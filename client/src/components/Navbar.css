@@ -1,0 +1,28 @@
+.navbar {
+    background-color: rgb(210, 210, 210);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0px 5px 5px -5px rgb(122, 122, 122);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+}
+
+.navbar_branding {
+    display: flex;
+    align-items: center;
+    /* background-color: rgb(210, 210, 210); */
+    color: #2B3467;
+}
+
+.login_details {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.login_details > p {
+    font-weight: bolder;
+}

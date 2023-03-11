@@ -1,5 +1,4 @@
 import React from 'react'
-import react from '../logo.svg'  
 import './Homepage.css'
 import TeacherDetails from './TeacherDetails'
 import VideoCards from './VideoCards'

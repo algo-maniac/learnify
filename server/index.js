@@ -41,22 +41,6 @@ app.use(helmet());
 app.use(morgan("common"));
 app.use(userRoutes);
 
-app.get("/setcookie", (req, res) => {
-  res.cookie("new-user", false);
-  res.cookie("new-employee", true, {
-    maxAge: 1000 * 60 * 60 * 24,
-    // secure: true,
-    // httpOnly: true,
-  });
-  res.send("You got the cookie");
-});
-
-app.get("/readcookie", (req, res) => {
-  const cookies = req.cookies;
-  console.log("Found Cookies", cookies);
-  res.send("Found Cookies");
-});
-
 // Server Starting
 
 app.listen(port, (err) => {

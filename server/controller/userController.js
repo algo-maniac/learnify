@@ -14,24 +14,31 @@ module.exports.signup = (req, res) => {
 };
 
 module.exports.signuppost = async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, isTeacher } = req.body;
   console.log(req.body);
 
   try {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
-    if (User.find({ username }) || User.find({ email })) {
+    if (
+      (await User.find({ username })).length > 0 ||
+      (await User.find({ email })).length > 0
+    ) {
       res.status(400).send("Account exits with same email or username");
+    } else {
+      const user = new User({
+        username,
+        email,
+        password: hashedPassword,
+        isTeacher: isTeacher === 1 ? true : false,
+      });
+      await user.save();
+      console.log(user);
+      res.status(200).json(user);
+
+      // res.cookie("jwt", token, { httpOnly: true, maxAge: age * 1000 });
+      // res.status(200).json({ ...user, jwt: token });
     }
-    const newuser = new User({
-      username,
-      email,
-      password: hashedPassword,
-    });
-    const user = await newuser.save();
-    const token = createToken(user._id);
-    // res.cookie("jwt", token, { httpOnly: true, maxAge: age * 1000 });
-    // res.status(200).json({ ...user, jwt: token });
   } catch (err) {
     console.log(err);
   }
@@ -52,7 +59,7 @@ module.exports.loginpost = async (req, res) => {
     } else if (!validPassword) {
       res.status(404).send("Invalid Password");
     } else {
-      res.status(200).json("Logged In");
+      res.status(200).json(user);
     }
   } catch (err) {
     console.log(err);

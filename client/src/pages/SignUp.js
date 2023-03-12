@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const SignUp = () => {
+  const navigate = useNavigate();
   const [userData, setUserData] = useState({
     username: "",
     email: "",
     password: "",
+    isTeacher: 0,
   });
 
   const handleSubmit = async (e) => {
@@ -17,10 +19,11 @@ const SignUp = () => {
         email: userData.email,
         username: userData.username,
         password: userData.password,
+        isTeacher: userData.isTeacher,
       });
       if (res.status === 200) {
-        console.log(res);
-        console.log(res.cookie);
+        console.log(res.data);
+        navigate("/Random");
       }
     } catch (err) {
       console.log(err);
@@ -75,6 +78,53 @@ const SignUp = () => {
                 }}
               />
             </InputWrapper>
+            <InputWrapper
+              onChange={(e) => {
+                if (e.target.value === "teacher") {
+                  setUserData({ ...userData, isTeacher: 1 });
+                } else {
+                  setUserData({ ...userData, isTeacher: 0 });
+                }
+              }}
+              style={{
+                display: "flex",
+                fontSize: "10px",
+                height: "20px",
+                margin: "5px 0px",
+              }}
+            >
+              <Label
+                className="container"
+                style={{
+                  display: "flex",
+                  fontSize: "20px",
+                }}
+              >
+                <Input
+                  type="radio"
+                  name="radio"
+                  value="student"
+                  style={{ display: "block", fontSize: "20px", height: "10px" }}
+                />
+                Student
+              </Label>
+              <Label
+                className="container"
+                style={{
+                  display: "flex",
+                  fontSize: "20px",
+                  marginLeft: "10px",
+                }}
+              >
+                <Input
+                  type="radio"
+                  name="radio"
+                  value="teacher"
+                  style={{ display: "block", fontSize: "40px", height: "10px" }}
+                />
+                Teacher
+              </Label>
+            </InputWrapper>
             <Button>Submit</Button>
             <Lognow>
               <NavLink to="/LogIn">Already Logged In? Log In</NavLink>
@@ -96,7 +146,7 @@ const ImageContainer = styled.img`
   box-shadow: 2px 7px 29px 4px rgba(0, 0, 0, 0.75);
 `;
 const Container = styled.div`
-  height: 550px;
+  height: 600px;
   width: 460px;
   margin-top: 100px;
   margin-left: 60vw;

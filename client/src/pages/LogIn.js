@@ -1,20 +1,20 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const LogIn = () => {
-  const [userData, setUserData] = useState({
+const LogIn = ({ userData, setUserData }) => {
+  const [currUser, setCurrUser] = useState({
     email: "",
     password: "",
   });
-
+  const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const res = await axios.post("http://localhost:8000/login", {
-        email: userData.email,
-        password: userData.password,
+        email: currUser.email,
+        password: currUser.password,
       });
       if (res.status === 404) {
         console.log("User Not Found");
@@ -22,6 +22,9 @@ const LogIn = () => {
         console.log("Wrong Password");
       } else {
         console.log("Logged In");
+        const { username, email, isTeacher } = res.data;
+        setUserData({ username, email, isLogged: true, isTeacher });
+        navigate("/Random");
       }
     } catch (err) {
       console.log(err);
@@ -45,9 +48,9 @@ const LogIn = () => {
                 type="text"
                 name="email"
                 id="email"
-                value={userData.email}
+                value={currUser.email}
                 onChange={(e) => {
-                  setUserData({ ...userData, email: e.target.value });
+                  setCurrUser({ ...currUser, email: e.target.value });
                 }}
               />
             </InputWrapper>
@@ -57,9 +60,9 @@ const LogIn = () => {
                 type="text"
                 name="password"
                 id="password"
-                value={userData.password}
+                value={currUser.password}
                 onChange={(e) => {
-                  setUserData({ ...userData, password: e.target.value });
+                  setCurrUser({ ...currUser, password: e.target.value });
                 }}
               />
             </InputWrapper>

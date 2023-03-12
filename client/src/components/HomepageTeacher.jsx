@@ -6,9 +6,12 @@ import VideoCards from './VideoCards'
 import { useNavigate } from 'react-router-dom';
 
 
-function HomepageTeacher() {
-  const {userID} = useParams();
-  console.log(userID);
+function HomepageTeacher(props) {
+  const userData = props.userData;
+  console.log("in this", userData);
+  
+  // const {userID} = useParams();
+  // console.log(userID);
 
   const teacherInfo = {
     userName: "Alakh Pandey",
@@ -44,7 +47,7 @@ function HomepageTeacher() {
 
   const navigate = useNavigate();
   const goLive = () => {
-    navigate("/live");
+    navigate("/live/?roomID=" + userData.id + "&role=Host");
   }
 
   const uploadVideo = () => {

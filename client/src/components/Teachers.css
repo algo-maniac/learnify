@@ -1,0 +1,9 @@
+.teachers {
+    display: grid;
+    grid-template-columns: 1fr 4fr;
+}
+
+.teachercards {
+    display: flex;
+    flex-wrap: wrap;
+}

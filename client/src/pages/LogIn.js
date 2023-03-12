@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useInRouterContext, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const LogIn = ({ userData, setUserData }) => {
@@ -23,8 +23,9 @@ const LogIn = ({ userData, setUserData }) => {
       } else {
         console.log("Logged In");
         const { _id, username, email, isTeacher } = res.data;
-        setUserData({ username, email, isLogged: true, isTeacher, id: _id });
-        navigate("/Random");
+        await setUserData({ username, email, isLogged: true, isTeacher, id: _id.substring(0, 5) });
+        console.log(userData);
+        navigate("/teacher/" + _id.substring(0, 5));
       }
     } catch (err) {
       console.log(err);

@@ -150,7 +150,7 @@ const Container = styled.div`
   width: 460px;
   margin-top: 100px;
   margin-left: 60vw;
-  //   border: 1px solid black;
+
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -163,7 +163,6 @@ const Container = styled.div`
 const Heading = styled.div`
   height: 10%;
   width: 60%;
-  //   border: 2px solid red;
   font-size: 40px;
   text-align: center;
   border: 2px solid #131c2c;
@@ -174,7 +173,6 @@ const Heading = styled.div`
 const Content = styled.div`
   height: 80%;
   width: 90%;
-  //   border: 2px solid red;
 `;
 
 const Form = styled.form`

@@ -4,11 +4,11 @@ import { Avatar } from '@mui/material';
 import './TeacherDetails.css'
 
 function TeacherDetails(props) {
-  const { userName, img } = props;
+  const { username, img } = props;
   return (
     <div className="teacher_details">
         <Avatar src={img} sx={{ width: 70, height: 70 }}/>
-        <h2>{userName}</h2>
+        <h2>{username}</h2>
     </div>
   )
 }

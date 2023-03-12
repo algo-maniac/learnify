@@ -1,12 +1,14 @@
 import React from 'react'
-import react from "../logo.svg"
+import { Avatar } from '@mui/material';
+
 import './TeacherDetails.css'
 
-function TeacherDetails() {
+function TeacherDetails(props) {
+  const { userName, img } = props;
   return (
     <div className="teacher_details">
-        <img src={react} alt="" />
-        <h2>Surendra Kumar Mishra</h2>
+        <Avatar src={img} sx={{ width: 70, height: 70 }}/>
+        <h2>{userName}</h2>
     </div>
   )
 }

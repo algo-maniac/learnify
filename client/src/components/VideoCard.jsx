@@ -1,17 +1,18 @@
 import React from 'react'
-import lectureThumbnail from "../lecture_thumbnail.jpeg"
-import react from '../logo.svg'  
+import { Avatar } from '@mui/material';
 import './VideoCard.css'
 
-function VideoCard() {
+function VideoCard(props) {
+  const {img, video} = props;
+
   return (
     <div className="videocard">
-        <img src={lectureThumbnail} alt="" className="thumbnail"/>
+        <img src={video.thumbnail} alt="" className="thumbnail"/>
         <div className="details">
             <div className="details_logo">
-                <img src={react} alt="" />
+                <Avatar src={img} alt="" />
             </div>
-            <p>Lecture titleLecture titleLecture titleLecture title</p>
+            <p>{video.title}</p>
         </div>
     </div>
   )

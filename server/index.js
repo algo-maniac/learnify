@@ -8,8 +8,8 @@ const cookieParser = require("cookie-parser");
 const bodyParser=require('body-parser');
 const multer=require('multer');
 const Post=require('./models/post');
-
-const port = 8001;
+const User=require('./models/user');
+const port = 5001;
 const app = express();
 
 // Middlewares
@@ -97,7 +97,11 @@ app.post('/doubt/comment',async(req,res,next)=>{
 
 });
 // Server Starting
-
+app.get('/teacher',(req,res,next)=>{
+  User.find({isTeacher:true}).then((data)=>{
+    res.json({data:data});
+  })
+})
 app.listen(port, (err) => {
   if (err) {
     console.log("Some error occured");

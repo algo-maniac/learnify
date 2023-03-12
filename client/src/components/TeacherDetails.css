@@ -4,7 +4,8 @@
     padding: 20px;
     display: flex;
     align-items: center;
-    color: whitesmoke
+    color: whitesmoke;
+    gap: 20px;
 }
 
 .teacher_details > img {

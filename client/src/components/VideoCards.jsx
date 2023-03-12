@@ -2,14 +2,15 @@ import React from 'react'
 import VideoCard from './VideoCard'
 import './VideoCards.css'
 
-function VideoCards() {
+function VideoCards(props) {
+  const { userName, img, isTeacher, videos } = props.teacherInfo;
+  console.log(videos);
+
   return (
     <div className="videocards">
-        <VideoCard />
-        <VideoCard />
-        <VideoCard />
-        <VideoCard />
-        <VideoCard />
+      {videos.map(video => (
+        <VideoCard img={img} video={video} />
+      ))}
     </div>
   )
 }

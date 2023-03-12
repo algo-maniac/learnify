@@ -24,7 +24,7 @@ function App() {
         <Route path="/home" element={<HomepageTeacher/ >} />
         {userData.isLoggedIn && <Route path="/live" element={<LiveStream/ >} />}
         <Route path="/uploadvideo" element={<UploadVideo data={userData}/> } />
-        <Route path="/teacher/:param" element={<TeacherForum />} />
+        <Route path="/teacher/:userID" element={<HomepageTeacher />} />
       </Routes>
     </div>
     </Router>

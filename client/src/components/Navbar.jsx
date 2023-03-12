@@ -1,5 +1,4 @@
 import React from 'react'
-import react from '../logo.svg'  
 import { Link } from 'react-router-dom'
 import './Navbar.css'
 import { Avatar } from '@mui/material';

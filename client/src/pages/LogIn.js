@@ -22,8 +22,8 @@ const LogIn = ({ userData, setUserData }) => {
         console.log("Wrong Password");
       } else {
         console.log("Logged In");
-        const { username, email, isTeacher } = res.data;
-        setUserData({ username, email, isLogged: true, isTeacher });
+        const { _id, username, email, isTeacher } = res.data;
+        setUserData({ username, email, isLogged: true, isTeacher, id: _id });
         navigate("/Random");
       }
     } catch (err) {

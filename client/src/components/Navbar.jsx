@@ -4,7 +4,8 @@ import './Navbar.css'
 import { Avatar } from '@mui/material';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 
-function Navbar() {
+function Navbar(props) {
+  // console.log(props);
   return (
     <div className="navbar">
         <div className="navbar_branding">
@@ -12,8 +13,8 @@ function Navbar() {
           <h1>Learnify</h1>
         </div>
         <div className="login_details">
-            <p>Surendra Kumar Mishra</p>
-            <Avatar />
+            <p>{props.userData.userName}</p>
+            <Avatar src={props.userData.img}/>
             <ArrowDropDownIcon />
         </div>
     </div>

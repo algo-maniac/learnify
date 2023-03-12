@@ -1,0 +1,35 @@
+.videocard {
+    width: calc(calc(100% - 140px)/3);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    margin: 20px;
+    /* border: 2px solid black; */
+    border-radius: 10px;
+    box-shadow: 4px 4px 10px 5px rgb(199, 199, 199);
+}
+
+.thumbnail {
+    width: 100%;
+    aspect-ratio: 5/3;
+    object-fit:contain;
+}
+
+/* .thumbnail > img {
+    width: 100%;
+} */
+
+.details {
+    display: flex;
+    /* align-items: flex-start; */
+}
+
+.details_logo {
+    width: 70px;
+}
+
+.details > p {
+    padding: 5px;
+    margin: 0;
+    font-size: 1.2rem;
+}

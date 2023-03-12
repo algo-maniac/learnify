@@ -1,0 +1,63 @@
+.about-container{
+    position:absolute;
+    top: 65rem;
+    left: 1.5rem;
+    height:35rem;
+    width: 45rem;
+    box-shadow: 5px 10px 18px #cd7851;
+    
+    border:2px solid #cd7851;
+    border-radius: 10px;
+}
+.heading{
+    padding: 15px 10px;
+    /* padding-top: 15px; */
+    font-family: 'Open Sans', sans-serif;
+    font-weight: bold;
+    color: #3798bf;
+}
+.para{
+    padding:25px 25px ;
+    font-size: large;
+    font-family: 'Roboto', sans-serif;
+}
+.container{
+    /* border: 2px solid white; */
+    margin: 106px 80px;
+    padding: 22px;
+    border-radius: 30px;
+    width: 33%;
+    position: absolute;
+    left: 30px;
+    top:100px;
+}
+.form-group input{
+    font-family: 'Baloo Bhai 2', cursive;
+    text-align: center;
+    display: block;
+    width: 508px;
+    padding: 1px;
+    border: 2px solid black;
+    margin: 11px auto;
+    font-size: 25px;
+    border-radius: 8px;
+}
+.container h1{
+    text-align: center;
+    text-decoration: underline;
+}
+.container button{
+    display: block;
+    width: 102%;
+    margin: 19px auto;
+    font-size: 25px;
+    border: 2px solid white;
+    border-radius: 8px;
+    background-color: black;
+    color: white;
+    font-family: 'Baloo Bhai 2', cursive;
+    cursor: pointer;
+}
+.container button:hover{
+    color: skyblue;
+}

@@ -1,0 +1,119 @@
+.navbar{
+    width:100%;
+    display:flex;
+    /* border: 2px solid black; */
+    justify-content: space-between;
+    align-items: center;
+    /* background: white; */
+    padding: 1rem 2rem;
+    position: fixed;
+    top: 0;
+}
+
+.navbar-logo{
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+.navbar-logo img{
+    height: 50px;
+}
+.navbar-links{
+    display: flex;
+    flex: 1;
+    justify-content: flex-end;
+    align-items: center;
+    /* gap: 1rem; */
+    list-style: none;
+}
+.navbar-links li{
+    margin: 0 1rem;
+    cursor: pointer;
+}
+.navbar-links li a{
+    color: orangered;
+    font-size: 1rem;
+    opacity: 0.7;
+    font-weight: bold;
+}
+.navbar-links a:hover{
+    opacity: 1;
+    /* font-weight: bold; */
+    /* border-bottom: 2px solid goldenrod; */
+    
+}
+.navbar-login{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    background: #2A454F;
+    border: 1px solid #2A454F;
+    border-radius: 15px;
+    padding: 10px 10px;
+}
+.navbar-login a{
+    margin: 0 1rem;
+    text-decoration: none;
+    /* transition: 0.5s ease; */
+}
+.navbar-login a:hover{
+    border-bottom: 2px solid goldenrod;
+}
+.navbar-login div{
+    width: 2px;
+    height: 30px;
+    background-color: goldenrod;
+}
+.lks {
+    font-family: 'Open Sans', sans-serif;
+    color: white;
+    font-weight: 400;
+    letter-spacing: 0.04em;
+    text-transform: capitalize;
+    line-height: 28px;
+    font-size: 16px;
+  }
+  .dropdown-content a {
+    display: block;
+    float: none;
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    text-align: left;
+    font-size: 1rem;
+    font-family: 'Open Sans', sans-serif;
+    color: orangered;
+    font-weight: bold;
+    opacity: 0.7;
+  }
+  .dropdown-content a:hover{
+    border-bottom: 1px solid orangered;
+    opacity: 1;
+  }
+ .dropbtn {
+    font-weight: bold;
+    color: orangered;
+    font-size: 1rem;
+    opacity: 0.7;
+    border: none;
+    outline: none;
+    padding: 14px 16px;
+    background-color: inherit;
+    font-family: 'Open Sans', sans-serif;
+    margin: 0;
+    cursor: pointer; 
+  }
+  .dropbtn:hover{
+    opacity: 1;
+  }
+  .dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+    width: 160px;
+  }
+  .dropdown:hover .dropdown-content {
+    display: block;
+  }

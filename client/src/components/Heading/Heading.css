@@ -1,0 +1,47 @@
+.heading-container{
+    display: flex;
+    width: 400px;
+    height: 320px;
+    line-height: 3.5rem;
+    position: absolute;
+    justify-content: center;
+    align-items: center;
+    top: 40vh;
+    border: 5px solid #2A454F;
+    margin-left: 2rem;
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 5px 10px #2A454F;
+    animation-name: bounce;
+    animation-timing-function: ease;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    
+}
+@keyframes bounce {
+    0%   { transform: translateY(0); }
+    50%  { transform: translateY(-80px); }
+    100% { transform: translateY(0); }
+}
+.heading-container h1{
+    color: #e2945e;
+    font-family: 'Roboto', sans-serif;
+}
+/* .img1{
+    position: absolute;
+    top: 0;left: 0;
+    opacity: 0.3;
+    height: 300px;
+    width: 300px;
+    border: 1px solid white;
+    border-radius: 50%;
+} */
+/* .img2{
+    position: absolute;
+    top: 0;left: 0;
+    opacity: 0.3;
+    height: 300px;
+    width: 300px;
+    border: 1px solid white;
+    border-radius: 50%;
+} */

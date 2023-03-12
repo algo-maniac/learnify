@@ -6,7 +6,6 @@ import React, { useEffect, useState } from "react";
 import "./App.css";
 import HomepageTeacher from "./components/HomepageTeacher";
 import LiveStream from "./components/LiveStream";
-import TeacherForum from "./components/TeacherForum";
 import Navbar from "./components/Navbar";
 import UploadVideo from "./components/UploadVideo";
 
@@ -35,7 +34,7 @@ function App() {
         <Route path="/home" element={<HomepageTeacher />} />
         {userData.isLogged && <Route path="/live" element={<LiveStream />} />}
         <Route path="/uploadvideo" element={<UploadVideo data={userData} />} />
-        <Route path="/teacher/:userID" element={<HomepageTeacher />} />
+        <Route path="/teacher/:userID" element={<HomepageTeacher userData={userData}/>} />
       </Routes>
     </>
   );

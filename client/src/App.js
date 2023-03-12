@@ -8,7 +8,7 @@ import HomepageTeacher from "./components/HomepageTeacher";
 import LiveStream from "./components/LiveStream";
 import Navbar from "./components/Navbar";
 import UploadVideo from "./components/UploadVideo";
-
+import Doubt from "./components/Doubt";
 function App() {
   const [userData, setUserData] = useState({
     id: "",
@@ -25,6 +25,7 @@ function App() {
     <>
       <Navbar userData={userData} />
       <Routes>
+        <Route path="/doubt" element={<Doubt/>}></Route>
         <Route path="/SignUp" element={<SignUp />} />
         <Route
           path="/LogIn"

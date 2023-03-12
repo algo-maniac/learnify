@@ -1,0 +1,41 @@
+.sendingPanel{
+    position: relative;
+    height: 8%;
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+.sendingPanel input{
+    height: 30px;
+    margin: 10px;
+    width: 90%;
+}
+
+.sendingPanel .fileUploader{
+    width: 20%;
+}
+.sendingPanel .fileUploader::file-selector-button {
+    font-weight: bold;
+    color: white;
+    padding: 0.5em;
+    background-color: blue;
+    border: thin solid grey;
+    border-radius: 3px;
+}
+.sendingPanel .fileUploader::file-selector-button:hover{
+    cursor: pointer;
+    background-color: rgb(137, 92, 227);
+}
+
+.sendingPanel button{
+    background-color: rgb(56, 56, 232);
+    color: whitesmoke;
+    height: 30px;
+    width: 100px;
+    margin-top: 9px;
+    margin-right: 5px;
+}
+.sendingPanel button:hover{
+    cursor: pointer;
+    background-color: rgb(31, 31, 149);
+}

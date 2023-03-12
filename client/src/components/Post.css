@@ -1,0 +1,36 @@
+.postBox{
+    height: 77%;
+    overflow: scroll;
+    position: relative;
+}
+.post{
+    margin: 15px;
+    /* border: 2px solid black; */
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 0.0625em 0.0625em, rgba(0, 0, 0, 0.25) 0px 0.125em 0.5em, rgba(255, 255, 255, 0.1) 0px 0px 0px 1px inset;
+    padding: 5px;
+}
+.post button{
+    background-color: rgb(56, 56, 232);
+    color: whitesmoke;
+    height: 30px;
+    margin: 3px;
+}
+.post button:hover{
+    cursor: pointer;
+    background-color: rgb(31, 31, 149);
+}
+.postImage{
+    width: 400px;
+    height: 250px;
+    border: 2px solid gray;
+}
+.commentSection{
+    width: 100%;
+    /* border: 3px solid black; */
+    box-shadow: rgba(14, 30, 37, 0.12) 0px 2px 4px 0px, rgba(14, 30, 37, 0.32) 0px 2px 16px 0px;
+    margin-top: 10px
+}
+.commentPanel{
+    width: 85%;
+    height: 22px;
+}

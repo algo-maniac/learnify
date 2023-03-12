@@ -81,7 +81,7 @@ function LiveStream() {
     <div
       className="myCallContainer"
       ref={myMeeting}
-      style={{ width: '100vw', height: '100vh' }}
+      style={{ width: '100vw', height: '80vh' }}
     ></div>
   );
 }

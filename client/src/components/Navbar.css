@@ -32,9 +32,8 @@
 
 .navbar_options > ul {
     list-style-type: none;
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 20px;
+    display: flex;
+    gap: 25px;
     font-size: 1.25rem;
 }
 

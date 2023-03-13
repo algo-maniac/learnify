@@ -9,7 +9,7 @@ const bodyParser=require('body-parser');
 const multer=require('multer');
 const Post=require('./models/post');
 const User=require('./models/user');
-const port = 5001;
+const port = 8000;
 const app = express();
 
 // Middlewares

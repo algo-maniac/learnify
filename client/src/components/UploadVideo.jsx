@@ -12,7 +12,7 @@ function UploadVideo(props) {
 
   const handleChange = (e) => {
     setFormData({...formData, [e.target.name]: e.target.value })
-    // console.log(formData);
+    console.log(formData);
   }
 
   const handleSubmit = (e) => {
@@ -37,18 +37,6 @@ function UploadVideo(props) {
           />
         </label>
         <label 
-          htmlFor="thumbnail"
-          name="thumbnail"
-        >
-          Thumbnail: 
-          <input 
-            type="url"
-            name="thumbnail"
-            value={formData.thumbnail}
-            onChange={handleChange}
-          />
-        </label>
-        <label 
           htmlFor="videoUrl"
           name="videoUrl"
         >
@@ -57,6 +45,18 @@ function UploadVideo(props) {
             type="url"
             name="videoUrl"
             value={formData.videoUrl}
+            onChange={handleChange}
+          />
+        </label>
+        <label 
+          htmlFor="thumbnail"
+          name="thumbnail"
+        >
+          Thumbnail: 
+          <input 
+            type="file"
+            name="thumbnail"
+            value={formData.thumbnail}
             onChange={handleChange}
           />
         </label>

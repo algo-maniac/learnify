@@ -10,6 +10,7 @@ const SignUp = () => {
     email: "",
     password: "",
     isTeacher: 0,
+    img: ""
   });
 
   const handleSubmit = async (e) => {
@@ -75,6 +76,18 @@ const SignUp = () => {
                 value={userData.password}
                 onChange={(e) => {
                   setUserData({ ...userData, password: e.target.value });
+                }}
+              />
+            </InputWrapper>
+            <InputWrapper>
+              <Label htmlFor="username">Image</Label>
+              <Input
+                type="file"
+                name="img"
+                id="imf"
+                value={userData.img}
+                onChange={(e) => {
+                  setUserData({ ...userData, img: e.target.value });
                 }}
               />
             </InputWrapper>

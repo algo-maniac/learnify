@@ -22,7 +22,9 @@ function getUrlParams(url = window.location.href) {
   return new URLSearchParams(urlStr);
 }
 
-function LiveStream() {
+function LiveStream(props) {
+  const {username} = props;
+
   const roomID = getUrlParams(window.location.href).get('roomID') || randomID(5);
   let role_str = getUrlParams(window.location.href).get('role') || 'Host';
   console.log(roomID, role_str);
@@ -57,7 +59,7 @@ function LiveStream() {
  // generate Kit Token
   const appID = 1411074036;
   const serverSecret = "c1b9ffacbd831b8a9decc98d29a78ea7";
-  const kitToken =  ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret, roomID,  randomID(5),  randomID(5));
+  const kitToken =  ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret, roomID,  randomID(5),  username);
 
 
   // start the call
@@ -81,7 +83,7 @@ function LiveStream() {
     <div
       className="myCallContainer"
       ref={myMeeting}
-      style={{ width: '100vw', height: '80vh' }}
+      style={{ width: '100vw', height: '85vh' }}
     ></div>
   );
 }

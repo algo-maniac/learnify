@@ -4,6 +4,7 @@ import './Homepage.css'
 import TeacherDetails from './TeacherDetails'
 import VideoCards from './VideoCards'
 import { useNavigate } from 'react-router-dom';
+import Sidebar from './Sidebar'
 
 
 function HomepageTeacher(props) {
@@ -41,32 +42,22 @@ function HomepageTeacher(props) {
     ]
   }
 
-
-
-
-
-  const navigate = useNavigate();
-  const goLive = () => {
-    navigate("/live/?roomID=" + userData.id + "&role=Host");
-  }
-
-  const uploadVideo = () => {
-    navigate("/uploadvideo");
-  }
+  
 
   return (
-    <div>
+    <div className='homepage'>
+      <div>
       {teacherInfo.isTeacher &&
-        <div className='homepage'>
-        <div className="navigation">
-          <button className="navbar_option" onClick={goLive}>Go Live</button>
-          <button className="navbar_option" onClick={uploadVideo}>Upload Lecture</button>
+        <div>
+          < Sidebar id={userData.id}/>
         </div>
-        <div className="content">
-          <TeacherDetails userName={teacherInfo.userName} img={teacherInfo.img}/>
-          <VideoCards teacherInfo={teacherInfo}/>
-        </div>
-      </div>}
+      }
+      </div>
+      <div className="content">
+        <TeacherDetails userName={teacherInfo.userName} img={teacherInfo.img}/>
+        <VideoCards teacherInfo={teacherInfo}/>
+      </div>
+      
     </div>
   )
 }

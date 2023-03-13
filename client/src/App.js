@@ -9,6 +9,7 @@ import LiveStream from "./components/LiveStream";
 import Navbar from "./components/Navbar";
 import UploadVideo from "./components/UploadVideo";
 import Doubt from "./components/Doubt";
+import Teachers from "./components/Teachers";
 function App() {
   const [userData, setUserData] = useState({
     id: "",
@@ -33,8 +34,9 @@ function App() {
         />
         <Route path="/Random" element={<Random />} />
         <Route path="/home" element={<HomepageTeacher />} />
-        {userData.isLogged && <Route path="/live" element={<LiveStream />} />}
+        {userData.isLogged && <Route path="/live" element={<LiveStream username={userData.username}/>} />}
         <Route path="/uploadvideo" element={<UploadVideo data={userData} />} />
+        <Route path="/teachers" element={<Teachers isLogged={userData.isLogged} isTeacher={userData.isTeacher} id={userData.id}/>} />
         <Route path="/teacher/:userID" element={<HomepageTeacher userData={userData}/>} />
       </Routes>
     </>

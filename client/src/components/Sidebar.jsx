@@ -3,12 +3,13 @@ import './Sidebar.css'
 import { useNavigate } from 'react-router-dom';
 
 
-function Sidebar() {
+function Sidebar(props) {
+    const { id } = props;
 
     const navigate = useNavigate();
 
     const goLive = () => {
-        navigate("/live");
+      navigate("/live/?roomID=" + id + "&role=Host");
     }
 
     const uploadVideo = () => {

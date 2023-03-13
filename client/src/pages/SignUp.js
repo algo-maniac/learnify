@@ -10,20 +10,25 @@ const SignUp = () => {
     email: "",
     password: "",
     isTeacher: 0,
-    img: ""
   });
-
+  const [file,setFile]=useState('');
+  const imgHandler=(env)=>{
+    setFile(env.target.files[0]);
+  }
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const formData=new FormData();
+    formData.append('email',userData.email);
+    formData.append('username',userData.username);
+    formData.append('password',userData.password);
+    formData.append('isTeacher',userData.isTeacher);
+    formData.append('image',file);
     try {
-      const res = await axios.post("http://localhost:8000/signup", {
-        email: userData.email,
-        username: userData.username,
-        password: userData.password,
-        isTeacher: userData.isTeacher,
-      });
+      const res = await fetch("http://localhost:8000/signup",{
+        method:'POST',
+        body:formData
+      })
       if (res.status === 200) {
-        console.log(res.data);
         navigate("/Random");
       }
     } catch (err) {
@@ -70,7 +75,7 @@ const SignUp = () => {
             <InputWrapper>
               <Label htmlFor="password">Password</Label>
               <Input
-                type="text"
+                type="password"
                 name="password"
                 id="password"
                 value={userData.password}
@@ -86,9 +91,7 @@ const SignUp = () => {
                 name="img"
                 id="imf"
                 value={userData.img}
-                onChange={(e) => {
-                  setUserData({ ...userData, img: e.target.value });
-                }}
+                onChange={imgHandler}
               />
             </InputWrapper>
             <InputWrapper

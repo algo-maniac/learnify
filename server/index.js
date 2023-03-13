@@ -11,7 +11,7 @@ const Post=require('./models/post');
 const User=require('./models/user');
 const port = 8000;
 const app = express();
-
+const userController=require('./controller/userController');
 // Middlewares
 app.use(cookieParser());
 
@@ -62,6 +62,8 @@ app.get('/doubt',async(req,res,next)=>{
         console.log('error');
     });
 })
+app.post("/signup",upload.single("image"), userController.signuppost);
+
 app.post('/doubt',upload.single("image"),async(req,res,next)=>{
     const question=req.body.question;
     let imgUrl='';
@@ -80,6 +82,30 @@ app.post('/doubt',upload.single("image"),async(req,res,next)=>{
     });
     post.save();
     res.json({msg:'posted created'});
+})
+app.post('/teacher',upload.single("image"),(req,res,next)=>{
+  const email=req.body.email;
+  const title=req.body.title;
+  const videoUrl=req.body.videourl;
+  const image=req.file.path;
+  const videoObj={
+    title:title,
+    videoUrl:videoUrl,
+    thumbnail:image,
+  }
+  // console.log(videoObj);
+  User.findOne({email:email}).then((result)=>{
+    // pushing details of video uploaded
+    result.videoInfo.push(videoObj);
+    result.save().then((data)=>{
+      if(data){
+        res.json({msg:'Video Uploaded'});
+      }
+      else{
+        res.json({msg:'error in uploading'});
+      }
+    });
+  })
 })
 app.post('/doubt/comment',async(req,res,next)=>{
     const id=req.body.id;

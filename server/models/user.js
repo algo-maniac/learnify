@@ -27,6 +27,12 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       require: true,
     },
+    profileImage:{
+      type:String
+    },
+    videoInfo:{
+      type:Array
+    }
   },
   { timestamps: true }
 );

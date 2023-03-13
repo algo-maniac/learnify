@@ -15,7 +15,9 @@ const userController = require("../controller/userController");
 
 router.get("/signup", userController.signup);
 
-router.post("/signup", userController.signuppost);
+// router.post("/signup", userController.signuppost);
+//declare in index.js
+
 
 router.get("/login", userController.login);
 

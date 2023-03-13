@@ -15,8 +15,10 @@ module.exports.signup = (req, res) => {
 
 module.exports.signuppost = async (req, res) => {
   const { username, email, password, isTeacher } = req.body;
-  console.log(req.body);
-
+  let profileImage='';
+  if(req.file!=''){
+    profileImage=req.file.path;
+  }
   try {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -31,6 +33,7 @@ module.exports.signuppost = async (req, res) => {
         email,
         password: hashedPassword,
         isTeacher: isTeacher === 1 ? true : false,
+        profileImage:profileImage
       });
       await user.save();
       console.log(user);

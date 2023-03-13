@@ -32,11 +32,6 @@ const Sender = () => {
       alert('Question Posted');
       window.location.reload();
     }).catch();
-    if(file!==''){
-      fetch('http://localhost:8001/saveimage',{
-        body:formData
-      }).then().catch();
-    }
   }
   return (
     <form method="POST" className="sendingPanel">

@@ -23,7 +23,13 @@ const LogIn = ({ userData, setUserData }) => {
       } else {
         console.log("Logged In");
         const { _id, username, email, isTeacher } = res.data;
-        await setUserData({ username, email, isLogged: true, isTeacher, id: _id });
+        await setUserData({
+          username,
+          email,
+          isLogged: true,
+          isTeacher,
+          id: _id,
+        });
         console.log(userData);
         navigate("/teachers");
       }
@@ -36,7 +42,7 @@ const LogIn = ({ userData, setUserData }) => {
       <ImageContainer src="./assets/back_img2.png" alt="Error" />
       <ImageContainer
         src="./assets/back_img1.png"
-        style={{ top: "450px", left: "400px", transform: "rotate(-10deg)" }}
+        style={{ top: "460px", left: "400px", transform: "rotate(-10deg)" }}
         alt="Error"
       />
       <Container>
@@ -82,6 +88,7 @@ const ImageContainer = styled.img`
   position: absolute;
   height: 300px;
   width: 350px;
+  top: 130px;
   left: 200px;
   border-radius: 10px;
   transform: rotate(10deg);

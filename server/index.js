@@ -123,8 +123,15 @@ app.post('/doubt/comment',async(req,res,next)=>{
 
 });
 // Server Starting
-app.get('/teacher',(req,res,next)=>{
+app.get('/teachers',(req,res,next)=>{
   User.find({isTeacher:true}).then((data)=>{
+    res.json({data:data});
+  })
+})
+app.get('/teacher/:id',(req,res,next)=>{
+  const id = req.params['id'];
+  console.log(id);
+  User.find({isTeacher:true, _id:id}).then((data)=>{
     res.json({data:data});
   })
 })

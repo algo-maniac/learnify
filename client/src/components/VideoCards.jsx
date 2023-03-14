@@ -3,13 +3,13 @@ import VideoCard from './VideoCard'
 import './VideoCards.css'
 
 function VideoCards(props) {
-  const { username, img, isTeacher, videos } = props.teacherInfo;
-  console.log(videos);
+  const { username, img, isTeacher, videoInfo } = props.teacherInfo;
+  console.log(videoInfo);
 
   return (
     <div className="videocards">
       
-      {videos.map(video => (
+      {videoInfo && videoInfo.map(video => (
         <VideoCard img={img} video={video} />
       ))}
     </div>

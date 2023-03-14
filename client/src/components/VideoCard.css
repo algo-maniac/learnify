@@ -1,5 +1,6 @@
 .videocard {
     width: calc(calc(100% - 140px)/3);
+    width: 500px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -15,9 +16,9 @@
     object-fit:contain;
 }
 
-/* .thumbnail > img {
+.thumbnail > img {
     width: 100%;
-} */
+}
 
 .details {
     display: flex;

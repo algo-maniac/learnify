@@ -23,9 +23,9 @@ const LogIn = ({ userData, setUserData }) => {
       } else {
         console.log("Logged In");
         const { _id, username, email, isTeacher } = res.data;
-        await setUserData({ username, email, isLogged: true, isTeacher, id: _id.substring(0, 5) });
+        await setUserData({ username, email, isLogged: true, isTeacher, id: _id });
         console.log(userData);
-        navigate("/teacher/" + _id.substring(0, 5));
+        navigate("/teachers");
       }
     } catch (err) {
       console.log(err);

@@ -21,11 +21,16 @@ function Navbar(props) {
               <li><Link exact to="/">About Us</Link></li>
             </ul>
           </div>
-          <div className="login_details">
+          {props.userData.isLogged && <div className="login_details">
               <p>{props.userData.username}</p>  
               <Avatar src={props.userData.img} sx={{ width: 50, height: 50 }}/>
               <ArrowDropDownIcon />
-          </div>
+          </div>}
+          {!props.userData.isLogged && 
+          <div className="login_signup">
+            <button><Link to="/signup">Sign Up</Link></button>
+            <button><Link to="/login">Login</Link></button>
+          </div>}
         </div>
     </div>
   )

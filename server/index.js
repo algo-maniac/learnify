@@ -15,6 +15,7 @@ const userController=require('./controller/userController');
 // Middlewares
 app.use(cookieParser());
 
+app.use('/uploads',express.static('uploads'))
 // MongoDB Connection
 
 const url = `mongodb+srv://Soumya:covbae2j64KUiUNN@userdata.da04qcr.mongodb.net/?retryWrites=true&w=majority`;
@@ -45,7 +46,6 @@ app.use(morgan("common"));
 app.use(userRoutes);
 app.use(bodyParser.urlencoded({extended:false}));
 app.use(bodyParser.json());
-app.use('/uploadedImage',express.static('uploads'))
 const Storage=multer.diskStorage({
     destination:'uploads',
     filename:(req,file,cb)=>{

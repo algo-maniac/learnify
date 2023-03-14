@@ -7,7 +7,7 @@ function VideoCard(props) {
   const {img, video} = props;
 
   return (
-    <Link to="/">
+    <a href={video.videoUrl} target="_blank" rel="noreferrer">
       <div className="videocard">
           <img src={video.thumbnail} alt="" className="thumbnail"/>
           <div className="details">
@@ -17,7 +17,7 @@ function VideoCard(props) {
               <p>{video.title}</p>
           </div>
       </div>
-    </Link>
+    </a>
   )
 }
 

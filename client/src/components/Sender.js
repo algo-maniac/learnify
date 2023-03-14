@@ -25,7 +25,7 @@ const Sender = () => {
     const formData=new FormData();
     formData.append('image',file);
     formData.append('question',postData);
-    fetch('http://localhost:8001/doubt',{
+    fetch('http://localhost:8000/doubt',{
       method:'POST',
       body:formData
     }).then(()=>{

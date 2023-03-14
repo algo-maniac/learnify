@@ -1,0 +1,214 @@
+@import url("https://fonts.googleapis.com/css?family=Fira+Sans:400,500,600,700,800");
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  text-decoration: none;
+  list-style: none;
+  font-family: "ubuntu";
+}
+
+.header{
+  display: flex;
+  width: 60%;
+  height: 40px;
+  margin: auto;
+  margin-top: 30px;
+  flex-direction: row;
+  justify-content: space-around;
+  flex-wrap: wrap;
+}
+.header div{
+  width: 15%;
+  display: flex;
+  transition: all 0.5s;
+  border-radius: 50%/125%;
+  justify-content: center;
+  border: 2px solid black;
+}
+.header div:hover{
+  cursor: pointer;
+  background-color: rgb(202, 192, 192);
+}
+.header div span{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+body{
+  /* display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column; */
+  min-height: 150vh;
+  font-family: 'Fira Sans', sans-serif;
+  /* background: linear-gradient(147deg,#2129c1 0%, #9295e0 74%); */
+}
+.blog-card{
+  width: 70%;
+  min-height: 40vh;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 30px;
+  border-radius: 25px;
+  background: white;
+  box-shadow: 0px 10px 50px rgba(40, 114, 193, 0.3);
+}
+.inner-part{
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 25px;
+  padding-top: 10px;
+}
+.inner-part .img{
+  height: 80%;
+  width: 35%;
+  flex-shrink: 0;
+  overflow: hidden;
+  border-radius: 20px;
+  border: 1px solid black;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+}
+.img img{
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+  cursor: pointer;
+  opacity: 0;
+  transition: .6s;
+}
+#tap-1:checked ~ .inner-part .img-1,
+#tap-2:checked ~ .inner-part .img-2,
+#tap-3:checked ~ .inner-part .img-3{
+  opacity: 1;
+  transition-delay: .2s;
+}
+.content{
+  padding: 0 20px 0 35px;
+  width: 530px;
+  margin-left: 50px;
+  opacity: 0;
+  transition: .6s;
+}
+
+#tap-1:checked ~ .inner-part .content-1,
+#tap-2:checked ~ .inner-part .content-2,
+#tap-3:checked ~ .inner-part .content-3{
+  opacity: 1;
+  margin-left: 0px;
+  z-index: 100;
+  transition-delay: .3s;
+}
+.content span{
+  display: block;
+  color: #7b7992;
+  margin-bottom: 15px;
+  font-size: 22px;
+  font-weight: 500
+}
+.content .title{
+  font-size: 30px;
+  font-weight: 700;
+  color: #0d0925;
+  margin-bottom: 20px;
+}
+.content .text{
+  color: #4e4a67;
+  font-size: 19px;
+  margin-bottom: 6px;
+  line-height: 1.5em;
+  text-align: justify;
+}
+.content button{
+  display: inline-flex;
+  padding: 15px 20px;
+  border: none;
+  font-size: 16px;
+  text-transform: uppercase;
+  color: #fff0e6;
+  font-weight: 600;
+  letter-spacing: 1px;
+  border-radius: 50px;
+  cursor: pointer;
+  outline: none;
+  border: 1px solid #fd3535;
+  background: linear-gradient(147deg, #fe8a39  0%, #fd3838 74%);
+}
+.content button:hover{
+  background: linear-gradient(147deg, #fe791b 0%, #fd1c1c 74%);
+}
+.toggleSyllabus{
+  text-decoration: underline;
+  color: #000001;
+}
+input[type="radio"],
+input[type="checkbox"]{
+  display: none;
+}
+.resourceContainer{
+  width: 70%;
+  margin-top: 30px;
+  margin: auto;
+  transition: all 1s;
+  border-radius: 25px;
+  padding: 10px;
+  background: white;
+  box-sizing: border-box;
+  box-shadow: 0px 10px 50px rgba(17, 110, 187, 0.3);
+}
+.resourceContainer .info{
+  font-weight: 500;
+}
+.resourceContainer h2{
+  margin: 16px;
+}
+.channel{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+.channel div{
+  text-align: center;
+}
+.channel img{
+  width: 200px;
+  border-radius: 10px;
+  height: 150px;
+  border: 3px solid black;
+}
+.channel .header{
+  font-weight: bolder;
+  font-size: 1.2rem;
+  margin-bottom: 0px;
+}
+.channel span{
+  width: 100%;
+  height: 24px;
+}
+.resources{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+.resources div{
+  text-align: center;
+}
+.resources img{
+  width: 200px;
+  border-radius: 10px;
+  border: 3px solid black;
+  height: 150px;
+}
+.resources .header{
+  font-weight: bolder;
+  font-size: 1.2rem;
+  width: 100%;
+  height: 24px;
+}
+
+.active{
+  color: white;
+  background-color: black;
+}

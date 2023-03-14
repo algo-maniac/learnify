@@ -68,9 +68,10 @@ const ExamHeader = () => {
             <div className={"text"}>
               {data[key].examSyllabus}
               <br></br>
-              <label style={{"fontSize":"1.2rem"}}>To know more </label>
+              <a href={data[key].examSyllabusUrl} target="_blank">
+              <label style={{"fontSize":"1.2rem"}} className="linkSyllabus">To know more </label>
+              </a>
             </div>
-            <div className={"text toggleSyllabus"} onClick={syllabusHandler}>Read more</div>
           </div>
         </div>
       </div>

@@ -7,7 +7,10 @@
   list-style: none;
   font-family: "ubuntu";
 }
-
+.linkSyllabus:hover{
+  cursor: pointer;
+  color: black;
+}
 .header{
   display: flex;
   width: 60%;
@@ -112,6 +115,7 @@ body{
   font-size: 30px;
   font-weight: 700;
   color: #0d0925;
+  text-decoration: underline;
   margin-bottom: 20px;
 }
 .content .text{

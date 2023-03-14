@@ -57,7 +57,7 @@ function App() {
           path="/teacher/:userID"
           element={<HomepageTeacher userData={userData} />}
         />
-        <Route path="/exam-corner/:exam" element={<ExamCorner />} />
+        <Route path="/exam-corner" element={<ExamCorner />} />
       </Routes>
     </>
   );

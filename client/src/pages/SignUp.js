@@ -11,24 +11,25 @@ const SignUp = () => {
     password: "",
     isTeacher: 0,
   });
-  const [file,setFile]=useState('');
-  const imgHandler=(env)=>{
+  const [file, setFile] = useState("");
+  const imgHandler = (env) => {
     setFile(env.target.files[0]);
-  }
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData=new FormData();
-    formData.append('email',userData.email);
-    formData.append('username',userData.username);
-    formData.append('password',userData.password);
-    formData.append('isTeacher',userData.isTeacher);
-    formData.append('image',file);
+    const formData = new FormData();
+    formData.append("email", userData.email);
+    formData.append("username", userData.username);
+    formData.append("password", userData.password);
+    formData.append("isTeacher", userData.isTeacher);
+    formData.append("image", file);
     try {
-      const res = await fetch("http://localhost:8000/signup",{
-        method:'POST',
-        body:formData
-      })
+      const res = await fetch("http://localhost:8000/signup", {
+        method: "POST",
+        body: formData,
+      });
       if (res.status === 200) {
+        console.log(res);
         navigate("/Random");
       }
     } catch (err) {
@@ -41,14 +42,14 @@ const SignUp = () => {
       <ImageContainer src="./assets/back_img2.png" alt="Error" />
       <ImageContainer
         src="./assets/back_img1.png"
-        style={{ top: "450px", left: "400px", transform: "rotate(-10deg)" }}
+        style={{ top: "460px", left: "400px", transform: "rotate(-10deg)" }}
         alt="Error"
       />
       <Container>
         <Heading>Sign Up</Heading>
         <Content>
           <Form onSubmit={handleSubmit}>
-            <InputWrapper>
+            <InputWrapper style={{ marginTop: "10px" }}>
               <Label htmlFor="username">Username</Label>
               <Input
                 type="text"
@@ -114,13 +115,19 @@ const SignUp = () => {
                 style={{
                   display: "flex",
                   fontSize: "20px",
+                  height: "20px",
                 }}
               >
                 <Input
                   type="radio"
                   name="radio"
                   value="student"
-                  style={{ display: "block", fontSize: "20px", height: "10px" }}
+                  style={{
+                    display: "block",
+                    fontSize: "20px",
+                    height: "10px",
+                    width: "30px",
+                  }}
                 />
                 Student
               </Label>
@@ -130,13 +137,19 @@ const SignUp = () => {
                   display: "flex",
                   fontSize: "20px",
                   marginLeft: "10px",
+                  height: "20px",
                 }}
               >
                 <Input
                   type="radio"
                   name="radio"
                   value="teacher"
-                  style={{ display: "block", fontSize: "40px", height: "10px" }}
+                  style={{
+                    display: "block",
+                    fontSize: "40px",
+                    height: "10px",
+                    width: "30px",
+                  }}
                 />
                 Teacher
               </Label>
@@ -156,17 +169,20 @@ const ImageContainer = styled.img`
   position: absolute;
   height: 300px;
   width: 350px;
+  top: 130px;
   left: 200px;
   border-radius: 10px;
   transform: rotate(10deg);
   box-shadow: 2px 7px 29px 4px rgba(0, 0, 0, 0.75);
+  z-index: -1;
 `;
 const Container = styled.div`
-  height: 600px;
+  // z-index: 10;
+  height: 640px;
   width: 460px;
-  margin-top: 100px;
+  margin-top: 30px;
   margin-left: 60vw;
-
+  margin-bottom: 100px;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
@@ -187,6 +203,7 @@ const Heading = styled.div`
   color: white;
 `;
 const Content = styled.div`
+  // z-index: 10;
   height: 80%;
   width: 90%;
 `;
@@ -200,7 +217,7 @@ const Form = styled.form`
   align-items: center;
 `;
 const Input = styled.input`
-  height: 40%;
+  height: 30%;
   width: 90%;
   margin-top: 5px;
   cursor: pointer;
@@ -218,12 +235,13 @@ const Label = styled.label`
   color: #131c2c;
   font-weight: 700;
   letter-spacing: 1px;
+  border: none;
 `;
 
 const InputWrapper = styled.div`
-  height: 25%;
+  height: 20%;
   width: 90%;
-  padding: 20px 0px;
+  padding: 15px 0px;
 `;
 
 const Button = styled.button`

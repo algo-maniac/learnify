@@ -10,6 +10,7 @@ import Navbar from "./components/Navbar";
 import UploadVideo from "./components/UploadVideo";
 import Doubt from "./components/Doubt";
 import Teachers from "./components/Teachers";
+import ExamCorner from "./components/ExamCorner";
 function App() {
   const [userData, setUserData] = useState({
     id: "",
@@ -26,7 +27,7 @@ function App() {
     <>
       <Navbar userData={userData} />
       <Routes>
-        <Route path="/doubt" element={<Doubt/>}></Route>
+        <Route path="/doubt" element={<Doubt />}></Route>
         <Route path="/SignUp" element={<SignUp />} />
         <Route
           path="/LogIn"
@@ -34,10 +35,28 @@ function App() {
         />
         <Route path="/Random" element={<Random />} />
         <Route path="/home" element={<HomepageTeacher />} />
-        {userData.isLogged && <Route path="/live" element={<LiveStream username={userData.username}/>} />}
+        {userData.isLogged && (
+          <Route
+            path="/live"
+            element={<LiveStream username={userData.username} />}
+          />
+        )}
         <Route path="/uploadvideo" element={<UploadVideo data={userData} />} />
-        <Route path="/teachers" element={<Teachers isLogged={userData.isLogged} isTeacher={userData.isTeacher} id={userData.id}/>} />
-        <Route path="/teacher/:userID" element={<HomepageTeacher userData={userData}/>} />
+        <Route
+          path="/teachers"
+          element={
+            <Teachers
+              isLogged={userData.isLogged}
+              isTeacher={userData.isTeacher}
+              id={userData.id}
+            />
+          }
+        />
+        <Route
+          path="/teacher/:userID"
+          element={<HomepageTeacher userData={userData} />}
+        />
+        <Route path="/examcorner" element={<ExamCorner />} />
       </Routes>
     </>
   );

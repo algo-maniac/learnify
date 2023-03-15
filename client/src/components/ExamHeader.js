@@ -63,7 +63,7 @@ const ExamHeader = () => {
             <h3>Role/Position offered</h3>
             <div className={"text"}>{data[key].examRole}</div>
             <h3>Official Website Link</h3>
-            <div className={"text"}>{data[key].examUrl}</div>
+            <div className={"text"}>Follow this <a href={data[key].examUrl} target="_blank">Link</a></div>
             <h3>Syllabus</h3>
             <div className={"text"}>
               {data[key].examSyllabus}

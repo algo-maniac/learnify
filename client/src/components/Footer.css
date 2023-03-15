@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Bungee+Shade&family=Cutive&family=Poppins:wght@700&display=swap');
+footer{
+    background-color: rgb(0, 0, 0);
+    color: white;
+    width: 100%;
+    margin-top: 20px;
+}
+.logo{
+    background-color: white;
+}
+h5{
+    font-family: 'Bungee Shade', cursive;
+font-family: 'Cutive', serif;
+font-family: 'Poppins', sans-serif;
+color: white;
+}
+.container-footer{
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+}
+.upper-part{
+    display: flex;
+    flex-direction: row;
+    margin: 20px;
+    justify-content: space-around;
+}
+.lower-part{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.about-section{
+    display: flex;
+    /* border: 2px solid black; */
+    flex-direction: column;
+    width: 30%;
+    margin-left: 40px;
+    justify-content: center;
+    height: 30%;
+}
+.about-section h5{
+    font-size: 2rem;
+    margin: 3px;
+}
+.about-section p{
+    margin: 3px;
+    color: white;
+}
+.link-section{
+    width: 20%;
+}
+.link-section h5{
+    font-size: 2rem;
+    margin: 3px;
+}
+.link-section p{
+    margin: 3px;
+    color: white;
+}
+footer a{
+    text-decoration: none;
+    color: rgb(4, 4, 4)
+}
+.link-section ul li{
+    margin: 6px;
+    font-size: 1.2rem;
+}
+.title-section{
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+}
+.title-section h2{
+    font-size: 4.2rem;
+    color: white;
+}
+.lower-part .page-links{
+    text-align: center;
+    list-style: none;
+    width: 30%;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    margin: auto;
+    justify-content: center;
+}
+.page-links li{
+    margin: 6px;
+}
+.link-section ul{
+    list-style: none;
+}
+.links-list li a{
+    color: rgb(142, 141, 141);
+    text-decoration: none;
+}
+#title-header h2 a{
+    color: rgb(177, 174, 174);
+}
+#title-header a:hover{
+    color: white;
+    
+}
+.links-list a:hover{
+    color: white;
+}
+#aboutMe,#services{
+    color: rgb(142, 141, 141);
+}
+#aboutMe:hover,#services:hover{
+    cursor: pointer;
+    color: white;
+}
+.text-center{
+    align-items: center;
+    text-align: center;
+    padding: auto;
+    padding-left: 10px;
+}

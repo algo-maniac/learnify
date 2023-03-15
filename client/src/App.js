@@ -11,7 +11,7 @@ import UploadVideo from "./components/UploadVideo";
 import Doubt from "./components/Doubt";
 import Teachers from "./components/Teachers";
 import ExamCorner from "./components/ExamCorner";
-
+import Footer from "./components/Footer";
 function App() {
   const [userData, setUserData] = useState({
     id: "",
@@ -59,6 +59,7 @@ function App() {
         />
         <Route path="/exam-corner" element={<ExamCorner />} />
       </Routes>
+      <Footer/>
     </>
   );
 }

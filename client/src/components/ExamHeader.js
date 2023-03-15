@@ -93,16 +93,17 @@ const ExamHeader = () => {
       </div>
       <h2>Best Resouces Channel</h2>
       <div className={"resources"}>
-        <div>
-          <img src={"/profile-12.jpeg"} alt=""></img>
-          <span className={"header"}>Previous Year Paper</span>
-          <span className={"info"}>Guns and roses Sweet Child of Mine</span>
-        </div>
-        <div>
-          <img src={"/profile-13.png"} alt=""></img>
-          <span className={"header"}>Handwritten Notes</span>
-          <span className={"info"}>Guns and roses Sweet Child of Mine</span>
-        </div>
+        {
+          data[key].examResources.map((obj)=>(
+            <div className={"resourceCard"}>
+              <a href={obj.url} target="_blank">
+                <img src={obj.img} alt=""></img>
+              </a>
+              <span className={"header"}>{obj.name}</span>
+              <span className={"info"}>Start practicing by solving questions</span>
+            </div>
+          ))
+        }
       </div>
     </div>
     </>

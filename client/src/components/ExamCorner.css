@@ -5,7 +5,9 @@
   box-sizing: border-box;
   text-decoration: none;
   list-style: none;
-  font-family: "ubuntu";
+  /* font-family: 'Bungee Shade', cursive;
+  font-family: 'Cutive', serif;
+  font-family: 'Poppins', sans-serif; */
 }
 .linkSyllabus:hover{
   cursor: pointer;
@@ -20,6 +22,9 @@
   flex-direction: row;
   justify-content: space-around;
   flex-wrap: wrap;
+  font-family: 'Bungee Shade', cursive;
+font-family: 'Cutive', serif;
+font-family: 'Poppins', sans-serif;
 }
 .header div{
   width: 15%;
@@ -167,14 +172,29 @@ input[type="checkbox"]{
 }
 .resourceContainer h2{
   margin: 16px;
+  font-family: 'Bungee Shade', cursive;
+font-family: 'Cutive', serif;
+font-family: 'Poppins', sans-serif;
+}
+.resourceContainer .resources{
+  display: flex;
+  flex-wrap: wrap;
+}
+.resourceCard{
+  margin: 10px;
+  /* border: 3px solid black;
+  box-shadow: rgba(17, 17, 26, 0.1) 0px 0px 16px; */
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;
 }
 .channel{
   display: flex;
   flex-direction: row;
   justify-content: space-around;
+  
 }
 .channel div{
   text-align: center;
+  box-shadow: rgba(0, 0, 0, 0.05) 0px 0px 0px 1px, rgb(209, 213, 219) 0px 0px 0px 1px inset;
 }
 .channel img{
   width: 200px;
@@ -202,7 +222,7 @@ input[type="checkbox"]{
 .resources img{
   width: 200px;
   border-radius: 10px;
-  border: 3px solid black;
+  border: 1px solid black;
   height: 150px;
 }
 .resources .header{

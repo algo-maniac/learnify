@@ -19,7 +19,43 @@
             "url":"https://www.youtube.com/@Unacademy"
         }
         ],
-        "examResources":[]
+        "examResources":[
+            {
+                "name":"Alternate Current",
+                "img":"/profile-13.png",
+                "url":"https://drive.google.com/file/d/1q2LlxkkyQ-krIg4VOV6rNIMmrHBmG4My/view"
+            },
+            {
+                "name":"Current Electricity",
+                "img":"/profile-13.png",
+                "url":"https://drive.google.com/file/d/1vlwJRYCGqNP751trQmmxPUUJGfv3THvw/view"
+            },
+            {
+                "name":"Thermodynamics",
+                "img":"/profile-13.png",
+                "url":"https://drive.google.com/file/d/12YkpdiPr7V_18ChCDunc0fNbRC4HS5n_/view"
+            },
+            {
+                "name":"Magnetics",
+                "img":"/profile-13.png",
+                "url":"https://drive.google.com/file/d/1X6rG3cPXqq13eeJhz9msOBljzcl-qgy8/view"
+            },
+            {
+                "name":"Work Power And Energy",
+                "img":"/profile-13.png",
+                "url":"https://drive.google.com/file/d/1cDTH9i0RNvlXdrddUmeE9uGHCPtKfwQQ/view"
+            },
+            {
+                "name":"Optics",
+                "img":"/profile-13.png",
+                "url":"https://drive.google.com/file/d/1Ni-16ipa2AqP0WYgD9hjZaMJPuag-MzZ/view"
+            },
+            {
+                "name":"Previous Year Paper",
+                "img":"/profile-12.jpeg",
+                "url":"https://drive.google.com/drive/folders/0B5Dik0wytECEOGRLa2ZFOFZQZGc?resourcekey=0-r_tfjdPpKooIkuFSs5Pa9g"
+            }
+        ]
     },
     {
         "examName":"National Eligibility Examination Test (NEET)",
@@ -46,7 +82,42 @@
             "url":"https://www.youtube.com/@AakashEducation"
         }
         ],
-        "examResources":[]
+        "examResources":[{
+            "name":"Alternate Current",
+            "img":"/profile-13.png",
+            "url":"https://drive.google.com/file/d/1q2LlxkkyQ-krIg4VOV6rNIMmrHBmG4My/view"
+        },
+        {
+            "name":"Current Electricity",
+            "img":"/profile-13.png",
+            "url":"https://drive.google.com/file/d/1vlwJRYCGqNP751trQmmxPUUJGfv3THvw/view"
+        },
+        {
+            "name":"Thermodynamics",
+            "img":"/profile-13.png",
+            "url":"https://drive.google.com/file/d/12YkpdiPr7V_18ChCDunc0fNbRC4HS5n_/view"
+        },
+        {
+            "name":"Magnetics",
+            "img":"/profile-13.png",
+            "url":"https://drive.google.com/file/d/1X6rG3cPXqq13eeJhz9msOBljzcl-qgy8/view"
+        },
+        {
+            "name":"Work Power And Energy",
+            "img":"/profile-13.png",
+            "url":"https://drive.google.com/file/d/1cDTH9i0RNvlXdrddUmeE9uGHCPtKfwQQ/view"
+        },
+        {
+            "name":"Optics",
+            "img":"/profile-13.png",
+            "url":"https://drive.google.com/file/d/1Ni-16ipa2AqP0WYgD9hjZaMJPuag-MzZ/view"
+        },
+        {
+            "name":"Previous Year Paper",
+            "img":"/profile-12.jpeg",
+            "url":"https://medicine.careers360.com/articles/neet-question-paper"
+        }
+    ]
     },
     {
         "examName":"Central Teacher Eligibility Test (CTET)",
@@ -66,7 +137,18 @@
             "url":"https://www.youtube.com/@YourCTETGirl",
             "img":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQheMd4B3H3PwEjvnd7ygHJ2z_jaWyWA4OnI6VzKLz6DA&s"
         }],
-        "examResources":[]
+        "examResources":[
+            {
+                "name":"Materials",
+                "img":"/profile-13.png",
+                "url":"https://www.pdfdrive.com/ctet-study-material-free-download-e40340401.html"
+            },
+            {
+                "name":"Previous Year Paper",
+                "img":"/profile-12.jpeg",
+                "url":"https://www.adda247.com/teaching-jobs-exam/ctet-previous-year-question-paper-pdfs/"
+            }
+        ]
     },
     {
         "examName":"National Defence Academy (NDA)",
@@ -82,7 +164,18 @@
             "img":"/profile-10.jpeg",
             "url":"https://www.youtube.com/@DefenceWallahPW"
         }],
-        "examResources":[]
+        "examResources":[
+            {
+                "name":"Materials",
+                "img":"/profile-13.png",
+                "url":"https://prepp.in/nda-exam/study-material"
+            },
+            {
+                "name":"Previous Year Paper",
+                "img":"/profile-12.jpeg",
+                "url":"https://www.careerpower.in/nda-previous-year-question-paper.html"
+            }
+        ]
     },
     {
         "examName":"Union Public Service Commission. (UPSC)",
@@ -98,6 +191,14 @@
             "img":"https://themayanagari.com/wp-content/uploads/2020/12/khan-sir-image-4.png",
             "url":"https://www.youtube.com/@khangsresearchcentre1685"
         }],
-        "examResources":[]
+        "examResources":[{
+            "name":"All subject",
+            "img":"/profile-13.png",
+            "url":"https://drive.google.com/drive/folders/1hCP9CDWTLAsee21MQ7qjSIrddyOnWglU"
+        },{
+            "name":"Previous Year Paper",
+            "img":"/profile-12.jpeg",
+            "url":"https://www.upsc.gov.in/examinations/previous-question-papers?field_exam_name_value=&page=1"
+        }]
     }
 ]

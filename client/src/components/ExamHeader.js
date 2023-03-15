@@ -29,7 +29,7 @@ const ExamHeader = () => {
 
   },[key])
   return (
-    <>
+    <div className={"exam-container"}>
       <div className={"header"}>
         <div id="jee" onClick={jeeHandler} className={key===0?'active':''}>
           <span>JEE</span>
@@ -106,7 +106,7 @@ const ExamHeader = () => {
         }
       </div>
     </div>
-    </>
+    </div>
   );
 };
 export default ExamHeader;

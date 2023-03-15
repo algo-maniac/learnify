@@ -1,36 +1,36 @@
 @import url('https://fonts.googleapis.com/css2?family=Bungee+Shade&family=Cutive&family=Poppins:wght@700&display=swap');
-footer{
+footer {
     background-color: rgb(0, 0, 0);
     color: white;
     width: 100%;
     margin-top: 20px;
 }
-.logo{
+footer .logo{
     background-color: white;
 }
-h5{
+footer h5{
     font-family: 'Bungee Shade', cursive;
 font-family: 'Cutive', serif;
 font-family: 'Poppins', sans-serif;
 color: white;
 }
-.container-footer{
+footer .container-footer{
     display: flex;
     width: 100%;
     flex-direction: column;
 }
-.upper-part{
+footer .upper-part{
     display: flex;
     flex-direction: row;
     margin: 20px;
     justify-content: space-around;
 }
-.lower-part{
+footer .lower-part{
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
-.about-section{
+footer .about-section{
     display: flex;
     /* border: 2px solid black; */
     flex-direction: column;
@@ -39,22 +39,22 @@ color: white;
     justify-content: center;
     height: 30%;
 }
-.about-section h5{
+footer .about-section h5{
     font-size: 2rem;
     margin: 3px;
 }
-.about-section p{
+footer .about-section p{
     margin: 3px;
     color: white;
 }
-.link-section{
+footer .link-section{
     width: 20%;
 }
-.link-section h5{
+footer .link-section h5{
     font-size: 2rem;
     margin: 3px;
 }
-.link-section p{
+footer .link-section p{
     margin: 3px;
     color: white;
 }
@@ -62,22 +62,22 @@ footer a{
     text-decoration: none;
     color: rgb(4, 4, 4)
 }
-.link-section ul li{
+footer .link-section ul li{
     margin: 6px;
     font-size: 1.2rem;
 }
-.title-section{
+footer .title-section{
     width: 30%;
     display: flex;
     flex-direction: column;
     text-align: center;
     justify-content: center;
 }
-.title-section h2{
+footer .title-section h2{
     font-size: 4.2rem;
     color: white;
 }
-.lower-part .page-links{
+footer .lower-part .page-links{
     text-align: center;
     list-style: none;
     width: 30%;
@@ -87,34 +87,34 @@ footer a{
     margin: auto;
     justify-content: center;
 }
-.page-links li{
+footer .page-links li{
     margin: 6px;
 }
-.link-section ul{
+footer .link-section ul{
     list-style: none;
 }
-.links-list li a{
+footer .links-list li a{
     color: rgb(142, 141, 141);
     text-decoration: none;
 }
-#title-header h2 a{
+footer #title-header h2 a{
     color: rgb(177, 174, 174);
 }
-#title-header a:hover{
+footer #title-header a:hover{
     color: white;
     
 }
-.links-list a:hover{
+footer .links-list a:hover{
     color: white;
 }
-#aboutMe,#services{
+footer #aboutMe,#services{
     color: rgb(142, 141, 141);
 }
-#aboutMe:hover,#services:hover{
+footer #aboutMe:hover,#services:hover{
     cursor: pointer;
     color: white;
 }
-.text-center{
+footer .text-center{
     align-items: center;
     text-align: center;
     padding: auto;

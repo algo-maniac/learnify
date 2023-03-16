@@ -1,6 +1,6 @@
 import React from 'react'
 import './Sidebar.css'
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 
 function Sidebar(props) {
@@ -18,6 +18,7 @@ function Sidebar(props) {
 
   return (
     <div className="navigation">
+        <Link to={"/teacher/" + id}><button className='navbar_option'>Dashboard</button></Link>
         <button className="navbar_option" onClick={goLive}>Go Live</button>
         <button className="navbar_option" onClick={uploadVideo}>Upload Lecture</button>
     </div>

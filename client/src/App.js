@@ -12,6 +12,7 @@ import Doubt from "./components/Doubt";
 import Teachers from "./components/Teachers";
 import ExamCorner from "./components/ExamCorner";
 import Footer from "./components/Footer";
+import Home from "./pages/Home";
 function App() {
   const [userData, setUserData] = useState({
     id: "",
@@ -28,6 +29,7 @@ function App() {
     <>
       <Navbar userData={userData} />
       <Routes>
+        <Route path="/" element={<Home/>}></Route>
         <Route path="/doubt" element={<Doubt />}></Route>
         <Route path="/SignUp" element={<SignUp />} />
         <Route

@@ -15,9 +15,9 @@ function Navbar(props) {
         <div className="navbar_right">
           <div className="navbar_options">
             <ul>
+              <li><Link to="/">Home</Link></li>
               {props.userData.isTeacher && <li><Link exact to={"/teacher/" + props.userData.id}>Dashboard</Link></li>}
               <li><Link exact to="/doubt">Doubt</Link></li>
-              <li><Link exact to="/">Courses</Link></li>
               <li><Link exact to="/teachers">Teachers</Link></li>
               <li><Link exact to="/exam-corner">Exam-Corner</Link></li>
               <li><Link exact to="/">About Us</Link></li>

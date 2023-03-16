@@ -8,7 +8,7 @@ function TeacherDetails(props) {
   return (
     <div className="teacher_details">
         
-        {props.img && <Avatar src={img} sx={{ width: 70, height: 70 }}/>}
+        <Avatar src={img} sx={{ width: 70, height: 70 }}/>
         {props.username && <h2>{username}</h2>}
     </div>
   )

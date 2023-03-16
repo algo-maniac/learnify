@@ -10,26 +10,29 @@ function Home() {
     return (
         <div className='home_background'>
             <div className="home">
+                <div className="banner">
+                    <h2>Learning made easy</h2>
+                </div>
                 <div className="cards">
                     <Link to="/teachers">
                     <div className="card">
                         <PersonIcon sx={{ fontSize: 40 }} />
                         <h3>Teachers</h3>
-                        <p>Teachers Teachers Teachers Teachers Teachers Teachers </p>
+                        <p>Follow the most experienced teacher on Learnify</p>
                     </div>
                     </Link>
-                    <Link to="/teachers">
+                    <Link to="/doubt">
                     <div className="card">
                         <PsychologyAltIcon sx={{ fontSize: 40 }} />
                         <h3>Having a Doubt</h3>
-                        <p>Teachers Teachers Teachers Teachers Teachers Teachers </p>
+                        <p>Have any doubt? clear it out instantly with Learnify doubt support</p>
                     </div>
                     </Link>
-                    <Link to="/teachers">
+                    <Link to="/exam-corner">
                     <div className="card">
                         <InfoIcon sx={{ fontSize: 40 }} />
                         <h3>Exam Information</h3>
-                        <p>Teachers Teachers Teachers Teachers Teachers Teachers </p>
+                        <p>Get all exam related information in one place. Explore now</p>
                     </div>
                     </Link>
                 </div>

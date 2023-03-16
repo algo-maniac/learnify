@@ -35,7 +35,7 @@ function Teachers(props) {
         </div>}
         <div className="teachercards">
           {teacherData.map(data => (
-            <TeacherCard img={data.img} username={data.username} />
+            <TeacherCard img={data.img} username={data.username} id={data._id}/>
           ))}
             {/* <TeacherCard img={img} username={username} />
             <TeacherCard img={img} username={username} />

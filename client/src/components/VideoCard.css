@@ -5,7 +5,12 @@
     overflow: hidden;
     /* border: 2px solid black; */
     border-radius: 10px;
-    box-shadow: 4px 4px 10px 5px rgb(199, 199, 199);
+    box-shadow: 5px 5px 10px 5px rgb(148, 146, 146);
+}
+
+.videocard > a {
+    text-decoration: none;
+    color: black;
 }
 
 .thumbnail {

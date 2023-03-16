@@ -43,7 +43,8 @@ function UploadVideo(props) {
       .then((result) => {
         alert(result.msg);
         // navigate karna hai waha kar dena
-        navigate(`teacher/${props.username.substring(0, 5)}`);
+        // navigate("/teacher" + props.user);
+        navigate(`/teacher/${props.data.id}`);
       })
       .catch((er) => {});
   };

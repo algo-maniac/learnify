@@ -22,16 +22,17 @@ const LogIn = ({ userData, setUserData }) => {
         console.log("Wrong Password");
       } else {
         console.log("Logged In");
-        const { _id, username, email, isTeacher } = res.data;
+        const { _id, img, username, email, isTeacher } = res.data;
         await setUserData({
           username,
+          img,
           email,
           isLogged: true,
           isTeacher,
           id: _id,
         });
         console.log(userData);
-        navigate("/teachers");
+        navigate("/");
       }
     } catch (err) {
       console.log(err);

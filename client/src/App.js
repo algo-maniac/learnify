@@ -16,6 +16,7 @@ import Home from "./pages/Home";
 function App() {
   const [userData, setUserData] = useState({
     id: "",
+    img: "",
     email: "",
     username: "",
     isLogged: false,
@@ -27,7 +28,7 @@ function App() {
   }, [userData]);
   return (
     <>
-      <Navbar userData={userData} />
+      <Navbar userData={userData} setUserData={setUserData}/>
       <Routes>
         <Route path="/" element={<Home />}></Route>
         <Route path="/doubt" element={<Doubt />}></Route>

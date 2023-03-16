@@ -6,8 +6,9 @@ import { Link } from 'react-router-dom';
 function VideoCard(props) {
   const {img, video} = props;
   return (
+    <div className="videocard">
     <a href={video.videoUrl} target="_blank" rel="noreferrer">
-      <div className="videocard">
+      <div>
           <img src={"http://localhost:8000/"+props.video.thumbnail} alt="" className="thumbnail"/>
           <div className="details">
               <div className="details_logo">
@@ -17,6 +18,7 @@ function VideoCard(props) {
           </div>
       </div>
     </a>
+    </div>
   )
 }
 

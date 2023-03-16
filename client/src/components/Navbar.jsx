@@ -1,32 +1,43 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Link, Navigate, NavLink } from "react-router-dom";
 import "./Navbar.css";
 import { Avatar } from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 
 function Navbar(props) {
+  const logout = () => {
+    props.setUserData({
+      id: "",
+      email: "",
+      username: "",
+      isLogged: false,
+      isTeacher: false,
+    })
+    Navigate("/");
+  }
+
+
   console.log(props);
   return (
     <div className="navbar">
+      <Link to="/">
       <div className="navbar_branding">
-        {/* <img
+        <img
           src="/learnify_logo.png"
           alt=""
           className="navbar_logo"
           style={{ backgroudColor: "white" }}
-        /> */}
+        />
         <h1
-          style={{ color: "white", marginLeft: "50px", letterSpacing: "2px" }}
+          style={{letterSpacing: "2px" }}
         >
           Learnify
         </h1>
       </div>
+      </Link>
 
       {props.userData.isLogged && (
         <div className="login_details">
-          <p>{props.userData.username}</p>
-          <Avatar src={props.userData.img} sx={{ width: 50, height: 50 }} />
-          <ArrowDropDownIcon />
 
           <div className="navbar_right">
             <div className="navbar_options">
@@ -63,6 +74,32 @@ function Navbar(props) {
                 </li>
               </ul>
             </div>
+          </div>
+          <div className="login_details">
+            <p>{props.userData.username}</p>
+            <Avatar src={props.userData.img} sx={{ width: 50, height: 50 }} />
+            <button
+            onClick={logout}
+            className="btn"
+            style={{
+              borderRadius: "30px 30px 30px 30px",
+              // borderLeft: "2px solid black",
+              // borderRight: "2px solid black",
+            }}
+          >
+            <Link
+              to="/"
+              style={{
+                textDecoration: "none",
+                color: "white",
+                paddingLeft: "15px",
+                paddingRight: "15px",
+                fontSize: "16px",
+              }}
+            >
+              Logout
+            </Link>
+          </button>
           </div>
         </div>
       )}

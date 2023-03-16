@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import './Homepage.css'
+import './HomepageTeacher.css'
 import TeacherDetails from './TeacherDetails'
 import VideoCards from './VideoCards'
 import { useNavigate } from 'react-router-dom';

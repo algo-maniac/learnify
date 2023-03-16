@@ -1,14 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Bungee+Shade&family=Cutive&family=Poppins:wght@700&display=swap');
 footer {
     background-color: rgb(0, 0, 0);
+    background-color: #2F58CD;
     color: white;
     width: 100%;
     position: relative;
     bottom: 0px;
-    border-top: 2px solid rgb(210, 210, 210);
+    /* border-top: 2px solid rgb(210, 210, 210); */
 }
 footer .logo{
-    background-color: white;
+    /* background-color: white; */
 }
 footer h5{
     font-family: 'Bungee Shade', cursive;

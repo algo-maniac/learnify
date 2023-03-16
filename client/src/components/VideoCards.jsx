@@ -12,6 +12,7 @@ function VideoCards(props) {
       {videoInfo && videoInfo.map(video => (
         <VideoCard img={img} video={video} />
       ))}
+    
     </div>
   )
 }

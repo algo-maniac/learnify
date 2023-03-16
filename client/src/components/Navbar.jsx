@@ -19,6 +19,7 @@ function Navbar(props) {
               <li><Link exact to="/doubt">Doubt</Link></li>
               <li><Link exact to="/">Courses</Link></li>
               <li><Link exact to="/teachers">Teachers</Link></li>
+              <li><Link exact to="/exam-corner">Exam-Corner</Link></li>
               <li><Link exact to="/">About Us</Link></li>
             </ul>
           </div>

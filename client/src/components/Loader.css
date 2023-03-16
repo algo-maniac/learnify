@@ -18,18 +18,18 @@
   display: flex;
   justify-content: center;
 }
-.wrapper{
+.loader-container .wrapper{
   position: absolute;
   top: 250px;
   transform: scale(1.5);
 }
-.loader{
+.loader-container .loader{
   height: 25px;
  width: 1px;
  position: absolute;
  animation: rotate 3.5s linear infinite;
 }
-.loader .dot{
+.loader-container .loader .dot{
   top: 30px;
  height: 7px;
  width: 7px;
@@ -37,7 +37,7 @@
  border-radius: 50%;
  position: relative;
 }
-.text{
+.loader-container .text{
   position: absolute;
   bottom: -345px;
   font-size: 25px;

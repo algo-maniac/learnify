@@ -4,7 +4,6 @@ import Chatcontainer from './Chatcontainer';
 function Doubt() {
   return (
     <div className="container">
-      <Sidebar2></Sidebar2>
       <Chatcontainer></Chatcontainer>
     </div>
   );

@@ -5,39 +5,81 @@ const Sender = () => {
   // //   fetch("http://localhost:3000/doubt", {
   // //   method: "POST",
   // //   body: JSON.stringify({
-        
+
   // //   }),
   // //   headers: {
   // //       "Content-type": "application/json; charset=UTF-8"
   // //   }
   // // }).then().catch();
   // // }
-  const [postData,setpostData]=useState('');
-  const [file,setFile]=useState('');
-  const questionHandler=(env)=>{
+  const [postData, setpostData] = useState("");
+  const [file, setFile] = useState("");
+  const questionHandler = (env) => {
     setpostData(env.target.value);
-  }
-  const imgHandler=(env)=>{
+  };
+  const imgHandler = (env) => {
     setFile(env.target.files[0]);
-  }
-  const submitHandler=(env)=>{
+  };
+  const submitHandler = (env) => {
     env.preventDefault();
-    const formData=new FormData();
-    formData.append('image',file);
-    formData.append('question',postData);
-    fetch('http://localhost:8000/doubt',{
-      method:'POST',
-      body:formData
-    }).then(()=>{
-      alert('Question Posted');
-      window.location.reload();
-    }).catch();
-  }
+    const formData = new FormData();
+    formData.append("image", file);
+    formData.append("question", postData);
+    fetch("http://localhost:8000/doubt", {
+      method: "POST",
+      body: formData,
+    })
+      .then(() => {
+        alert("Question Posted");
+        window.location.reload();
+      })
+      .catch();
+  };
   return (
-    <form method="POST" className="sendingPanel">
-        <input type="text" placeholder="Post your doubt here" name="question" onChange={questionHandler}></input>
-        <input type="file" className="fileUploader" name="img" id="imgUrl" onChange={imgHandler}></input>
-        <button type="submit" onClick={submitHandler}>Post</button>
+    <form method="POST" className="sendingPanel" style={{ marginTop: "10px" }}>
+      <input
+        type="text"
+        placeholder="Post your doubt here"
+        name="question"
+        onChange={questionHandler}
+        style={{
+          height: "40px",
+          width: "80%",
+          borderRadius: "10px",
+          padding: "6px",
+          // color: "white",
+          // backgroundColor: "#171b29",
+        }}
+      ></input>
+      <input
+        type="file"
+        className="fileUploader"
+        name="img"
+        id="imgUrl"
+        onChange={imgHandler}
+        style={{
+          height: "50px",
+          width: "130px",
+          borderRadius: "10px",
+          padding: "4px",
+          color: "white",
+          // backgroundColor: "#171b29",
+        }}
+      ></input>
+      <button
+        type="submit"
+        onClick={submitHandler}
+        style={{
+          height: "40px",
+          width: "100px",
+          borderRadius: "10px",
+          padding: "4px",
+          color: "white",
+          backgroundColor: "#171b29",
+        }}
+      >
+        Post
+      </button>
     </form>
   );
 };

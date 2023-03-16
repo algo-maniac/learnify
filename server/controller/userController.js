@@ -30,8 +30,8 @@ module.exports.signuppost = async (req, res) => {
       res.status(400).send("Account exits with same email or username");
     } else {
       const user = new User({
-        userName:username,
-        email:email,
+        userName: username,
+        email: email,
         password: hashedPassword,
         isTeacher: isTeacher === 1 ? true : false,
         profileImage: profileImage,

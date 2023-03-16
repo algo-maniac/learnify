@@ -29,7 +29,7 @@ function App() {
     <>
       <Navbar userData={userData} />
       <Routes>
-        <Route path="/" element={<Home/>}></Route>
+        <Route path="/" element={<Home />}></Route>
         <Route path="/doubt" element={<Doubt />}></Route>
         <Route path="/SignUp" element={<SignUp />} />
         <Route
@@ -61,7 +61,7 @@ function App() {
         />
         <Route path="/exam-corner" element={<ExamCorner />} />
       </Routes>
-      <Footer/>
+      {/* <Footer /> */}
     </>
   );
 }

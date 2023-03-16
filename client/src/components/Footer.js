@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import './Footer.css'
 const Footer = () => {
   return (
@@ -24,25 +25,25 @@ const Footer = () => {
             <h5>Quick links</h5>
             <ul className="links-list">
               <li>
-                <a href="/">Home</a>
+                <Link to="/">Home</Link>
               </li>
               <li>
-                <a href="/login">Login</a>
+                <Link to="/login">Login</Link>
               </li>
               <li>
-                <a href="/signup">Signup</a>
+                <Link to="/signup">Signup</Link>
               </li>
               <li>
-                <a href="/teachers">Teachers</a>
+                <Link to="/teachers">Teachers</Link>
               </li>
               <li>
-                <a href="/exam-corner">Exam-Corner</a>
+                <Link to="/exam-corner">Exam-Corner</Link>
               </li>
             </ul>
           </div>
 
           <div className="title-section" id="title-header">
-            <a href="/home" class="footer-title">
+            <Link to="/home" class="footer-title">
               <img
                 src="/learnify_logo.png"
                 width="300px"
@@ -51,7 +52,7 @@ const Footer = () => {
                 alt=""
                 className='logo'
               ></img>
-            </a>
+            </Link>
           </div>
         </div>
 

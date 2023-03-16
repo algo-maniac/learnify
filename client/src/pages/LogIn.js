@@ -107,10 +107,11 @@ const Container = styled.div`
   border-radius: 10px;
   box-shadow: 2px 7px 29px 4px rgba(0, 0, 0, 0.75);
   background-color: white;
+  background: linear-gradient(90deg, #e3ffe7 0%, #d9e7ff 100%);
 `;
 
 const Heading = styled.div`
-  height: 10%;
+  height: 13%;
   width: 60%;
   //   border: 2px solid red;
   font-size: 40px;

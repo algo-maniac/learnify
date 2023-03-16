@@ -66,7 +66,7 @@ function HomepageTeacher(props) {
 
   return (
     <div className='homepage'>
-      <div>
+      <div className='sidebar'>
       {userData.isTeacher && userData.isLogged &&
         <div>
           < Sidebar id={userData.id}/>

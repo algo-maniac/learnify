@@ -16,9 +16,10 @@ module.exports.signup = (req, res) => {
 module.exports.signuppost = async (req, res) => {
   const { username, email, password, isTeacher } = req.body;
   let profileImage = "";
-  if (req.file != "") {
+  if (req.file) {
     profileImage = req.file.path;
   }
+  console.log(req.body);
   try {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -29,15 +30,15 @@ module.exports.signuppost = async (req, res) => {
       res.status(400).send("Account exits with same email or username");
     } else {
       const user = new User({
-        username,
-        email,
+        userName: username,
+        email: email,
         password: hashedPassword,
         isTeacher: isTeacher === 1 ? true : false,
         profileImage: profileImage,
       });
       await user.save();
       console.log(user);
-      const token = createToken(user.id);
+      // const token = createToken(user.id);
       res.status(200).json({ ...user, token });
 
       // res.cookie("jwt", token, { httpOnly: true, maxAge: age * 1000 });

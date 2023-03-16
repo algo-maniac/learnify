@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./Post.css";
 import SinglePost from "./SinglePost";
+import Loader from './Loader'
 const Posts = () => {
   const [data, setData] = useState([]);
   const [loader,setLoader]=useState(true);
@@ -24,7 +25,7 @@ const Posts = () => {
   return (
     <div className="postBox">
       {
-        loader && <p>Loading Wait for the Respense</p>
+        loader && <Loader/>
       }
       {
         data.map((obj,key)=>(

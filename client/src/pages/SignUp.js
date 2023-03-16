@@ -23,18 +23,21 @@ const SignUp = () => {
     formData.append("password", userData.password);
     formData.append("isTeacher", userData.isTeacher);
     formData.append("image", file);
-    try {
-      const res = await fetch("http://localhost:8000/signup", {
+    console.log(formData)
+      fetch("http://localhost:8000/signup", {
         method: "POST",
         body: formData,
+      }).then((data)=>{
+        return data.json();
+      }).then((result)=>{
+        console.log(result);
+      }).catch((er)=>{
+        console.log(er);
       });
-      if (res.status === 200) {
-        console.log(res);
-        navigate("/Random");
-      }
-    } catch (err) {
-      console.log(err);
-    }
+      // if (res.status === 200) {
+      //   console.log(res);
+      //   navigate("/home");
+      // }
   };
 
   return (

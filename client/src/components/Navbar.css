@@ -8,9 +8,11 @@
     justify-content: space-between;
     align-items: center;
     padding: 5px 10px;
+
     height:80px;
     background: #171b29;
 /* background: linear-gradient(90deg, rgba(10,0,129,1) 0%, rgba(38,68,154,1) 47%, rgba(231,226,255,0.7596288515406162) 100%); */
+
 }
 
 .navbar_branding {

@@ -1,0 +1,122 @@
+@import url('https://fonts.googleapis.com/css2?family=Bungee+Shade&family=Cutive&family=Poppins:wght@700&display=swap');
+footer {
+    background-color: rgb(0, 0, 0);
+    color: white;
+    width: 100%;
+    border-top: 2px solid rgb(210, 210, 210);
+}
+footer .logo{
+    background-color: white;
+}
+footer h5{
+    font-family: 'Bungee Shade', cursive;
+font-family: 'Cutive', serif;
+font-family: 'Poppins', sans-serif;
+color: white;
+}
+footer .container-footer{
+    display: flex;
+    width: 100%;
+    flex-direction: column;
+}
+footer .upper-part{
+    display: flex;
+    flex-direction: row;
+    margin: 20px;
+    justify-content: space-around;
+}
+footer .lower-part{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+footer .about-section{
+    display: flex;
+    /* border: 2px solid black; */
+    flex-direction: column;
+    width: 30%;
+    margin-left: 40px;
+    justify-content: center;
+    height: 30%;
+}
+footer .about-section h5{
+    font-size: 2rem;
+    margin: 3px;
+}
+footer .about-section p{
+    margin: 3px;
+    color: white;
+}
+footer .link-section{
+    width: 20%;
+}
+footer .link-section h5{
+    font-size: 2rem;
+    margin: 3px;
+}
+footer .link-section p{
+    margin: 3px;
+    color: white;
+}
+footer a{
+    text-decoration: none;
+    color: rgb(4, 4, 4)
+}
+footer .link-section ul li{
+    margin: 6px;
+    font-size: 1.2rem;
+}
+footer .title-section{
+    width: 30%;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    justify-content: center;
+}
+footer .title-section h2{
+    font-size: 4.2rem;
+    color: white;
+}
+footer .lower-part .page-links{
+    text-align: center;
+    list-style: none;
+    width: 30%;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+    margin: auto;
+    justify-content: center;
+}
+footer .page-links li{
+    margin: 6px;
+}
+footer .link-section ul{
+    list-style: none;
+}
+footer .links-list li a{
+    color: rgb(142, 141, 141);
+    text-decoration: none;
+}
+footer #title-header h2 a{
+    color: rgb(177, 174, 174);
+}
+footer #title-header a:hover{
+    color: white;
+    
+}
+footer .links-list a:hover{
+    color: white;
+}
+footer #aboutMe,#services{
+    color: rgb(142, 141, 141);
+}
+footer #aboutMe:hover,#services:hover{
+    cursor: pointer;
+    color: white;
+}
+footer .text-center{
+    align-items: center;
+    text-align: center;
+    padding: auto;
+    padding-left: 10px;
+}

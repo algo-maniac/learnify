@@ -1,0 +1,204 @@
+[
+    {
+        "examName":"Joint Entrance Examination (JEE)",
+        "examReg":"14 Feb - 12 Mar 2023",
+        "examDate":"6 - 12 April 2023",
+        "examRole":"IITs, NITs, IIITs, GFTIs college seats",
+        "examImg":"/profile-5.jpeg",
+        "examUrl":"https://jeemain.nta.nic.in/",
+        "examSyllabus":"Mathematics, Physics, Chemistry",
+        "examSyllabusUrl":"https://byjus.com/jee/jee-main-syllabus/",
+        "examVideoLinks":[{
+            "name":"Physics Wallah",
+            "img":"/profile-10.jpeg",
+            "url":"https://www.youtube.com/@PhysicsWallah"
+        },
+        {
+            "name":"Unacademy",
+            "img":"/profile-11.jpeg",
+            "url":"https://www.youtube.com/@Unacademy"
+        }
+        ],
+        "examResources":[
+            {
+                "name":"Alternate Current",
+                "img":"/profile-13.png",
+                "url":"https://drive.google.com/file/d/1q2LlxkkyQ-krIg4VOV6rNIMmrHBmG4My/view"
+            },
+            {
+                "name":"Current Electricity",
+                "img":"/profile-13.png",
+                "url":"https://drive.google.com/file/d/1vlwJRYCGqNP751trQmmxPUUJGfv3THvw/view"
+            },
+            {
+                "name":"Thermodynamics",
+                "img":"/profile-13.png",
+                "url":"https://drive.google.com/file/d/12YkpdiPr7V_18ChCDunc0fNbRC4HS5n_/view"
+            },
+            {
+                "name":"Magnetics",
+                "img":"/profile-13.png",
+                "url":"https://drive.google.com/file/d/1X6rG3cPXqq13eeJhz9msOBljzcl-qgy8/view"
+            },
+            {
+                "name":"Work Power And Energy",
+                "img":"/profile-13.png",
+                "url":"https://drive.google.com/file/d/1cDTH9i0RNvlXdrddUmeE9uGHCPtKfwQQ/view"
+            },
+            {
+                "name":"Optics",
+                "img":"/profile-13.png",
+                "url":"https://drive.google.com/file/d/1Ni-16ipa2AqP0WYgD9hjZaMJPuag-MzZ/view"
+            },
+            {
+                "name":"Previous Year Paper",
+                "img":"/profile-12.jpeg",
+                "url":"https://drive.google.com/drive/folders/0B5Dik0wytECEOGRLa2ZFOFZQZGc?resourcekey=0-r_tfjdPpKooIkuFSs5Pa9g"
+            }
+        ]
+    },
+    {
+        "examName":"National Eligibility Examination Test (NEET)",
+        "examReg":"2nd week of March",
+        "examDate":"7 May 2023 (tentative)",
+        "examRole":"Medical College seats",
+        "examImg":"/profile-6.jpeg",
+        "examUrl":"https://neet.nta.nic.in/",
+        "examSyllabus":"Biology, Physics, Chemistry",
+        "examSyllabusUrl":"https://medicine.careers360.com/articles/neet-syllabus",
+        "examVideoLinks":[{
+            "name":"Physics Wallah",
+            "img":"/profile-10.jpeg",
+            "url":"https://www.youtube.com/@PhysicsWallah"
+        },
+        {
+            "name":"Unacademy",
+            "img":"/profile-11.jpeg",
+            "url":"https://www.youtube.com/@Unacademy"
+        },
+        {
+            "name":"Aakash Institute",
+            "img":"data:image/png;base64,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",
+            "url":"https://www.youtube.com/@AakashEducation"
+        }
+        ],
+        "examResources":[{
+            "name":"Alternate Current",
+            "img":"/profile-13.png",
+            "url":"https://drive.google.com/file/d/1q2LlxkkyQ-krIg4VOV6rNIMmrHBmG4My/view"
+        },
+        {
+            "name":"Current Electricity",
+            "img":"/profile-13.png",
+            "url":"https://drive.google.com/file/d/1vlwJRYCGqNP751trQmmxPUUJGfv3THvw/view"
+        },
+        {
+            "name":"Thermodynamics",
+            "img":"/profile-13.png",
+            "url":"https://drive.google.com/file/d/12YkpdiPr7V_18ChCDunc0fNbRC4HS5n_/view"
+        },
+        {
+            "name":"Magnetics",
+            "img":"/profile-13.png",
+            "url":"https://drive.google.com/file/d/1X6rG3cPXqq13eeJhz9msOBljzcl-qgy8/view"
+        },
+        {
+            "name":"Work Power And Energy",
+            "img":"/profile-13.png",
+            "url":"https://drive.google.com/file/d/1cDTH9i0RNvlXdrddUmeE9uGHCPtKfwQQ/view"
+        },
+        {
+            "name":"Optics",
+            "img":"/profile-13.png",
+            "url":"https://drive.google.com/file/d/1Ni-16ipa2AqP0WYgD9hjZaMJPuag-MzZ/view"
+        },
+        {
+            "name":"Previous Year Paper",
+            "img":"/profile-12.jpeg",
+            "url":"https://medicine.careers360.com/articles/neet-question-paper"
+        }
+    ]
+    },
+    {
+        "examName":"Central Teacher Eligibility Test (CTET)",
+        "examReg":"October 2023",
+        "examDate":"December 2023 - January 2024",
+        "examRole":"Primary and Secondary Teachers",
+        "examUrl":"https://ctet.nic.in/",
+        "examImg":"/profile-7.jpeg",
+        "examSyllabus":"Child development and pedagogy, Language-I, Language-II, Mathematics, Environmental studies",
+        "examSyllabusUrl":"https://www.careerpower.in/ctet-syllabus.html",
+        "examVideoLinks":[{
+            "name":"Let's LEARN",
+            "img":"https://yt3.googleusercontent.com/ytc/AL5GRJWR1jQDRp7uZtCSxwfhEQ9AoFpLr9Hg7HkQA70e=s900-c-k-c0x00ffffff-no-rj",
+            "url":"https://www.youtube.com/@LetsLEARN2016"
+        },{
+            "name":"YourCTETGirl",
+            "url":"https://www.youtube.com/@YourCTETGirl",
+            "img":"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQheMd4B3H3PwEjvnd7ygHJ2z_jaWyWA4OnI6VzKLz6DA&s"
+        }],
+        "examResources":[
+            {
+                "name":"Materials",
+                "img":"/profile-13.png",
+                "url":"https://www.pdfdrive.com/ctet-study-material-free-download-e40340401.html"
+            },
+            {
+                "name":"Previous Year Paper",
+                "img":"/profile-12.jpeg",
+                "url":"https://www.adda247.com/teaching-jobs-exam/ctet-previous-year-question-paper-pdfs/"
+            }
+        ]
+    },
+    {
+        "examName":"National Defence Academy (NDA)",
+        "examReg":"10 January 2023",
+        "examDate":"16 April 2023",
+        "examImg":"/profile-8.jpeg",
+        "examRole":"Army, Air Force, Navy officers",
+        "examUrl":"https://nda.nic.in/",
+        "examSyllabus":"Mathematics, General-Studies, English",
+        "examSyllabusUrl":"https://www.careerpower.in/nda-syllabus.html",
+        "examVideoLinks":[{
+            "name":"Defence Wallah",
+            "img":"/profile-10.jpeg",
+            "url":"https://www.youtube.com/@DefenceWallahPW"
+        }],
+        "examResources":[
+            {
+                "name":"Materials",
+                "img":"/profile-13.png",
+                "url":"https://prepp.in/nda-exam/study-material"
+            },
+            {
+                "name":"Previous Year Paper",
+                "img":"/profile-12.jpeg",
+                "url":"https://www.careerpower.in/nda-previous-year-question-paper.html"
+            }
+        ]
+    },
+    {
+        "examName":"Union Public Service Commission. (UPSC)",
+        "examReg":"21 February 2023",
+        "examDate":"28 May 2023",
+        "examImg":"/profile-9.jpeg",
+        "examRole":"IAS, IPS, IFS Officers",
+        "examUrl":"https://www.upsc.gov.in/",
+        "examSyllabus":"General Studies, Essay, Interview",
+        "examSyllabusUrl":"https://byjus.com/ias/upsc-syllabus/",
+        "examVideoLinks":[{
+            "name":"Khan GS Research Centre ",
+            "img":"https://themayanagari.com/wp-content/uploads/2020/12/khan-sir-image-4.png",
+            "url":"https://www.youtube.com/@khangsresearchcentre1685"
+        }],
+        "examResources":[{
+            "name":"All subject",
+            "img":"/profile-13.png",
+            "url":"https://drive.google.com/drive/folders/1hCP9CDWTLAsee21MQ7qjSIrddyOnWglU"
+        },{
+            "name":"Previous Year Paper",
+            "img":"/profile-12.jpeg",
+            "url":"https://www.upsc.gov.in/examinations/previous-question-papers?field_exam_name_value=&page=1"
+        }]
+    }
+]

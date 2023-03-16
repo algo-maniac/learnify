@@ -11,6 +11,8 @@ import UploadVideo from "./components/UploadVideo";
 import Doubt from "./components/Doubt";
 import Teachers from "./components/Teachers";
 import ExamCorner from "./components/ExamCorner";
+import Footer from "./components/Footer";
+import Home from "./pages/Home";
 function App() {
   const [userData, setUserData] = useState({
     id: "",
@@ -27,6 +29,7 @@ function App() {
     <>
       <Navbar userData={userData} />
       <Routes>
+        <Route path="/" element={<Home />}></Route>
         <Route path="/doubt" element={<Doubt />}></Route>
         <Route path="/SignUp" element={<SignUp />} />
         <Route
@@ -56,8 +59,9 @@ function App() {
           path="/teacher/:userID"
           element={<HomepageTeacher userData={userData} />}
         />
-        <Route path="/examcorner" element={<ExamCorner />} />
+        <Route path="/exam-corner" element={<ExamCorner />} />
       </Routes>
+      {/* <Footer /> */}
     </>
   );
 }

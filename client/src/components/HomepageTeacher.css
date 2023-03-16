@@ -3,6 +3,10 @@
     grid-template-columns: 1fr 4fr;
 }
 
+.sidebar {
+    background-color: rgb(24, 24, 63);
+}
+
 /* .navigation {
     background-color: rgb(24, 24, 63);
     min-height: 100vh;
@@ -24,21 +28,3 @@
 
 }
 
-.navbar_option {
-    width: 100%;
-    display: block;
-    padding: 20px 0 20px 15px;
-    background-color: inherit;
-    border: 0;
-    border-bottom: 3px solid #2B3467;
-    font-size: 1.3rem;
-    text-align: left;
-    font-weight: bolder;
-    color: rgb(210, 210, 210);
-}
-
-.navbar_option:focus,
-.navbar_option:hover {
-    background-color: rgb(210, 210, 210);
-    color: rgb(15, 15, 40);
-}

@@ -6,11 +6,11 @@
     border: 6px solid lightgray;
     height: 700px;
 }
-.body{
+/* .body{
     display: flex;
     flex-direction: row;
     justify-content: center;
-}
+} */
 .sideBar{
     box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
     width: 20%;

@@ -5,9 +5,9 @@
   box-sizing: border-box;
 }
 .loader-container body{
-  display: flex;
+  /* display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center; */
   min-height: 100vh;
   text-align: center;
   background: #0079d7;

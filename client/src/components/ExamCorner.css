@@ -9,6 +9,7 @@
   font-family: 'Cutive', serif;
   font-family: 'Poppins', sans-serif; */
 }
+
 .exam-container .linkSyllabus:hover{
   cursor: pointer;
   color: black;
@@ -48,7 +49,7 @@ font-family: 'Poppins', sans-serif;
   align-items: center;
   justify-content: center;
   flex-direction: column; */
-  min-height: 150vh;
+  min-height: 200vh;
   font-family: 'Fira Sans', sans-serif;
   /* background: linear-gradient(147deg,#2129c1 0%, #9295e0 74%); */
 }

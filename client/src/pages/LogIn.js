@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { NavLink, useInRouterContext, useNavigate } from "react-router-dom";
 import axios from "axios";
-
+import './Home.css'
 const LogIn = ({ userData, setUserData }) => {
   const [currUser, setCurrUser] = useState({
     email: "",
@@ -64,7 +64,7 @@ const LogIn = ({ userData, setUserData }) => {
             <InputWrapper>
               <Label htmlFor="password">Password</Label>
               <Input
-                type="text"
+                type="password"
                 name="password"
                 id="password"
                 value={currUser.password}
@@ -73,13 +73,14 @@ const LogIn = ({ userData, setUserData }) => {
                 }}
               />
             </InputWrapper>
-            <Button>Submit</Button>
+            <Button className="login-submit">Submit</Button>
             <Signnow>
-              <NavLink to="/SignUp">Not Signed Up? Sign Up</NavLink>
+              <NavLink to="/SignUp">Don't have an account? Sign Up</NavLink>
             </Signnow>
           </Form>
         </Content>
       </Container>
+      <br></br><br></br><br></br><br></br><br></br>
     </>
   );
 };
@@ -136,13 +137,12 @@ const Form = styled.form`
   align-items: center;
 `;
 const Input = styled.input`
-  height: 40%;
+  height: 100%;
   width: 90%;
   margin-top: 5px;
-  cursor: pointer;
   font-size: 20px;
   padding: 5px;
-  border-radius: 10px;
+  border-radius: 5px;
   color: #131c2c;
   font-weight: 550;
   letter-spacing: 1px;
@@ -150,7 +150,9 @@ const Input = styled.input`
 
 const Label = styled.label`
   font-size: 25px;
-  cursor: pointer;
+  font-family: 'Bungee Shade', cursive;
+font-family: 'Cutive', serif;
+font-family: 'Poppins', sans-serif;
   color: #131c2c;
   font-weight: 700;
   letter-spacing: 1px;

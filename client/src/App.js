@@ -61,7 +61,7 @@ function App() {
         />
         <Route path="/exam-corner" element={<ExamCorner />} />
       </Routes>
-      {/* <Footer /> */}
+      <Footer />
     </>
   );
 }

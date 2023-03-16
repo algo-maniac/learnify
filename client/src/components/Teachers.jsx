@@ -3,7 +3,7 @@ import './Teachers.css'
 
 import TeacherCard from './TeacherCard'
 import Sidebar from './Sidebar'
-
+import Loader from './Loader'
 function Teachers(props) {
   const {isLogged, isTeacher, id} = props;
   console.log(isLogged, isTeacher)

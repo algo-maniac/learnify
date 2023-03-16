@@ -39,3 +39,13 @@
     justify-content: space-between;
     text-align: center;
 }
+.login-submit:hover{
+    background-color: white;
+    color: black;
+    cursor: pointer;
+}
+.signup-submit:hover{
+    background-color: white;
+    color: black;
+    cursor: pointer;
+}

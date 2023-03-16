@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
-
+import './Home.css'
 const SignUp = () => {
   const navigate = useNavigate();
   const [userData, setUserData] = useState({
@@ -157,7 +157,7 @@ const SignUp = () => {
                 Teacher
               </Label>
             </InputWrapper>
-            <Button>Submit</Button>
+            <Button className="signup-submit">Submit</Button>
             <Lognow>
               <NavLink to="/LogIn">Already Logged In? Log In</NavLink>
             </Lognow>
@@ -181,8 +181,8 @@ const ImageContainer = styled.img`
 `;
 const Container = styled.div`
   // z-index: 10;
-  height: 640px;
-  width: 460px;
+  height: 670px;
+  width: 540px;
   margin-top: 30px;
   margin-left: 60vw;
   margin-bottom: 100px;
@@ -221,13 +221,12 @@ const Form = styled.form`
   align-items: center;
 `;
 const Input = styled.input`
-  height: 30%;
+  height: 55%;
   width: 90%;
   margin-top: 5px;
-  cursor: pointer;
   font-size: 20px;
   padding: 5px;
-  border-radius: 10px;
+  border-radius: 5px;
   color: #131c2c;
   font-weight: 550;
   letter-spacing: 1px;
@@ -235,7 +234,6 @@ const Input = styled.input`
 
 const Label = styled.label`
   font-size: 25px;
-  cursor: pointer;
   color: #131c2c;
   font-weight: 700;
   letter-spacing: 1px;

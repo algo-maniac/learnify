@@ -50,6 +50,20 @@ const SinglePost = (props) => {
     }
   };
   const date = new Date(props.data.date);
+  let hour="";
+  if(String(date.getHours()).length===1){
+    hour+='0'+String(date.getHours());
+  }
+  else{
+    hour+=String(date.getHours());
+  }
+  let minute="";
+  if(String(date.getMinutes()).length===1){
+    minute+='0'+String(date.getMinutes());
+  }
+  else{
+    minute+=String(date.getMinutes());
+  }
   return (
     <>
       <div className="post">
@@ -89,8 +103,8 @@ const SinglePost = (props) => {
             }}
           >
             Posted this on {date.getDate()}/
-            {date.getMonth()}/{date.getFullYear()}, {date.getHours()}:
-            {date.getMinutes()}
+            {date.getMonth()}/{date.getFullYear()}, {hour}:
+            {minute}
 
           </span>
           <br></br>

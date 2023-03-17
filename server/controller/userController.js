@@ -15,6 +15,7 @@ module.exports.signup = (req, res) => {
 
 module.exports.signuppost = async (req, res) => {
   const { username, email, password, isTeacher } = req.body;
+  console.log(isTeacher)
   let profileImage = "";
   if (req.file) {
     profileImage = req.file.path;
@@ -30,7 +31,7 @@ module.exports.signuppost = async (req, res) => {
       res.status(400).send("Account exits with same email or username");
     } else {
       const user = new User({
-        userName: username,
+        username: username,
         email: email,
         password: hashedPassword,
         isTeacher: isTeacher === 1 ? true : false,
@@ -39,7 +40,7 @@ module.exports.signuppost = async (req, res) => {
       await user.save();
       console.log(user);
       // const token = createToken(user.id);
-      res.status(200).json({ ...user, token });
+      res.status(200).json(user);
 
       // res.cookie("jwt", token, { httpOnly: true, maxAge: age * 1000 });
       // res.status(200).json({ ...user, jwt: token });

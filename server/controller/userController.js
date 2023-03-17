@@ -57,9 +57,8 @@ module.exports.login = (req, res) => {
 module.exports.loginpost = async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await User.findOne({ email });
+    const user = await User.findOne({ email:email });
     const validPassword = await bcrypt.compare(password, user.password);
-    console.log(user);
     if (!user) {
       res.status(404).send("User Not Present");
     } else if (!validPassword) {

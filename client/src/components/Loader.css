@@ -10,7 +10,7 @@
   justify-content: center; */
   min-height: 100vh;
   text-align: center;
-  background: #0079d7;
+  background: #fafcfd;
 }
 .loader-container{
   position: relative;
@@ -33,7 +33,7 @@
   top: 30px;
  height: 7px;
  width: 7px;
- background: #190bd4;
+ background: #f7f7fa;
  border-radius: 50%;
  position: relative;
 }
@@ -43,7 +43,7 @@
   font-size: 25px;
   font-weight: 400;
   font-family: 'Poppins',sans-serif;
-  color: #5449e7;
+  color: #fafafa;
 }
 @keyframes rotate {
   30%{

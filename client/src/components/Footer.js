@@ -17,7 +17,10 @@ const Footer = () => {
               <i className="fa fa-phone"></i> 93XXXXXXXX
             </p>
             <p style={{"text-align":"left"}}>
-              <i className="fa fa fa-envelope"></i> XXtuhinXX@gmail.com
+              <i className="fa fa fa-envelope"></i> learnify@gmail.com
+            </p>
+            <p style={{"text-align":"left"}}>
+              For Contribution <a href='https://github.com/algo-maniac/learnify' style={{"color":"black","textDecoration":"none"}} target="_blank">Link</a>
             </p>
           </div>
 

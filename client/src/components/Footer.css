@@ -3,7 +3,7 @@ footer {
     background-color: rgb(0, 0, 0);
     background-color: #2F58CD;
     color: white;
-    width: 100%;
+    width: 100vw;
     position: relative;
     bottom: 0px;
     /* border-top: 2px solid rgb(210, 210, 210); */

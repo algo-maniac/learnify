@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import "./Post.css";
 import SinglePost from "./SinglePost";
 import Loader from './Loader'
-const Posts = () => {
+const Posts = (props) => {
   const [data, setData] = useState([]);
   const [loader,setLoader]=useState(true);
   useEffect(() => {
@@ -21,7 +21,7 @@ const Posts = () => {
           console.log(er);
         },
       );
-    },[]);
+    },[props.flag]);
   return (
     <div className="postBox">
       {

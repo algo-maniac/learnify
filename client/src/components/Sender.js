@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import AuthContext from "../store/auth-context";
 import "./Sender.css";
-const Sender = () => {
+const Sender = (props) => {
   // // const event=()=>{
   // //   fetch("http://localhost:3000/doubt", {
   // //   method: "POST",
@@ -34,7 +34,10 @@ const Sender = () => {
     })
       .then(() => {
         alert("Question Posted");
-        window.location.reload();
+        props.setFlag((prev) => {
+          return !prev;
+        })
+        // window.location.reload();
       })
       .catch();
   };

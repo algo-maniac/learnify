@@ -75,7 +75,7 @@ app.post("/doubt", upload.single("image"), async (req, res, next) => {
     imgUrl = req.file.path;
   }
   const date = new Date();
-  const name = "Tuhin";
+  const name=req.body.name;
   const comment = [];
   const post = new Post({
     name: name,
@@ -113,10 +113,10 @@ app.post("/teacher", upload.single("image"), (req, res, next) => {
 app.post("/doubt/comment", async (req, res, next) => {
   const id = req.body.id;
   const comment = req.body.comment;
+  const name=req.body.name;
   const d = new Date();
   const date = `${d.getDate()}/${d.getMonth()}/${d.getFullYear()}, ${d.getHours()}:${d.getMinutes()}`;
   console.log(date);
-  const name = "Soumyajit";
   const post = await Post.findOne({ _id: id });
   if (post) {
     post.comments.push({ comment: comment, date: date, name: name });

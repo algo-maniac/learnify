@@ -1,7 +1,9 @@
-import Sidebar2 from "./Sidebar2";
 import "./Sidebar2.css";
 import Chatcontainer from "./Chatcontainer";
+import AuthContext from "../store/auth-context";
+import { useContext } from "react";
 function Doubt() {
+  const ctx=useContext(AuthContext);
   return (
     <div className="container_wrapper_wrapper">
       {/* <div className="container_wrapper"> */}

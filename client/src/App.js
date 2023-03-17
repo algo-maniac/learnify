@@ -13,6 +13,7 @@ import Teachers from "./components/Teachers";
 import ExamCorner from "./components/ExamCorner";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
+import AuthContext from "./store/auth-context";
 function App() {
   const [userData, setUserData] = useState({
     id: "",
@@ -28,6 +29,7 @@ function App() {
   }, [userData]);
   return (
     <>
+    <AuthContext.Provider value={userData}>
       <Navbar userData={userData} setUserData={setUserData}/>
       <Routes>
         <Route path="/" element={<Home />}></Route>
@@ -63,6 +65,7 @@ function App() {
         <Route path="/exam-corner" element={<ExamCorner />} />
       </Routes>
       <Footer />
+    </AuthContext.Provider>
     </>
   );
 }

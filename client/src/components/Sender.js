@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useContext, useState } from "react";
+import AuthContext from "../store/auth-context";
 import "./Sender.css";
 const Sender = () => {
   // // const event=()=>{
@@ -14,6 +15,7 @@ const Sender = () => {
   // // }
   const [postData, setpostData] = useState("");
   const [file, setFile] = useState("");
+  const ctx=useContext(AuthContext);
   const questionHandler = (env) => {
     setpostData(env.target.value);
   };
@@ -23,6 +25,7 @@ const Sender = () => {
   const submitHandler = (env) => {
     env.preventDefault();
     const formData = new FormData();
+    formData.append("name",ctx.username);
     formData.append("image", file);
     formData.append("question", postData);
     fetch("http://localhost:8000/doubt", {

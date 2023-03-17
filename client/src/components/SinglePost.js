@@ -1,6 +1,7 @@
 import { Avatar } from "@mui/material";
 import { fontSize } from "@mui/system";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
+import AuthContext from "../store/auth-context";
 import Comment from "./Comment";
 const SinglePost = (props) => {
   const [answerToggle, setAnswer] = useState(false);
@@ -8,6 +9,8 @@ const SinglePost = (props) => {
   const [comment, setComment] = useState("");
   const [comments, setCommentFlag] = useState([]);
   const [imgFlag, setImgFlag] = useState(false);
+  const ctx=useContext(AuthContext);
+  // it is the context api which store the data of the user
   useEffect(() => {
     if (props.data.comments.length > 0) {
       setCommentFlag(props.data.comments);
@@ -27,6 +30,7 @@ const SinglePost = (props) => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        name:ctx.username,
         id: id,
         comment: comment,
       }),
@@ -46,7 +50,6 @@ const SinglePost = (props) => {
     }
   };
   const date = new Date(props.data.date);
-  console.log(props.data.img);
   return (
     <>
       <div className="post">

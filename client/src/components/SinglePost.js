@@ -1,3 +1,5 @@
+import { Avatar } from "@mui/material";
+import { fontSize } from "@mui/system";
 import { useEffect, useState } from "react";
 import Comment from "./Comment";
 const SinglePost = (props) => {
@@ -52,26 +54,41 @@ const SinglePost = (props) => {
           style={{
             margin: "5px 0px",
             borderRadius: "10px",
-            backgroundColor: "#171b29",
-            color: "white",
-            height: "50px",
-            padding: "10px 10px",
+            // backgroundColor: "#171b29",
+            color: "black",
+            // height: "50px",
+            padding: "10px 0px",
             width: "40%",
           }}
         >
-          <span
-          // style={{
-          //   margin: "5px",
-          //   borderRadius: "5px",
-          //   backgroundColor: "#171b29",
-          //   color: "white",
-          // }}
-          >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "10px",
+              fontSize: "1.25rem"
+            }}>
+
+            <Avatar src="props.data.img" />
             <b>
-              {props.data.name} Posted this on {date.getDate()}/
-              {date.getMonth()}/{date.getFullYear()}, {date.getHours()}:
-              {date.getMinutes()}
+              {props.data.name}
             </b>
+          </div>
+          <span
+            // style={{
+            //   margin: "5px",
+            //   borderRadius: "5px",
+            //   backgroundColor: "#171b29",
+            //   color: "white",
+            // }}
+            style={{
+              fontSize: ".75rem"
+            }}
+          >
+            Posted this on {date.getDate()}/
+            {date.getMonth()}/{date.getFullYear()}, {date.getHours()}:
+            {date.getMinutes()}
+
           </span>
           <br></br>
         </div>
@@ -84,7 +101,9 @@ const SinglePost = (props) => {
             ></img>
           )}
           <p className="questionData">
-            <b>{props.data.question}</b>
+            <b style={{
+              fontSize: "1.25rem"
+            }}>{props.data.question}</b>
           </p>
           <button
             onClick={changeAnswer}
@@ -94,31 +113,31 @@ const SinglePost = (props) => {
               borderRadius: "10px",
               padding: "4px",
               color: "white",
-              backgroundColor: "#171b29",
+              backgroundColor: "#264285",
             }}
           >
             {answerText}
           </button>
         </div>
-        <hr></hr>
-        <div className="commentSection" style={{ padding: "5px" }}>
-          {answerToggle && (
+        {/* <hr></hr> */}
+        {answerToggle &&
+          <div className="commentSection" style={{ padding: "5px", borderRadius: "10px" }}>
             <div>
               <div>
                 <label
-                  style={{
-                    height: "30px",
-                    width: "130px",
-                    borderRadius: "10px",
-                    padding: "6px",
-                    color: "white",
-                    backgroundColor: "#171b29",
-                    textAlign: "center",
-                  }}
+                  // style={{
+                  //   height: "30px",
+                  //   width: "130px",
+                  //   borderRadius: "10px",
+                  //   padding: "6px",
+                  //   color: "white",
+                  //   backgroundColor: "#171b29",
+                  //   textAlign: "center",
+                  // }}
                 >
-                  <b>Add a answer</b>
+                  {/* <b>Add a answer</b> */}
                 </label>
-                <br></br>
+                {/* <br></br> */}
                 <input
                   className="commentPanel"
                   placeholder="Write your answer here"
@@ -141,7 +160,8 @@ const SinglePost = (props) => {
                     borderRadius: "10px",
                     padding: "4px",
                     color: "white",
-                    backgroundColor: "#171b29",
+                    // backgroundColor: "#171b29",
+                    backgroundColor: "#264285"
                   }}
                 >
                   Post
@@ -151,8 +171,8 @@ const SinglePost = (props) => {
                 <Comment val={val} key={key}></Comment>
               ))}
             </div>
-          )}
-        </div>
+          </div>
+        }
       </div>
 
       <br></br>

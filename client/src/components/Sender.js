@@ -44,7 +44,7 @@ const Sender = () => {
         onChange={questionHandler}
         style={{
           height: "40px",
-          width: "80%",
+          width: "85%",
           borderRadius: "10px",
           padding: "6px",
           // color: "white",
@@ -59,7 +59,7 @@ const Sender = () => {
         onChange={imgHandler}
         style={{
           height: "50px",
-          width: "130px",
+          width: "125px",
           borderRadius: "10px",
           padding: "4px",
           color: "white",
@@ -70,8 +70,8 @@ const Sender = () => {
         type="submit"
         onClick={submitHandler}
         style={{
-          height: "40px",
-          width: "100px",
+          height: "50px",
+          width: "130px",
           borderRadius: "10px",
           padding: "4px",
           color: "white",

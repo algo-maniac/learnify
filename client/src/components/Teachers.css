@@ -1,10 +1,15 @@
 .teachers {
     display: grid;
     grid-template-columns: 1fr 4fr;
-    min-height: 85vh;
+    min-height: 90vh;
 }
 
 .teachercards {
     display: flex;
     flex-wrap: wrap;
+    flex-direction: row;
+}
+
+.sidebar {
+    background-color: #a9b9da;
 }

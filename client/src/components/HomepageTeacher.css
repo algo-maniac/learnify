@@ -1,6 +1,7 @@
 .homepage {
     display: grid;
     grid-template-columns: 1fr 4fr;
+    min-height: 90vh;
 }
 
 .sidebar {

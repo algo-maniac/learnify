@@ -30,9 +30,11 @@ function Teachers(props) {
     // const username= "Chandrachur Mukerjee"
   return (
     <div className='teachers'>
+        <div className='sidebar'>
         {isLogged && isTeacher &&<div>
             <Sidebar id={id}/> 
         </div>}
+        </div>
         <div className="teachercards">
           {teacherData.map(data => (
             <TeacherCard img={data.img} username={data.username} id={data._id}/>

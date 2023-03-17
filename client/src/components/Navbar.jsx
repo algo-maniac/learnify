@@ -26,7 +26,7 @@ function Navbar(props) {
           src="/learnify_logo.png"
           alt=""
           className="navbar_logo"
-          style={{ backgroudColor: "white" }}
+          style={{ backgroudColor: "white", width: "70px", height: "70px" }}
         />
         <h1
           style={{letterSpacing: "2px" }}

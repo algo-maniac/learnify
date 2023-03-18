@@ -1,17 +1,18 @@
-import React, { useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import "./UploadVideo.css";
 import { useState } from "react";
 // import '/assets/logo192.png'
 import { Navigate, useNavigate } from "react-router-dom";
 import { Container } from "@mui/system";
 import styled from "styled-components";
-
+import AuthContext from '../store/auth-context'
 function UploadVideo(props) {
   const navigate = useNavigate();
   // console.log(props.userData);
   // props mein data tik nhi raha hai toh jwt ke baad shayad karega
   // email se search karunga mein
-  const email = "abc@gmail.com";
+  const ctx=useContext(AuthContext);
+  const email=ctx.email;
   // fake user defined email is used after jwt actual data will be used
   const [teacherInfo, setInfo] = useState([]);
   const [formData, setFormData] = useState({

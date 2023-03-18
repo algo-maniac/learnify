@@ -86,7 +86,7 @@ const ExamHeader = () => {
                 <img src={obj.img} alt=""></img>
               </a>
               <span className={"header"}>{obj.name}</span>
-              <span clasNames={"info"}>Guns and roses Sweet Child of Mine</span>
+              <span clasNames={"info"}>Best youtube channel Link above</span>
             </div>
           ))
         }

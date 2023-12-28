@@ -1,9 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
-import { NavLink, useInRouterContext, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 import './Home.css'
-const LogIn = ({ userData, setUserData }) => {
+import AuthContext from "../store/auth-context";
+
+const LogIn = () => {
+  const { fetchUserdata } = useContext(AuthContext);
   const [currUser, setCurrUser] = useState({
     email: "",
     password: "",
@@ -18,22 +21,17 @@ const LogIn = ({ userData, setUserData }) => {
       });
       if (res.status === 404) {
         console.log("User Not Found");
-      } else if (res.status === 400) {
+        return;
+      } 
+      if (res.status === 400) {
         console.log("Wrong Password");
-      } else {
-        console.log("Logged In");
-        const { _id, img, username, email, isTeacher } = res.data;
-        await setUserData({
-          username,
-          img,
-          email,
-          isLogged: true,
-          isTeacher,
-          id: _id,
-        });
-        console.log(userData);
-        navigate("/");
-      }
+        return;
+      } 
+      
+      const { token } = res.data;
+      localStorage.setItem('token', token);
+      fetchUserdata();
+      navigate("/");
     } catch (err) {
       console.log(err);
     }
@@ -41,6 +39,7 @@ const LogIn = ({ userData, setUserData }) => {
   return (
     <>
       <ImageContainer src="./assets/back_img2.png" alt="Error" />
+      
       <ImageContainer
         src="./assets/back_img1.png"
         style={{ top: "460px", left: "400px", transform: "rotate(-10deg)" }}

@@ -14,58 +14,68 @@ import ExamCorner from "./components/ExamCorner";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import AuthContext from "./store/auth-context";
+import axios from 'axios';
+
 function App() {
-  const [userData, setUserData] = useState({
-    id: "",
-    img: "",
-    email: "",
-    username: "",
-    isLogged: false,
-    isTeacher: false,
+  const [userdata, setUserdata] = useState(() => {
+    const storedUserData = localStorage.getItem('userData');
+    return storedUserData ? JSON.parse(storedUserData) : null;
   });
   // const [drive, SetDrive] = useState({ googleDrive: "/http://google.drive./" });
+
+  const fetchUserdata = async () => {
+    try {
+      const data = await fetch('http://localhost:8000/getUserData', {
+        headers: {
+          token: localStorage.getItem('token'),
+        },
+      });
+      if (data.ok) {
+        const newUserdata = await data.json();
+
+        setUserdata(newUserdata);
+        localStorage.setItem('userdata', JSON.stringify(newUserdata));
+      } else {
+        console.error('Error fetching user data');
+      }
+    } catch (error) {
+      console.error('Error fetching user data', error);
+    }
+  }
+
   useEffect(() => {
-    console.log(userData);
-  }, [userData]);
+    if (!userdata) {
+      fetchUserdata();
+    }
+  });
+
+  const contextValue = {
+    userdata,
+    setUserdata,
+    fetchUserdata,
+  };
+
   return (
     <>
-    <AuthContext.Provider value={userData}>
-      <Navbar userData={userData} setUserData={setUserData}/>
-      <Routes>
-        <Route path="/" element={<Home />}></Route>
-        <Route path="/doubt" element={<Doubt />}></Route>
-        <Route path="/SignUp" element={<SignUp />} />
-        <Route
-          path="/LogIn"
-          element={<LogIn userData={userData} setUserData={setUserData} />}
-        />
-        <Route path="/Random" element={<Random />} />
-        <Route path="/home" element={<HomepageTeacher />} />
-        {userData.isLogged && (
-          <Route
-            path="/live"
-            element={<LiveStream username={userData.username} />}
-          />
-        )}
-        <Route path="/uploadvideo" element={<UploadVideo data={userData} />} />
-        <Route
-          path="/teachers"
-          element={
-            <Teachers
-              isLogged={userData.isLogged}
-              isTeacher={userData.isTeacher}
-              id={userData.id}
-            />
-          }
-        />
-        <Route
-          path="/teacher/:userID"
-          element={<HomepageTeacher userData={userData} />}
-        />
-        <Route path="/exam-corner" element={<ExamCorner />} />
-      </Routes>
-      <Footer />
-    </AuthContext.Provider>
+      <AuthContext.Provider value={contextValue}>
+        <Navbar />
+        <Routes>
+          <Route path="/" element={<Home />}></Route>
+          <Route path="/doubt" element={<Doubt />}></Route>
+          <Route path="/SignUp" element={<SignUp />} />
+          <Route path="/LogIn" element={<LogIn />} />
+          <Route path="/Random" element={<Random />} />
+          <Route path="/home" element={<HomepageTeacher />} />
+          {userdata && userdata.role === 'teacher' && (
+            <Route path="/live" element={<LiveStream />}/>
+          )}
+          <Route path="/uploadvideo" element={<UploadVideo/>} />
+          <Route path="/teachers" element={<Teachers/>} />
+          <Route path="/teacher/:userID" element={<HomepageTeacher />} />
+          <Route path="/exam-corner" element={<ExamCorner />} />
+        </Routes>
+        <Footer />
+      </AuthContext.Provider>
     </>
   );
 }

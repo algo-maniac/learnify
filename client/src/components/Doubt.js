@@ -3,7 +3,7 @@ import Chatcontainer from "./Chatcontainer";
 import AuthContext from "../store/auth-context";
 import { useContext } from "react";
 function Doubt() {
-  const ctx=useContext(AuthContext);
+  const ctx = useContext(AuthContext);
   return (
     <div className="container_wrapper_wrapper">
       {/* <div className="container_wrapper"> */}

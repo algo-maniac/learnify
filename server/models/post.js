@@ -1,5 +1,6 @@
-const mongoose=require('mongoose');
-const Post=new mongoose.Schema({
+const mongoose = require('mongoose');
+
+const Post = new mongoose.Schema({
     name:{
         type:String,
         required:true
@@ -18,4 +19,5 @@ const Post=new mongoose.Schema({
         type:Array
     }
 })
+
 module.exports=mongoose.model('post',Post);

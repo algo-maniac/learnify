@@ -1,44 +1,60 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
 import './Home.css'
+import AuthContext from "../store/auth-context";
+
+
 const SignUp = () => {
+  const { fetchUserdata } = useContext(AuthContext);
   const navigate = useNavigate();
-  const [userData, setUserData] = useState({
-    username: "",
-    email: "",
-    password: "",
-    isTeacher: 0,
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: '',
+    profileImage: null,
+    role: 'student',
   });
-  const [file, setFile] = useState("");
-  const imgHandler = (env) => {
-    setFile(env.target.files[0]);
+
+  const handleInputChange = (e) => {
+    const { name, value, files } = e.target;
+
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: name === 'profileImage' ? files[0] : value,
+    }));
   };
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const formData = new FormData();
-    formData.append("email", userData.email);
-    formData.append("username", userData.username);
-    formData.append("password", userData.password);
-    formData.append("isTeacher", userData.isTeacher);
-    formData.append("image", file);
-    console.log(formData)
-      fetch("http://localhost:8000/signup", {
+
+    const formDataToSend = new FormData();
+    formDataToSend.append('username', formData.username);
+    formDataToSend.append('email', formData.email);
+    formDataToSend.append('password', formData.password);
+    formDataToSend.append('profileImage', formData.profileImage);
+    formDataToSend.append('role', formData.role);
+
+    try {
+      const data = await fetch("http://localhost:8000/signup", {
         method: "POST",
-        body: formData,
-      }).then((data)=>{
-        return data.json();
-      }).then((result)=>{
-        console.log(result);
-      }).catch((er)=>{
-        console.log(er);
+        body: formDataToSend,
       });
-      // if (res.status === 200) {
-      //   console.log(res);
-      //   navigate("/home");
-      // }
+
+      const res = await data.json();
+
+      const token = res.token;
+      localStorage.setItem('token', token);
+      fetchUserdata();
+      navigate('/');
+    } catch (err) {
+      console.log(err);
+    }
   };
+
+
 
   return (
     <>
@@ -53,110 +69,45 @@ const SignUp = () => {
         <Content>
           <Form onSubmit={handleSubmit}>
             <InputWrapper style={{ marginTop: "10px" }}>
-              <Label htmlFor="username">Username</Label>
-              <Input
-                type="text"
-                name="username"
-                id="username"
-                value={userData.username}
-                onChange={(e) => {
-                  setUserData({ ...userData, username: e.target.value });
-                }}
-              />
+              <Label>
+                Username:
+                <Input type="text" name="username" value={formData.username} onChange={handleInputChange} />
+              </Label>
             </InputWrapper>
+
             <InputWrapper>
-              <Label htmlFor="email">Email</Label>
-              <Input
-                type="text"
-                name="email"
-                id="email"
-                value={userData.email}
-                onChange={(e) => {
-                  setUserData({ ...userData, email: e.target.value });
-                }}
-              />
+              <Label>
+                Email:
+                <Input type="email" name="email" value={formData.email} onChange={handleInputChange} />
+              </Label>
             </InputWrapper>
+
             <InputWrapper>
-              <Label htmlFor="password">Password</Label>
-              <Input
-                type="password"
-                name="password"
-                id="password"
-                value={userData.password}
-                onChange={(e) => {
-                  setUserData({ ...userData, password: e.target.value });
-                }}
-              />
+              <Label>
+                Password:
+                <Input type="password" name="password" value={formData.password} onChange={handleInputChange} />
+              </Label>
             </InputWrapper>
+
             <InputWrapper>
-              <Label htmlFor="username">Image</Label>
-              <Input
-                type="file"
-                name="img"
-                id="imf"
-                value={userData.img}
-                onChange={imgHandler}
-              />
+              <Label>
+                Profile Image:
+                <Input type="file" name="profileImage" accept="image/*" onChange={handleInputChange} />
+              </Label>
             </InputWrapper>
-            <InputWrapper
-              onChange={(e) => {
-                if (e.target.value === "teacher") {
-                  setUserData({ ...userData, isTeacher: 1 });
-                } else {
-                  setUserData({ ...userData, isTeacher: 0 });
-                }
-              }}
-              style={{
-                display: "flex",
-                fontSize: "10px",
-                height: "20px",
-                margin: "5px 0px",
-              }}
-            >
-              <Label
-                className="container"
-                style={{
-                  display: "flex",
-                  fontSize: "20px",
-                  height: "20px",
-                }}
-              >
-                <Input
-                  type="radio"
-                  name="radio"
-                  value="student"
-                  style={{
-                    display: "block",
-                    fontSize: "20px",
-                    height: "10px",
-                    width: "30px",
-                  }}
-                />
+
+            <InputWrapper>
+              <Label>
+                Role:
+                <Input type="radio" name="role" value="student" checked={formData.role === 'student'} onChange={handleInputChange} />
                 Student
               </Label>
-              <Label
-                className="container"
-                style={{
-                  display: "flex",
-                  fontSize: "20px",
-                  marginLeft: "10px",
-                  height: "20px",
-                }}
-              >
-                <Input
-                  type="radio"
-                  name="radio"
-                  value="teacher"
-                  style={{
-                    display: "block",
-                    fontSize: "40px",
-                    height: "10px",
-                    width: "30px",
-                  }}
-                />
+              <Label>
+                <Input type="radio" name="role" value="teacher" checked={formData.role === 'teacher'} onChange={handleInputChange} />
                 Teacher
               </Label>
             </InputWrapper>
+
             <Button className="signup-submit">Submit</Button>
             <Lognow>
               <NavLink to="/LogIn">Already Logged In? Log In</NavLink>
@@ -180,7 +131,6 @@ const ImageContainer = styled.img`
   z-index: -1;
 `;
 const Container = styled.div`
-  // z-index: 10;
   height: 670px;
   width: 540px;
   margin-top: 30px;

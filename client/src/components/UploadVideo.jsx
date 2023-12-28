@@ -42,7 +42,7 @@ function UploadVideo(props) {
         return data.json();
       })
       .then((result) => {
-        alert(result.msg);
+        // alert.show('Oh look, an alert!')
         // navigate karna hai waha kar dena
         // navigate("/teacher" + props.user);
         navigate(`/teacher/${props.data.id}`);

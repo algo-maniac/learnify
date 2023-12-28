@@ -3,6 +3,8 @@ import { fontSize } from "@mui/system";
 import { useContext, useEffect, useState } from "react";
 import AuthContext from "../store/auth-context";
 import Comment from "./Comment";
+import { grey } from "@mui/material/colors";
+import { Navigate } from "react-router-dom";
 const SinglePost = (props) => {
   const [answerToggle, setAnswer] = useState(false);
   const [answerText, setText] = useState("Show answers");
@@ -37,7 +39,10 @@ const SinglePost = (props) => {
     })
       .then(() => {
         alert("Answer posted");
-        window.location.reload();
+        // setComment("");
+        setAnswer(false);
+        setAnswer(true);
+        // window.location.reload();
       })
       .catch();
   };
@@ -130,7 +135,9 @@ const SinglePost = (props) => {
               borderRadius: "10px",
               padding: "4px",
               color: "white",
-              backgroundColor: "#264285",
+              border: 0,
+              backgroundColor: "#d6d6d6",
+              color: "black"
             }}
           >
             {answerText}

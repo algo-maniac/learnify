@@ -65,7 +65,7 @@ const Sender = (props) => {
         onChange={imgHandler}
         style={{
           height: "50px",
-          width: "125px",
+          width: "120px",
           borderRadius: "10px",
           padding: "4px",
           color: "white",
@@ -76,12 +76,14 @@ const Sender = (props) => {
         type="submit"
         onClick={submitHandler}
         style={{
-          height: "50px",
+          height: "45px",
           width: "130px",
+          // fontSize: "1.5rem",
           borderRadius: "10px",
+          border: 0,
           padding: "4px",
           color: "white",
-          backgroundColor: "#171b29",
+          backgroundColor: "#2F58CD",
         }}
       >
         Post

@@ -5,10 +5,12 @@ import TeacherDetails from './TeacherDetails'
 import VideoCards from './VideoCards'
 import { useNavigate } from 'react-router-dom';
 import Sidebar from './Sidebar'
+import AuthContext from '../store/auth-context'
+import { useContext } from 'react'
 
 
-function HomepageTeacher(props) {
-  const userData = props.userData;
+function HomepageTeacher() {
+  const { userData } = useContext(AuthContext);
   console.log("in this", userData);
   
   const {userID} = useParams();
@@ -74,8 +76,16 @@ function HomepageTeacher(props) {
       }
       </div>
       <div className="content">
-        {teacherInfo && teacherInfo[0] && <TeacherDetails username={teacherInfo[0].username} img={teacherInfo[0].img}/>}
-        {teacherInfo && teacherInfo[0] && <VideoCards teacherInfo={teacherInfo[0]}/>}
+        {teacherInfo && teacherInfo[0] && 
+          <TeacherDetails 
+            username={teacherInfo[0].username} 
+            img={teacherInfo[0].img} 
+            id={userID}
+          />}
+        {teacherInfo && teacherInfo[0] && 
+          <VideoCards 
+            teacherInfo={teacherInfo[0]}
+          />}
       </div>
       
     </div>

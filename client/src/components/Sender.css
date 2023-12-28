@@ -1,18 +1,18 @@
 .sendingPanel{
     position: relative;
-    height: 8%;
+    /* height: 8%; */
     display: flex;
-    flex-direction: row;
-    width: 100%;
+    align-items: center;
+    /* width: 100%; */
 }
 .sendingPanel input{
-    height: 30px;
+    /* height: 30px;
     margin: 10px;
-    width: 90%;
+    width: 90%; */
 }
 
 .sendingPanel .fileUploader{
-    width: 20%;
+    /* width: 20%; */
 }
 .sendingPanel .fileUploader::file-selector-button {
     font-weight: bold;
@@ -30,10 +30,10 @@
 .sendingPanel button{
     background-color: rgb(56, 56, 232);
     color: whitesmoke;
-    height: 30px;
+    /* height: 30px;
     width: 100px;
     margin-top: 9px;
-    margin-right: 5px;
+    margin-right: 5px; */
 }
 .sendingPanel button:hover{
     cursor: pointer;

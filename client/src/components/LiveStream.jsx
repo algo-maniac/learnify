@@ -57,8 +57,11 @@ function LiveStream(props) {
       '&role=Audience',
   });
  // generate Kit Token
-  const appID = 1411074036;
-  const serverSecret = "c1b9ffacbd831b8a9decc98d29a78ea7";
+  // const appID = 1411074036;
+  // const serverSecret = "c1b9ffacbd831b8a9decc98d29a78ea7";
+  // const kitToken =  ZegoUIKitPrebuilt.generateKi tTokenForTest(appID, serverSecret, roomID,  randomID(5),  username);
+  const appID = 1282213053;
+  const serverSecret = process.env.SECRET_KEY;
   const kitToken =  ZegoUIKitPrebuilt.generateKitTokenForTest(appID, serverSecret, roomID,  randomID(5),  username);
 
 

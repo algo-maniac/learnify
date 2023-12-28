@@ -6,7 +6,7 @@
 .home {
     min-height: 90vh;
     background-color: black;
-    opacity: 0.9;
+    opacity: 0.8;
 }
 
 .banner {
@@ -16,18 +16,19 @@
     place-content: center;
 }
 
-.banner > h2 {
+.banner>h2 {
     font-size: 4rem;
     color: whitesmoke;
     font-family: Georgia, 'Times New Roman', Times, serif;
 }
 
-.cards > a {
+.cards>a {
     text-decoration: none;
     color: black;
 }
 
-.cards > a:hover, a:focus {
+.cards>a:hover,
+a:focus {
     text-decoration: none;
 }
 
@@ -53,16 +54,17 @@
     text-align: center;
 }
 
-.card > p {
+.card>p {
     font-weight: bolder;
 }
 
-.login-submit:hover{
+.login-submit:hover {
     background-color: white;
     color: black;
     cursor: pointer;
 }
-.signup-submit:hover{
+
+.signup-submit:hover {
     background-color: white;
     color: black;
     cursor: pointer;

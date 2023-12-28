@@ -1,23 +1,43 @@
-import React from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { Link, Navigate, NavLink } from "react-router-dom";
 import "./Navbar.css";
 import { Avatar } from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import AuthContext from "../store/auth-context";
 
 function Navbar(props) {
+  const { userdata, setUserdata, fetchUserdata } = useContext(AuthContext);
   const logout = () => {
-    props.setUserData({
-      id: "",
-      email: "",
-      username: "",
-      isLogged: false,
-      isTeacher: false,
-    })
+    localStorage.removeItem('token');
+    localStorage.removeItem('userdata');
+    localStorage.removeItem('profileImage');
+    setUserdata(null);
     Navigate("/");
   }
+  const [imageSrc, setImageSrc] = useState('');
 
+  useEffect(() => {
+    if(!userdata) {
+      setImageSrc("");
+      return;
+    }
+    if(localStorage.getItem('profileImage')) {
+      setImageSrc(localStorage.getItem('profileImage'));
+      return;
+    }
+    
+    const imageUrl = `http://localhost:3000/image/${userdata.profileImage}`; // Replace <ObjectId> with the actual ObjectId
 
-  console.log(props);
+    fetch(imageUrl)
+      .then(response => response.blob())
+      .then(blob => {
+        const objectURL = URL.createObjectURL(blob);
+        setImageSrc(objectURL);
+        localStorage.setItem("profileImage", objectURL);
+      })
+      .catch(error => console.error('Error fetching image:', error));
+  }, [userdata]); // Run this effect only once on component mount
+
   return (
     <div className="navbar">
       <Link to="/">
@@ -36,7 +56,7 @@ function Navbar(props) {
       </div>
       </Link>
 
-      {props.userData.isLogged && (
+      {userdata && (
         <div className="login_details">
 
           <div className="navbar_right">
@@ -45,9 +65,9 @@ function Navbar(props) {
                 <li>
                   <Link to="/">Home</Link>
                 </li>
-                {props.userData.isTeacher && (
+                {userdata && userdata.role === 'teacher' && (
                   <li>
-                    <Link exact to={"/teacher/" + props.userData.id}>
+                    <Link exact to={"/teacher/" + userdata.id}>
                       Dashboard
                     </Link>
                   </li>
@@ -76,8 +96,8 @@ function Navbar(props) {
             </div>
           </div>
           <div className="login_details">
-            <p>{props.userData.username}</p>
-            <Avatar src={props.userData.img} sx={{ width: 50, height: 50 }} />
+            <p>{userdata.username}</p>
+            <Avatar src={imageSrc} sx={{ width: 50, height: 50 }} />
             <button
             onClick={logout}
             className="btn"
@@ -103,7 +123,7 @@ function Navbar(props) {
           </div>
         </div>
       )}
-      {!props.userData.isLogged && (
+      {!userdata && (
         <div className="login_signup">
           <button className="btn" style={{ borderRight: "2px solid black" }}>
             <Link

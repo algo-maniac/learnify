@@ -10,7 +10,7 @@ function Navbar(props) {
   const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('userdata');
-    localStorage.removeItem('profileImage');
+    sessionStorage.removeItem('profileImage');
     setUserdata(null);
     Navigate("/");
   }
@@ -21,8 +21,9 @@ function Navbar(props) {
       setImageSrc("");
       return;
     }
-    if(localStorage.getItem('profileImage')) {
-      setImageSrc(localStorage.getItem('profileImage'));
+
+    if(sessionStorage.getItem('profileImage')) {
+      setImageSrc(sessionStorage.getItem('profileImage'));
       return;
     }
     
@@ -33,10 +34,10 @@ function Navbar(props) {
       .then(blob => {
         const objectURL = URL.createObjectURL(blob);
         setImageSrc(objectURL);
-        localStorage.setItem("profileImage", objectURL);
+        sessionStorage.setItem("profileImage", objectURL);
       })
       .catch(error => console.error('Error fetching image:', error));
-  }, [userdata]); // Run this effect only once on component mount
+  }, [userdata]); 
 
   return (
     <div className="navbar">
@@ -96,8 +97,10 @@ function Navbar(props) {
             </div>
           </div>
           <div className="login_details">
-            <p>{userdata.username}</p>
-            <Avatar src={imageSrc} sx={{ width: 50, height: 50 }} />
+            <div className="userdetails">
+              <p>{userdata.username}</p>
+              <Avatar src={imageSrc} sx={{ width: 50, height: 50 }} />
+            </div>
             <button
             onClick={logout}
             className="btn"

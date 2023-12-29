@@ -1,9 +1,10 @@
 const router = require("express").Router();
-const multer = require("multer");
 const teacherController = require("../controller/teacherController");
 
+const multer = require("multer");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
+
 
 router.post("/teacher/uploadVideo", upload.single("image"), teacherController.uploadVideo);
 

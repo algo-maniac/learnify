@@ -8,7 +8,7 @@ const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
 
-const port = 8000;
+const port = process.env.port || 8000;
 const app = express();
 
 app.use(cookieParser());

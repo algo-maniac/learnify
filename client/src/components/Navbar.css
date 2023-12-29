@@ -43,7 +43,6 @@
 }
 
 .navbar_options {
-    
     margin-right: 50px;
 }
 
@@ -80,6 +79,22 @@ li > a:hover{
     display: flex;
     gap: 10px;
     align-items: center;
+}
+
+.userdetails {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    padding: 7px 10px 7px 15px;
+    background-color: rgb(19, 32, 95);
+    border-radius: 99px;
+}
+
+.userdetails p {
+    margin: 0;
+    color: whitesmoke;
+    font-size: large;
+    font-weight: bolder;
 }
 
 .login_details Link{

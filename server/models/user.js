@@ -1,10 +1,10 @@
 const mongoose = require("mongoose");
 
 const userSchema = new mongoose.Schema({
-  username: { type: String, required: true},
+  username: { type: String, required: true },
   email: { type: String, unique: true, required: true },
   password: { type: String, required: true },
-  profileImage: { type: mongoose.Schema.Types.ObjectId, ref: 'uploads.files' },  
+  profileImage: { type: mongoose.Schema.Types.ObjectId, ref: 'uploads.files' },
   role: {
     type: String,
     enum: ['teacher', 'student'],
@@ -17,8 +17,8 @@ const userSchema = new mongoose.Schema({
     },
   },
   videoInfo: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Video' }],
-  },{ timestamps: true }
-);
+},
+  { timestamps: true });
 
 const User = mongoose.model("user", userSchema);
 

@@ -17,35 +17,34 @@ module.exports.uploadVideo = (req, res, next) => {
     const videoUrl = req.body.videourl;
     const image = req.file.path;
     const videoObj = {
-      title: title,
-      videoUrl: videoUrl,
-      thumbnail: image,
+        title: title,
+        videoUrl: videoUrl,
+        thumbnail: image,
     };
     // console.log(videoObj);
     User.findOne({ email: email }).then((result) => {
-      // pushing details of video uploaded
-      result.videoInfo.push(videoObj);
-      result.save().then((data) => {
-        if (data) {
-          res.json({ msg: "Video Uploaded" });
-        } else {
-          res.json({ msg: "error in uploading" });
-        }
-      });
+        // pushing details of video uploaded
+        result.videoInfo.push(videoObj);
+        result.save().then((data) => {
+            if (data) {
+                res.json({ msg: "Video Uploaded" });
+            } else {
+                res.json({ msg: "error in uploading" });
+            }
+        });
     });
-  }
-  
-  
+}
+
 module.exports.getAllTeachers = (req, res, next) => {
     User.find({ role: 'teacher' }).then((data) => {
-      res.json({ data: data });
+        res.json({ data: data });
     });
-  }
-  
+}
+
 module.exports.getTeacherWithId = (req, res, next) => {
     const id = req.params["id"];
     console.log(id);
     User.find({ role: "teacher", _id: id }).then((data) => {
-      res.json({ data: data });
+        res.json({ data: data });
     });
-  });
+}

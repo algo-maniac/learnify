@@ -5,9 +5,9 @@ const { Readable } = require('stream');
 const conn = mongoose.connection;
 let gfs;
 conn.once('open', () => {
-    gfs = new mongoose.mongo.GridFSBucket(conn.db, {
-        bucketName: 'doubts',
-    });
+  gfs = new mongoose.mongo.GridFSBucket(conn.db, {
+    bucketName: 'doubts',
+  });
 });
 
 module.exports.getDoubts = async (req, res, next) => {

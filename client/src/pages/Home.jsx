@@ -1,4 +1,3 @@
-import React from 'react'
 import './Home.css'
 
 import PersonIcon from '@mui/icons-material/Person';

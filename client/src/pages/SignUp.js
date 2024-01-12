@@ -14,7 +14,7 @@ const SignUp = () => {
     email: '',
     password: '',
     profileImage: null,
-    role: 'student',
+    role: 'user',
   });
 
   const handleInputChange = (e) => {
@@ -38,7 +38,7 @@ const SignUp = () => {
     formDataToSend.append('role', formData.role);
 
     try {
-      const data = await fetch("http://localhost:8000/instructor/signup", {
+      const data = await fetch(`http://localhost:8000/${formData.role}/signup`, {
         method: "POST",
         body: formDataToSend,
       });
@@ -68,6 +68,20 @@ const SignUp = () => {
         <Heading>Sign Up</Heading>
         <Content>
           <Form onSubmit={handleSubmit}>
+          <InputWrapper>
+              <Label htmlFor="role">Role</Label>
+              <Select
+                name="role"
+                id="role"
+                value={formData.role}
+                onChange={handleInputChange}
+              >
+                <option value="user">User</option>
+                <option value="instructor">Instructor</option>
+                <option value="admin">Admin</option>
+              </Select>
+            </InputWrapper>
+
             <InputWrapper style={{ marginTop: "10px" }}>
               <Label>
                 Username:
@@ -96,18 +110,6 @@ const SignUp = () => {
               </Label>
             </InputWrapper>
 
-            <InputWrapper>
-              <Label>
-                Role:
-                <Input type="radio" name="role" value="student" checked={formData.role === 'student'} onChange={handleInputChange} />
-                Student
-              </Label>
-              <Label>
-                <Input type="radio" name="role" value="teacher" checked={formData.role === 'teacher'} onChange={handleInputChange} />
-                Teacher
-              </Label>
-            </InputWrapper>
-
             <Button className="signup-submit">Submit</Button>
             <Lognow>
               <NavLink to="/LogIn">Already Logged In? Log In</NavLink>
@@ -130,6 +132,17 @@ const ImageContainer = styled.img`
   box-shadow: 2px 7px 29px 4px rgba(0, 0, 0, 0.75);
   z-index: -1;
 `;
+
+const Select = styled.select`
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-bottom: 15px;
+`;
+
+
 const Container = styled.div`
   height: 670px;
   width: 540px;

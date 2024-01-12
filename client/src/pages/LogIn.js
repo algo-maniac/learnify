@@ -8,14 +8,17 @@ import AuthContext from "../store/auth-context";
 const LogIn = () => {
   const { fetchUserdata } = useContext(AuthContext);
   const [currUser, setCurrUser] = useState({
+    role: "user", 
     email: "",
     password: "",
   });
+
   const navigate = useNavigate();
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:8000/instructor/login", {
+      const res = await axios.post(`http://localhost:8000/${currUser.role}/login`, {
+        role: currUser.role,
         email: currUser.email,
         password: currUser.password,
       });
@@ -38,17 +41,33 @@ const LogIn = () => {
   };
   return (
     <>
-      <ImageContainer src="./assets/back_img2.png" alt="Error" />
+      {/* <ImageContainer src="./assets/back_img2.png" alt="Error" />
       
       <ImageContainer
         src="./assets/back_img1.png"
         style={{ top: "460px", left: "400px", transform: "rotate(-10deg)" }}
         alt="Error"
-      />
+      /> */}
       <Container>
         <Heading>Log In</Heading>
         <Content>
           <Form onSubmit={handleSubmit}>
+          <InputWrapper>
+              <Label htmlFor="role">Role</Label>
+              <Select
+                name="role"
+                id="role"
+                value={currUser.role}
+                onChange={(e) => {
+                  setCurrUser({ ...currUser, role: e.target.value });
+                }}
+              >
+                <option value="user">User</option>
+                <option value="instructor">Instructor</option>
+                <option value="admin">Admin</option>
+              </Select>
+            </InputWrapper>
+
             <InputWrapper>
               <Label htmlFor="email">Email</Label>
               <Input
@@ -95,6 +114,16 @@ const ImageContainer = styled.img`
   transform: rotate(10deg);
   box-shadow: 2px 7px 29px 4px rgba(0, 0, 0, 0.75);
 `;
+
+const Select = styled.select`
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-bottom: 15px;
+`;
+
 const Container = styled.div`
   height: 500px;
   width: 460px;

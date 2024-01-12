@@ -10,39 +10,9 @@ function Navbar(props) {
   const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('userdata');
-    sessionStorage.removeItem('profileImage');
     setUserdata(null);
     Navigate("/");
   }
-  const [imageSrc, setImageSrc] = useState('');
-
-  useEffect(() => {
-    if(!userdata) {
-      setImageSrc("");
-      return;
-    }
-
-    if(sessionStorage.getItem('profileImage')) {
-      setImageSrc(sessionStorage.getItem('profileImage'));
-      return;
-    }
-    
-    const imageUrl = `http://localhost:3000/getUserProfileImage/${userdata.profileImage}`; // Replace <ObjectId> with the actual ObjectId
-
-    fetch(imageUrl, {
-      method: 'GET',
-      headers: {
-        "Authorization": localStorage.getItem('token')
-      }
-    })
-      .then(response => response.blob())
-      .then(blob => {
-        const objectURL = URL.createObjectURL(blob);
-        setImageSrc(objectURL);
-        sessionStorage.setItem("profileImage", objectURL);
-      })
-      .catch(error => console.error('Error fetching image:', error));
-  }, [userdata]); 
 
   return (
     <div className="navbar">
@@ -104,7 +74,7 @@ function Navbar(props) {
           <div className="login_details">
             <div className="userdetails">
               <p>{userdata.username}</p>
-              <Avatar src={imageSrc} sx={{ width: 50, height: 50 }} />
+              <Avatar src={userdata.profileImage} sx={{ width: 50, height: 50 }} />
             </div>
             <button
             onClick={logout}

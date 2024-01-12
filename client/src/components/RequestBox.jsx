@@ -3,12 +3,15 @@ import Button from '@mui/material/Button'; // Assuming you're using Material-UI 
 import Modal from '@mui/material/Modal'; // Assuming you're using Material-UI for Modal
 import Box from '@mui/material/Box'; // Assuming you're using Material-UI for Box
 import { Typography } from '@mui/material';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
+import AuthContext from '../store/auth-context';
 const RequestBox=()=>{
     const [img,setImg]=useState(false);
     const [imgUrl,setImgUrl]=useState();
     const [document,setDocument]=useState(false);
     const [data,setData]=useState([]);
+    const ctx=useContext(AuthContext);
+    console.log(ctx)
     const imagePopupHandler=(env)=>{
         // console.log(env.target.id)
         const id=env.target.id;
@@ -26,7 +29,6 @@ const RequestBox=()=>{
         setDocument(true)
     }
     useEffect(() => {
-        console.log('Client error')
         const fetchHandler = async () => {
           try {
             const result = await fetch('http://localhost:8000/admin/getpendingrequests', {

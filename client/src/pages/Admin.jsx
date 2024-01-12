@@ -6,6 +6,7 @@ import PlaylistAddIcon from '@mui/icons-material/PlaylistAdd';
 import MapsUgcIcon from '@mui/icons-material/MapsUgc';
 import RequestBox from '../components/RequestBox';
 function Admin() {
+    
     return (
         <>
         <div className='outer'>

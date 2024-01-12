@@ -14,29 +14,24 @@ import ExamCorner from "./components/ExamCorner";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import AuthContext from "./store/auth-context";
-import { jwtDecode } from "jwt-decode";
+import axios from 'axios';
+import Admin from "./pages/Admin";
 
 function App() {
   const [userdata, setUserdata] = useState(() => {
     const storedUserData = localStorage.getItem('userData');
     return storedUserData ? JSON.parse(storedUserData) : null;
   });
+  // const [drive, SetDrive] = useState({ googleDrive: "/http://google.drive./" });
 
   const fetchUserdata = async () => {
     try {
-      const token = localStorage.getItem('token');
-
-      if(!token) return;
-      
-      const role = jwtDecode(token).role;
-      const requestRoute = `${role}/get${role.charAt(0).toUpperCase() + role.slice(1)}Data`
-      const data = await fetch(`http://localhost:8000/${requestRoute}`, {
+      const data = await fetch('http://localhost:8000/instructor/getInstructorData', {
         method: 'GET',
         headers: {
-          "authorization": token
+          "Authorization": localStorage.getItem('token')
         },
       });
-
       if (data.ok) {
         const newUserdata = await data.json();
 
@@ -52,8 +47,7 @@ function App() {
 
   useEffect(() => {
     if (!userdata) {
-      if(localStorage.getItem("token"))
-        fetchUserdata();
+      fetchUserdata();
     }
   });
 
@@ -77,6 +71,7 @@ function App() {
           {userdata && userdata.role === 'teacher' && (
             <Route path="/live" element={<LiveStream />}/>
           )}
+          <Route path="/adminpanel" element={<Admin />} />
           <Route path="/uploadvideo" element={<UploadVideo/>} />
           <Route path="/teachers" element={<Teachers/>} />
           <Route path="/teacher/:userID" element={<HomepageTeacher />} />

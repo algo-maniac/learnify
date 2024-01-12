@@ -19,7 +19,7 @@ router.get("/getInstructorData", authenticateInstructor, instructorController.ge
 // router.get("/getInstructorProfileImage/:id", authenticateGeneral, instructorController.getInstructorProfileImage);
 
 
-router.post("/instructor/uploadVideo", upload.fields([{ name: 'video', maxCount: 1 }, { name: 'thumbnail', maxCount: 1 }]), instructorController.uploadVideo);
+router.post("/uploadVideo", upload.fields([{ name: 'video', maxCount: 1 }, { name: 'thumbnail', maxCount: 1 }]), instructorController.uploadVideo);
 // router.post("/instructor/uploadSection", upload.single("image"), instructorController.uploadSection);
 // router.post("/instructor/uploadCourse", upload.single("image"), instructorController.uploadCourse);
 

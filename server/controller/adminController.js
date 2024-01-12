@@ -5,6 +5,8 @@ const nodemailer = require('nodemailer');
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
 const { Readable } = require('stream');
+const cloudinary = require('cloudinary').v2;
+
 
 const conn = mongoose.connection;
 let gfs;
@@ -14,6 +16,13 @@ conn.once('open', () => {
   });
 });
 
+          
+cloudinary.config({ 
+  cloud_name: 'desdkbhvz', 
+  api_key: '822224579263365', 
+  api_secret: 'kTX01qyk21TXjM3YPAdBd4YN6ps' 
+});
+
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
@@ -21,6 +30,19 @@ const transporter = nodemailer.createTransport({
     pass: 'mfeu ndqh rnju dbnp', // Your Gmail password or an app-specific password
   },
 });
+
+
+// Function to upload file to Cloudinary
+const uploadToCloudinary = (file) => {
+  return new Promise((resolve, reject) => {
+      cloudinary.uploader.upload_stream({ resource_type: 'auto' },
+          (error, result) => {
+              if (error) reject(error);
+              resolve(result.secure_url);
+          })
+          .end(file.buffer);
+  });
+};
 
 module.exports.signuppost = async (req, res) => {
   const { username, email, password } = req.body;
@@ -344,8 +366,33 @@ async function sendDenialEmail(userEmail) {
     console.error('Error sending rejection email:', error);
     throw error;
   }
-
 }
 
+module.exports.getPendingRequests = async (req, res) => {
+  const pendingInstructors = await Instructor.find({ isApproved: false });
+  const pendingAdmins = await Admin.find({ isApproved: false });
+
+  const result1 = pendingInstructors.map(val => {
+    return {
+      id: val.id,
+      username: val.username,
+      email: val.email,
+      profileImage: val.profileImage
+    }
+  });
+  const result2 = pendingAdmins.map(val => {
+    return {
+      id: val.id,
+      username: val.username,
+      email: val.email,
+      profileImage: val.profileImage
+    }
+  });
+
+  res.json({
+    pendingInstructors: result1,
+    pendingAdmins: result2
+  });
+}
 
 

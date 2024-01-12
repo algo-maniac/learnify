@@ -17,4 +17,6 @@ router.post("/approveInstructor", authenticateAdmin, adminController.approveInst
 
 router.post("/denyInstructor", authenticateAdmin, adminController.denyInstructor);
 
+router.get("/getPendingRequests", authenticateAdmin, adminController.getPendingRequests);
+
 module.exports = router;

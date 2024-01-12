@@ -10,7 +10,7 @@ function Teachers(props) {
 
   const [teacherData, setData] = useState([]);
   useEffect(() => {
-    fetch('http://localhost:8000/teachers', {
+    fetch('http://localhost:8000/teacher', {
       method: 'GET'
     }).then((data) => {
       return data.json();

@@ -25,9 +25,10 @@ function App() {
 
   const fetchUserdata = async () => {
     try {
-      const data = await fetch('http://localhost:8000/getUserData', {
+      const data = await fetch('http://localhost:8000/instructor/getInstructorData', {
+        method: 'GET',
         headers: {
-          token: localStorage.getItem('token'),
+          "Authorization": localStorage.getItem('token')
         },
       });
       if (data.ok) {

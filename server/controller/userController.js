@@ -13,24 +13,11 @@ conn.once('open', () => {
 });
 
 module.exports.signuppost = async (req, res) => {
-  const { username, email, password, isTeacher } = req.body;
+  const { username, email, password } = req.body;
   try {
-    const readableStream = new Readable();
-    readableStream.push(req.file.buffer);
-    readableStream.push(null);
+    const profileImage = req.file;
 
-    // Create write stream to GridFS
-    const uploadStream = gfs.openUploadStream(req.file.originalname);
-    readableStream.pipe(uploadStream);
-
-    // Wait for the upload to finish
-    await new Promise((resolve, reject) => {
-      uploadStream.on('finish', resolve);
-      uploadStream.on('error', reject);
-    });
-
-    // Get the ObjectId of the uploaded file
-    const objectId = uploadStream.id;
+    const profileImageUrl = await uploadToCloudinary(profileImage);
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
@@ -47,13 +34,12 @@ module.exports.signuppost = async (req, res) => {
       username: username,
       email: email,
       password: hashedPassword,
-      role: isTeacher === 1 ? "teacher" : "student",
-      profileImage: objectId,
+      profileImage: profileImageUrl,
     });
 
     await user.save();
     console.log(user);
-    const token = jwt.sign({ email: user.email }, "trident-secret", { expiresIn: '1h' });
+    const token = jwt.sign({ email: user.email, role: "user" }, process.env.USER_JWT_SECRET, { expiresIn: '1h' });
     res.status(200).json({
       message: "SignUp successfull",
       token: token
@@ -79,7 +65,7 @@ module.exports.loginpost = async (req, res) => {
       return;
     }
 
-    const token = jwt.sign({ email: user.email }, "trident-secret", { expiresIn: '1h' });
+    const token = jwt.sign({ email: user.email, role: "user" }, process.env.USER_JWT_SECRET, { expiresIn: '1h' });
     res.status(200).json({
       message: "Login successfull",
       token: token
@@ -91,51 +77,24 @@ module.exports.loginpost = async (req, res) => {
 
 
 module.exports.getUserData = async (req, res) => {
-  const token = req.headers.token;
   try {
-    const data = jwt.verify(token, "trident-secret");
-    const email = data.email;
-    const user = await User.findOne({ email });
-    console.log("user:   ---------" + user);
+    const id = req.user.id;
+    const user = await User.findById(id);
+
     return res.status(200).json({
       id: user.id,
       username: user.username,
       email: user.email,
-      role: user.role,
+      role: "user",
       profileImage: user.profileImage
     });
+    
   } catch (err) {
     console.log(err);
     res.status(404).json({
       message: "Authorization failed"
     })
   }
-
 }
-
-module.exports.getUserProfileImage = async(req, res) => {
-  try {
-    const objectId = new mongoose.Types.ObjectId(req.params.id);
-
-    // Find the file in GridFS by ObjectId
-    const file = await gfs.find({ _id: objectId }).toArray();
-
-    if (!file || file.length === 0) {
-      return res.status(404).json({ message: 'Image not found' });
-    }
-
-    // Set the appropriate content type
-    res.set('Content-Type', file[0].contentType);
-
-    // Create a readable stream and pipe it to the response
-    const downloadStream = await gfs.openDownloadStream(objectId);
-
-    await downloadStream.pipe(res);
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: 'Internal server error' });
-  }
-}
-
 
 

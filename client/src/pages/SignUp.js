@@ -38,7 +38,7 @@ const SignUp = () => {
     formDataToSend.append('role', formData.role);
 
     try {
-      const data = await fetch("http://localhost:8000/signup", {
+      const data = await fetch("http://localhost:8000/instructor/signup", {
         method: "POST",
         body: formDataToSend,
       });

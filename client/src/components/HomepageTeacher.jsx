@@ -69,7 +69,8 @@ function HomepageTeacher() {
   return (
     <div className='homepage'>
       <div className='sidebar'>
-      {userData.isTeacher && userData.isLogged &&
+      {userData && 
+      // userData.role === "teacher" &&
         <div>
           < Sidebar id={userData.id}/>
         </div>

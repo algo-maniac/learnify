@@ -27,9 +27,14 @@ function Navbar(props) {
       return;
     }
     
-    const imageUrl = `http://localhost:3000/image/${userdata.profileImage}`; // Replace <ObjectId> with the actual ObjectId
+    const imageUrl = `http://localhost:3000/getUserProfileImage/${userdata.profileImage}`; // Replace <ObjectId> with the actual ObjectId
 
-    fetch(imageUrl)
+    fetch(imageUrl, {
+      method: 'GET',
+      headers: {
+        "Authorization": localStorage.getItem('token')
+      }
+    })
       .then(response => response.blob())
       .then(blob => {
         const objectURL = URL.createObjectURL(blob);

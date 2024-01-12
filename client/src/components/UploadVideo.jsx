@@ -8,47 +8,51 @@ import styled from "styled-components";
 import AuthContext from '../store/auth-context'
 function UploadVideo(props) {
   const navigate = useNavigate();
-  // console.log(props.userData);
-  // props mein data tik nhi raha hai toh jwt ke baad shayad karega
-  // email se search karunga mein
-  const ctx=useContext(AuthContext);
-  const email=ctx.email;
-  // fake user defined email is used after jwt actual data will be used
-  const [teacherInfo, setInfo] = useState([]);
+  
   const [formData, setFormData] = useState({
     title: "",
-    videoUrl: "",
-    userID: "",
+    description: "",
+    video: null,
+    thumbnail: null,
   });
-  const [file, setFile] = useState("");
-  const imgHandler = (env) => {
-    setFile(env.target.files[0]);
-  };
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
+  const handleVideoChange = (e) => {
+    setFormData({ ...formData, video: e.target.files[0] });
+  };
+
+  const handleThumbnailChange = (e) => {
+    setFormData({ ...formData, thumbnail: e.target.files[0] });
+  };
+
   const handleSubmit = (e) => {
     e.preventDefault();
+
     const form = new FormData();
-    form.append("image", file);
     form.append("title", formData.title);
-    form.append("videourl", formData.videoUrl);
-    form.append("email", email);
-    fetch("http://localhost:8000/teacher", {
+    form.append("description", formData.description);
+    form.append("video", formData.video);
+    form.append("thumbnail", formData.thumbnail);
+
+    fetch("http://localhost:8000/instructor/uploadVideo", {
       method: "POST",
+      headers: {
+        "authorization": localStorage.getItem("token")
+      },
       body: form,
     })
-      .then((data) => {
-        return data.json();
-      })
+      .then((data) => data.json())
       .then((result) => {
-        // alert.show('Oh look, an alert!')
-        // navigate karna hai waha kar dena
-        // navigate("/teacher" + props.user);
         navigate(`/teacher/${props.data.id}`);
       })
-      .catch((er) => {});
+      .catch((err) => {
+        console.error(err);
+      });
   };
+
   return (
     <>
       <ImageContainer src="./assets/back_img2.png" alt="Error" />
@@ -71,14 +75,23 @@ function UploadVideo(props) {
                 onChange={handleChange}
               />
             </Label>
-            <Label htmlFor="videoUrl" name="videoUrl">
-              VideoUrl:
+            <Label htmlFor="description" name="description">
+              Description:
               <Input
-                type="url"
-                name="videoUrl"
-                id="videoUrl"
-                value={formData.videoUrl}
+                type="text"
+                name="description"
+                id="description"
+                value={formData.description}
                 onChange={handleChange}
+              />
+            </Label>
+            <Label htmlFor="video">
+              Video File:
+              <Input
+                type="file"
+                name="video"
+                id="video"
+                onChange={handleVideoChange}
               />
             </Label>
             <Label htmlFor="thumbnail" name="thumbnail">
@@ -87,8 +100,7 @@ function UploadVideo(props) {
                 type="file"
                 name="thumbnail"
                 id="thumbnail"
-                value={formData.thumbnail}
-                onChange={imgHandler}
+                onChange={handleThumbnailChange}
               />
             </Label>
             <Button>Submit</Button>

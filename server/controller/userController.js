@@ -1,8 +1,10 @@
 const User = require("../models/user");
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
 const mongoose = require("mongoose");
+const jwt = require("jsonwebtoken");
+const bcrypt = require('bcrypt');
 const { Readable } = require('stream');
+const cloudinary = require('cloudinary').v2;
+
 
 const conn = mongoose.connection;
 let gfs;
@@ -11,6 +13,26 @@ conn.once('open', () => {
     bucketName: 'uploads',
   });
 });
+
+
+          
+cloudinary.config({ 
+  cloud_name: 'desdkbhvz', 
+  api_key: '822224579263365', 
+  api_secret: 'kTX01qyk21TXjM3YPAdBd4YN6ps' 
+});
+
+// Function to upload file to Cloudinary
+const uploadToCloudinary = (file) => {
+  return new Promise((resolve, reject) => {
+      cloudinary.uploader.upload_stream({ resource_type: 'auto' },
+          (error, result) => {
+              if (error) reject(error);
+              resolve(result.secure_url);
+          })
+          .end(file.buffer);
+  });
+};
 
 module.exports.signuppost = async (req, res) => {
   const { username, email, password } = req.body;
@@ -39,7 +61,7 @@ module.exports.signuppost = async (req, res) => {
 
     await user.save();
     console.log(user);
-    const token = jwt.sign({ email: user.email, role: "user" }, process.env.USER_JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ id: user.id, role: "user" }, process.env.USER_JWT_SECRET, { expiresIn: '1h' });
     res.status(200).json({
       message: "SignUp successfull",
       token: token
@@ -65,7 +87,7 @@ module.exports.loginpost = async (req, res) => {
       return;
     }
 
-    const token = jwt.sign({ email: user.email, role: "user" }, process.env.USER_JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ id: user.id, role: "user" }, process.env.USER_JWT_SECRET, { expiresIn: '1h' });
     res.status(200).json({
       message: "Login successfull",
       token: token
@@ -79,7 +101,9 @@ module.exports.loginpost = async (req, res) => {
 module.exports.getUserData = async (req, res) => {
   try {
     const id = req.user.id;
+    console.log(id);
     const user = await User.findById(id);
+    console.log(user);
 
     return res.status(200).json({
       id: user.id,

@@ -50,12 +50,13 @@ module.exports.signuppost = async (req, res) => {
 
     await instructor.save();
 
-    res.status(200).json({
+    return res.status(200).json({
       message: "Sucessfully registered. Awaiting approval",
     });
   } catch (err) {
     console.log(err);
-    res.status(500).json({
+
+    return res.status(500).json({
       message: "There is some problem at our end. Please retry",
     });
   }
@@ -72,15 +73,21 @@ module.exports.loginpost = async (req, res) => {
     const validPassword = await bcrypt.compare(password, instructor.password);
 
     if (!instructor) {
-      return res.status(404).send("Instructor Not Present");
+      return res.status(404).json({
+        message: "Instructor Not Present"
+      });
     }
 
     if (!validPassword) {
-      return res.status(404).send("Invalid Password");
+      return res.status(404).json({
+        message: "Invalid Password"
+      });
     }
 
     if(!instructor.isApproved) {
-      return res.status(401).send("Approval pending!");
+      return res.status(401).json({
+        message: "Approval pending!"
+      });
     }
 
     const token = jwt.sign(
@@ -93,14 +100,14 @@ module.exports.loginpost = async (req, res) => {
     );
 
 
-    res.status(200).json({
+    return res.status(200).json({
       message: "Login successfull",
       token: token
     });
 
   } catch (err) {
     console.log(err);
-    res.status(500).json({
+    return res.status(500).json({
       message: "There is some problem at our end. Please retry",
     });
   }

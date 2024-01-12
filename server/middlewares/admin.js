@@ -9,7 +9,6 @@ const authenticateAdmin = (req, res, next) => {
 
     try {
         const user = jwt.verify(token, process.env.ADMIN_JWT_SECRET);
-
         req.user = user;
         next();
     } catch (err) {

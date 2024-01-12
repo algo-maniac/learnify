@@ -71,14 +71,15 @@ module.exports.signuppost = async (req, res) => {
     });
 
     await admin.save();
-    console.log(admin);
-    const token = jwt.sign({ email: admin.email, role: "admin" }, process.env.ADMIN_JWT_SECRET, { expiresIn: '1h' });
-    res.status(200).json({
-      message: "SignUp successfull",
-      token: token
+    
+    return res.status(200).json({
+      message: "Registered successfull! Approval pending",
     });
   } catch (err) {
     console.log(err);
+    return res.status(500).json({
+      message: "Something went wrong at our end"
+    })
   }
 }
 
@@ -91,13 +92,21 @@ module.exports.loginpost = async (req, res) => {
     const validPassword = await bcrypt.compare(password, admin.password);
 
     if (!admin) {
-      res.status(404).send("User Not Present");
-      return;
+      return res.status(404).json({
+        message: "User Not Present"
+      });
     }
 
     if (!validPassword) {
-      res.status(404).send("Invalid Password");
-      return;
+      return res.status(404).json({
+        message: "Invalid Password"
+      });
+    }
+
+    if (!admin.isApproved) {
+      return res.status(400).json({
+        message: "Approval Pending"
+      });
     }
 
     const token = jwt.sign(
@@ -109,23 +118,25 @@ module.exports.loginpost = async (req, res) => {
       { expiresIn: '1h' }
     );
 
-    res.status(200).json({
+    return res.status(200).json({
       message: "Login successfull",
       token: token
     });
 
   } catch (err) {
     console.log(err);
+    return res.status(500).json({
+      message: "There is some problem at our end"
+    });
   }
 }
 
 
 module.exports.getAdminData = async (req, res) => {
-  const token = req.headers.token;
   try {
-    const data = jwt.verify(token, process.env.ADMIN_JWT_SECRET);
-    const id = data.id;
-    const admin = await User.findById(id);
+    const id = req.user.id;
+    const admin = await Admin.findById(id);
+
     return res.status(200).json({
       id: admin.id,
       username: admin.username,
@@ -169,10 +180,6 @@ async function sendApprovalEmail(userEmail) {
     from: 'your-email@gmail.com',
     to: userEmail,
     subject: 'Your Account has been Approved',
-    // text: 'Congratulations! Your account has been approved. You can now log in.',
-    // html : `
-    // <h1>Congratulations! Your account has been approved. You can now <a href="http://localhost:3000/instructor/signup">log in</a> </h1>
-    // `
     html: `
       <!DOCTYPE html>
       <html lang="en">
@@ -284,7 +291,6 @@ async function sendDenialEmail(userEmail) {
   const rejectionMailOptions = {
     from: 'your-email@gmail.com',
     to: userEmail,
-    subject: 'Your Account Approval Request has been Denied',
     html: `
         <!DOCTYPE html>
         <html lang="en">

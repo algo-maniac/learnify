@@ -377,7 +377,9 @@ module.exports.getPendingRequests = async (req, res) => {
       id: val.id,
       username: val.username,
       email: val.email,
-      profileImage: val.profileImage
+      profileImage: val.profileImage,
+      createdAt: val.createdAt,
+      updatedAt: val.updatedAt
     }
   });
   const result2 = pendingAdmins.map(val => {
@@ -385,7 +387,9 @@ module.exports.getPendingRequests = async (req, res) => {
       id: val.id,
       username: val.username,
       email: val.email,
-      profileImage: val.profileImage
+      profileImage: val.profileImage,
+      createdAt: val.createdAt,
+      updatedAt: val.updatedAt
     }
   });
 

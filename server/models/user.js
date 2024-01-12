@@ -17,7 +17,9 @@ const userSchema = new mongoose.Schema({
   subscribedInstructors: [{
     type: mongoose.Schema.Types.ObjectId, ref: 'Instructor'
   }], 
-}, { timestamps: true });
+}, { 
+  timestamps: true 
+});
 
 const User = mongoose.model("user", userSchema);
 

@@ -13,6 +13,8 @@ const instructorSchema = new mongoose.Schema({
   videoLectures: [{ type: mongoose.Schema.Types.ObjectId, ref: 'VideoLecture' }],
   courses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Course' }],
   isApproved: { type: Boolean, default: false },
+}, {
+  timestamps: true, 
 });
 
 const Instructor = mongoose.model("instructor", instructorSchema);

@@ -87,7 +87,15 @@ module.exports.loginpost = async (req, res) => {
       return;
     }
 
-    const token = jwt.sign({ id: user.id, role: "user" }, process.env.USER_JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign(
+      { 
+        id: user.id, 
+        role: "user" 
+      }, 
+      process.env.USER_JWT_SECRET, 
+      { expiresIn: '24h' }
+    );
+    
     res.status(200).json({
       message: "Login successfull",
       token: token

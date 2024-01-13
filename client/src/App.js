@@ -15,6 +15,7 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import AuthContext from "./store/auth-context";
 import axios from 'axios';
+import { jwtDecode } from "jwt-decode";
 import Admin from "./pages/Admin";
 
 function App() {
@@ -22,16 +23,22 @@ function App() {
     const storedUserData = localStorage.getItem('userData');
     return storedUserData ? JSON.parse(storedUserData) : null;
   });
-  // const [drive, SetDrive] = useState({ googleDrive: "/http://google.drive./" });
 
   const fetchUserdata = async () => {
     try {
-      const data = await fetch('http://localhost:8000/instructor/getInstructorData', {
+      const token = localStorage.getItem('token');
+
+      if(!token) return;
+      
+      const role = jwtDecode(token).role;
+      const requestRoute = `${role}/get${role.charAt(0).toUpperCase() + role.slice(1)}Data`
+      const data = await fetch(`http://localhost:8000/${requestRoute}`, {
         method: 'GET',
         headers: {
-          "Authorization": localStorage.getItem('token')
+          "authorization": token
         },
       });
+
       if (data.ok) {
         const newUserdata = await data.json();
 
@@ -47,7 +54,8 @@ function App() {
 
   useEffect(() => {
     if (!userdata) {
-      fetchUserdata();
+      if(localStorage.getItem("token"))
+        fetchUserdata();
     }
   });
 

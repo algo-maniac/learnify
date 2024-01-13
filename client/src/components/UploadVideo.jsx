@@ -6,6 +6,7 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { Container } from "@mui/system";
 import styled from "styled-components";
 import AuthContext from '../store/auth-context'
+
 function UploadVideo(props) {
   const navigate = useNavigate();
   
@@ -46,7 +47,8 @@ function UploadVideo(props) {
     })
       .then((data) => data.json())
       .then((result) => {
-        navigate(`/teacher/${props.data.id}`);
+        console.log(result);
+        // navigate(`/teacher/${props.data.id}`);
       })
       .catch((err) => {
         console.error(err);
@@ -55,12 +57,12 @@ function UploadVideo(props) {
 
   return (
     <>
-      <ImageContainer src="./assets/back_img2.png" alt="Error" />
+      {/* <ImageContainer src="./assets/back_img2.png" alt="Error" />
       <ImageContainer
         src="./assets/back_img1.png"
         style={{ top: "460px", left: "400px", transform: "rotate(-10deg)" }}
         alt="Error"
-      />
+      /> */}
       <Contain>
         <Heading>Upload Video</Heading>
         <Content>

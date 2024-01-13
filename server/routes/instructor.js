@@ -15,7 +15,7 @@ router.post("/login", instructorController.loginpost);
 
 router.use(authenticateInstructor);
 
-router.get("/getInstructorData", authenticateInstructor, instructorController.getInstructorData);
+router.get("/getInstructorData", instructorController.getInstructorData);
 // router.get("/getInstructorProfileImage/:id", authenticateGeneral, instructorController.getInstructorProfileImage);
 
 

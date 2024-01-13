@@ -115,7 +115,7 @@ module.exports.loginpost = async (req, res) => {
         role: "admin"
       },
       process.env.ADMIN_JWT_SECRET,
-      { expiresIn: '1h' }
+      { expiresIn: '24h' }
     );
 
     return res.status(200).json({

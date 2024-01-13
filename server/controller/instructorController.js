@@ -1,10 +1,15 @@
+const http = require("http");
+const express = require("express");
 const Instructor = require("../models/instructor");
 const VideoLecture = require("../models/videoLecture");
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
 const Post = require("../models/post");
 const mongoose = require("mongoose");
-const { Readable } = require('stream');
+const ffmpeg = require('fluent-ffmpeg');
+const streamifier = require('streamifier');
+const ffmpegInstaller = require('@ffmpeg-installer/ffmpeg');
+const { getVideoDurationInSeconds } = require('get-video-duration');
 const cloudinary = require('cloudinary').v2;
 
 const conn = mongoose.connection;
@@ -15,8 +20,6 @@ conn.once('open', () => {
   });
 });
 
-// Configure Cloudinary with your credentials
-// import {v2 as cloudinary} from 'cloudinary';
           
 cloudinary.config({ 
   cloud_name: 'desdkbhvz', 
@@ -96,7 +99,7 @@ module.exports.loginpost = async (req, res) => {
         role: "instructor" 
       }, 
       process.env.INSTRUCTOR_JWT_SECRET, 
-      { expiresIn: '1h' }
+      { expiresIn: '24h' }
     );
 
 
@@ -142,22 +145,26 @@ module.exports.uploadVideo = async (req, res) => {
     const videoFile = req.files['video'][0];
     const thumbnail = req.files['thumbnail'][0];
 
-    const videoFileUrl = await uploadToCloudinary(videoFile);
-    const thumbnailUrl = await uploadToCloudinary(thumbnail);
+    const emitProgress = (percentage) => {
+      io.emit('upload-progress', { percentage });
+    };
+
+    const videoFileUrl = await uploadToCloudinary(videoFile, emitProgress);
+    const videoStream = streamifier.createReadStream(videoFile.buffer);
+    const duration = await getVideoDurationInSeconds(videoStream);
+    
+    const thumbnailUrl = await uploadToCloudinary(thumbnail, emitProgress);
 
     const videoLecture = new VideoLecture({
       title: req.body.title,
       description: req.body.description,
-      duration: 10,
-      // duration: req.body.duration,
+      duration: duration,
       videoFile: videoFileUrl,
       thumbnail: thumbnailUrl
     });
 
-    console.log("here2");
 
     const result = await videoLecture.save();
-    // add video to instructor data
     Instructor.findOneAndUpdate(
       { email: req.user.email },
       { $push: { videoLectures: result._id } }
@@ -166,7 +173,6 @@ module.exports.uploadVideo = async (req, res) => {
           console.error(err);
           return res.status(500).json({ error: "Internal Server Error" });
         }
-    
         console.log("Video added to instructor");
         return res.status(200).json({ message: "Video added successfully" });
       });
@@ -176,17 +182,25 @@ module.exports.uploadVideo = async (req, res) => {
   }
 }
 
-// Function to upload file to Cloudinary
-const uploadToCloudinary = (file) => {
+
+const uploadToCloudinary = (file, emitProgress) => {
   return new Promise((resolve, reject) => {
-      cloudinary.uploader.upload_stream({ resource_type: 'auto' },
-          (error, result) => {
-              if (error) reject(error);
-              resolve(result.secure_url);
-          })
-          .end(file.buffer);
+    const uploadStream = cloudinary.uploader.upload_stream(
+      { resource_type: 'auto' }, // Adjust chunk_size as needed
+      (error, result) => {
+        if (error) {
+          console.error('Error during upload:', error);
+          reject(error);
+        } else {
+          resolve(result.secure_url);
+        }
+      }
+    );
+
+    uploadStream.end(file.buffer);
   });
 };
+
 
 // module.exports.createSection = async (req, res) => {
 //   try {

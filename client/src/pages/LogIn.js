@@ -1,10 +1,10 @@
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, useLocation, useNavigate } from "react-router-dom";
 import axios from "axios";
 import './Home.css'
 import AuthContext from "../store/auth-context";
-
+import { toast } from "react-toastify";
 const LogIn = () => {
   const { fetchUserdata } = useContext(AuthContext);
   const [currUser, setCurrUser] = useState({
@@ -34,8 +34,11 @@ const LogIn = () => {
       localStorage.setItem('token', token);
       console.log(res);
       fetchUserdata();
-      navigate("/");
+      navigate('/', { state: {toast:true,data:res.message } });
     } catch (err) {
+      toast.error("Error in Logging",{
+        position:'top-center'
+      })
       console.log(err);
     }
   };

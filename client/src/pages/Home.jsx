@@ -3,10 +3,26 @@ import './Home.css'
 import PersonIcon from '@mui/icons-material/Person';
 import PsychologyAltIcon from '@mui/icons-material/PsychologyAlt';
 import InfoIcon from '@mui/icons-material/Info';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
 
 function Home() {
+    const location = useLocation();
+    const [state,setState]=useState(location.state)
+    useEffect(()=>{
+        if(state){
+            if(state?.toast){
+                toast.success(state?.data,{
+                    position:'top-center'
+                })
+            }
+            setState(null)
+        }
+    },[state])
     return (
+        <>
+        <ToastContainer/>
         <div className='home_background'>
             <div className="home">
                 <div className="banner">
@@ -37,6 +53,7 @@ function Home() {
                 </div>
             </div>
         </div>
+        </>
     )
 }
 

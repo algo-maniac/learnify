@@ -1,16 +1,18 @@
 import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { NavLink, Navigate, useNavigate } from "react-router-dom";
-import axios from "axios";
 import './Home.css'
 import AuthContext from "../store/auth-context";
 import Modal from '@mui/material/Modal'; 
-import Box from '@mui/material/Box'; 
+import Box from '@mui/material/Box';
+import { ToastContainer, toast } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
 import { Typography } from '@mui/material';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 const SignUp = () => {
   const { fetchUserdata } = useContext(AuthContext);
   const [popup,setPopup]=useState(false);
+  const [loader,setLoader]=useState(false);
   const [timeout,setTimeout]=useState(5);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -32,16 +34,15 @@ const SignUp = () => {
   const redirectHandler=()=>{
     navigate("/")
   }
-  const handleTimeout=()=>{
-    var time=5;
-    setInterval(() => {
-      setTimeout(time)
-      time--;
-    }, 1000);
+  const redirectToLogin=()=>{
+    navigate("/login")
   }
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setLoader(true);
+    toast("Signing up... Please wait ",{
+      position:'top-center'
+    });
     const formDataToSend = new FormData();
     formDataToSend.append('username', formData.username);
     formDataToSend.append('email', formData.email);
@@ -54,9 +55,8 @@ const SignUp = () => {
         method: "POST",
         body: formDataToSend,
       });
-
+      setLoader(false);
       const res = await data.json();
-
       const token = res.token;
       localStorage.setItem('token', token);
       fetchUserdata();
@@ -75,13 +75,16 @@ const SignUp = () => {
       }
     } catch (err) {
       console.log(err);
+      setLoader(true);
+      toast.error("Signup Failed, Try Again",{
+        position:'top-center'
+      })
     }
   };
 
-
-
   return (
     <>
+    {loader && <ToastContainer />}
       {popup && <Modal
         open={true}
         aria-labelledby="modal-modal-title"
@@ -102,11 +105,11 @@ const SignUp = () => {
                   <p>Redirecting to Home Page in {timeout}...</p>
                 </div>
                 <div className="content-box">
-                  <button className="button-70" onClick={redirectHandler}>OK</button>
+                  <button className="button-70" onClick={redirectHandler}>Home</button>
+                  <button className="button-70" onClick={redirectToLogin}>Login</button>
                 </div>
               </div>
             </div>
-
           </Typography>
         </Box>
       </Modal>}
@@ -161,7 +164,6 @@ const SignUp = () => {
                 <Input type="file" name="profileImage" accept="image/*" onChange={handleInputChange} />
               </Label>
             </InputWrapper>
-
             <Button className="signup-submit">Submit</Button>
             <Lognow>
               <NavLink to="/LogIn">Already Logged In? Log In</NavLink>

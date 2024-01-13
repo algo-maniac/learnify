@@ -30,9 +30,9 @@ const LogIn = () => {
         console.log("Wrong Password");
         return;
       } 
-      
       const { token } = res.data;
       localStorage.setItem('token', token);
+      console.log(res);
       fetchUserdata();
       navigate("/");
     } catch (err) {

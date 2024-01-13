@@ -4,10 +4,14 @@ import { NavLink, Navigate, useNavigate } from "react-router-dom";
 import axios from "axios";
 import './Home.css'
 import AuthContext from "../store/auth-context";
-
-
+import Modal from '@mui/material/Modal'; 
+import Box from '@mui/material/Box'; 
+import { Typography } from '@mui/material';
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 const SignUp = () => {
   const { fetchUserdata } = useContext(AuthContext);
+  const [popup,setPopup]=useState(false);
+  const [timeout,setTimeout]=useState(5);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: '',
@@ -25,8 +29,16 @@ const SignUp = () => {
       [name]: name === 'profileImage' ? files[0] : value,
     }));
   };
-
-
+  const redirectHandler=()=>{
+    navigate("/")
+  }
+  const handleTimeout=()=>{
+    var time=5;
+    setInterval(() => {
+      setTimeout(time)
+      time--;
+    }, 1000);
+  }
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -48,7 +60,19 @@ const SignUp = () => {
       const token = res.token;
       localStorage.setItem('token', token);
       fetchUserdata();
-      navigate('/');
+      if(res.message==="Sucessfully registered. Awaiting approval"){
+        setInterval(() => {
+          setTimeout((prev)=>{
+            if(prev===0){
+              navigate("/")
+            }
+            else{
+              return prev-1;
+            }
+          })
+        }, 1000);
+        setPopup(true)
+      }
     } catch (err) {
       console.log(err);
     }
@@ -58,6 +82,34 @@ const SignUp = () => {
 
   return (
     <>
+      {popup && <Modal
+        open={true}
+        aria-labelledby="modal-modal-title"
+        aria-describedby="modal-modal-description"
+      >
+        <Box className="popup-box">
+          <Typography id="modal-modal-title" variant="h6" component="h2">
+            <div className="header">
+              <div className="icon"><ErrorOutlineIcon/></div>
+              <div className="text"><h3>Approval Pending</h3></div>
+            </div>
+          </Typography>
+          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+            <div className="content">
+              <p>Successfully Registered, Awaiting Approval</p>
+              <div className="redirect">
+                <div className="content-box">
+                  <p>Redirecting to Home Page in {timeout}...</p>
+                </div>
+                <div className="content-box">
+                  <button className="button-70" onClick={redirectHandler}>OK</button>
+                </div>
+              </div>
+            </div>
+
+          </Typography>
+        </Box>
+      </Modal>}
       <ImageContainer src="./assets/back_img2.png" alt="Error" />
       <ImageContainer
         src="./assets/back_img1.png"

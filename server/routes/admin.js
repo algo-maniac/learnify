@@ -13,9 +13,9 @@ router.post("/login", adminController.loginpost);
 
 router.get("/getAdminData", authenticateAdmin, adminController.getAdminData);
 
-router.post("/approveInstructor", authenticateAdmin, adminController.approveInstructor);
+router.post("/approveAccount", authenticateAdmin, adminController.approveAccount);
 
-router.post("/denyInstructor", authenticateAdmin, adminController.denyInstructor);
+router.post("/denyAccount", authenticateAdmin, adminController.denyAccount);
 
 router.get("/getPendingRequests", authenticateAdmin, adminController.getPendingRequests);
 

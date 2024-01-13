@@ -153,29 +153,45 @@ module.exports.getAdminData = async (req, res) => {
 }
 
 
-module.exports.approveInstructor = async (req, res) => {
+module.exports.approveAccount = async (req, res) => {
   try {
-    const { id } = req.body;
-    console.log("approve");
+    console.log(req.body);
 
-    const instructor = await Instructor.findByIdAndUpdate(id, { isApproved: true }, { new: true });
+    const { id, role } = req.body;
 
-    if (!instructor) {
-      return res.status(404).json({ error: 'User not found.' });
+    let account;
+    switch (role) {
+      case "Admin":
+        account = await Admin.findByIdAndUpdate(id, { isApproved: true }, { new: true });
+        break;
+        
+      case "Instructor":
+        account = await Instructor.findByIdAndUpdate(id, { isApproved: true }, { new: true });
+        break;
+
+      default:
+        return res.status(400).json({
+          message: "invalid request"
+        })
+        break;
     }
 
-    // sending approval mail to instructor
-    await sendApprovalEmail(instructor.email);
+    if (!account) {
+      return res.status(404).json({ error: 'Account not found.' });
+    }
 
-    res.status(200).json({ message: 'User approved successfully.' });
+    // sending approval mail to instructor / admin
+    await sendApprovalEmail(account.email, role);
+
+    res.status(200).json({ message: 'Account approved successfully.' });
 
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Error approving instructor.' });
+    res.status(500).json({ error: 'Account approving instructor.' });
   }
 }
 
-async function sendApprovalEmail(userEmail) {
+async function sendApprovalEmail(userEmail, userRole) {
   const mailOptions = {
     from: 'your-email@gmail.com',
     to: userEmail,
@@ -245,7 +261,7 @@ async function sendApprovalEmail(userEmail) {
       
               <!-- Content -->
               <h1>Congratulations!</h1>
-              <p>Your account has been approved. You can now <a href="http://localhost:3000/instructor/signup" style="color: #28a745; text-decoration: none; font-weight: bold;">log in</a>.</p>
+              <p>Your ${userRole} account has been approved. You can now <a href="http://localhost:3000/signup" style="color: #28a745; text-decoration: none; font-weight: bold;">log in</a>.</p>
           </div>
       
       </body>
@@ -263,31 +279,47 @@ async function sendApprovalEmail(userEmail) {
   }
 }
 
-module.exports.denyInstructor = async (req, res) => {
+module.exports.denyAccount = async (req, res) => {
   try {
-    const { id } = req.body;
+    console.log(req.body);
+    const { id, role } = req.body;
+    console.log(id + " " + role);
 
-    // Find the instructor first
-    const instructor = await Instructor.findById(id);
+    let account;
+    switch (role) {
+      case "Admin":
+        account = await Admin.findById(id);
+        if (!account) {
+          return res.status(404).json({ error: 'Account not found.' });
+        }
+        await sendDenialEmail(account.email, role);
+        await Admin.deleteOne({ _id: id });
+        break;
+        
+      case "Instructor":
+        account = await Instructor.findById(id);
+        if (!account) {
+          return res.status(404).json({ error: 'Account not found.' });
+        }
+        await sendDenialEmail(account.email, role);
+        await Instructor.deleteOne({ _id: id });
+        break;
 
-    if (!instructor) {
-      return res.status(404).json({ error: 'User not found.' });
+      default:
+        return res.status(400).json({
+          message: "invalid request"
+        })
+        break;
     }
-
-    // Sending denial email to instructor
-    await sendDenialEmail(instructor.email);
-
-    await Instructor.deleteOne({ _id: id });
-
-    res.status(200).json({ message: 'User denied and deleted successfully.' });
+    res.status(200).json({ message: 'Account denied and deleted successfully.' });
 
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Error denying instructor.' });
+    res.status(500).json({ error: 'Error denying Account.' });
   }
 }
 
-async function sendDenialEmail(userEmail) {
+async function sendDenialEmail(userEmail, userRole) {
   const rejectionMailOptions = {
     from: 'your-email@gmail.com',
     to: userEmail,
@@ -356,7 +388,7 @@ async function sendDenialEmail(userEmail) {
 
                 <!-- Content -->
                 <h1>Account Approval Denied</h1>
-                <p>We regret to inform you that your account approval request has been denied. If you have any concerns, please <a href="mailto:your-email@gmail.com" style="color: #007bff; text-decoration: none; font-weight: bold;">contact us</a>.</p>
+                <p>We regret to inform you that your account approval request for ${userRole} role has been denied. If you have any concerns, please <a href="mailto:your-email@gmail.com" style="color: #007bff; text-decoration: none; font-weight: bold;">contact us</a>.</p>
             </div>
 
         </body>
@@ -381,6 +413,7 @@ module.exports.getPendingRequests = async (req, res) => {
   const result1 = pendingInstructors.map(val => {
     return {
       id: val.id,
+      role: "Instructor",
       username: val.username,
       email: val.email,
       profileImage: val.profileImage,
@@ -391,6 +424,7 @@ module.exports.getPendingRequests = async (req, res) => {
   const result2 = pendingAdmins.map(val => {
     return {
       id: val.id,
+      role: "Admin",
       username: val.username,
       email: val.email,
       profileImage: val.profileImage,
@@ -399,9 +433,10 @@ module.exports.getPendingRequests = async (req, res) => {
     }
   });
 
+  const result = [...result1, ...result2];
+
   res.json({
-    pendingInstructors: result1,
-    pendingAdmins: result2
+    pendingRequests: result
   });
 }
 

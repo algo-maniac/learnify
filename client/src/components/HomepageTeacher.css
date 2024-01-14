@@ -1,13 +1,16 @@
 .homepage {
-    display: grid;
-    grid-template-columns: 1fr 4fr;
-    min-height: 90vh;
+    display: flex;
+    
 }
 
 .sidebar {
+    width: 30%;
     background-color: #a9b9da;
 }
 
+.content {
+    display: flex;
+}
 /* .navigation {
     background-color: rgb(24, 24, 63);
     min-height: 100vh;

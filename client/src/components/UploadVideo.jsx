@@ -41,7 +41,7 @@ function UploadVideo(props) {
     fetch("http://localhost:8000/instructor/uploadVideo", {
       method: "POST",
       headers: {
-        "authorization": localStorage.getItem("token")
+        Authorization: localStorage.getItem("token")
       },
       body: form,
     })

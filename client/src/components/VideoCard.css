@@ -1,9 +1,10 @@
 .videocard {
-    width: 100%;
+    width: 300px;
+    height: 300px;
     display: flex;
     flex-direction: column;
     overflow: hidden;
-    /* border: 2px solid black; */
+    border: 2px solid black;
     border-radius: 10px;
     box-shadow: 5px 5px 10px 5px rgb(148, 146, 146);
 }
@@ -16,7 +17,7 @@
 .thumbnail {
     width: 100%;
     aspect-ratio: 5/3;
-    object-fit:cover;
+    /* object-fit:cover; */
 }
 
 .thumbnail > img {

@@ -6,7 +6,8 @@ import Button from '@mui/material/Button';
 import './TeacherDetails.css'
 
 function TeacherDetails(props) {
-  const { username, img, id } = props;
+  console.log(props)
+  const { id, username, profileImage  } = props;
 
   const joinLiveClass = () => {
     console.log("Hello!!!!!!!!");
@@ -16,7 +17,7 @@ function TeacherDetails(props) {
   return (
     <div className="teacher_details">
         
-        <Avatar src={img} sx={{ width: 70, height: 70 }}/>
+        <Avatar src={profileImage} sx={{ width: 70, height: 70 }}/>
         {props.username && <h2>{username}</h2>}
         <Link to={`/live/?roomID=${id}&role=Audience`}>
           <Button 

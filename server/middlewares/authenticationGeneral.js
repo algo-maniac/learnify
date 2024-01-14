@@ -1,7 +1,7 @@
 const jwt = require('jsonwebtoken');
 
 const authenticateGeneral = (req, res, next) => {
-    const token = req.header('Authorization');
+    const token = req.headers['authorization'];
 
     if (!token) {
         return res.status(401).json({ message: 'Unauthorized' });
@@ -10,7 +10,7 @@ const authenticateGeneral = (req, res, next) => {
     try {
         console.log(jwt.decode(token));
         const role = jwt.decode(token).role;
-        console.log(role);
+
         let user;
         switch (role) {
             case "user":
@@ -26,6 +26,7 @@ const authenticateGeneral = (req, res, next) => {
         req.user = user;
         next();
     } catch (err) {
+        console.log(err);
         return res.status(403).json({ message: 'Forbidden' });
     }
 };

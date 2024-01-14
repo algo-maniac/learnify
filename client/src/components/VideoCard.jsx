@@ -4,20 +4,22 @@ import './VideoCard.css'
 import { Link } from 'react-router-dom';
 
 function VideoCard(props) {
-  const {img, video} = props;
+  const { id, title, description, duration, thumbnail, profileImage } = props;
   return (
     <div className="videocard">
-    <a href={video.videoUrl} target="_blank" rel="noreferrer">
+    <Link to={`/video/${id}`}>
       <div>
-          <img src={"http://localhost:8000/"+props.video.thumbnail} alt="" className="thumbnail"/>
+          <img src={thumbnail} alt="" className="thumbnail"/>
           <div className="details">
               <div className="details_logo">
-                  <Avatar src={img} alt="" />
+                  <Avatar src={profileImage} alt="profileImage" />
               </div>
-              <p>{video.title}</p>
+              <p>{title}</p>
+              <p>{duration}</p>
+              <p>{description}</p>
           </div>
       </div>
-    </a>
+    </Link>
     </div>
   )
 }

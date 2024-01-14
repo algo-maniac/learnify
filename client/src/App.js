@@ -9,7 +9,7 @@ import LiveStream from "./components/LiveStream";
 import Navbar from "./components/Navbar";
 import UploadVideo from "./components/UploadVideo";
 import Doubt from "./components/Doubt";
-import Teachers from "./components/Teachers";
+import Instructors from "./components/Instructors";
 import ExamCorner from "./components/ExamCorner";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
@@ -20,7 +20,7 @@ import Admin from "./pages/Admin";
 
 function App() {
   const [userdata, setUserdata] = useState(() => {
-    const storedUserData = localStorage.getItem('userData');
+    const storedUserData = localStorage.getItem('userdata');
     return storedUserData ? JSON.parse(storedUserData) : null;
   });
 
@@ -81,8 +81,8 @@ function App() {
           )}
           <Route path="/adminpanel" element={<Admin />} />
           <Route path="/uploadvideo" element={<UploadVideo/>} />
-          <Route path="/teachers" element={<Teachers/>} />
-          <Route path="/teacher/:userID" element={<HomepageTeacher />} />
+          <Route path="/instructors" element={<Instructors/>} />
+          <Route path="/instructor/:id" element={<HomepageTeacher />} />
           <Route path="/exam-corner" element={<ExamCorner />} />
         </Routes>
         <Footer />

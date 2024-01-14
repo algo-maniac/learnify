@@ -1,94 +1,72 @@
-import React, { useState, useEffect } from 'react'
-import { useParams } from 'react-router-dom'
+import React, { useState, useEffect, useContext } from 'react'
+import { useParams, useNavigate } from 'react-router-dom'
 import './HomepageTeacher.css'
 import TeacherDetails from './TeacherDetails'
-import VideoCards from './VideoCards'
-import { useNavigate } from 'react-router-dom';
+import VideoCard from './VideoCard'
 import Sidebar from './Sidebar'
 import AuthContext from '../store/auth-context'
-import { useContext } from 'react'
 
 
 function HomepageTeacher() {
-  const { userData } = useContext(AuthContext);
-  console.log("in this", userData);
-  
-  const {userID} = useParams();
-  // console.log(userID);
-  const [teacherInfo,setData]=useState([]);
-    useEffect(()=>{
-      const url = "http://localhost:8000/teacher/"+userID;
-      fetch(url,{
-        method:'GET'
-      }).then((data)=>{
-        return data.json();
-      }).then((result)=>{
-        console.log(result.data);
-        setData([...result.data]);
-        console.log("teacher info",teacherInfo, teacherInfo[0]);
-        console.log(teacherInfo);
-        // This is the information of all teachers
-        // console.log(result); first console it then examine it 
-      })
-      .catch((er)=>{
-        console.log('error in fetching');
-      })
+  const { userdata } = useContext(AuthContext);
+  const { id } = useParams();
 
-    },[]);
+  const [instructordata, setInstructorData] = useState();
 
-  // const teacherInfoo = {
-  //   userName: "Alakh Pandey",
-  //   img: "https://images.hindustantimes.com/img/2021/10/21/1600x900/IMG_1400_1634826351847_1634826367466.jpg",
-  //   isTeacher: true,
-  //   videos: [
-  //     {
-  //       thumbnail: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2lb5xTlKkJnuDaWpONxk68vb7vmtmqsxDqg&usqp=CAU",
-  //       title: "Lecture titleLecture titleLecture titleLecture title",
-  //     },
-  //     {
-  //       thumbnail: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2lb5xTlKkJnuDaWpONxk68vb7vmtmqsxDqg&usqp=CAU",
-  //       title: "Lecture titleLecture titleLecture titleLecture title",
-  //     },
-  //     {
-  //       thumbnail: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2lb5xTlKkJnuDaWpONxk68vb7vmtmqsxDqg&usqp=CAU",
-  //       title: "Lecture titleLecture titleLecture titleLecture title",
-  //     },
-  //     {
-  //       thumbnail: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2lb5xTlKkJnuDaWpONxk68vb7vmtmqsxDqg&usqp=CAU",
-  //       title: "Lecture titleLecture titleLecture titleLecture title",
-  //     },
-  //     {
-  //       thumbnail: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcT2lb5xTlKkJnuDaWpONxk68vb7vmtmqsxDqg&usqp=CAU",
-  //       title: "Lecture titleLecture titleLecture titleLecture title",
-  //     }
-  //   ]
-  // }
+  const getInstructorData = async () => {
+    const data = await fetch(`http://localhost:8000/instructor/getInstructor/${id}`, {
+      method: 'GET',
+      headers: {
+        Authorization: localStorage.getItem("token")
+      }
+    });
+    const json = await data.json();
+    console.log(json.instructor);
+    setInstructorData(json.instructor);
+  }
+  useEffect(() => {
+    try {
+      getInstructorData();
+    } catch (err) {
+      console.log(err);
+    }
+  }, []);
 
-  
 
   return (
     <div className='homepage'>
       <div className='sidebar'>
-      {userData && 
-      // userData.role === "teacher" &&
-        <div>
-          < Sidebar id={userData.id}/>
-        </div>
-      }
+        {userdata && userdata.role === "instructor" &&
+          <div>
+            < Sidebar id={userdata.id} />
+          </div>
+        }
       </div>
       <div className="content">
-        {teacherInfo && teacherInfo[0] && 
-          <TeacherDetails 
-            username={teacherInfo[0].username} 
-            img={teacherInfo[0].img} 
-            id={userID}
+        {instructordata &&
+          <TeacherDetails
+            className='instructorDetails'
+            id={instructordata._id}
+            username={instructordata.username}
+            profileImage={instructordata.profileImage}
           />}
-        {teacherInfo && teacherInfo[0] && 
-          <VideoCards 
-            teacherInfo={teacherInfo[0]}
-          />}
+
+        <div className="videos">
+          {instructordata && instructordata.videoLectures &&
+            instructordata.videoLectures.map(vid => {
+              return <VideoCard
+                id={vid._id}
+                title={vid.title}
+                description={vid.description}
+                duration={vid.duration}
+                thumbnail={vid.thumbnail}
+                profileImage={instructordata.profileImage}
+              />
+            })
+          }
+        </div>
       </div>
-      
+
     </div>
   )
 }

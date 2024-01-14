@@ -10,8 +10,8 @@ const upload = multer({ storage: storage });
 router.post("/signup", upload.single("profileImage"), instructorController.signuppost);
 router.post("/login", instructorController.loginpost);
 
-// router.get("/instructor", authenticateGeneral, instructorController.getAllInstructors);
-// router.get("/instructor/:id", authenticateGeneral, instructorController.getInstructorWithId);
+router.get("/", authenticateGeneral, instructorController.getAllInstructors);
+router.get("/getInstructor/:id", authenticateGeneral, instructorController.getInstructorWithId);
 
 router.use(authenticateInstructor);
 

@@ -2,6 +2,7 @@ const http = require("http");
 const express = require("express");
 const Instructor = require("../models/instructor");
 const VideoLecture = require("../models/videoLecture");
+const Course = require("../models/course");
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
 const Post = require("../models/post");
@@ -20,11 +21,11 @@ conn.once('open', () => {
   });
 });
 
-          
-cloudinary.config({ 
-  cloud_name: 'desdkbhvz', 
-  api_key: '822224579263365', 
-  api_secret: 'kTX01qyk21TXjM3YPAdBd4YN6ps' 
+
+cloudinary.config({
+  cloud_name: 'desdkbhvz',
+  api_key: '822224579263365',
+  api_secret: 'kTX01qyk21TXjM3YPAdBd4YN6ps'
 });
 
 module.exports.signuppost = async (req, res) => {
@@ -87,18 +88,18 @@ module.exports.loginpost = async (req, res) => {
       });
     }
 
-    if(!instructor.isApproved) {
+    if (!instructor.isApproved) {
       return res.status(401).json({
         message: "Approval pending!"
       });
     }
 
     const token = jwt.sign(
-      { 
-        id: instructor.id, 
-        role: "instructor" 
-      }, 
-      process.env.INSTRUCTOR_JWT_SECRET, 
+      {
+        id: instructor.id,
+        role: "instructor"
+      },
+      process.env.INSTRUCTOR_JWT_SECRET,
       { expiresIn: '24h' }
     );
 
@@ -129,7 +130,7 @@ module.exports.getInstructorData = async (req, res) => {
       role: "instructor",
       profileImage: instructor.profileImage
     });
-    
+
   } catch (err) {
     console.log(err);
     res.status(404).json({
@@ -141,19 +142,14 @@ module.exports.getInstructorData = async (req, res) => {
 
 module.exports.uploadVideo = async (req, res) => {
   try {
-    console.log("here");
     const videoFile = req.files['video'][0];
     const thumbnail = req.files['thumbnail'][0];
 
-    const emitProgress = (percentage) => {
-      io.emit('upload-progress', { percentage });
-    };
-
-    const videoFileUrl = await uploadToCloudinary(videoFile, emitProgress);
+    const videoFileUrl = await uploadToCloudinary(videoFile);
     const videoStream = streamifier.createReadStream(videoFile.buffer);
     const duration = await getVideoDurationInSeconds(videoStream);
-    
-    const thumbnailUrl = await uploadToCloudinary(thumbnail, emitProgress);
+
+    const thumbnailUrl = await uploadToCloudinary(thumbnail);
 
     const videoLecture = new VideoLecture({
       title: req.body.title,
@@ -163,41 +159,37 @@ module.exports.uploadVideo = async (req, res) => {
       thumbnail: thumbnailUrl
     });
 
-
     const result = await videoLecture.save();
-    Instructor.findOneAndUpdate(
-      { email: req.user.email },
-      { $push: { videoLectures: result._id } }
-    ).then((err) => {
-        if (err) {
-          console.error(err);
-          return res.status(500).json({ error: "Internal Server Error" });
-        }
-        console.log("Video added to instructor");
-        return res.status(200).json({ message: "Video added successfully" });
+    const doc = await Instructor.findByIdAndUpdate(
+      req.user.id,
+      { $push: { videoLectures: result._id } },
+      { new: true } // Return the updated document
+    );
+
+    if (!doc) {
+      return res.status(404).json({ 
+        error: "Instructor not found" 
       });
+    }
+
+    res.status(200).json({
+      message: "Lecture added successfully"
+    })
   } catch (error) {
-    console.error('Error uploading video:', error);
+    console.log('Error uploading video:' + error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 }
 
 
-const uploadToCloudinary = (file, emitProgress) => {
+const uploadToCloudinary = (file) => {
   return new Promise((resolve, reject) => {
-    const uploadStream = cloudinary.uploader.upload_stream(
-      { resource_type: 'auto' }, // Adjust chunk_size as needed
+    cloudinary.uploader.upload_stream({ resource_type: 'auto' },
       (error, result) => {
-        if (error) {
-          console.error('Error during upload:', error);
-          reject(error);
-        } else {
-          resolve(result.secure_url);
-        }
-      }
-    );
-
-    uploadStream.end(file.buffer);
+        if (error) reject(error);
+        resolve(result.secure_url);
+      })
+      .end(file.buffer);
   });
 };
 
@@ -206,7 +198,7 @@ const uploadToCloudinary = (file, emitProgress) => {
 //   try {
 //     const { courseId, title, description } = req.body;
 
-    
+
 //   }
 // }
 
@@ -275,3 +267,42 @@ const uploadToCloudinary = (file, emitProgress) => {
 //     res.status(500).json({ error: 'Internal server error' });
 //   }
 // });
+
+
+module.exports.getAllInstructors = async (req, res) => {
+  const instructors = await Instructor.find(
+    { isApproved: true },
+    'id username profileImage socialMediaLinks'
+  );
+  res.json({
+    instructors: instructors
+  })
+}
+
+module.exports.getInstructorWithId = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const instructor = await Instructor.findOne({
+      _id: id,
+      isApproved: true
+    }, 
+    "_id username profileImage videoLectures courses"
+    ).populate({
+      path: 'videoLectures',
+      select: '_id title description duration thumbnail',
+    })
+    // .populate({
+    //   path: 'courses',
+    //   select: '_id title description duration thumbnail price rating enrollmentCount category level',
+    //   options: { lean: true }
+    // });
+
+
+    console.log(instructor);
+    res.json({
+      instructor: instructor
+    })
+  } catch (err) {
+    console.log(err);
+  }
+}

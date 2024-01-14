@@ -7,18 +7,21 @@
 .video-player{
     display: flex;
     flex-direction: column;
-    min-width: 1050px;
+    min-width: 1025px;
 }
 .video-player .video{
     min-height: 60vh;
     min-width: 1050px;
+}
+.video-player video{
+    border-radius: 15px;
+    margin: 0.8rem;
 }
 .video-player .video-info{
     min-height: 50vh;
 }
 .video-player .video-info .header1{
     padding-left: 1.5rem;
-    margin-top: 0.4rem;
     min-height: 16px;
 }
 .video-player .video-info .count-info{
@@ -111,7 +114,7 @@
 }
 .comment-box .header1{
     margin: 0.5rem;
-    padding-left: 3%;
+    padding-left: 1%;
 }
 .comment-box h4{
     font-weight: 700;
@@ -143,7 +146,7 @@
     margin-top: 0.6rem;
 }
 .comment-box .comments .chats{
-    padding-left: 4%;
+    padding-left: 2%;
     padding-top: 0.5rem;
     padding-bottom: 0.4rem;
 }

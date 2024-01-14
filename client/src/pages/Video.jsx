@@ -18,7 +18,7 @@ const Video=()=>{
                         controlsList="nodownload"
                         poster={poster}
                         preload="auto"
-                        width={1050}
+                        width={1000}
                         data-setup='{}'>
                     <source src="https://res.cloudinary.com/desdkbhvz/video/upload/v1705173563/l09rwfmifegpl5bnlc1w.mp4" type="video/mp4"></source>
                     </video>

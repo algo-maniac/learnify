@@ -1,7 +1,7 @@
 const http = require("http");
 const express = require("express");
 const Instructor = require("../models/instructor");
-const VideoLecture = require("../models/videoLecture");
+const { VideoLecture } = require("../models/videoLecture");
 const Course = require("../models/course");
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
@@ -152,6 +152,9 @@ module.exports.uploadVideo = async (req, res) => {
     const thumbnailUrl = await uploadToCloudinary(thumbnail);
 
     const videoLecture = new VideoLecture({
+      instructorId: req.user.id,
+      courseId: req?.courseId || null,  
+      sectionId: req?.sectionId || null,
       title: req.body.title,
       description: req.body.description,
       duration: duration,

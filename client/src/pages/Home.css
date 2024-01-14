@@ -110,11 +110,13 @@ a:focus {
 }
 .popup-box .content{
     font-weight: 650;
+    max-width: 35vw;
+    display: flex;
+    flex-direction: column;
     padding-left: 1rem;
 }
 .popup-box .redirect .content-box{
     font-weight: 400;
-    margin-top: 1rem;
 }
 /* CSS */
 .button-70 {

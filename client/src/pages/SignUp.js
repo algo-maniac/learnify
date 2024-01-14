@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
 import { NavLink, Navigate, useNavigate } from "react-router-dom";
 import './Home.css'
@@ -6,7 +6,7 @@ import AuthContext from "../store/auth-context";
 import Modal from '@mui/material/Modal'; 
 import Box from '@mui/material/Box';
 import { ToastContainer, toast } from 'react-toastify';
-  import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.css';
 import { Typography } from '@mui/material';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 const SignUp = () => {
@@ -55,11 +55,11 @@ const SignUp = () => {
         method: "POST",
         body: formDataToSend,
       });
-      setLoader(false);
       const res = await data.json();
       const token = res.token;
       localStorage.setItem('token', token);
       fetchUserdata();
+      setLoader(false)
       if(res.message==="Sucessfully registered. Awaiting approval"){
         setInterval(() => {
           setTimeout((prev)=>{
@@ -99,7 +99,9 @@ const SignUp = () => {
           </Typography>
           <Typography id="modal-modal-description" sx={{ mt: 2 }}>
             <div className="content">
-              <p>Successfully Registered, Awaiting Approval</p>
+              <div>
+                <p>Successfully Registered, Awaiting Approval</p>
+              </div>
               <div className="redirect">
                 <div className="content-box">
                   <p>Redirecting to Home Page in {timeout}...</p>

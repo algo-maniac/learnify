@@ -1,0 +1,203 @@
+.video-box{
+    min-height: 100vh;
+    min-width: 100vw;
+    display: flex;
+    flex-direction: row;
+}
+.video-player{
+    display: flex;
+    flex-direction: column;
+    min-width: 1050px;
+}
+.video-player .video{
+    min-height: 60vh;
+    min-width: 1050px;
+}
+.video-player .video-info{
+    min-height: 50vh;
+}
+.video-player .video-info .header1{
+    padding-left: 1.5rem;
+    margin-top: 0.4rem;
+    min-height: 16px;
+}
+.video-player .video-info .count-info{
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+}
+.video-player .video-info .avatar-box{
+    padding-left: 1rem;
+    display: flex;
+    flex-direction: row;
+}
+.video-player .video-info .avatar-box .avatar{
+    padding-right: 0.4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.video-player .video-info .header1 h3{
+    font-family:sans-serif;
+    font-size: 1.5rem;
+    font-weight: 800;
+}
+.video-player .video-info .avatar-box .name{
+    display: flex;
+    width: 70%;
+    flex-direction: column;
+    justify-content: space-around;
+}
+.video-player .video-info .avatar-box .name .link{
+    font-weight: 500;
+    width: fit-content;
+    font-size: 0.9rem;
+    color: rgb(142, 142, 142);
+}
+.video-player .video-info .avatar-box .name .link:hover{
+    color: rgb(43, 0, 100);
+    cursor: pointer;
+}
+.video-player .video-info .avatar-box .name .link .arrow-icon{
+    font-size: 1rem;
+    padding-left: 0.1rem;
+    padding-bottom: 0.1rem;
+}
+.video-player .like-count{
+    display: flex;
+    width: 9%;
+    border-radius: 20px;
+    background-color: rgb(226, 226, 226);
+    text-align: center;
+    flex-direction: column;
+    justify-content: center;
+}
+.video-player .like-count div span{
+    margin: 0.2rem;
+}
+.video-player .like-count:hover{
+    background-color: rgb(200, 200, 200);
+    cursor: pointer;
+    color: black;
+}
+.video-player .like-count div .text{
+    font-weight: 600;
+    color: black;
+}
+.video-player .like-count div svg{
+    color: gray;
+}
+.video-player .posted-time{
+    color: rgb(0, 0, 0);
+    font-size: 0.85rem;
+    font-weight: 700;
+    margin-top: 0.5rem;
+    padding-left: 1.3rem;
+}
+.video-player .description{
+    width: 98%;
+    border-radius: 10px;
+    padding: 0.3rem;
+    background-color: rgb(230, 228, 228);
+    margin-top: 3rem;
+    margin: auto;
+}
+
+/* comments */
+.comment-box{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.comment-box .header1{
+    margin: 0.5rem;
+    padding-left: 3%;
+}
+.comment-box h4{
+    font-weight: 700;
+}
+.comment-box .comment-field{
+    width: 100%;
+    text-align: center;
+    margin-bottom: 0.5rem;
+}
+.comment-box .comment-field .input{
+    width: 90%;
+    font-size: 0.8rem;
+    border-radius: 10px;
+}
+.comment-box .comments .time{
+    width: fit-content;
+    height: fit-content;
+}
+.comment-box .comments .username span{
+    font-weight: 750;
+}
+.comment-box .comments .time span{
+    font-weight: 500;
+    color: gray;
+    font-size: 0.6rem;
+    display: block;
+}
+.comment-box .comments{
+    margin-top: 0.6rem;
+}
+.comment-box .comments .chats{
+    padding-left: 4%;
+    padding-top: 0.5rem;
+    padding-bottom: 0.4rem;
+}
+.comment-box .comments .chats:nth-child(odd){
+    background-color: rgb(240, 240, 240);
+
+}
+.comment-box .comments span{
+    font-size: 0.9rem;
+}
+/* CSS */
+.button-21 {
+  align-items: center;
+  appearance: none;
+  background-color: #3431ff;
+  /* background-image: linear-gradient(1deg, #4F58FD, #149BF3 99%); */
+  background-size: calc(100% + 20px) calc(100% + 20px);
+  border-width: 0;
+  border-radius: 30px;
+  box-shadow: none;
+  box-sizing: border-box;
+  color: #FFFFFF;
+  cursor: pointer;
+  display: inline-flex;
+  font-family: CircularStd,sans-serif;
+  font-size: 0.85rem;
+  height: auto;
+  justify-content: center;
+  line-height: 1.5;
+  padding: 6px 20px;
+  position: relative;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color .2s,background-position .2s;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: top;
+  white-space: nowrap;
+}
+
+.button-21:active,
+.button-21:focus {
+  outline: none;
+}
+
+.button-21:hover {
+  background-position: -20px -20px;
+}
+
+.button-21:focus:not(:active) {
+  box-shadow: rgba(40, 170, 255, 0.25) 0 0 0 .125em;
+}
+.comment-btn{
+    width: 100%;
+    padding-left: 5%;
+}

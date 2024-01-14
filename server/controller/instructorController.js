@@ -74,14 +74,14 @@ module.exports.loginpost = async (req, res) => {
     const instructor = await Instructor.findOne({ email: email });
     console.log("hello from login" + instructor);
 
-    const validPassword = await bcrypt.compare(password, instructor.password);
-
+    
     if (!instructor) {
       return res.status(404).json({
         message: "Instructor Not Present"
       });
     }
-
+    
+    const validPassword = await bcrypt.compare(password, instructor.password);
     if (!validPassword) {
       return res.status(404).json({
         message: "Invalid Password"

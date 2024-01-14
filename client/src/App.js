@@ -17,6 +17,7 @@ import AuthContext from "./store/auth-context";
 import axios from 'axios';
 import { jwtDecode } from "jwt-decode";
 import Admin from "./pages/Admin";
+import Video from "./pages/Video";
 
 function App() {
   const [userdata, setUserdata] = useState(() => {
@@ -79,6 +80,7 @@ function App() {
           {userdata && userdata.role === 'teacher' && (
             <Route path="/live" element={<LiveStream />}/>
           )}
+          <Route path="/video/:id" element={<Video/>} />
           <Route path="/adminpanel" element={<Admin />} />
           <Route path="/uploadvideo" element={<UploadVideo/>} />
           <Route path="/instructors" element={<Instructors/>} />

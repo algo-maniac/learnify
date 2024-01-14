@@ -42,7 +42,8 @@ function HomepageTeacher() {
           </div>
         }
       </div>
-      <div className="content">
+      <div className="contentt">
+        <div className="instructorDetails">
         {instructordata &&
           <TeacherDetails
             className='instructorDetails'
@@ -50,18 +51,21 @@ function HomepageTeacher() {
             username={instructordata.username}
             profileImage={instructordata.profileImage}
           />}
+        </div>
 
         <div className="videos">
           {instructordata && instructordata.videoLectures &&
             instructordata.videoLectures.map(vid => {
-              return <VideoCard
-                id={vid._id}
-                title={vid.title}
-                description={vid.description}
-                duration={vid.duration}
-                thumbnail={vid.thumbnail}
-                profileImage={instructordata.profileImage}
-              />
+              return <div className="video">
+                <VideoCard
+                  id={vid._id}
+                  title={vid.title}
+                  description={vid.description}
+                  duration={vid.duration}
+                  thumbnail={vid.thumbnail}
+                  profileImage={instructordata.profileImage}
+                />
+              </div>
             })
           }
         </div>

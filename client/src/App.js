@@ -1,6 +1,7 @@
 import { Routes, Route } from "react-router-dom";
 import LogIn from "./pages/LogIn";
 import Random from "./pages/Random";
+import Random2 from "./pages/Random2";
 import SignUp from "./pages/SignUp";
 import React, { useEffect, useState } from "react";
 import "./App.css";
@@ -83,6 +84,7 @@ function App() {
           <Route path="/uploadvideo" element={<UploadVideo/>} />
           <Route path="/instructors" element={<Instructors/>} />
           <Route path="/instructor/:id" element={<HomepageTeacher />} />
+          <Route path="/video/:id" element={<Random2 />} />
           <Route path="/exam-corner" element={<ExamCorner />} />
         </Routes>
         <Footer />

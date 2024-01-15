@@ -61,7 +61,7 @@ module.exports.signuppost = async (req, res) => {
 
     await user.save();
     console.log(user);
-    const token = jwt.sign({ id: user.id, role: "user" }, process.env.USER_JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign({ id: user.id, username: user.username, role: "user" }, process.env.USER_JWT_SECRET, { expiresIn: '1h' });
     res.status(200).json({
       message: "SignUp successfull",
       token: token

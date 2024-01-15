@@ -1,17 +1,22 @@
 const router = require("express").Router();
-const userController = require("../controller/userController");
+const videoController = require("../controller/videoController");
 
 const multer = require("multer");
+const authenticateVideoAccess = require("../middlewares/videoAccess");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 
-router.post("/signup", upload.single("profileImage"), userController.signuppost);
+router.get("/getVideo/:id", videoController.getVideoDetails);
 
-router.post("/login", userController.loginpost);
+router.post("/addComment", authenticateVideoAccess, videoController.createComment);
 
-router.get("/getUserData", userController.getUserData);
+router.post("/addReply/", authenticateVideoAccess, videoController.addReply);
 
-router.get("/image/:id", userController.getUserProfileImage);
+// router.post("/login", userController.loginpost);
+
+// router.get("/getUserData", userController.getUserData);
+
+// router.get("/image/:id", userController.getUserProfileImage);
 
 module.exports = router;

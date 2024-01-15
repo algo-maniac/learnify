@@ -3,6 +3,7 @@ const express = require("express");
 const Instructor = require("../models/instructor");
 const { VideoLecture } = require("../models/videoLecture");
 const Course = require("../models/course");
+const Section = require("../models/section");
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
 const Post = require("../models/post");
@@ -97,6 +98,7 @@ module.exports.loginpost = async (req, res) => {
     const token = jwt.sign(
       {
         id: instructor.id,
+        username: instructor.username,
         role: "instructor"
       },
       process.env.INSTRUCTOR_JWT_SECRET,
@@ -153,7 +155,7 @@ module.exports.uploadVideo = async (req, res) => {
 
     const videoLecture = new VideoLecture({
       instructorId: req.user.id,
-      courseId: req?.courseId || null,  
+      courseId: req?.courseId || null,
       sectionId: req?.sectionId || null,
       title: req.body.title,
       description: req.body.description,
@@ -170,8 +172,8 @@ module.exports.uploadVideo = async (req, res) => {
     );
 
     if (!doc) {
-      return res.status(404).json({ 
-        error: "Instructor not found" 
+      return res.status(404).json({
+        error: "Instructor not found"
       });
     }
 
@@ -195,6 +197,7 @@ const uploadToCloudinary = (file) => {
       .end(file.buffer);
   });
 };
+
 
 
 // module.exports.createSection = async (req, res) => {
@@ -288,8 +291,8 @@ module.exports.getInstructorWithId = async (req, res) => {
     const instructor = await Instructor.findOne({
       _id: id,
       isApproved: true
-    }, 
-    "_id username profileImage videoLectures courses"
+    },
+      "_id username profileImage videoLectures courses"
     ).populate({
       path: 'videoLectures',
       select: '_id title description duration thumbnail',

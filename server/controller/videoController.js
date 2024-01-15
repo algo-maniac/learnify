@@ -40,10 +40,26 @@ module.exports.getVideoDetails = async (req, res) => {
   const { id } = req.params;
 
   try {
-    const video = await VideoLecture.findById(id).populate({
-      path: 'instructorId',
-      select: '_id username profileImage'
-    });
+    // const video = await VideoLecture.findById(id).populate({
+    //   path: 'instructorId',
+    //   select: '_id username profileImage'
+    // });
+
+    const video = await VideoLecture.findById(id)
+      .populate({
+        path: 'instructorId',
+        select: '_id username profileImage',
+      })
+      .populate({
+        path: 'comments.userId',
+        select: '_id username profileImage',
+      })
+      .populate({
+        path: 'comments.replies.userId',
+        select: '_id username profileImage',
+      });
+    console.log(video)
+
 
     res.status(200).json({
       video: video
@@ -60,22 +76,25 @@ module.exports.getVideoDetails = async (req, res) => {
 module.exports.createComment = async (req, res) => {
   try {
     const { videoId, text } = req.body;
-
+    
     const comment = new Comment({
       userId: req.user.id,
-      userType: req.user.role,
+      username: req.user.username,
+      role: req.user.role,
       text: text,
     });
 
-    await comment.save();
-
     const videoLecture = await VideoLecture.findByIdAndUpdate(
       videoId,
-      { $push: { comments: comment._id } },
+      { $push: { comments: comment } },
       { new: true }
     );
     
-    // console.log(videoLecture);
+    if(!videoLecture) {
+      return res.status(400).json({
+        message: "Wrong Info"
+      })
+    }
 
     res.status(200).json({
       message: "Successfully added comment"
@@ -93,9 +112,11 @@ module.exports.createComment = async (req, res) => {
 module.exports.addReply = async (req, res) => {
   try {
     const { videoId, commentId, replyText } = req.body;
+    console.log(req.user);
     const reply = {
       userId: req.user.id,
-      userType: req.user.role,
+      username: req.user.username,
+      role: req.user.role,
       text: replyText,
     };
 
@@ -104,12 +125,18 @@ module.exports.addReply = async (req, res) => {
       { $push: { 'comments.$.replies': reply } },
       { new: true }
     );
-    // console.log(videoLecture);
+
+    if(!videoLecture) {
+      return res.status(400).json({
+        message: "Wrong Info"
+      })
+    }
+    console.log(videoLecture);
     // console.log(videoLecture.comments[0].replies);
     return res.status(200).json({
       message: "Successfully added reply"
     })
-  } catch(err) {
+  } catch (err) {
     console.log(err);
     return res.status(500).json({
       message: "There is some problem at our end"

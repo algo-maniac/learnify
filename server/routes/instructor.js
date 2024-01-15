@@ -21,7 +21,6 @@ router.get("/getInstructorData", instructorController.getInstructorData);
 
 router.post("/uploadVideo", upload.fields([{ name: 'video', maxCount: 1 }, { name: 'thumbnail', maxCount: 1 }]), instructorController.uploadVideo);
 // router.post("/instructor/uploadSection", upload.single("image"), instructorController.uploadSection);
-// router.post("/instructor/uploadCourse", upload.single("image"), instructorController.uploadCourse);
 
 // router.post("/instructor/updateVideo" ,upload.single("image"), instructorController.updateVideo);
 // router.post("/instructor/updateSection", upload.single("image"), instructorController.updateSection);

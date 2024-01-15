@@ -6,7 +6,8 @@ const commentSchema = new mongoose.Schema({
     required: true,
     refPath: 'userType',
   },
-  userType: {
+  username: { type: String, required: true},
+  role: {
     type: String,
     required: true,
     enum: ['instructor', 'user', 'admin'],
@@ -21,7 +22,8 @@ const commentSchema = new mongoose.Schema({
         required: true,
         refPath: 'userType',
       },
-      userType: {
+      username: { type: String, required: true},
+      role: {
         type: String,
         required: true,
         enum: ['instructor', 'user', 'admin'],
@@ -46,7 +48,7 @@ const videoLectureSchema = new mongoose.Schema({
   like: { type: Number, default: 0 }, // Number of likes
   
   comments: [commentSchema], // Array of comments using the defined comment schema
-});
+}, {timestamps: true});
 
 
 const VideoLecture = mongoose.model('VideoLecture', videoLectureSchema);

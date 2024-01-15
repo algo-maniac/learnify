@@ -112,6 +112,7 @@ module.exports.loginpost = async (req, res) => {
     const token = jwt.sign(
       {
         id: admin.id,
+        username: admin.username,
         role: "admin"
       },
       process.env.ADMIN_JWT_SECRET,

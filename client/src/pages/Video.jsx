@@ -18,7 +18,6 @@ const Video=()=>{
                         controlsList="nodownload"
                         poster={poster}
                         preload="auto"
-                        width={1000}
                         data-setup='{}'>
                     <source src="https://res.cloudinary.com/desdkbhvz/video/upload/v1705173563/l09rwfmifegpl5bnlc1w.mp4" type="video/mp4"></source>
                     </video>
@@ -45,7 +44,7 @@ const Video=()=>{
                         </div>
                     </div>
                     <div className="posted-time">
-                        <span>Posted on 11:10am,<br></br> 12 January,2024</span>
+                        <span>Posted on 11:10am,  12 January,2024</span>
                     </div>
                     <div className="description">
                         <p>This is the video created by viruThis is the video created by viruThis is the video created by viruThis is the video created by viruThis is the video created by viruThis is the video created by viruThis is the video created by viru</p>
@@ -55,7 +54,7 @@ const Video=()=>{
             <div className="comment-box">
                 <div className="header1"><h4>12 Comments</h4></div>
                 <div className="comment-field">
-                    <TextField id="filled-basic" label="Add a Comment" className="input"/>
+                    <input className="input" placeholder="Add a comment"></input>
                 </div>
                 <div className="comment-btn">
                     <button className="button-21">Comment</button>

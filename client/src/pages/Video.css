@@ -7,11 +7,23 @@
 .video-player{
     display: flex;
     flex-direction: column;
-    min-width: 1025px;
+    width: 70vw;
+}
+.video-player .video{
+    width: 70vw;
+    min-height: 78.2vh;
+}
+.video-player .video-js{
+    width: 68.5vw;
+    height: 76vh;
+}
+.video-player img{
+    width: 68.5vw;
+    min-height: 60vh;
 }
 .video-player .video{
     min-height: 60vh;
-    min-width: 1050px;
+    min-width: 70vw;
 }
 .video-player video{
     border-radius: 15px;
@@ -102,8 +114,8 @@
     border-radius: 10px;
     padding: 0.3rem;
     background-color: rgb(230, 228, 228);
-    margin-top: 3rem;
     margin: auto;
+    margin-top: 0.2rem;
 }
 
 /* comments */
@@ -113,8 +125,9 @@
     flex-direction: column;
 }
 .comment-box .header1{
-    margin: 0.5rem;
+    margin-top: 0.5rem;
     padding-left: 1%;
+    height: fit-content;
 }
 .comment-box h4{
     font-weight: 700;
@@ -122,12 +135,13 @@
 .comment-box .comment-field{
     width: 100%;
     text-align: center;
+    height: 6vh;
     margin-bottom: 0.5rem;
 }
 .comment-box .comment-field .input{
     width: 96%;
-    font-size: 0.8rem;
-    border-radius: 10px;
+    height: 100%;
+    font-size: 0.9rem;
 }
 .comment-box .comments .time{
     width: fit-content;
@@ -149,6 +163,7 @@
     padding-left: 2%;
     padding-top: 0.5rem;
     padding-bottom: 0.4rem;
+    border-radius: 4px;
 }
 .comment-box .comments .chats:nth-child(odd){
     background-color: rgb(240, 240, 240);
@@ -165,7 +180,7 @@
   /* background-image: linear-gradient(1deg, #4F58FD, #149BF3 99%); */
   background-size: calc(100% + 20px) calc(100% + 20px);
   border-width: 0;
-  border-radius: 30px;
+  border-radius: 15px;
   box-shadow: none;
   box-sizing: border-box;
   color: #FFFFFF;
@@ -195,6 +210,7 @@
 
 .button-21:hover {
   background-position: -20px -20px;
+  background-color: rgb(55, 55, 218);
 }
 
 .button-21:focus:not(:active) {
@@ -202,5 +218,7 @@
 }
 .comment-btn{
     width: 100%;
-    padding-left: 5%;
+    padding-top: 0.2rem;
+    padding-left: 2%;
+    padding-bottom: 0.2rem;
 }

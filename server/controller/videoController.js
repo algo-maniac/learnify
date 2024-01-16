@@ -97,7 +97,8 @@ module.exports.createComment = async (req, res) => {
     }
 
     res.status(200).json({
-      message: "Successfully added comment"
+      message: "Successfully added comment",
+      comment: comment
     })
     return;
   } catch (err) {
@@ -131,11 +132,15 @@ module.exports.addReply = async (req, res) => {
         message: "Wrong Info"
       })
     }
-    console.log(videoLecture);
     // console.log(videoLecture.comments[0].replies);
+    const updatedComment = videoLecture.comments.find(comment => comment._id.toString() === commentId);
+    console.log(videoLecture);
+    console.log(updatedComment);
+
     return res.status(200).json({
-      message: "Successfully added reply"
-    })
+      message: "Successfully added reply",
+      comment: updatedComment
+    });
   } catch (err) {
     console.log(err);
     return res.status(500).json({

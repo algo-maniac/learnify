@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import "./Video.css"
-import {useParams} from "react-router-dom"
+import { useParams } from "react-router-dom"
 import { Avatar } from "@mui/material";
 import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
@@ -8,13 +8,13 @@ import TextField from '@mui/material/TextField';
 import { ToastContainer, toast } from "react-toastify";
 import LoadingBar from 'react-top-loading-bar'
 import CircularProgress from "@mui/material/CircularProgress";
-const Video=()=>{
+const Video = () => {
     const { id } = useParams();
-    const [data,setData]=useState({});
-    const [comments,setComment]=useState([])
-    const [input,setInput]=useState("");
-    const [url,setUrl]=useState('');
-    const [loader,setLoader]=useState(false);
+    const [data, setData] = useState({});
+    const [comments, setComment] = useState([])
+    const [input, setInput] = useState("");
+    const [url, setUrl] = useState('');
+    const [loader, setLoader] = useState(false);
     const ref = useRef(null)
 
     const fetchVideoDetails = async () => {
@@ -25,15 +25,16 @@ const Video=()=>{
         });
         const data = await res.json();
 
-        setComment(data.video.comments)
+        const sortedComments = data.video.comments.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        setComment(sortedComments)
         setData(data.video)
         setUrl(data.video.videoFile);
         console.log(data.video);
-        console.log(url);
     }
+
     useEffect(() => {
         fetchVideoDetails();
-    }, [])
+    }, [id])
 
     const getTime = (data) => {
         const dateObject = new Date(data);
@@ -55,47 +56,62 @@ const Video=()=>{
         ];
         const day = dateObject.getDate();
         var date = ""
-        date += `${day},${monthNames[month-1]} ${year}`;
+        date += `${day},${monthNames[month - 1]} ${year}`;
         return date
     }
-    const changeHandler=(env)=>{
+    const changeHandler = (env) => {
         setInput(env.target.value);
     }
-    const commentHandler=async()=>{
-        if(input===''){
-            toast.error("Validation Error! Do not leave the input blank",{
-                position:'top-center'
+    const commentHandler = async () => {
+        if (input === '') {
+            toast.error("Validation Error! Do not leave the input blank", {
+                position: 'top-center'
             })
         }
-        else{
+        else {
             setLoader(true)
             ref.current.continuousStart()
-            const url=window.location.href.split('/')[4];
-            console.log(localStorage.getItem('token'))
-            const res = await fetch("http://localhost:8000/video/addComment", {
-                method:'POST',
-                headers: {
-                    Authorization: localStorage.getItem('token'),
-                    'Content-type': 'application/json'
-                },
-                body: JSON.stringify({
-                    videoId:url,
-                    text:input
-                })
-            });
-            const data=res.json();
-            console.log(data)
-            ref.current.complete()
-            setLoader(false)
-            toast.success("Comment Posted",{
-                position:'top-center'
-            })
-            fetchVideoDetails();
-        }  
+            const url = window.location.href.split('/')[4];
+
+            try {
+                const res = await fetch("http://localhost:8000/video/addComment", {
+                    method: 'POST',
+                    headers: {
+                        Authorization: localStorage.getItem('token'),
+                        'Content-type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        videoId: url,
+                        text: input
+                    })
+                });
+
+                const data = await res.json();
+                console.log(data);
+                ref.current.complete()
+                setLoader(false)
+                if (res.ok) {
+                    const newComment = data.comment;
+
+                    setComment(prevComments => [newComment, ...prevComments]);
+
+                    toast.success("Comment Posted", {
+                        position: 'top-center'
+                    });
+                } else {
+                    toast.error("Failed to post comment", {
+                        position: 'top-center'
+                    });
+                }
+            } catch (error) {
+                console.error('Error posting comment:', error);
+            }
+
+        }
     }
     return <>
-        <ToastContainer/>
-        <LoadingBar color="black" ref={ref} className="loading-bar"/>
+        <ToastContainer />
+        <LoadingBar color="black" ref={ref} className="loading-bar" />
         <div className="video-box">
             <div className="video-player">
                 <div className="video">
@@ -107,7 +123,7 @@ const Video=()=>{
                         poster={data.thumbnail}
                         preload="auto"
                         data-setup='{}'>
-                    <source src={url}></source>
+                        {url && <source src={url}></source>}
                     </video>
                 </div>
                 <div className="video-info">
@@ -121,11 +137,11 @@ const Video=()=>{
                         <div className="count-info">
                             <div className="name">
                                 <span className="instructor">{"sd"}</span>
-                                <span className="link">View Portal<ArrowOutwardIcon className="arrow-icon"/></span>
+                                <span className="link">View Portal<ArrowOutwardIcon className="arrow-icon" /></span>
                             </div>
                             <div className="like-count">
                                 <div>
-                                    <span><ThumbUpOffAltIcon/></span>
+                                    <span><ThumbUpOffAltIcon /></span>
                                     <span className="text">{data.like}</span>
                                 </div>
                             </div>
@@ -145,10 +161,10 @@ const Video=()=>{
                     <input className="input" placeholder="Add a comment" onChange={changeHandler}></input>
                 </div>
                 <div className="comment-btn">
-                    {loader?<CircularProgress />:<button className="button-21" onClick={commentHandler}>Comment</button>}
+                    {loader ? <CircularProgress /> : <button className="button-21" onClick={commentHandler}>Comment</button>}
                 </div>
                 <div className="comments">
-                    {comments.map((data,index)=>(
+                    {comments.map((data, index) => (
                         <div className="chats" key={index}>
                             <div className="username">
                                 <span>Chandrachur</span>
@@ -161,7 +177,7 @@ const Video=()=>{
                             </div>
                         </div>
                     ))}
-                    
+
                 </div>
             </div>
         </div>

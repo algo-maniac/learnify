@@ -43,12 +43,13 @@ module.exports.createCourse = async (req, res) => {
       price: price,
       level: level,
       category: category,
-      thumbnail: thumbnailUrl,
+      thumbnail: thumbnailUrl
     });
 
     course.save();
 
     res.status(200).json({
+      ok: true,
       message: "Created Course Successfully",
       courseId: course._id
     })
@@ -72,17 +73,65 @@ module.exports.createSection = async (req, res) => {
       description: description,
     });
 
-    section.save();
+    await section.save();
+
+    const updatedCourse = await Course.findByIdAndUpdate(
+      courseId,
+      { $push: { sections: section._id } },
+      { new: true }
+    );
+
+    console.log(updatedCourse);
+
 
     res.status(200).json({
       message: "Section Course Successfully",
-      courseId: section._id
+      sectionId: section._id
     })
 
   } catch (err) {
     console.log(err);
     res.status(500).json({
       error: "There is some problem at our end"
+    })
+  }
+}
+
+
+module.exports.getCourse = async (req, res) => {
+  const { id } = req.params;
+
+  try {
+    const course = await Course.findById(id)
+      .populate({
+        path: 'sections',
+        populate: {
+          path: 'videoLectures',
+          model: 'VideoLecture',
+          select: '_id courseId sectionId title description duration thumbnail createdAt updatedAt', 
+        },
+        select: '_id courseid title description', 
+      })
+      .exec();
+
+
+
+    if (!course) {
+      res.status(400).json({
+        ok: false,
+        error: "Invalid courseId"
+      })
+    }
+    console.log(course);
+    res.status(200).json({
+      ok: true,
+      course: course
+    })
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      ok: false,
+      error: "Internal Server Error"
     })
   }
 }

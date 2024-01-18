@@ -8,9 +8,11 @@ const upload = multer({ storage: storage });
 
 
 
-router.post("/uploadCourse", authenticateInstructor, upload.single("thumbnail"), courseController.createCourse);
+router.post("/createCourse", authenticateInstructor, upload.single("thumbnail"), courseController.createCourse);
 
-router.post("/uploadCourse", authenticateInstructor, courseController.createSection);
+router.post("/createSection", authenticateInstructor, upload.none(), courseController.createSection);
+
+router.get("/getCourse/:id", authenticateInstructor, courseController.getCourse);
 
 // router.post("/signup", upload.single("profileImage"), courseController.signuppost);
 

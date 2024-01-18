@@ -72,16 +72,17 @@ module.exports.loginpost = async (req, res) => {
   try {
     const { email, password } = req.body;
     console.log(req.body);
+    console.log(req.body);
     const instructor = await Instructor.findOne({ email: email });
     console.log("hello from login" + instructor);
 
-    
+
     if (!instructor) {
       return res.status(404).json({
         message: "Instructor Not Present"
       });
     }
-    
+
     const validPassword = await bcrypt.compare(password, instructor.password);
     if (!validPassword) {
       return res.status(404).json({
@@ -144,8 +145,12 @@ module.exports.getInstructorData = async (req, res) => {
 
 module.exports.uploadVideo = async (req, res) => {
   try {
+    console.log(req.body)
+    console.log(req.files);
+
     const videoFile = req.files['video'][0];
     const thumbnail = req.files['thumbnail'][0];
+
 
     const videoFileUrl = await uploadToCloudinary(videoFile);
     const videoStream = streamifier.createReadStream(videoFile.buffer);
@@ -155,8 +160,8 @@ module.exports.uploadVideo = async (req, res) => {
 
     const videoLecture = new VideoLecture({
       instructorId: req.user.id,
-      courseId: req?.courseId || null,
-      sectionId: req?.sectionId || null,
+      courseId: req.body?.courseId || null,
+      sectionId: req.body?.sectionId || null,
       title: req.body.title,
       description: req.body.description,
       duration: duration,
@@ -165,21 +170,23 @@ module.exports.uploadVideo = async (req, res) => {
     });
 
     const result = await videoLecture.save();
-    const doc = await Instructor.findByIdAndUpdate(
-      req.user.id,
-      { $push: { videoLectures: result._id } },
-      { new: true } // Return the updated document
-    );
+    console.log(result);
 
-    if (!doc) {
-      return res.status(404).json({
-        error: "Instructor not found"
-      });
+    if (req.body.courseId && req.body.sectionId) {
+      const updatedSection = await Section.findByIdAndUpdate(
+        req.body.sectionId,
+        { $push: { videoLectures: result._id } },
+        { new: true }
+      );
+
+      console.log(updatedSection);
     }
 
     res.status(200).json({
-      message: "Lecture added successfully"
+      message: "Lecture added successfully",
+      video: result
     })
+    return;
   } catch (error) {
     console.log('Error uploading video:' + error);
     res.status(500).json({ error: 'Internal Server Error' });

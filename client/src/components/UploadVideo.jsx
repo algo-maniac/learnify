@@ -37,6 +37,7 @@ function UploadVideo(props) {
     form.append("description", formData.description);
     form.append("video", formData.video);
     form.append("thumbnail", formData.thumbnail);
+    console.log(form);
 
     fetch("http://localhost:8000/instructor/uploadVideo", {
       method: "POST",

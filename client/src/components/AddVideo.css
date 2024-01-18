@@ -1,0 +1,38 @@
+/* Add this CSS to your stylesheet or in your component style tag */
+
+.add-video-form {
+    max-width: 400px;
+    margin: 20px auto;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .add-video-form label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  .add-video-form input,
+  .add-video-form textarea,
+  .add-video-form button {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+  }
+  
+  .add-video-form button {
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+  }
+  
+  .add-video-form button:hover {
+    background-color: #45a049;
+  }
+  

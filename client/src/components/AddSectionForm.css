@@ -1,0 +1,40 @@
+/* AddSectionForm.css */
+
+/* Style for the form container */
+.add-section-form-container {
+    margin-top: 20px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f8f8f8;
+  }
+  
+  /* Style for form labels */
+  .add-section-form label {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  /* Style for form inputs */
+  .add-section-form input,
+  .add-section-form textarea {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    box-sizing: border-box;
+  }
+  
+  /* Style for the submit button */
+  .add-section-form button {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .add-section-form button:hover {
+    background-color: #45a049;
+  }
+  

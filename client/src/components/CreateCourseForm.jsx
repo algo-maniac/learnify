@@ -1,137 +1,133 @@
+// CreateCourse.jsx
 import React, { useState } from 'react';
+import { Navigate, useNavigate } from 'react-router-dom';
+import './CreateCourseForm.css'
 
-const CourseForm = () => {
-  const [courseData, setCourseData] = useState({
+const CreateCourseForm = () => {
+  const navigate = useNavigate();
+  const [courseDetails, setCourseDetails] = useState({
     title: '',
     description: '',
-    price: '',
-    duration: '',
-    sections: [{ title: '', description: '', lectures: [{ title: '', description: '', videoFile: null }] }],
+    duration: 0,
+    price: 0,
+    level: 'beginner',
+    category: '',
+    thumbnail: null,
   });
 
-  const handleInputChange = (e, sectionIndex, lectureIndex) => {
-    const { name, value, files } = e.target;
+  const [formDataa, setFormDataa] = useState({
+    title: "title",
+    description: "desc",
+    video: null,
+    thumbnail: null,
+  });
 
-    if (lectureIndex !== undefined) {
-      const updatedSections = [...courseData.sections];
-      updatedSections[sectionIndex].lectures[lectureIndex][name] = files ? files[0] : null;      
-      setCourseData({ ...courseData, sections: updatedSections });
-    } else if (sectionIndex !== undefined) {
-      const updatedSections = [...courseData.sections];
-      updatedSections[sectionIndex][name] = value;
-      setCourseData({ ...courseData, sections: updatedSections });
+  const handleChange = (e) => {
+    const { name, value, type } = e.target;
+
+    setCourseDetails((prevDetails) => ({
+      ...prevDetails,
+      [name]: type === 'file' ? e.target.files[0] : value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append('title', courseDetails.title);
+    formData.append('description', courseDetails.description);
+    formData.append('duration', courseDetails.duration);
+    formData.append('price', courseDetails.price);
+    formData.append('level', courseDetails.level);
+    formData.append('category', courseDetails.category);
+    formData.append('thumbnail', courseDetails.thumbnail);
+
+    const res = await fetch('http://localhost:8000/course/createCourse', {
+      method: 'POST',
+      headers: {
+        Authorization: localStorage.getItem('token'),
+      },
+      body: formData,
+    });
+
+    const data = await res.json();
+    console.log(data);
+    console.log(data.ok);
+
+    if (data.ok) {
+      const courseId = data.courseId;
+      // show toast success
+      navigate(`/course/${courseId}/edit`);
     } else {
-      setCourseData({ ...courseData, [name]: value });
+      // show toast err
     }
   };
 
-  const addSection = () => {
-    setCourseData({
-      ...courseData,
-      sections: [...courseData.sections, { title: '', description: '', lectures: [{ title: '', description: '', videoFile: null }] }],
-    });
-  };
-
-  const addLecture = (sectionIndex) => {
-    const updatedSections = [...courseData.sections];
-    updatedSections[sectionIndex].lectures.push({ title: '', description: '', videoFile: null });
-    setCourseData({ ...courseData, sections: updatedSections });
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Replace this with your actual form submission logic
-    console.log(courseData);
-  };
-
   return (
-    <form onSubmit={handleSubmit}>
+    <form className="basic-details-form" onSubmit={handleSubmit}>
       <label>
-        Course Title:
-        <input type="text" name="title" value={courseData.title} onChange={(e) => handleInputChange(e)} />
+        Title:
+        <input type="text" name="title" value={courseDetails.title} onChange={handleChange} required />
       </label>
-      <br />
       <label>
-        Course Description:
-        <textarea name="description" value={courseData.description} onChange={(e) => handleInputChange(e)} />
+        Description:
+        <textarea
+          name="description"
+          value={courseDetails.description}
+          onChange={handleChange}
+          required
+        />
       </label>
-      <br />
       <label>
-        Price:
-        <input type="text" name="price" value={courseData.price} onChange={(e) => handleInputChange(e)} />
+        Duration (months):
+        <input
+          type="number"
+          name="duration"
+          value={courseDetails.duration}
+          onChange={handleChange}
+          required
+        />
       </label>
-      <br />
       <label>
-        Duration:
-        <input type="text" name="duration" value={courseData.duration} onChange={(e) => handleInputChange(e)} />
-      </label>
-      <br />
-
-      {courseData.sections.map((section, sectionIndex) => (
-        <div key={sectionIndex}>
-          <label>
-            Section Title:
-            <input
-              type="text"
-              name="title"
-              value={section.title}
-              onChange={(e) => handleInputChange(e, sectionIndex)}
-            />
-          </label>
-          <br />
-          <label>
-            Section Description:
-            <textarea
-              name="description"
-              value={section.description}
-              onChange={(e) => handleInputChange(e, sectionIndex)}
-            />
-          </label>
-          <br />
-          {section.lectures.map((lecture, lectureIndex) => (
-            <div key={lectureIndex}>
-              <label>
-                Lecture Title:
-                <input
-                  type="text"
-                  name="title"
-                  value={lecture.title}
-                  onChange={(e) => handleInputChange(e, sectionIndex, lectureIndex)}
-                />
-              </label>
-              <br />
-              <label>
-                Lecture Description:
-                <textarea
-                  name="description"
-                  value={lecture.description}
-                  onChange={(e) => handleInputChange(e, sectionIndex, lectureIndex)}
-                />
-              </label>
-              <br />
-              <label>
-                Video File:
-                <input
-                  type="file"
-                  name="videoFile"
-                  onChange={(e) => handleInputChange(e, sectionIndex, lectureIndex)}
-                />
-              </label>
-              <br />
-            </div>
-          ))}
-          <button type="button" onClick={() => addLecture(sectionIndex)}>
-            Add Lecture
-          </button>
+        Price (INR):
+        <div className="price-input-container">
+          <input
+            type="number"
+            name="price"
+            value={courseDetails.price}
+            onChange={handleChange}
+            required
+          />
+          <span className="currency-label">INR</span>
         </div>
-      ))}
-      <button type="button" onClick={addSection}>
-        Add Section
-      </button>
-      <br />
-      <button type="submit">Submit</button>
+      </label>
+
+      <label>
+        Level:
+        <select name="level" value={courseDetails.level} onChange={handleChange} required>
+          <option value="beginner">Beginner</option>
+          <option value="intermediate">Intermediate</option>
+          <option value="advanced">Advanced</option>
+        </select>
+      </label>
+      <label>
+        Category:
+        <input
+          type="text"
+          name="category"
+          value={courseDetails.category}
+          onChange={handleChange}
+        />
+      </label>
+      <label>
+        Thumbnail:
+        <input type="file" name="thumbnail" onChange={handleChange} accept="image/*" />
+      </label>
+      <button type="submit">Next</button>
     </form>
   );
 };
 
-export default CourseForm;
+
+export default CreateCourseForm;

@@ -1,0 +1,144 @@
+/* EditCourseForm.css */
+
+/* Container styling */
+.edit-course-container {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Header styling */
+  .edit-course-container h2 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  /* Details styling */
+  .edit-course-container p {
+    color: #555;
+    margin: 5px 0;
+  }
+  
+  /* Thumbnail styling */
+  .thumbnail-container {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin-bottom: 10px;
+    max-width: 300px;
+  }
+
+  /* Thumbnail styling */
+.thumbnail-container {
+    border: 1px solid #ddd;
+    padding: 5px;
+    /* overflow: hidden; */
+  }
+  
+  .thumbnail-container img {
+    width: 100%;
+    height: 100%; /* Change this line to 100% */
+    object-fit: contain; /* Add this line to maintain aspect ratio */
+    border-radius: 4px;
+    position: relative;
+  }
+  
+  
+  /* Sections styling */
+  .edit-course-container ul {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+  }
+  
+  .edit-course-container ul li {
+    color: #333;
+    font-size: 16px;
+    margin-bottom: 5px;
+  }
+  
+  /* Button styling */
+  .edit-course-container button {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+  }
+  
+  .edit-course-container button:hover {
+    background-color: #45a049;
+  }
+  
+  /* Add this CSS to your stylesheet or in your component style tag */
+
+.sections-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .section-item {
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 8px;
+  }
+  
+  .section-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .section-description {
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .videos-container {
+    display: flex;
+    flex-direction: column;
+    overflow-x: auto;
+  }
+  
+  .video-item {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #f9f9f9;
+  }
+  
+  .video-item img {
+    max-width: 100px;
+    height: auto;
+    border-radius: 6px;
+    margin-right: 20px;
+    position: relative;
+  }
+  
+  .video-item-details {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  
+  .video-item-details div {
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #333;
+  }
+  
+  .add-video-form {
+    margin-top: 20px;
+  }
+  
+  /* Add more styles as needed */
+  

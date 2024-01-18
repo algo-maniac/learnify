@@ -6,9 +6,8 @@ import VideoCard from './VideoCard'
 import Sidebar from './Sidebar'
 import AuthContext from '../store/auth-context'
 
-
-function HomepageTeacher() {
-  const { userdata } = useContext(AuthContext);
+const InstructorVideo=()=>{
+    const { userdata } = useContext(AuthContext);
   const { id } = useParams();
 
   const [instructordata, setInstructorData] = useState();
@@ -31,31 +30,34 @@ function HomepageTeacher() {
       console.log(err);
     }
   }, []);
-
-  return (
-    <div className='homepage'>
-      <div className='sidebar'>
-        {userdata && userdata.role === "instructor" &&
-          <div>
-            < Sidebar id={userdata.id} />
-          </div>
-        }
-      </div>
-      <div className="contentt">
-        <div className="instructorDetails">
-        {instructordata &&
-          <TeacherDetails
-            className='instructorDetails'
-            id={instructordata._id}
-            username={instructordata.username}
-            profileImage={instructordata.profileImage}
-          />}
+  const toMin=(val)=>{
+    var duration="";
+    var min=parseInt(val);
+    if(min){
+      duration+=min+" m"
+    }
+    else{
+      duration+="1 m"
+    }
+    return duration
+  }
+    return <>
+        <div className="videos">
+          {instructordata && instructordata.videoLectures &&
+            instructordata.videoLectures.map(vid => {
+              return <div className="video">
+                <VideoCard
+                  id={vid._id}
+                  title={vid.title}
+                  description={vid.description}
+                  duration={toMin(vid.duration)}
+                  thumbnail={vid.thumbnail}
+                  profileImage={instructordata.profileImage}
+                />
+              </div>
+            })
+          }
         </div>
-        
-      </div>
-
-    </div>
-  )
+    </>
 }
-
-export default HomepageTeacher
+export default InstructorVideo

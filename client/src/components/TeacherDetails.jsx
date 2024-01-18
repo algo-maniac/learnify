@@ -4,7 +4,12 @@ import { Avatar } from '@mui/material';
 import Button from '@mui/material/Button';
 import Tabs from '@mui/material/Tabs'
 import Tab from '@mui/material/Tab'
+import VideoCard from './VideoCard'
 import './TeacherDetails.css'
+import InstructorVideo from './InstructorVideo';
+import InstructorHome from './InstructorHome';
+import InstructorAbout from './InstructorAbout';
+import InstructorPlaylist from './InstructorPlaylist';
 
 function TeacherDetails(props) {
   console.log(props)
@@ -23,7 +28,7 @@ function TeacherDetails(props) {
       </div>
       <div className="user-info">
         <div className="username">
-          <h2>Chandrachur</h2>
+          <h2>{props.username}</h2>
         </div>
         <div className="subscriber-count">
           <span>12 subscribers</span>
@@ -49,6 +54,11 @@ function TeacherDetails(props) {
         <Tab label="About" onClick={()=>setTabvalue(3)}/>
       </Tabs>
     </div>
+    {tabValue===0 && <InstructorHome/>}
+    {tabValue===1 && <InstructorVideo/>}
+    {tabValue===2 && <InstructorPlaylist/>}
+    {tabValue===3 && <InstructorAbout/>}
+
     </>
   )
 }

@@ -52,7 +52,6 @@ function HomepageTeacher() {
             profileImage={instructordata.profileImage}
           />}
         </div>
-
         <div className="videos">
           {instructordata && instructordata.videoLectures &&
             instructordata.videoLectures.map(vid => {

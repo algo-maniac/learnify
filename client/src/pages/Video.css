@@ -232,12 +232,13 @@
     
 }
 .comment-box .comments .link{
-    color: #2724c6;
+    color: #5b59be;
     font-weight: 600;
+    width: fit-content;
     cursor: pointer;
 }
 .comment-box .comments .link:hover{
-    color: blue;
+    color: rgb(9, 9, 198);
 }
 .comment-box .reply{
     width: 89%;
@@ -262,6 +263,9 @@
 }
 .comment-box .input-field .send-btn svg{
     color: #0660d4;
+}
+.comment-box .input-field .send-btn:hover{
+    cursor: pointer;
 }
 .comment-box .replies .header-text span{
     color: black;

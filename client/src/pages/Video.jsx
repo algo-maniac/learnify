@@ -17,6 +17,7 @@ const Video = () => {
     const [url, setUrl] = useState('');
     const [loader, setLoader] = useState(false);
     const [replytext,setReply]=useState(new Map())
+    const [togglereply,setToggleReply]=useState(new Map());
     const ref = useRef(null)
 
     const fetchVideoDetails = async () => {
@@ -119,11 +120,10 @@ const Video = () => {
         const value=env.target.value;
         replytext.set(videoId,value);
     }
-    const replyHandler=async(env)=>{
-        const commentID=env.target.id;
+    const replyHandler=async(env,commentid)=>{
+        const commentID=commentid;
         const videoId=data._id;
         const text=replytext.get(commentID)
-        console.log(commentID)
         try {
             const res = await fetch(`http://localhost:8000/video/addReply/?videoId=${videoId}&commentId=${commentID}`, {
                 method: 'POST',
@@ -149,6 +149,17 @@ const Video = () => {
             }
         } catch (error) {
             console.error('Error posting comment:', error);
+        }
+    }
+    const replyToggleHandler=(commentID)=>{
+        const state=togglereply[commentID]
+        if(state==="close"|| state===""){
+            const newMap={...togglereply,[commentID]:"open"};
+            setToggleReply(newMap);
+        }
+        else{
+            const newMap={...togglereply,[commentID]:"close"};
+            setToggleReply(newMap);
         }
     }
     return <>
@@ -184,7 +195,7 @@ const Video = () => {
                             <div className="like-count">
                                 <div>
                                     <span><ThumbUpOffAltIcon /></span>
-                                    <span className="text">{data.like}</span>
+                                    <span className="text">{data.likeCount}</span>
                                 </div>
                             </div>
                         </div>
@@ -218,15 +229,15 @@ const Video = () => {
                             <div className="text">
                                 <span>{data.text}</span>
                             </div>
-                            <div className="link"><span>Replies</span></div>
+                            <div className="link"><span onClick={()=>replyToggleHandler(data._id)}>{togglereply[data._id]==="open" && "Hide Replies"}{togglereply[data._id]!=="open" && "Show Replies"}</span></div>
                         </div>
-                        {data.replies.length>0 && <div className="reply">
+                        {data.replies.length>0 && togglereply[data._id]==="open" && <div className="reply">
                             <div className="input-field">
                                 <div className="input">
                                     <TextField id={`${"standard-basic"} ${data._id}`} placeholder="Add a reply..." variant="standard" className="input-text"  onChange={replyTextHandler}/>
                                 </div>
                                 <div className="send-btn">
-                                    <SendIcon onClick={replyHandler} id={data._id}/>
+                                    <SendIcon onClick={(env)=>replyHandler(env,data._id)}/>
                                 </div>
                             </div>
                             <div className="replies">

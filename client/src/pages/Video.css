@@ -262,7 +262,8 @@
     justify-content: center;
 }
 .comment-box .input-field .send-btn svg{
-    color: #0660d4;
+    cursor: pointer;
+    color: rgb(9, 9, 198);
 }
 .comment-box .input-field .send-btn:hover{
     cursor: pointer;
@@ -276,3 +277,40 @@
     padding-bottom: 0.4rem;
     background-color: rgb(255, 255, 255);
 }
+
+.link span {
+    cursor: pointer;
+    margin-right: 10px;
+    color: rgb(9, 9, 198);
+}
+
+.input-field {
+    display: flex;
+    margin-top: 10px;
+}
+
+.input {
+    flex: 1;
+}
+
+/* Style for the "Send" button */
+.send-btn {
+    margin-left: 10px;
+    
+}
+
+/* Style to hide "Show Replies" if there are no replies */
+.link span.hide {
+    display: none;
+}
+
+.reply-toggle {
+    cursor: pointer;
+    color: rgb(52, 52, 124);
+    text-decoration: underline;
+  }
+  
+  /* Style for hiding the "Hide Replies" and "Show Replies" span */
+  .hide {
+    display: none;
+  }

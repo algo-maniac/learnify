@@ -16,8 +16,9 @@ const Video = () => {
     const [input, setInput] = useState("");
     const [url, setUrl] = useState('');
     const [loader, setLoader] = useState(false);
-    const [replytext,setReply]=useState(new Map())
-    const [togglereply,setToggleReply]=useState(new Map());
+    const [replyTexts, setReplyTexts] = useState({})
+    const [togglereply, setToggleReply] = useState(new Map());
+    const [replyVisibility, setReplyVisibility] = useState(new Map());
     const ref = useRef(null)
 
     const fetchVideoDetails = async () => {
@@ -32,7 +33,11 @@ const Video = () => {
         const data = await res.json();
         console.log(data);
 
-        const sortedComments = data.video.comments.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+        const sortedComments = data.video.comments.map(comment => ({
+            ...comment,
+            replies: comment.replies.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+        })).sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
+
         setComment(sortedComments)
         setData(data.video)
         setUrl(data.video.videoFile);
@@ -74,56 +79,66 @@ const Video = () => {
             toast.error("Validation Error! Do not leave the input blank", {
                 position: 'top-center'
             })
+            return;
         }
-        else {
-            setLoader(true)
-            ref.current.continuousStart()
-            const url = window.location.href.split('/')[4];
+        setLoader(true)
+        ref.current.continuousStart()
+        const url = window.location.href.split('/')[4];
 
-            try {
-                const res = await fetch(`http://localhost:8000/video/addComment/?videoId=${url}`, {
-                    method: 'POST',
-                    headers: {
-                        Authorization: localStorage.getItem('token'),
-                        'Content-type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        text: input
-                    })
+        try {
+            const res = await fetch(`http://localhost:8000/video/addComment/?videoId=${url}`, {
+                method: 'POST',
+                headers: {
+                    Authorization: localStorage.getItem('token'),
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({
+                    text: input
+                })
+            });
+
+            const data = await res.json();
+            console.log(data);
+            ref.current.complete()
+            setLoader(false)
+            if (res.ok) {
+                const newComment = data.comment;
+                setComment(prevComments => [newComment, ...prevComments]);
+                setInput('');
+                setReplyTexts(prevReplies => {
+                    return { [newComment._id]: '', ...prevReplies }
+                })
+
+                toast.success("Comment Posted", {
+                    position: 'top-center'
                 });
-
-                const data = await res.json();
-                console.log(data);
-                ref.current.complete()
-                setLoader(false)
-                if (res.ok) {
-                    const newComment = data.comment;
-
-                    setComment(prevComments => [newComment, ...prevComments]);
-
-                    toast.success("Comment Posted", {
-                        position: 'top-center'
-                    });
-                } else {
-                    toast.error("Failed to post comment", {
-                        position: 'top-center'
-                    });
-                }
-            } catch (error) {
-                console.error('Error posting comment:', error);
+            } else {
+                toast.error("Failed to post comment", {
+                    position: 'top-center'
+                });
             }
-
+        } catch (error) {
+            console.error('Error posting comment:', error);
         }
     }
-    const replyTextHandler=(env)=>{
-        const videoId=env.target.id.split(' ')[1];
-        const value=env.target.value;
-        replytext.set(videoId,value);
+
+    const replyTextHandler = (env) => {
+        const commentId = env.target.id.split(' ')[1];
+        const value = env.target.value;
+        setReplyTexts({ ...replyTexts, [commentId]: value });
+        console.log(replyTexts);
     }
-    const replyHandler=async(env,commentid)=>{
-        const commentID=commentid;
-        const videoId=data._id;
-        const text=replytext.get(commentID)
+
+    const replyHandler = async (env, commentid) => {
+        const commentID = commentid;
+        const videoId = data._id;
+        const text = replyTexts[commentID]
+        if (text === '') {
+            toast.error("Validation Error! Do not leave the input blank", {
+                position: 'top-center'
+            })
+            return;
+        }
         try {
             const res = await fetch(`http://localhost:8000/video/addReply/?videoId=${videoId}&commentId=${commentID}`, {
                 method: 'POST',
@@ -137,8 +152,27 @@ const Video = () => {
             });
 
             const data = await res.json();
-            console.log(data);
+
+
             if (res.ok) {
+                const updatedComment = data.comment;
+
+                const updatedComments = comments.map(comment => {
+                    if (comment._id === commentID) {
+                        return {
+                            ...comment,
+                            replies: updatedComment.replies.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+                        };
+                    }
+                    return comment;
+                });
+
+                setReplyTexts(prevReply => {
+                    return { ...prevReply, [updatedComment._id]: '' }
+                });
+                console.log(replyTexts)
+                setComment(updatedComments);
+
                 toast.success("Reply Posted", {
                     position: 'top-center'
                 });
@@ -151,19 +185,25 @@ const Video = () => {
             console.error('Error posting comment:', error);
         }
     }
-    const replyToggleHandler=(commentID)=>{
-        const state=togglereply[commentID]
-        if(state==="close"|| state===""){
-            const newMap={...togglereply,[commentID]:"open"};
+    const replyToggleHandler = (commentID) => {
+        const state = replyVisibility.get(commentID) || false;
+        setReplyVisibility(new Map(replyVisibility.set(commentID, !state)));
+    }
+    const showRepliesToogleHandler = (commentID) => {
+        const state = togglereply[commentID] || "close";
+
+        if (state === "close") {
+            const newMap = { ...togglereply, [commentID]: "open" };
             setToggleReply(newMap);
         }
-        else{
-            const newMap={...togglereply,[commentID]:"close"};
+        else if(state === "open") {
+            const newMap = { ...togglereply, [commentID]: "close" };
             setToggleReply(newMap);
         }
+        console.log(togglereply);
     }
     return <>
-         <ToastContainer />
+        <ToastContainer />
         <LoadingBar color="black" ref={ref} className="loading-bar" />
         <div className="video-box">
             <div className="video-player">
@@ -219,48 +259,67 @@ const Video = () => {
                 <div className="comments">
                     {comments.map((data, index) => (
                         <>
-                        <div className="chats" key={index} id={index%2 && "gray"}>
-                            <div className="username">
-                                <span>Chandrachur</span>
-                            </div>
-                            <div className="time">
-                                <span>{getTime(data.timestamp)}, {getDate(data.timestamp)}</span>
-                            </div>
-                            <div className="text">
-                                <span>{data.text}</span>
-                            </div>
-                            <div className="link"><span onClick={()=>replyToggleHandler(data._id)}>{togglereply[data._id]==="open" && "Hide Replies"}{togglereply[data._id]!=="open" && "Show Replies"}</span></div>
-                        </div>
-                        {data.replies.length>0 && togglereply[data._id]==="open" && <div className="reply">
-                            <div className="input-field">
-                                <div className="input">
-                                    <TextField id={`${"standard-basic"} ${data._id}`} placeholder="Add a reply..." variant="standard" className="input-text"  onChange={replyTextHandler}/>
+                            <div className="chats" key={index} id={index % 2 && "gray"}>
+                                <div className="username">
+                                    <span>{data.username}</span>
                                 </div>
-                                <div className="send-btn">
-                                    <SendIcon onClick={(env)=>replyHandler(env,data._id)}/>
+                                <div className="time">
+                                    <span>{getTime(data.timestamp)}, {getDate(data.timestamp)}</span>
+                                </div>
+                                <div className="text">
+                                    <span>{data.text}</span>
+                                </div>
+                                {/* <div className="link"><span onClick={() => showRepliesToogleHandler(data._id)}>{togglereply[data._id] === "open" && "Hide Replies"}{togglereply[data._id] !== "open" && "Show Replies"}</span></div> */}
+                                <div className="link">
+                                    <span onClick={() => replyToggleHandler(data._id)}>Reply</span>
+                                    <span
+                                        className={`reply-toggle ${data.replies.length > 0 ? "" : "hide"}`}
+                                        onClick={() => showRepliesToogleHandler(data._id)}
+                                    >
+                                        {togglereply[data._id] === "open" ? "Hide Replies" : "Show Replies"}
+                                    </span>
                                 </div>
                             </div>
-                            <div className="replies">
-                                <div className="header-text">
-                                    <span>All replies</span>
+                            {replyVisibility.get(data._id) && (
+                                <div className="input-field">
+                                    <div className="input">
+                                        <TextField
+                                            id={`${"standard-basic"} ${data._id}`}
+                                            placeholder="Add a reply..."
+                                            variant="standard"
+                                            className="input-text"
+                                            onChange={replyTextHandler}
+                                            value={replyTexts[data._id] || ''}
+                                        />
+                                    </div>
+                                    <div className="send-btn">
+                                        <SendIcon onClick={(env) => replyHandler(env, data._id)} />
+                                    </div>
                                 </div>
-                                {
-                                    data.replies.map((data,index)=>(
-                                        <div className="reply-chats">
-                                            <div className="username">
-                                                <span>Chandrachur</span>
+                            )}
+                            {data.replies.length > 0 && togglereply[data._id] === "open" && <div className="reply">
+
+                                <div className="replies">
+                                    <div className="header-text">
+                                        <span>All replies</span>
+                                    </div>
+                                    {
+                                        data.replies.map((data, index) => (
+                                            <div className="reply-chats">
+                                                <div className="username">
+                                                    <span>Chandrachur</span>
+                                                </div>
+                                                <div className="time">
+                                                    <span>{getTime(data.timestamp)}, {getDate(data.timestamp)}</span>
+                                                </div>
+                                                <div className="text">
+                                                    <span>{data.text}</span>
+                                                </div>
                                             </div>
-                                            <div className="time">
-                                                <span>{getTime(data.timestamp)}, {getDate(data.timestamp)}</span>
-                                            </div>
-                                            <div className="text">
-                                                <span>{data.text}</span>
-                                            </div>
-                                        </div>
-                                    ))
-                                }
-                            </div>
-                        </div>}
+                                        ))
+                                    }
+                                </div>
+                            </div>}
                         </>
                     ))}
                 </div>

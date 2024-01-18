@@ -53,7 +53,7 @@ const Video = () => {
             setIsLiked(true);
         } else {
             setIsLiked(false);
-        }        
+        }
     }
 
     useEffect(() => {
@@ -272,7 +272,7 @@ const Video = () => {
                             <div className="like-count">
                                 <div onClick={isLiked ? unlikeHandler : likeHandler}>
                                     <span>
-                                        {isLiked ? <ThumbUpAltIcon style={{ color: "black"}} className="liked" /> : <ThumbUpOffAltIcon />}
+                                        {isLiked ? <ThumbUpAltIcon style={{ color: "black" }} className="liked" /> : <ThumbUpOffAltIcon />}
                                     </span>
                                     <span className="text">{likeCount}</span>
                                 </div>
@@ -291,15 +291,19 @@ const Video = () => {
             <div className="comment-box">
                 <div className="header1"><h4><span>{comments.length}</span> Comments</h4></div>
                 <div className="comment-field">
-                    <input className="input" placeholder="Add a comment" onChange={changeHandler}></input>
+                    <input className="input" placeholder="Add a comment" value={input} onChange={changeHandler}></input>
                 </div>
                 <div className="comment-btn">
                     {loader ? <CircularProgress /> : <button className="button-21" onClick={commentHandler}>Comment</button>}
                 </div>
                 <div className="comments">
                     {comments.map((data, index) => (
-                        <>
-                            <div className="chats" key={index} id={index % 2 && "gray"}>
+                        <div className="chatWithReply">
+                            <div
+                                className={`chats ${data.role === "admin" ? "admin-chat" : data.role === "instructor" ? "instructor-chat" : "user-chat"}`}
+                                key={index}
+                                id={index % 2 && "gray"}
+                            >
                                 <div className="username">
                                     <span>{data.username}</span>
                                 </div>
@@ -319,8 +323,7 @@ const Video = () => {
                                         {togglereply[data._id] === "open" ? "Hide Replies" : "Show Replies"}
                                     </span>
                                 </div>
-                            </div>
-                            {replyVisibility.get(data._id) && (
+                                {replyVisibility.get(data._id) && (
                                 <div className="input-field">
                                     <div className="input">
                                         <TextField
@@ -345,7 +348,7 @@ const Video = () => {
                                     </div>
                                     {
                                         data.replies.map((data, index) => (
-                                            <div className="reply-chats">
+                                            <div className={`reply-chats ${data.role === "admin" ? "admin-chat" : data.role === "instructor" ? "instructor-chat" : "user-chat"}`}>
                                                 <div className="username">
                                                     <span>Chandrachur</span>
                                                 </div>
@@ -360,7 +363,9 @@ const Video = () => {
                                     }
                                 </div>
                             </div>}
-                        </>
+                            </div>
+                            
+                        </div>
                     ))}
                 </div>
             </div>

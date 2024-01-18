@@ -40,6 +40,8 @@
     display: flex;
     width: 100%;
     flex-direction: row;
+    justify-content: space-between;
+    padding: 15px;
 }
 .video-player .video-info .avatar-box{
     padding-left: 1rem;
@@ -119,6 +121,9 @@
 }
 
 /* comments */
+.comments {
+    width: 100%;
+}
 .comment-box{
     width: 100%;
     display: flex;
@@ -135,7 +140,8 @@
 .comment-box .comment-field{
     width: 100%;
     text-align: center;
-    height: 7vh;
+    /* height: 7vh; */
+    height: 50px;
     margin-bottom: 0.5rem;
 }
 .comment-box .comment-field .input{
@@ -150,6 +156,7 @@
     width: fit-content;
     height: fit-content;
 }
+
 .comment-box .comments .username span{
     font-weight: 750;
 }
@@ -168,6 +175,7 @@
     padding-top: 0.5rem;
     border-radius: 4px;
     padding-bottom: 0.4rem;
+    margin: 5px;
     background-color: rgb(243, 243, 243);
 }
 .comment-box #gray{
@@ -175,6 +183,12 @@
 }
 .comment-box .comments span{
     font-size: 0.9rem;
+}
+
+.comment-box .text {
+    font-weight: 600;
+    font-weight: 1.2rem;
+    padding: 5px 0;
 }
 /* CSS */
 .button-21 {
@@ -231,6 +245,10 @@
     font-weight: 800;
     
 }
+
+.comment-box {
+    padding: 15px;
+}
 .comment-box .comments .link{
     color: #5b59be;
     font-weight: 600;
@@ -241,13 +259,15 @@
     color: rgb(9, 9, 198);
 }
 .comment-box .reply{
-    width: 89%;
-    margin-left: auto;
+    width: 100%;
+    /* margin-left: 2rem; */
+    padding-left: 25px;
     margin-bottom: 0.7rem;
 }
 .comment-box .input-field{
     display: flex;
     flex-direction: row;
+    padding-left: 25px;
 }
 .comment-box .input-field .input{
     width: 88%;
@@ -272,9 +292,33 @@
     color: black;
     font-weight: 400;
 }
+.chatWithReply {
+    background-color: rgb(239, 239, 239);
+    padding: .2px;
+    margin-bottom: 5px;
+    border-radius: 10px;
+}
+.reply {
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.114);
+    margin: 10px 5px 0 0;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.replies {
+    width: 100%;
+}
+.reply-chats {
+    width: 100%;
+    padding: 5px;
+    margin-bottom: 5px;
+}
+
 .comment-box .replies .reply-chats{
     border-radius: 4px;
     padding-bottom: 0.4rem;
+    /* margin-left: 5px; */
     background-color: rgb(255, 255, 255);
 }
 
@@ -314,3 +358,16 @@
   .hide {
     display: none;
   }
+  .instructor-chat {
+    background-color: rgb(249, 248, 233) !important;
+    /* Additional styles for instructor role */
+}
+
+.admin-chat {
+    background-color: rgb(240, 222, 212) !important;
+    /* Additional styles for student role */
+}
+
+.user-chat {
+    background-color: rgb(219, 219, 219) !important;
+}

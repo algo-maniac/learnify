@@ -1,17 +1,24 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import "./Video.css"
 import { useParams } from "react-router-dom"
 import { Avatar } from "@mui/material";
 import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
+import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import TextField from '@mui/material/TextField';
 import SendIcon from '@mui/icons-material/Send';
 import { ToastContainer, toast } from "react-toastify";
 import LoadingBar from 'react-top-loading-bar'
 import CircularProgress from "@mui/material/CircularProgress";
+import AuthContext from "../store/auth-context";
+
+
 const Video = () => {
+    const { userdata } = useContext(AuthContext)
     const { id } = useParams();
     const [data, setData] = useState({});
+    const [isLiked, setIsLiked] = useState(false);
+    const [likeCount, setLikeCount] = useState(0);
     const [comments, setComment] = useState([])
     const [input, setInput] = useState("");
     const [url, setUrl] = useState('');
@@ -22,7 +29,6 @@ const Video = () => {
     const ref = useRef(null)
 
     const fetchVideoDetails = async () => {
-        console.log(id);
         const res = await fetch(`http://localhost:8000/video/getVideo/?videoId=${id}`, {
             method: 'POST',
             headers: {
@@ -31,7 +37,6 @@ const Video = () => {
             }
         });
         const data = await res.json();
-        console.log(data);
 
         const sortedComments = data.video.comments.map(comment => ({
             ...comment,
@@ -41,7 +46,14 @@ const Video = () => {
         setComment(sortedComments)
         setData(data.video)
         setUrl(data.video.videoFile);
-        console.log(data.video);
+        setLikeCount(data.video.likeCount);
+
+        const userIdAsString = userdata.id.toString();
+        if (data.video.likes.includes(userIdAsString)) {
+            setIsLiked(true);
+        } else {
+            setIsLiked(false);
+        }        
     }
 
     useEffect(() => {
@@ -98,7 +110,6 @@ const Video = () => {
             });
 
             const data = await res.json();
-            console.log(data);
             ref.current.complete()
             setLoader(false)
             if (res.ok) {
@@ -126,7 +137,6 @@ const Video = () => {
         const commentId = env.target.id.split(' ')[1];
         const value = env.target.value;
         setReplyTexts({ ...replyTexts, [commentId]: value });
-        console.log(replyTexts);
     }
 
     const replyHandler = async (env, commentid) => {
@@ -170,7 +180,6 @@ const Video = () => {
                 setReplyTexts(prevReply => {
                     return { ...prevReply, [updatedComment._id]: '' }
                 });
-                console.log(replyTexts)
                 setComment(updatedComments);
 
                 toast.success("Reply Posted", {
@@ -196,12 +205,40 @@ const Video = () => {
             const newMap = { ...togglereply, [commentID]: "open" };
             setToggleReply(newMap);
         }
-        else if(state === "open") {
+        else if (state === "open") {
             const newMap = { ...togglereply, [commentID]: "close" };
             setToggleReply(newMap);
         }
-        console.log(togglereply);
     }
+    const likeHandler = async () => {
+        const videoId = data._id;
+
+        const res = await fetch(`http://localhost:8000/video/addLike/?videoId=${videoId}`, {
+            method: 'POST',
+            headers: {
+                Authorization: localStorage.getItem('token'),
+            },
+        });
+
+        const result = await res.json();
+        setLikeCount(result.likeCount);
+        setIsLiked(true);
+    };
+
+    const unlikeHandler = async () => {
+        const videoId = data._id;
+
+        const res = await fetch(`http://localhost:8000/video/removeLike/?videoId=${videoId}`, {
+            method: 'POST',
+            headers: {
+                Authorization: localStorage.getItem('token'),
+            },
+        });
+
+        const result = await res.json();
+        setLikeCount(result.likeCount);
+        setIsLiked(false);
+    };
     return <>
         <ToastContainer />
         <LoadingBar color="black" ref={ref} className="loading-bar" />
@@ -233,10 +270,13 @@ const Video = () => {
                                 <span className="link">View Portal<ArrowOutwardIcon className="arrow-icon" /></span>
                             </div>
                             <div className="like-count">
-                                <div>
-                                    <span><ThumbUpOffAltIcon /></span>
-                                    <span className="text">{data.likeCount}</span>
+                                <div onClick={isLiked ? unlikeHandler : likeHandler}>
+                                    <span>
+                                        {isLiked ? <ThumbUpAltIcon style={{ color: "black"}} className="liked" /> : <ThumbUpOffAltIcon />}
+                                    </span>
+                                    <span className="text">{likeCount}</span>
                                 </div>
+
                             </div>
                         </div>
                     </div>

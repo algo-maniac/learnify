@@ -77,7 +77,7 @@ module.exports.createComment = async (req, res) => {
   try {
     const { videoId } = req.query;
     const { text } = req.body;
-    
+
     const comment = new Comment({
       userId: req.user.id,
       username: req.user.username,
@@ -90,8 +90,8 @@ module.exports.createComment = async (req, res) => {
       { $push: { comments: comment } },
       { new: true }
     );
-    
-    if(!videoLecture) {
+
+    if (!videoLecture) {
       return res.status(400).json({
         message: "Wrong Info"
       })
@@ -129,7 +129,7 @@ module.exports.addReply = async (req, res) => {
       { new: true }
     );
 
-    if(!videoLecture) {
+    if (!videoLecture) {
       return res.status(400).json({
         message: "Wrong Info"
       })
@@ -202,18 +202,27 @@ async function toggleLikeStatus(videoId, userId, action) {
     const userLiked = userIndex !== -1;
 
     if ((action === 'add' && !userLiked) || (action === 'remove' && userLiked)) {
-      // Toggle local state
+      let updateQuery;
+
       if (action === 'add') {
-        video.likes.push(userId);
-        video.likeCount += 1;
+        updateQuery = {
+          $addToSet: { likes: userId },
+          $inc: { likeCount: 1 },
+        };
+      } else if (action === 'remove') {
+        updateQuery = {
+          $pull: { likes: userId },
+          $inc: { likeCount: -1 },
+        };
       } else {
-        video.likes.splice(userIndex, 1);
-        video.likeCount -= 1;
+        throw new Error(`Invalid action: ${action}`);
       }
 
       // Save the updated video to the database
-      await video.save();
+      const video = await VideoLecture.findByIdAndUpdate(videoId, updateQuery, { new: true }).exec();
       console.log(video);
+      console.log(video.likes);
+
 
       return { success: true, message: `Like ${action === 'add' ? 'added' : 'removed'} successfully.`, likeCount: video.likeCount };
     } else {

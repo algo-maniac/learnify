@@ -141,7 +141,9 @@
 .comment-box .comment-field .input{
     width: 96%;
     height: 100%;
-    border-radius: 3px;
+    padding: 0.2rem;
+    border-radius: 5px;
+    border: 2px solid rgb(0, 0, 0);
     font-size: 0.9rem;
 }
 .comment-box .comments .time{
@@ -159,15 +161,17 @@
 }
 .comment-box .comments{
     margin-top: 0.6rem;
+    border-radius: 4px;
 }
 .comment-box .comments .chats{
     padding-left: 2%;
     padding-top: 0.5rem;
+    border-radius: 4px;
     padding-bottom: 0.4rem;
+    background-color: rgb(243, 243, 243);
 }
-.comment-box .comments .chats:nth-child(odd){
-    background-color: rgb(240, 240, 240);
-
+.comment-box #gray{
+    background-color: rgb(219, 218, 218);
 }
 .comment-box .comments span{
     font-size: 0.9rem;
@@ -226,4 +230,45 @@
     color: blue;
     font-weight: 800;
     
+}
+.comment-box .comments .link{
+    color: #2724c6;
+    font-weight: 600;
+    cursor: pointer;
+}
+.comment-box .comments .link:hover{
+    color: blue;
+}
+.comment-box .reply{
+    width: 89%;
+    margin-left: auto;
+    margin-bottom: 0.7rem;
+}
+.comment-box .input-field{
+    display: flex;
+    flex-direction: row;
+}
+.comment-box .input-field .input{
+    width: 88%;
+}
+.comment-box .input-field .input .input-text{
+    width: 100%;
+    font-size: 0.5rem;
+}
+.comment-box .input-field .send-btn{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.comment-box .input-field .send-btn svg{
+    color: #0660d4;
+}
+.comment-box .replies .header-text span{
+    color: black;
+    font-weight: 400;
+}
+.comment-box .replies .reply-chats{
+    border-radius: 4px;
+    padding-bottom: 0.4rem;
+    background-color: rgb(255, 255, 255);
 }

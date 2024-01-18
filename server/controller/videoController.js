@@ -4,8 +4,8 @@ const Instructor = require("../models/instructor");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
-const { Readable } = require('stream');
 const cloudinary = require('cloudinary').v2;
+
 
 
 const conn = mongoose.connection;
@@ -37,27 +37,27 @@ const uploadToCloudinary = (file) => {
 };
 
 module.exports.getVideoDetails = async (req, res) => {
-  const { id } = req.params;
+  const { videoId } = req.query;
 
   try {
-    // const video = await VideoLecture.findById(id).populate({
-    //   path: 'instructorId',
-    //   select: '_id username profileImage'
-    // });
+    const video = await VideoLecture.findById(videoId).populate({
+      path: 'instructorId',
+      select: '_id username profileImage'
+    });
 
-    const video = await VideoLecture.findById(id)
-      .populate({
-        path: 'instructorId',
-        select: '_id username profileImage',
-      })
-      .populate({
-        path: 'comments.userId',
-        select: '_id username profileImage',
-      })
-      .populate({
-        path: 'comments.replies.userId',
-        select: '_id username profileImage',
-      });
+    // const video = await VideoLecture.findById(id)
+    //   .populate({
+    //     path: 'instructorId',
+    //     select: '_id username profileImage',
+    //   })
+    //   .populate({
+    //     path: 'comments.userId',
+    //     select: '_id username profileImage',
+    //   })
+    //   .populate({
+    //     path: 'comments.replies.userId',
+    //     select: '_id username profileImage',
+    //   });
     console.log(video)
 
 
@@ -75,7 +75,8 @@ module.exports.getVideoDetails = async (req, res) => {
 
 module.exports.createComment = async (req, res) => {
   try {
-    const { videoId, text } = req.body;
+    const { videoId } = req.query;
+    const { text } = req.body;
     
     const comment = new Comment({
       userId: req.user.id,
@@ -112,13 +113,14 @@ module.exports.createComment = async (req, res) => {
 
 module.exports.addReply = async (req, res) => {
   try {
-    const { videoId, commentId, replyText } = req.body;
+    const { videoId, commentId } = req.query;
+    const { text } = req.body;
     console.log(req.user);
     const reply = {
       userId: req.user.id,
       username: req.user.username,
       role: req.user.role,
-      text: replyText,
+      text: text,
     };
 
     const videoLecture = await VideoLecture.findOneAndUpdate(
@@ -148,3 +150,78 @@ module.exports.addReply = async (req, res) => {
     })
   }
 };
+
+
+
+// Add Like Endpoint
+module.exports.addLike = async (req, res) => {
+  try {
+    const { videoId } = req.query;
+    const userId = req.user.id;
+
+    const result = await toggleLikeStatus(videoId, userId, 'add');
+
+    if (result.success) {
+      return res.status(200).json({ message: result.message, likeCount: result.likeCount });
+    } else {
+      return res.status(400).json({ message: result.message, likeCount: result.likeCount });
+    }
+  } catch (err) {
+    console.log(err);
+    return res.status(500).json({ message: 'Internal server error.' });
+  }
+};
+
+// Remove Like Endpoint
+module.exports.removeLike = async (req, res) => {
+  try {
+    const { videoId } = req.query;
+    const userId = req.user.id;
+
+    const result = await toggleLikeStatus(videoId, userId, 'remove');
+
+    if (result.success) {
+      return res.status(200).json({ message: result.message, likeCount: result.likeCount });
+    } else {
+      return res.status(400).json({ message: result.message, likeCount: result.likeCount });
+    }
+  } catch (err) {
+    console.error(err);
+    return res.status(500).json({ message: 'Internal server error.' });
+  }
+};
+
+// Function to toggle like status and update local state
+async function toggleLikeStatus(videoId, userId, action) {
+  try {
+    // Fetch video from the database
+    const video = await VideoLecture.findById(videoId).exec();
+
+    // Check if the user has already liked the video
+    const userIndex = video.likes.indexOf(userId);
+    const userLiked = userIndex !== -1;
+
+    if ((action === 'add' && !userLiked) || (action === 'remove' && userLiked)) {
+      // Toggle local state
+      if (action === 'add') {
+        video.likes.push(userId);
+        video.likeCount += 1;
+      } else {
+        video.likes.splice(userIndex, 1);
+        video.likeCount -= 1;
+      }
+
+      // Save the updated video to the database
+      await video.save();
+      console.log(video);
+
+      return { success: true, message: `Like ${action === 'add' ? 'added' : 'removed'} successfully.`, likeCount: video.likeCount };
+    } else {
+      return { success: false, message: `User already ${action === 'add' ? 'liked' : 'not liked'} the video.`, likeCount: video.likeCount };
+    }
+  } catch (error) {
+    console.log(`Error ${action === 'add' ? 'adding' : 'removing'} like:`, error);
+    return { success: false, message: 'Error occurred while toggling like status.' };
+  }
+}
+

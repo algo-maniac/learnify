@@ -6,12 +6,17 @@ const authenticateVideoAccess = require("../middlewares/videoAccess");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
+router.use(authenticateVideoAccess);
 
-router.get("/getVideo/:id", videoController.getVideoDetails);
+router.post("/getVideo", videoController.getVideoDetails);
 
-router.post("/addComment", authenticateVideoAccess, videoController.createComment);
+router.post("/addComment", videoController.createComment);
 
-router.post("/addReply/", authenticateVideoAccess, videoController.addReply);
+router.post("/addReply", videoController.addReply);
+
+router.post('/addLike', videoController.addLike);
+
+router.post('/removeLike', videoController.removeLike);
 
 // router.post("/login", userController.loginpost);
 

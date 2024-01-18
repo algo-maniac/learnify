@@ -8,8 +8,8 @@ const authenticateVideoAccess = async (req, res, next) => {
     try {
         const token = req.headers['authorization'];
 
-        const videoId = req.body.videoId;
-
+        const { videoId } = req.query;
+        
         if (!token || !videoId) {
             return res.status(401).json({ message: 'Unauthorized' });
         }

@@ -45,10 +45,11 @@ const videoLectureSchema = new mongoose.Schema({
   thumbnail: { type: String, required: true },
   resources: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Resource' }],
   
-  like: { type: Number, default: 0 }, // Number of likes
+  likeCount: { type: Number, default: 0 }, // Number of likes
+  likes: [{ type: String, index: true }], // Array of user IDs who liked the video
   
   comments: [commentSchema], // Array of comments using the defined comment schema
-}, {timestamps: true});
+}, { timestamps: true });
 
 
 const VideoLecture = mongoose.model('VideoLecture', videoLectureSchema);

@@ -5,6 +5,7 @@ import { Avatar } from "@mui/material";
 import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
 import ThumbUpOffAltIcon from '@mui/icons-material/ThumbUpOffAlt';
 import TextField from '@mui/material/TextField';
+import SendIcon from '@mui/icons-material/Send';
 import { ToastContainer, toast } from "react-toastify";
 import LoadingBar from 'react-top-loading-bar'
 import CircularProgress from "@mui/material/CircularProgress";
@@ -15,15 +16,20 @@ const Video = () => {
     const [input, setInput] = useState("");
     const [url, setUrl] = useState('');
     const [loader, setLoader] = useState(false);
+    const [replytext,setReply]=useState(new Map())
     const ref = useRef(null)
 
     const fetchVideoDetails = async () => {
-        const res = await fetch(`http://localhost:8000/video/getVideo/${id}`, {
+        console.log(id);
+        const res = await fetch(`http://localhost:8000/video/getVideo/?videoId=${id}`, {
+            method: 'POST',
             headers: {
-                Authorization: localStorage.getItem('token')
+                Authorization: localStorage.getItem("token"),
+                'Content-type': 'application/json'
             }
         });
         const data = await res.json();
+        console.log(data);
 
         const sortedComments = data.video.comments.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp));
         setComment(sortedComments)
@@ -74,14 +80,13 @@ const Video = () => {
             const url = window.location.href.split('/')[4];
 
             try {
-                const res = await fetch("http://localhost:8000/video/addComment", {
+                const res = await fetch(`http://localhost:8000/video/addComment/?videoId=${url}`, {
                     method: 'POST',
                     headers: {
                         Authorization: localStorage.getItem('token'),
                         'Content-type': 'application/json'
                     },
                     body: JSON.stringify({
-                        videoId: url,
                         text: input
                     })
                 });
@@ -109,8 +114,45 @@ const Video = () => {
 
         }
     }
+    const replyTextHandler=(env)=>{
+        const videoId=env.target.id.split(' ')[1];
+        const value=env.target.value;
+        replytext.set(videoId,value);
+    }
+    const replyHandler=async(env)=>{
+        const commentID=env.target.id;
+        const videoId=data._id;
+        const text=replytext.get(commentID)
+        console.log(commentID)
+        try {
+            const res = await fetch(`http://localhost:8000/video/addReply/?videoId=${videoId}&commentId=${commentID}`, {
+                method: 'POST',
+                headers: {
+                    Authorization: localStorage.getItem('token'),
+                    'Content-type': 'application/json'
+                },
+                body: JSON.stringify({
+                    text: text,
+                })
+            });
+
+            const data = await res.json();
+            console.log(data);
+            if (res.ok) {
+                toast.success("Reply Posted", {
+                    position: 'top-center'
+                });
+            } else {
+                toast.error("Failed to post reply", {
+                    position: 'top-center'
+                });
+            }
+        } catch (error) {
+            console.error('Error posting comment:', error);
+        }
+    }
     return <>
-        <ToastContainer />
+         <ToastContainer />
         <LoadingBar color="black" ref={ref} className="loading-bar" />
         <div className="video-box">
             <div className="video-player">
@@ -165,7 +207,8 @@ const Video = () => {
                 </div>
                 <div className="comments">
                     {comments.map((data, index) => (
-                        <div className="chats" key={index}>
+                        <>
+                        <div className="chats" key={index} id={index%2 && "gray"}>
                             <div className="username">
                                 <span>Chandrachur</span>
                             </div>
@@ -175,9 +218,40 @@ const Video = () => {
                             <div className="text">
                                 <span>{data.text}</span>
                             </div>
+                            <div className="link"><span>Replies</span></div>
                         </div>
+                        {data.replies.length>0 && <div className="reply">
+                            <div className="input-field">
+                                <div className="input">
+                                    <TextField id={`${"standard-basic"} ${data._id}`} placeholder="Add a reply..." variant="standard" className="input-text"  onChange={replyTextHandler}/>
+                                </div>
+                                <div className="send-btn">
+                                    <SendIcon onClick={replyHandler} id={data._id}/>
+                                </div>
+                            </div>
+                            <div className="replies">
+                                <div className="header-text">
+                                    <span>All replies</span>
+                                </div>
+                                {
+                                    data.replies.map((data,index)=>(
+                                        <div className="reply-chats">
+                                            <div className="username">
+                                                <span>Chandrachur</span>
+                                            </div>
+                                            <div className="time">
+                                                <span>{getTime(data.timestamp)}, {getDate(data.timestamp)}</span>
+                                            </div>
+                                            <div className="text">
+                                                <span>{data.text}</span>
+                                            </div>
+                                        </div>
+                                    ))
+                                }
+                            </div>
+                        </div>}
+                        </>
                     ))}
-
                 </div>
             </div>
         </div>

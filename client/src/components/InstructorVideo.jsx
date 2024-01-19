@@ -7,9 +7,8 @@ import Sidebar from './Sidebar'
 import AuthContext from '../store/auth-context'
 
 const InstructorVideo=()=>{
-    const { userdata } = useContext(AuthContext);
+  const { userdata } = useContext(AuthContext);
   const { id } = useParams();
-
   const [instructordata, setInstructorData] = useState();
 
   const getInstructorData = async () => {

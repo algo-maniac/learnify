@@ -126,7 +126,7 @@
 .button-61 {
   align-items: center;
   appearance: none;
-  background-color: #3043d4;
+  background-color: #4a56b8;
   border-radius: .375em;
   box-shadow: none;
   box-sizing: border-box;
@@ -141,6 +141,8 @@
   line-height: 1.5;
   padding: calc(.5em - 1px) 1em;
   position: relative;
+  padding-left: 1.3rem;
+  padding-right: 1.3rem;
   text-align: center;
   user-select: none;
   -webkit-user-select: none;
@@ -166,20 +168,46 @@
 .button-61:focus:not(:active) {
   box-shadow: rgba(72, 95, 199, .25) 0 0 0 .125em;
 }
-.course-container .courses-list{
+.courses-list{
     width: 100%;
     display: flex;
     flex-direction: row;
     height: 100%;
     flex-wrap: wrap;
 }
-.course-container .courses-list .courses{
+.courses-list .courses{
     margin-right: 1rem;
     margin-bottom: 1rem;
+}
+.courses-list .courses .level{
+    font-weight: 700;
+    background: -webkit-linear-gradient(90deg,#6980b5, #3f469d,blue);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+.courses-list .courses .price{
+    font-weight: 700;
+    color: black;
+}
+.courses-list .courses .desc{
+    padding: 0px;
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+}
+.courses-list .courses .tag{
+    background-color: black;
+    color: white;
+    text-transform: none;
+    font-size: 0.72rem;
+    margin: 0.1rem;
+}
+.courses-list .courses .box1{
+    height: fit-content;
 }
 /* css for home page */
 .home-page{
     display: flex;
+    width: 96%;
     margin: 0.7rem;
     flex-direction: column;
 }
@@ -191,6 +219,7 @@
 }
 .home-page .header1 h5{
     font-weight: 600;
+    color: rgb(57, 57, 173);
 }
 .home-page .line1{
     border: 1px solid rgb(192, 191, 189);
@@ -198,7 +227,7 @@
     margin-right: 0.34rem;
 }
 .home-page .line2{
-    width: 80%;
+    width: 90%;
     margin-left: 0.34rem;
     border: 1px solid rgb(192, 191, 189);
 

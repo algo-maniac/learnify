@@ -1,12 +1,11 @@
 // AddSectionForm.jsx
 import React, { useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import './AddSectionForm.css'
 
-const AddSectionForm = () => {
+const AddSectionForm = ({ setCourseDetails, handleAddSectionClick }) => {
   const { courseId } = useParams();
 
-  const navigate = useNavigate();
   console.log(courseId);
   const [sectionDetails, setSectionDetails] = useState({
     title: '',
@@ -25,7 +24,7 @@ const AddSectionForm = () => {
     formData.append('courseId', courseId);
     formData.append('title', sectionDetails.title);
     formData.append('description', sectionDetails.description);
-    
+
     const res = await fetch('http://localhost:8000/course/createSection', {
       method: 'POST',
       headers: {
@@ -39,7 +38,23 @@ const AddSectionForm = () => {
     console.log(data.ok);
 
     if (data.ok) {
-      const sectionId = data.sectionId;
+      // const sectionId = data.sectionId;
+
+      setCourseDetails((prevCourseDetails) => {
+        return {
+          ...prevCourseDetails,
+          sections: [
+            ...prevCourseDetails.sections,
+            data.section
+          ]
+        };
+      });
+
+      setSectionDetails({
+        title: '',
+        description: '',
+      });
+      handleAddSectionClick();
       // show toast success
       // navigate(`/course/${courseId}/edit`);
     } else {
@@ -57,8 +72,7 @@ const AddSectionForm = () => {
         Section Description:
         <textarea name="description" value={sectionDetails.description} onChange={handleChange} required />
       </label>
-      {/* Add other input fields for section details */}
-      <button type="submit">Add Section</button>
+      <button type="submit">Save Section</button>
     </form>
   );
 };

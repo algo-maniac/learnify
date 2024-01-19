@@ -9,12 +9,14 @@
 }
 
 label {
+    width: 100%;
     display: block;
     margin-bottom: 10px;
     font-weight: bold;
     color: #333;
 }
 
+.basic-details-form 
 input,
 textarea,
 select {

@@ -57,11 +57,17 @@ const AddVideo = ({ courseId, sectionId, setCourseDetails }) => {
                     return section;
                 });
 
-                // Return the updated courseDetails object
                 return {
                     ...prevDetails,
                     sections: updatedSections,
                 };
+            });
+
+            setVideoDetails({
+                title: '',
+                description: '',
+                video: null,
+                thumbnail: null,
             });
         }
     };

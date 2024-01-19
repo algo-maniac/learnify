@@ -1,0 +1,76 @@
+/* EditSectionDetailsForm.css */
+
+.section-edit-form {
+    width: 100%;
+    margin-top: 20px;
+  }
+
+  .section-edit-form label {
+    width: 100%;
+  }
+  
+  .checkbox-container {
+    display: inline-block;
+    margin-right: 10px;
+  }
+  
+  .checkbox {
+    margin-top: 2px;
+  }
+  
+  .input-container {
+    margin-bottom: 10px;
+  }
+  
+  .not-editable {
+    background-color: #f5f5f5;
+  }
+  
+  .text-label {
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+  }
+  
+  textarea, input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-top: 5px;
+  }
+  
+  .file-preview {
+    margin-top: 10px;
+  }
+  
+  .file-preview img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin-top: 5px;
+  }
+  
+  .buttons {
+    margin-top: 20px;
+  }
+  
+  .buttons button {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 10px;
+  }
+  
+  .buttons button:hover {
+    background-color: #45a049;
+  }
+  
+ 

@@ -1,0 +1,130 @@
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.basic-edit-form label {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.checkbox {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ... (previous styles) */
+
+.checkbox-label {
+  display: flex;
+  align-items: center;
+}
+
+.checkbox {
+  margin-right: 15px;
+}
+
+.input-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.text-label {
+  margin-bottom: 5px;
+}
+
+/* ... (remaining styles) */
+
+/* Styles for checked state */
+.checkbox:checked + .input-container .text-label {
+  display: block;
+}
+
+.basic-edit-form
+label,
+input,
+textarea,
+select,
+button {
+  margin-top: 5px;
+  padding: 5px;
+  font-size: 16px;
+  width: 100%;
+
+}
+  
+  /* ... rest of the styles ... */
+  
+  
+  /* Adjust for checkboxes */
+  input[type="checkbox"] {
+    margin-top: 0; /* Remove default top margin */
+    margin-right: 5px; /* Add margin between checkbox and label */
+  }
+  
+  button {
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #45a049;
+  }
+  
+  img {
+    margin-top: 10px;
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+  }
+  
+  .buttons {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+
+    justify-content: space-between;
+    gap: 40px;
+  }
+
+
+  .not-editable {
+    background-color: #f2f2f2; /* Light gray background */
+    border: 1px solid #ccc; /* Light border color */
+    padding: 8px;
+    opacity: 0.7; /* Reduced opacity for a subtle effect */
+    cursor: not-allowed; /* Change cursor to not-allowed */
+    padding: 5px;
+  }
+  
+  .not-editable input,
+  .not-editable textarea,
+  .not-editable select {
+    background-color: transparent; /* Make input fields transparent within not-editable container */
+    border: none; /* Remove borders within not-editable container */
+    color: #555; /* Adjust text color */
+    padding: 0;
+  }
+  
+  .not-editable button {
+    background-color: #ddd; /* Light button background color */
+    color: #777; /* Adjust button text color */
+    cursor: not-allowed; /* Change cursor to not-allowed */
+  }
+  

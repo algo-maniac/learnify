@@ -193,15 +193,24 @@ module.exports.uploadVideo = async (req, res) => {
   }
 }
 
-
 const uploadToCloudinary = (file) => {
   return new Promise((resolve, reject) => {
-    cloudinary.uploader.upload_stream({ resource_type: 'auto' },
+    const uploadStream = cloudinary.uploader.upload_stream({ resource_type: 'auto' },
       (error, result) => {
-        if (error) reject(error);
-        resolve(result.secure_url);
-      })
-      .end(file.buffer);
+        if (error) {
+          console.error("Error uploading to Cloudinary:", error);
+          reject(error);
+        } else {
+          console.log(result);
+          if (result && result.secure_url) {
+            resolve(result.secure_url);
+          } else {
+            reject(new Error("Cloudinary upload result is missing 'secure_url'."));
+          }
+        }
+      });
+
+    uploadStream.end(file.buffer);
   });
 };
 

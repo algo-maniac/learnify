@@ -1,7 +1,8 @@
 /* Add this CSS to your stylesheet or in your component style tag */
 
 .add-video-form {
-    max-width: 400px;
+    /* max-width: 400px; */
+    width: 100%;
     margin: 20px auto;
     padding: 15px;
     border: 1px solid #ddd;

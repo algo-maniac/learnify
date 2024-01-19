@@ -5,9 +5,9 @@
   box-sizing: border-box;
   text-decoration: none;
   list-style: none;
-  /* font-family: 'Bungee Shade', cursive;
+  font-family: 'Bungee Shade', cursive;
   font-family: 'Cutive', serif;
-  font-family: 'Poppins', sans-serif; */
+  font-family: 'Poppins', sans-serif;
 }
 
 .exam-container .linkSyllabus:hover{
@@ -15,7 +15,7 @@
   color: black;
 }
 .exam-container .header{
-display: flex;
+  display: flex;
   width: 60%;
   height: 40px;
   margin: auto;
@@ -24,11 +24,12 @@ display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
   font-family: 'Bungee Shade', cursive;
-font-family: 'Cutive', serif;
-font-family: 'Poppins', sans-serif;
+  font-family: 'Cutive', serif;
+  font-family: 'Poppins', sans-serif;
 }
 .exam-container .header div{
-  width: 15%;
+  width: 13%;
+  height: 60%;
   display: flex;
   transition: all 0.5s;
   border-radius: 50%/125%;
@@ -36,7 +37,6 @@ font-family: 'Poppins', sans-serif;
   border: 2px solid black;
 }
 .exam-container .header div:hover{
-  cursor: pointer;
   background-color: rgb(202, 192, 192);
 }
 .exam-container .header div span{
@@ -74,6 +74,7 @@ font-family: 'Poppins', sans-serif;
 .exam-container .inner-part .img{
   height: 80%;
   width: 35%;
+  position: static;
   flex-shrink: 0;
   overflow: hidden;
   border-radius: 20px;
@@ -216,6 +217,7 @@ font-family: 'Poppins', sans-serif;
 }
 .exam-container .channel img{
   width: 200px;
+  position: static;
   border-radius: 10px;
   height: 150px;
   border: 3px solid black;
@@ -253,4 +255,11 @@ font-family: 'Poppins', sans-serif;
 .exam-container .active{
   color: white;
   background-color: black;
+}
+.exam-container .notes-content{
+  text-align: left;
+}
+.exam-container .notes-header{
+  font-weight: 700;
+  text-align: left;
 }

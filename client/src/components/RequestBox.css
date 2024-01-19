@@ -6,19 +6,19 @@
     border-radius: 5px;
 }
 
-.top {
+.request-box .top {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.sort-options {
+.request-box .sort-options {
     display: flex;
     gap: 10px;
     align-items: center;
 }
 
-.content-table {
+.request-box .content-table {
     border-collapse: collapse;
     margin: 25px 0;
     font-size: 0.9em;
@@ -29,7 +29,7 @@
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.15);
 }
 
-.content-table thead tr {
+.request-box .content-table thead tr {
     background-color: #07279d;
     color: #ffffff;
     text-align: left;
@@ -37,34 +37,34 @@
     border-radius: 5px;
 }
 
-.content-table th,
-.content-table td {
+.request-box .content-table th,
+.request-box .content-table td {
     padding: 12px 15px;
     box-sizing: border-box;
 }
 
-.content-table tbody tr {
+.request-box .content-table tbody tr {
     border-bottom: 1px solid #dddddd;
 }
 
-.content-table tbody tr:nth-of-type(even) {
+.request-box .content-table tbody tr:nth-of-type(even) {
     background-color: #e3e0e0;
 }
 
-.MuiModal-root {
+.request-box .MuiModal-root {
     max-height: 80vh;
     /* You can adjust this value based on your needs */
 }
 
 
-.image-container {
+.request-box .image-container {
     position: relative;
     width: 100%;
     padding-top: 75%;
     /* Adjust this value to set the aspect ratio (e.g., 75% for 4:3) */
 }
 
-img {
+.content img {
     position: absolute;
     top: 0;
     left: 0;
@@ -74,30 +74,30 @@ img {
     /* Maintain aspect ratio while covering the container */
 }
 
-.content-table tbody tr.active-row {
+.request-box .content-table tbody tr.active-row {
     font-weight: bold;
     background-color: #c2cbf4;
 }
 
-.table-body tr:hover {
+.request-box .table-body tr:hover {
     background-color: #c2cbf4 !important;
 }
 
-.content-table .table-body .img-link:hover {
+.request-box .content-table .table-body .img-link:hover {
     cursor: pointer;
     color: blue;
 }
 
-.content-table .table-body .link:hover {
+.request-box .content-table .table-body .link:hover {
     cursor: pointer;
     color: blue;
 }
 
-.content-table .table-body .img-link {
+.request-box .content-table .table-body .img-link {
     font-weight: 700;
 }
 
-.content-table .table-body .link {
+.request-box .content-table .table-body .link {
     font-weight: 700;
 }
 
@@ -165,19 +165,19 @@ img {
     background: #03673a;
 } */
 
-.timestamp {
+.request-box .timestamp {
     color: rgb(69, 81, 211);
     font-weight: 700;
 }
 
-.role,
-.name,
-.email,
-.serial-no {
+.request-box .role,
+.request-box .name,
+.request-box .email,
+.request-box .serial-no {
     font-weight: 700;
 }
 
-.content {
+.request-box .content {
     position: absolute;
     min-height: 100vh;
     min-width: 100vw;
@@ -193,7 +193,7 @@ img {
 }
 
 
-img {
+.request-box img {
     max-width: 100%;
     max-height: 100%;
     width: auto;
@@ -237,12 +237,12 @@ img {
 }
 
 /* Label style for sort options */
-.sort-options label {
+.request-box .sort-options label {
     font-weight: bold;
 }
 
 /* Select dropdown style for sort options */
-.sort-options select {
+.request-box .sort-options select {
     padding: 8px;
     border-radius: 4px;
     border: 1px solid #ccc;

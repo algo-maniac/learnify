@@ -12,7 +12,9 @@ const helmet = require("helmet");
 const morgan = require("morgan");
 const cookieParser = require("cookie-parser");
 const bodyParser = require("body-parser");
-const VideoLecture = require("./models/videoLecture")
+const {VideoLecture}=require("./models/videoLecture");
+const Instructor = require("./models/instructor");
+const Course = require("./models/course");
 const port = 8000;
 const app = express();
 
@@ -46,7 +48,21 @@ mongoose
     console.error(`Error connecting to the database. n${err}`);
   });
 
-
+app.post('/search',async(req,res)=>{
+  console.log("Inside Backend")
+  const query=req.body.query;
+  console.log(query)
+  try {
+      const regex = new RegExp(query, 'i');
+      const courseData=await Course.find({title:regex})
+      const instructorData = await Instructor.find({ username: regex });
+      const videoLecturData=await VideoLecture.find({title:regex});
+      res.json({instructor:instructorData,courses:courseData,videos:videoLecturData});
+  }catch(error) {
+      console.error('Error during search:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+  } 
+})
 app.listen(port, (err) => {
   if (err) {
     console.log("Some error occured");

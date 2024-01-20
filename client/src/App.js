@@ -14,6 +14,7 @@ import Instructors from "./components/Instructors";
 import ExamCorner from "./components/ExamCorner";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
+import Search from "./pages/Search";
 import CreateCourseForm from "./components/CreateCourseForm";
 import AuthContext from "./store/auth-context";
 import axios from 'axios';
@@ -92,6 +93,7 @@ function App() {
           <Route path="/exam-corner" element={<ExamCorner />} />
           <Route path="/course/create" element={<CreateCourseForm />} />
           <Route path="/course/:courseId/edit" element={<EditCourseForm />} />
+          <Route path="/search" element={<Search />} />
         </Routes>
         <Footer />
       </AuthContext.Provider>

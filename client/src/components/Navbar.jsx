@@ -1,10 +1,10 @@
 import React, { useState, useContext, useEffect } from "react";
-import { Link, Navigate, NavLink } from "react-router-dom";
+import { Link, Navigate, NavLink, useNavigate } from "react-router-dom";
 import "./Navbar.css";
 import { Avatar } from "@mui/material";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import AuthContext from "../store/auth-context";
-
+import { useHistory } from 'react-router-dom';
 function Navbar(props) {
   const { userdata, setUserdata, fetchUserdata } = useContext(AuthContext);
   const logout = () => {
@@ -13,6 +13,11 @@ function Navbar(props) {
     setUserdata(null);
     Navigate("/");
   }
+  const history = useNavigate();
+  const [searchText, setSearchText] = useState('');
+  const redirectToSearch = (text) => {
+    history(`/search?query=${text}`)
+  };
 
   return (
     <div className="navbar">
@@ -31,7 +36,6 @@ function Navbar(props) {
         </h1>
       </div>
       </Link>
-
       {userdata && (
         <div className="login_details">
 
@@ -67,6 +71,13 @@ function Navbar(props) {
                   <Link exact to="/">
                     About Us
                   </Link>
+                </li>
+                <li>
+                <input
+                  type="text"
+                  placeholder="Search..."
+                  onChange={(e) => redirectToSearch(e.target.value)}
+                />
                 </li>
               </ul>
             </div>

@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import './EditBasicDetailsForm.css'
 
-const EditBasicDetailsForm = ({ initialDetails, onSubmit, toggleShowEditForm }) => {
+const EditBasicDetailsForm = ({ initialDetails, onSubmit, toggleShowEditForm, loading, setLoading }) => {
     console.log(initialDetails)
+    const [localLoading, setLocalLoading] = useState(false);
     const [editedDetails, setEditedDetails] = useState({ ...initialDetails });
     const [editedThumbnail, setEditedThumbnail] = useState(null);
     const [editableFields, setEditableFields] = useState({
@@ -50,7 +51,16 @@ const EditBasicDetailsForm = ({ initialDetails, onSubmit, toggleShowEditForm }) 
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        onSubmit(editedDetails, editedThumbnail, editableFields);
+        try {
+            setLoading(true);
+            setLocalLoading(true);
+            onSubmit(editedDetails, editedThumbnail, editableFields);
+        } catch(err) {
+
+        } finally {
+            setLocalLoading(false);
+            setLoading(false);
+        }
     };
 
     const handleCheckboxToggle = (fieldName, e) => {
@@ -81,7 +91,7 @@ const EditBasicDetailsForm = ({ initialDetails, onSubmit, toggleShowEditForm }) 
                         onChange={(e) => handleCheckboxToggle('title', e)}
                     />
                 </div>
-                <div className={`input-container ${!editableFields.title ? 'not-editable' : ''}`}>
+                <div className={`input-container ${ !editableFields.title ? 'not-editable' : '' }`}>
                     <span className="text-label">Title:</span>
                     <input
                         type="text"
@@ -101,7 +111,7 @@ const EditBasicDetailsForm = ({ initialDetails, onSubmit, toggleShowEditForm }) 
                         onChange={(e) => handleCheckboxToggle('description', e)}
                     />
                 </div>
-                <div className={`input-container ${!editableFields.description ? 'not-editable' : ''}`}>
+                <div className={`input-container ${ !editableFields.description ? 'not-editable' : '' }`}>
                     <span className="text-label">Description:</span>
                     <textarea
                         name="description"
@@ -120,7 +130,7 @@ const EditBasicDetailsForm = ({ initialDetails, onSubmit, toggleShowEditForm }) 
                         onChange={(e) => handleCheckboxToggle('duration', e)}
                     />
                 </div>
-                <div className={`input-container ${!editableFields.duration ? 'not-editable' : ''}`}>
+                <div className={`input-container ${ !editableFields.duration ? 'not-editable' : '' }`}>
                     <span className="text-label">Duration (months):</span>
                     <input
                         type="number"
@@ -140,7 +150,7 @@ const EditBasicDetailsForm = ({ initialDetails, onSubmit, toggleShowEditForm }) 
                         onChange={(e) => handleCheckboxToggle('price', e)}
                     />
                 </div>
-                <div className={`input-container ${!editableFields.price ? 'not-editable' : ''}`}>
+                <div className={`input-container ${ !editableFields.price ? 'not-editable' : '' }`}>
                     <span className="text-label">Price (INR):</span>
                     <input
                         type="number"
@@ -160,7 +170,7 @@ const EditBasicDetailsForm = ({ initialDetails, onSubmit, toggleShowEditForm }) 
                         onChange={(e) => handleCheckboxToggle('level', e)}
                     />
                 </div>
-                <div className={`input-container ${!editableFields.level ? 'not-editable' : ''}`}>
+                <div className={`input-container ${ !editableFields.level ? 'not-editable' : '' }`}>
                     <span className="text-label">Level:</span>
                     <select
                         name="level"
@@ -183,7 +193,7 @@ const EditBasicDetailsForm = ({ initialDetails, onSubmit, toggleShowEditForm }) 
                         onChange={(e) => handleCheckboxToggle('category', e)}
                     />
                 </div>
-                <div className={`input-container ${!editableFields.category ? 'not-editable' : ''}`}>
+                <div className={`input-container ${ !editableFields.category ? 'not-editable' : '' }`}>
                     <span className="text-label">Category:</span>
                     <input
                         type="text"
@@ -203,7 +213,7 @@ const EditBasicDetailsForm = ({ initialDetails, onSubmit, toggleShowEditForm }) 
                         onChange={(e) => handleCheckboxToggle('thumbnail', e)}
                     />
                 </div>
-                <div className={`input-container ${!editableFields.thumbnail ? 'not-editable' : ''}`}>
+                <div className={`input-container ${ !editableFields.thumbnail ? 'not-editable' : '' }`}>
                     <span className="text-label">Thumbnail:</span>
                     <input
                         type="file"
@@ -221,16 +231,23 @@ const EditBasicDetailsForm = ({ initialDetails, onSubmit, toggleShowEditForm }) 
                             />
                             <div className="buttons">
                                 <button onClick={handleConfirmThumbnailChange}>Confirm Thumbnail Change</button>
-                                <button onClick={handleCancelThumbnailChange}>Cancel Thumbnail Change</button>
+                                <button onClick={handleCancelThumbnailChange} className='cancel'>Cancel Thumbnail Change</button>
                             </div>
                         </div>
                     )}
                 </div>
             </label>
             <div className="buttons">
-                <button type="submit">Save Changes</button>
-                <button onClick={toggleShowEditForm}>Cancel Changes</button>
+                <button
+                    onClick={handleSubmit}
+                    disabled={loading}
+                >
+                    {!localLoading ? 'Submit' : 'Submitting...'}
+                </button>
+                <button onClick={toggleShowEditForm} className='cancel'>Cancel Changes</button>
             </div>
+            {/* {localLoading && <div className="loader">Loading...</div>} */}
+            {localLoading && <div className="toaster">Backend call in progress...</div>}
         </form>
     );
 };

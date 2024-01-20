@@ -4,6 +4,8 @@ import { Navigate, useNavigate } from 'react-router-dom';
 import './CreateCourseForm.css'
 
 const CreateCourseForm = () => {
+  const [loading, setLoading] = useState(false);
+
   const navigate = useNavigate();
   const [courseDetails, setCourseDetails] = useState({
     title: '',
@@ -15,12 +17,6 @@ const CreateCourseForm = () => {
     thumbnail: null,
   });
 
-  const [formDataa, setFormDataa] = useState({
-    title: "title",
-    description: "desc",
-    video: null,
-    thumbnail: null,
-  });
 
   const handleChange = (e) => {
     const { name, value, type } = e.target;
@@ -33,45 +29,51 @@ const CreateCourseForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    try {
+      setLoading(true);
+      const formData = new FormData();
+      formData.append('title', courseDetails.title);
+      formData.append('description', courseDetails.description);
+      formData.append('duration', courseDetails.duration);
+      formData.append('price', courseDetails.price);
+      formData.append('level', courseDetails.level);
+      formData.append('category', courseDetails.category);
+      formData.append('thumbnail', courseDetails.thumbnail);
 
-    const formData = new FormData();
-    formData.append('title', courseDetails.title);
-    formData.append('description', courseDetails.description);
-    formData.append('duration', courseDetails.duration);
-    formData.append('price', courseDetails.price);
-    formData.append('level', courseDetails.level);
-    formData.append('category', courseDetails.category);
-    formData.append('thumbnail', courseDetails.thumbnail);
+      const res = await fetch('http://localhost:8000/course/createCourse', {
+        method: 'POST',
+        headers: {
+          Authorization: localStorage.getItem('token'),
+        },
+        body: formData,
+      });
 
-    const res = await fetch('http://localhost:8000/course/createCourse', {
-      method: 'POST',
-      headers: {
-        Authorization: localStorage.getItem('token'),
-      },
-      body: formData,
-    });
+      const data = await res.json();
+      console.log(data);
+      console.log(data.ok);
 
-    const data = await res.json();
-    console.log(data);
-    console.log(data.ok);
-
-    if (data.ok) {
-      const courseId = data.courseId;
-      // show toast success
-      navigate(`/course/${courseId}/edit`);
-    } else {
-      // show toast err
+      if (data.ok) {
+        const courseId = data.courseId;
+        // show toast success
+        navigate(`/course/${courseId}/edit`);
+      } else {
+        // show toast err
+      }
+    } catch (err) {
+      console.log(err);
+      setLoading(false);
     }
   };
 
   return (
     <form className="basic-details-form" onSubmit={handleSubmit}>
+      <h3>Create Course</h3>
       <label>
-        Title:
+        <span className='details-heading'>Title:</span>
         <input type="text" name="title" value={courseDetails.title} onChange={handleChange} required />
       </label>
       <label>
-        Description:
+        <span className='details-heading'>Description:</span>
         <textarea
           name="description"
           value={courseDetails.description}
@@ -80,7 +82,7 @@ const CreateCourseForm = () => {
         />
       </label>
       <label>
-        Duration (months):
+        <span className='details-heading'>Duration (months):</span>
         <input
           type="number"
           name="duration"
@@ -90,7 +92,7 @@ const CreateCourseForm = () => {
         />
       </label>
       <label>
-        Price (INR):
+        <span className='details-heading'>Price (INR):</span>
         <div className="price-input-container">
           <input
             type="number"
@@ -104,7 +106,7 @@ const CreateCourseForm = () => {
       </label>
 
       <label>
-        Level:
+        <span className='details-heading'>Level:</span>
         <select name="level" value={courseDetails.level} onChange={handleChange} required>
           <option value="beginner">Beginner</option>
           <option value="intermediate">Intermediate</option>
@@ -112,7 +114,7 @@ const CreateCourseForm = () => {
         </select>
       </label>
       <label>
-        Category:
+        <span className='details-heading'>Category:</span>
         <input
           type="text"
           name="category"
@@ -121,10 +123,13 @@ const CreateCourseForm = () => {
         />
       </label>
       <label>
-        Thumbnail:
+        <span className='details-heading'>Thumbnail:</span>
         <input type="file" name="thumbnail" onChange={handleChange} accept="image/*" />
       </label>
-      <button type="submit">Next</button>
+      <button type="submit" disabled={loading}>
+        {loading ? 'Creating...' : 'Create'}
+      </button>
+      {loading && <div className="toaster">Backend call in progress...</div>}
     </form>
   );
 };

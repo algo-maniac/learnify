@@ -6,10 +6,16 @@ form {
 }
 
 .basic-edit-form label {
+  width: 100%;
   display: flex;
   flex-direction: row;
-  align-items: center;
-  margin-bottom: 5px;
+}
+
+.basic-edit-form  label .input-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
 
 .checkbox {
@@ -61,7 +67,6 @@ button {
   padding: 5px;
   font-size: 16px;
   width: 100%;
-
 }
   
   /* ... rest of the styles ... */
@@ -73,17 +78,18 @@ button {
     margin-right: 5px; /* Add margin between checkbox and label */
   }
   
-  button {
+  /* .edit-course-container button {
     background-color: #4caf50;
     color: #fff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    max-width: 200px !important;
   }
-  
-  button:hover {
+   */
+  /* button:hover {
     background-color: #45a049;
-  }
+  } */
   
   img {
     margin-top: 10px;
@@ -94,14 +100,8 @@ button {
     position: relative;
   }
   
-  .buttons {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
 
-    justify-content: space-between;
-    gap: 40px;
-  }
+
 
 
   .not-editable {

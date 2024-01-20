@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
 import './AddVideo.css'
 
-const AddVideo = ({ courseId, sectionId, setCourseDetails }) => {
+const AddVideo = ({ courseId, sectionId, setCourseDetails, handleAddVideoClick, loading, setLoading }) => {
+    const [localLoading, setLocalLoading] = useState(false);
     const [videoDetails, setVideoDetails] = useState({
         title: '',
         description: '',
@@ -20,55 +21,63 @@ const AddVideo = ({ courseId, sectionId, setCourseDetails }) => {
 
     const handleUpload = async (e) => {
         e.preventDefault();
+        try {
+            setLocalLoading(true);
+            setLoading(true);
+            const form = new FormData();
+            form.append("courseId", courseId);
+            form.append("sectionId", sectionId);
+            form.append("title", videoDetails.title);
+            form.append("description", videoDetails.description);
+            form.append("video", videoDetails.video);
+            form.append("thumbnail", videoDetails.thumbnail);
+            console.log(videoDetails);
 
-        const form = new FormData();
-        form.append("courseId", courseId);
-        form.append("sectionId", sectionId);
-        form.append("title", videoDetails.title);
-        form.append("description", videoDetails.description);
-        form.append("video", videoDetails.video);
-        form.append("thumbnail", videoDetails.thumbnail);
-        console.log(videoDetails);
+            const res = await fetch("http://localhost:8000/instructor/uploadVideo", {
+                method: "POST",
+                headers: {
+                    Authorization: localStorage.getItem("token")
+                },
+                body: form,
+            })
+            const data = await res.json();
+            const newVideo = data.video;
 
-        const res = await fetch("http://localhost:8000/instructor/uploadVideo", {
-            method: "POST",
-            headers: {
-                Authorization: localStorage.getItem("token")
-            },
-            body: form,
-        })
-        const data = await res.json();
-        const newVideo = data.video;
+            if (!newVideo) {
+                // show err
+            } else {
 
-        if (!newVideo) {
-            // show err
-        } else {
+                setCourseDetails((prevDetails) => {
+                    const updatedSections = prevDetails.sections.map((section) => {
+                        if (section._id === sectionId) {
+                            return {
+                                ...section,
+                                videoLectures: [...section.videoLectures, newVideo],
+                            };
+                        }
+                        return section;
+                    });
 
-            setCourseDetails((prevDetails) => {
-                // Find the section where the video was added
-                const updatedSections = prevDetails.sections.map((section) => {
-                    if (section._id === sectionId) {
-                        // Add the new video to the section's videoLectures array
-                        return {
-                            ...section,
-                            videoLectures: [...section.videoLectures, newVideo],
-                        };
-                    }
-                    return section;
+                    return {
+                        ...prevDetails,
+                        sections: updatedSections,
+                    };
                 });
 
-                return {
-                    ...prevDetails,
-                    sections: updatedSections,
-                };
-            });
+                setVideoDetails({
+                    title: '',
+                    description: '',
+                    video: null,
+                    thumbnail: null,
+                });
 
-            setVideoDetails({
-                title: '',
-                description: '',
-                video: null,
-                thumbnail: null,
-            });
+                handleAddVideoClick(sectionId);
+            }
+        } catch (err) {
+
+        } finally {
+            setLocalLoading(false);
+            setLoading(false);
         }
     };
 
@@ -90,7 +99,9 @@ const AddVideo = ({ courseId, sectionId, setCourseDetails }) => {
                 Thumbnail:
                 <input type="file" name="thumbnail" onChange={handleChange} accept="image/*" />
             </label>
-            <button onClick={handleUpload}>Upload Video</button>
+            <button onClick={handleUpload} disabled={loading}>
+                {!localLoading ? 'Upload Video' : 'Uploading...'}
+            </button>
         </div>
     );
 };

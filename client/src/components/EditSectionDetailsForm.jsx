@@ -1,25 +1,24 @@
-// EditSectionDetailsForm.js
-
 import React, { useState } from 'react';
 import './EditSectionDetailsForm.css';
 import EditVideoDetailsForm from './EditVideoDetailsForm';
 import { useEffect } from 'react';
 
-const EditSectionDetailsForm = ({ initialSectionDetails, onSubmit, setCourseDetails, toggleShowEditSectionForm }) => {
-  console.log(initialSectionDetails);
+const EditSectionDetailsForm = ({ initialSectionDetails, onSubmit, setCourseDetails, handleVideoDetailsSubmit, toggleShowEditSectionForm, loading, setLoading }) => {
+  const [localLoading, setLocalLoading] = useState(false);
   const [editedSectionDetails, setEditedSectionDetails] = useState({ ...initialSectionDetails });
   const [editableFields, setEditableFields] = useState({
     title: false,
     description: false,
   });
-
   const [selectedVideoForEdit, setSelectedVideoForEdit] = useState(null);
+
+  useEffect(() => {
+    setEditedSectionDetails({ ...initialSectionDetails });
+  }, [initialSectionDetails]);
 
   const handleEditClick = (video) => {
     setSelectedVideoForEdit(video);
   };
-
-
 
   const handleCancelEdit = () => {
     setSelectedVideoForEdit(null);
@@ -34,83 +33,31 @@ const EditSectionDetailsForm = ({ initialSectionDetails, onSubmit, setCourseDeta
   };
 
   const handleSubmit = (e) => {
-    console.log("inside handel submit inside section");
     e.preventDefault();
-    const formData = new FormData();
-    if (editableFields['title']) formData.append('title', editedSectionDetails.title);
-    if (editableFields['description']) formData.append('description', editedSectionDetails.description);
-    onSubmit(formData, initialSectionDetails._id);
-  };
 
-  const handleVideoDetailsSubmit = async (formData, videoId, sectionId) => {
     try {
-      console.log("inside handle video details submit");
-      const res = await fetch(`http://localhost:8000/course/editVideoDetails/${videoId}`, {
-        method: 'PUT',
-        headers: {
-          Authorization: localStorage.getItem('token'),
-        },
-        body: formData
-      });
+      setLocalLoading(true);
+      setLoading(true);
+      const formData = new FormData();
+      if (editableFields['title']) formData.append('title', editedSectionDetails.title);
+      if (editableFields['description']) formData.append('description', editedSectionDetails.description);
+      onSubmit(formData, initialSectionDetails._id);
+    } catch (err) {
 
-      const data = await res.json();
-
-      if (data.ok) {
-        const updatedVideoDetails = data.video;
-        console.log('updatedVideoDetails', updatedVideoDetails);
-        console.log("videoId", videoId, "sectionid", sectionId);
-        setCourseDetails((prevDetails) => {
-          const updatedCourseDetails = { ...prevDetails };
-          const sectionIndex = updatedCourseDetails.sections.findIndex(
-            (section) => section._id === sectionId
-          );
-
-          if (sectionIndex !== -1) {
-            const section = { ...updatedCourseDetails.sections[sectionIndex] };
-            const videoIndex = section.videoLectures.findIndex(
-              (video) => video._id === videoId
-            );
-
-            if (videoIndex !== -1) {
-              const updatedVideoLectures = [...section.videoLectures];
-              updatedVideoLectures[videoIndex] = {
-                ...updatedVideoLectures[videoIndex],
-                ...updatedVideoDetails,
-              };
-
-              // Update the section with the new videoLectures array
-              section.videoLectures = updatedVideoLectures;
-
-              // Update the courseDetails with the updated section
-              updatedCourseDetails.sections[sectionIndex] = section;
-            }
-          }
-
-          console.log(updatedCourseDetails);
-          return updatedCourseDetails;
-        });
-
-        setEditedSectionDetails((prevDetails) => ({
-          ...prevDetails,
-          videoLectures: prevDetails.videoLectures.map((video) =>
-            video._id === videoId ? { ...video, ...updatedVideoDetails } : video
-          ),
-        }));
-
-      } else {
-
-      }
-    } catch (error) {
-      console.log(error);
+    } finally {
+      setLocalLoading(false);
+      setLoading(false);
     }
-  }
+  };
 
   const handleDeleteClick = async (video) => {
     try {
+      setLocalLoading(true);
+      setLoading(true);
       const videoId = video._id;
       const sectionId = video.sectionId;
       console.log("inside handle video details submit");
-      const res = await fetch(`http://localhost:8000/course/deleteVideo/${videoId}`, {
+      const res = await fetch(`http://localhost:8000/course/deleteVideo/${ videoId }`, {
         method: 'DELETE',
         headers: {
           Authorization: localStorage.getItem('token'),
@@ -144,18 +91,21 @@ const EditSectionDetailsForm = ({ initialSectionDetails, onSubmit, setCourseDeta
         });
 
         // Update editedSectionDetails
-        setEditedSectionDetails((prevDetails) => ({
-          ...prevDetails,
-          videoLectures: prevDetails.videoLectures.filter(
-            (video) => video._id !== videoId
-          ),
-        }));
+        // setEditedSectionDetails((prevDetails) => ({
+        //   ...prevDetails,
+        //   videoLectures: prevDetails.videoLectures.filter(
+        //     (video) => video._id !== videoId
+        //   ),
+        // }));
 
       } else {
 
       }
     } catch (error) {
       console.log(error);
+    } finally {
+      setLocalLoading(false);
+      setLoading(false);
     }
   }
 
@@ -166,10 +116,6 @@ const EditSectionDetailsForm = ({ initialSectionDetails, onSubmit, setCourseDeta
       [fieldName]: !prev[fieldName],
     }));
   };
-
-  useEffect(() => {
-    console.log("Edit section details re rendered");
-  })
 
 
   return (
@@ -183,7 +129,7 @@ const EditSectionDetailsForm = ({ initialSectionDetails, onSubmit, setCourseDeta
             onChange={() => handleCheckboxToggle('title')}
           />
         </div>
-        <div className={`input-container ${!editableFields.title ? 'not-editable' : ''}`}>
+        <div className={`input-container ${ !editableFields.title ? 'not-editable' : '' }`}>
           <span className="text-label">Section Title:</span>
           <input
             type="text"
@@ -203,7 +149,7 @@ const EditSectionDetailsForm = ({ initialSectionDetails, onSubmit, setCourseDeta
             onChange={() => handleCheckboxToggle('description')}
           />
         </div>
-        <div className={`input-container ${!editableFields.description ? 'not-editable' : ''}`}>
+        <div className={`input-container ${ !editableFields.description ? 'not-editable' : '' }`}>
           <span className="text-label">Section Description:</span>
           <textarea
             name="description"
@@ -222,6 +168,8 @@ const EditSectionDetailsForm = ({ initialSectionDetails, onSubmit, setCourseDeta
               handleCancelEdit={handleCancelEdit}
               handleVideoDetailsSubmit={handleVideoDetailsSubmit}
               toggleShowEditForm={handleCancelEdit}
+              loading={loading}
+              setLoading={setLoading}
             />
           ) : (
             <div className='video-item-details'>
@@ -241,8 +189,8 @@ const EditSectionDetailsForm = ({ initialSectionDetails, onSubmit, setCourseDeta
                 <div>{video.title}</div>
                 <div>{video.description}</div>
                 <div className="buttons">
-                  <button onClick={() => handleEditClick(video)}>Edit</button>
-                  <button onClick={() => handleDeleteClick(video)} className='delete'>Delete</button>
+                  <button onClick={() => handleEditClick(video)} disabled={loading}>Edit</button>
+                  <button onClick={() => handleDeleteClick(video)} disabled={loading} className='delete'>Delete</button>
                 </div>
               </div>
             </div>
@@ -251,8 +199,10 @@ const EditSectionDetailsForm = ({ initialSectionDetails, onSubmit, setCourseDeta
       ))}
 
       <div className="buttons">
-        <button type="submit">Save Section Changes</button>
-        <button onClick={toggleShowEditSectionForm}>Cancel Section Changes</button>
+        <button type="submit" disabled={loading}>
+          {!localLoading ? 'Save Changes' : 'Saving Changes'}
+        </button>
+        <button onClick={toggleShowEditSectionForm} className='cancel'>Cancel Changes</button>
       </div>
     </form>
   );

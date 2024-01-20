@@ -3,11 +3,24 @@
 .section-edit-form {
     width: 100%;
     margin-top: 20px;
+    padding: 10px;
+    background-color: #f8f8f8;
+    box-shadow: 1px 1px 5px #ddd;
   }
 
   .section-edit-form label {
     width: 100%;
+    display: flex;
+    flex-direction: row;
   }
+
+  .section-edit-form label .input-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
   
   .checkbox-container {
     display: inline-block;
@@ -58,7 +71,7 @@
     margin-top: 20px;
   }
   
-  .buttons button {
+  /* .buttons button {
     background-color: #4caf50;
     color: #fff;
     padding: 8px 16px;
@@ -71,6 +84,6 @@
   
   .buttons button:hover {
     background-color: #45a049;
-  }
+  } */
   
  

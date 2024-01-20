@@ -9,6 +9,7 @@ import EditSectionDetailsForm from './EditSectionDetailsForm';
 const EditCourseForm = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
   const [courseDetails, setCourseDetails] = useState({
     _id: '',
     title: '',
@@ -22,7 +23,6 @@ const EditCourseForm = () => {
     sections: [],
   });
 
-  // const [sections, setSections] = useState([]);
   const [showAddSectionForm, setShowAddSectionForm] = useState(false);
   const [sectionAddVideoState, setSectionAddVideoState] = useState({});
   const [showEditForm, setShowEditForm] = useState(false);
@@ -38,7 +38,7 @@ const EditCourseForm = () => {
   };
 
   const fetchCourseDetails = async () => {
-    const res = await fetch(`http://localhost:8000/course/getCourse/${courseId}`, {
+    const res = await fetch(`http://localhost:8000/course/getCourse/${ courseId }`, {
       method: 'GET',
       headers: {
         Authorization: localStorage.getItem('token'),
@@ -60,11 +60,12 @@ const EditCourseForm = () => {
   }, []);
 
   const handleAddSectionClick = () => {
-    setShowAddSectionForm(!showAddSectionForm);
+    setShowAddSectionForm(prev => !prev);
   };
 
   const handleBasicDetailsSubmit = async (editedDetails, editedThumbnail, editableFields) => {
     try {
+      setLoading(true);
       console.log(editedDetails);
       console.log(editedThumbnail);
       const formData = new FormData();
@@ -76,7 +77,7 @@ const EditCourseForm = () => {
       if (editableFields['category']) formData.append('category', editedDetails.category);
       if (editableFields['thumbnail']) formData.append('thumbnail', editedThumbnail);
 
-      const res = await fetch(`http://localhost:8000/course/editBasicCourseDetails/${courseId}`, {
+      const res = await fetch(`http://localhost:8000/course/editBasicCourseDetails/${ courseId }`, {
         method: 'PUT',
         headers: {
           Authorization: localStorage.getItem('token'),
@@ -103,6 +104,10 @@ const EditCourseForm = () => {
       }
     } catch (error) {
       // Handle error
+    } finally {
+      setTimeout(() => {
+        setLoading(false);
+      }, 5000);
     }
   };
 
@@ -118,7 +123,7 @@ const EditCourseForm = () => {
 
   const handleSectionDetailsSubmit = async (formData, sectionId) => {
     try {
-      const res = await fetch(`http://localhost:8000/course/editSectionDetails/${courseId}/${sectionId}`, {
+      const res = await fetch(`http://localhost:8000/course/editSectionDetails/${ courseId }/${ sectionId }`, {
         method: 'PUT',
         headers: {
           Authorization: localStorage.getItem('token'),
@@ -133,11 +138,11 @@ const EditCourseForm = () => {
         const updatedSection = data.updatedSection;
         setCourseDetails((prevDetails) => {
           const updatedCourseDetails = { ...prevDetails };
-      
+
           const sectionIndex = updatedCourseDetails.sections.findIndex(
             (section) => section._id === sectionId
           );
-      
+
           if (sectionIndex !== -1) {
             const previousSection = updatedCourseDetails.sections[sectionIndex];
             updatedCourseDetails.sections[sectionIndex] = {
@@ -145,7 +150,7 @@ const EditCourseForm = () => {
               ...updatedSection,
             };
           }
-      
+
           return updatedCourseDetails;
         });
         setShowEditSectionForm(false);
@@ -158,9 +163,68 @@ const EditCourseForm = () => {
     setShowEditSectionForm(false);
   }
 
+  const handleVideoDetailsSubmit = async (formData, videoId, sectionId) => {
+    try {
+      console.log("inside handle video details submit");
+      const res = await fetch(`http://localhost:8000/course/editVideoDetails/${videoId}`, {
+        method: 'PUT',
+        headers: {
+          Authorization: localStorage.getItem('token'),
+        },
+        body: formData
+      });
+
+      const data = await res.json();
+      console.log(data);
+
+      if (data.ok) {
+        const updatedVideoDetails = data.video;
+        console.log('updatedVideoDetails', updatedVideoDetails);
+        console.log("videoId", videoId, "sectionid", sectionId);
+        setCourseDetails((prevDetails) => {
+          const updatedCourseDetails = { ...prevDetails };
+          const sectionIndex = updatedCourseDetails.sections.findIndex(
+            (section) => section._id === sectionId
+          );
+
+          if (sectionIndex !== -1) {
+            const section = { ...updatedCourseDetails.sections[sectionIndex] };
+            const videoIndex = section.videoLectures.findIndex(
+              (video) => video._id === videoId
+            );
+
+            if (videoIndex !== -1) {
+              const updatedVideoLectures = [...section.videoLectures];
+              updatedVideoLectures[videoIndex] = {
+                ...updatedVideoLectures[videoIndex],
+                ...updatedVideoDetails,
+              };
+
+              // Update the section with the new videoLectures array
+              section.videoLectures = updatedVideoLectures;
+
+              // Update the courseDetails with the updated section
+              updatedCourseDetails.sections[sectionIndex] = section;
+            }
+          }
+
+          console.log(updatedCourseDetails);
+          return updatedCourseDetails;
+        });
+
+      } else {
+
+      }
+    } catch (error) {
+      console.log("error in uploading");
+      console.log(error);
+
+    }
+  }
+
   const handleDeleteSectionClick = async (sectionId) => {
     try {
-      const res = await fetch(`http://localhost:8000/course/deleteSection/${sectionId}`, {
+      const res = await fetch(`http://localhost:8000/course/deleteSection/${ sectionId }`, {
         method: 'DELETE',
         headers: {
           Authorization: localStorage.getItem('token'),
@@ -189,9 +253,9 @@ const EditCourseForm = () => {
 
   const handleDeleteCourse = async (e) => {
     e.preventDefault();
-    
+
     try {
-      const res = await fetch(`http://localhost:8000/course/deleteCourse/${courseDetails._id}`, {
+      const res = await fetch(`http://localhost:8000/course/deleteCourse/${ courseDetails._id }`, {
         method: 'DELETE',
         headers: {
           Authorization: localStorage.getItem('token'),
@@ -223,28 +287,37 @@ const EditCourseForm = () => {
             initialDetails={courseDetails}
             onSubmit={handleBasicDetailsSubmit}
             toggleShowEditForm={toggleShowEditForm}
+            loading={loading}
+            setLoading={setLoading}
           />
         ) : (
           <div className="test-details">
-            <h2>{courseDetails.title}</h2>
-            <p>Description: {courseDetails.description}</p>
-            <p>Duration: {courseDetails.duration} months</p>
-            <p>Price: {courseDetails.price} INR</p>
-            <p>Level: {courseDetails.level}</p>
-            <p>Category: {courseDetails.category}</p>
-            <button onClick={toggleShowEditForm}>Edit Basic Details</button>
-            <button onClick={handleDeleteCourse} className='delete'>Delete Course</button>
+            <div className="all-details">
+            <div className="details">
+              <h2>{courseDetails.title}</h2>
+              <p><span className='detais-heading'>Description:</span> {courseDetails.description}</p>
+              <p><span className='detais-heading'>Duration:</span> {courseDetails.duration} months</p>
+              <p><span className='detais-heading'>Price:</span> {courseDetails.price} INR</p>
+              <p><span className='detais-heading'>Level:</span> {courseDetails.level}</p>
+              <p><span className='detais-heading'>Category:</span> {courseDetails.category}</p>
+            </div>
+            {courseDetails && courseDetails.thumbnail && (
+              <div className="thumbnail-container">
+                <img
+                  src={courseDetails.thumbnail}
+                  alt="Course Thumbnail"
+                />
+              </div>
+            )}
+            </div>
+            <div className="buttons">
+              <button onClick={toggleShowEditForm} disabled={loading}>Edit Basic Details</button>
+              <button onClick={handleDeleteCourse} disabled={loading} className='delete'>Delete Course</button>
+            </div>
           </div>
         )}
 
-        {courseDetails && courseDetails.thumbnail && (
-          <div className="thumbnail-container">
-            <img
-              src={courseDetails.thumbnail}
-              alt="Course Thumbnail"
-            />
-          </div>
-        )}
+
       </div>
 
       <h3>Sections</h3>
@@ -256,8 +329,10 @@ const EditCourseForm = () => {
               initialSectionDetails={{ ...section }}
               onSubmit={handleSectionDetailsSubmit}
               setCourseDetails={setCourseDetails}
-              // handleVideoDetailsSubmit={handleVideoDetailsSubmit}
+              handleVideoDetailsSubmit={handleVideoDetailsSubmit}
               toggleShowEditSectionForm={() => setShowEditSectionForm(false)}
+              loading={loading}
+              setLoading={setLoading}
             />
           ) : (
             <ul className="sections-list">
@@ -291,17 +366,27 @@ const EditCourseForm = () => {
                   </div>
                 )}
                 {sectionAddVideoState[section._id] && (
-                  <AddVideo courseId={courseId} sectionId={section._id} setCourseDetails={setCourseDetails} />
+                  <AddVideo
+                    courseId={courseId}
+                    sectionId={section._id}
+                    setCourseDetails={setCourseDetails}
+                    handleAddVideoClick={handleAddVideoClick}
+                    loading={loading}
+                    setLoading={setLoading}
+                  />
                 )}
-                <button onClick={() => handleAddVideoClick(section._id)}>
-                    {sectionAddVideoState[section._id] ? 'Cancel Add Video' : 'Add Video'}
+                <button
+                  onClick={() => handleAddVideoClick(section._id)}
+                  className={sectionAddVideoState[section._id] ? 'cancel' : ''}
+                >
+                  {sectionAddVideoState[section._id] ? 'Cancel Add Video' : 'Add Video'}
                 </button>
                 <div className="buttons">
-                  
+
                   <button onClick={() => handleEditSectionClick(section._id)}>
                     Edit Section
                   </button>
-                  <button onClick={() => handleDeleteSectionClick(section._id)} className='delete'>
+                  <button onClick={() => handleDeleteSectionClick(section._id)} className='delete' disabled={loading}>
                     Delete Section
                   </button>
                 </div>
@@ -311,11 +396,21 @@ const EditCourseForm = () => {
         </React.Fragment>
       ))}
 
-      
-      <button onClick={handleAddSectionClick}>
-        {showAddSectionForm ? 'Cancel Add Section' : 'Add Section'}
-      </button>
-      {showAddSectionForm && <AddSectionForm setCourseDetails={setCourseDetails} handleAddSectionClick={handleAddSectionClick} />}
+
+      {showAddSectionForm &&
+        <AddSectionForm
+          setCourseDetails={setCourseDetails}
+          handleAddSectionClick={handleAddSectionClick}
+          loading={loading}
+          setLoading={setLoading}
+        />}
+      <div className="buttons">
+        <button onClick={handleAddSectionClick} disabled={loading} className={showAddSectionForm ? 'cancel' : ''}>
+          {showAddSectionForm ? 'Cancel Add Section' : 'Add Section'}
+        </button>
+      </div>
+      {/* {loading && <div className="loader">Loading...</div>} */}
+      {loading && <div className="toaster">Backend call in progress...</div>}
     </div>
   )
 }

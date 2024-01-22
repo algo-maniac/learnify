@@ -51,6 +51,7 @@ const videoLectureSchema = new mongoose.Schema({
   comments: [commentSchema], // Array of comments using the defined comment schema
 }, { timestamps: true });
 
+videoLectureSchema.index({ createdAt: -1 });
 
 const VideoLecture = mongoose.model('VideoLecture', videoLectureSchema);
 const Comment = mongoose.model('Comment', commentSchema);

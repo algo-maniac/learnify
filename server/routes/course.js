@@ -1,8 +1,10 @@
 const router = require("express").Router();
+const authenticateCourseEditAccess = require('../middlewares/authenticateCourseEditAccess');
 const courseController = require("../controller/courseController");
 
 const multer = require("multer");
 const authenticateInstructor = require("../middlewares/instructor");
+const authenticateCourseAccess = require("../middlewares/authenticateCourseAccess");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
@@ -10,21 +12,28 @@ const upload = multer({ storage: storage });
 
 router.post("/createCourse", authenticateInstructor, upload.single("thumbnail"), courseController.createCourse);
 
-router.delete("/deleteCourse/:courseId", authenticateInstructor, courseController.deleteCourse);
+router.get("/getCourse/:id", authenticateCourseAccess, courseController.getCourseDetails);
 
-router.put("/editBasicCourseDetails/:courseId", authenticateInstructor, upload.single("thumbnail"), courseController.editBasicCourseDetails);
+router.get("/getCourseDetailsForEdit/:courseId", authenticateCourseEditAccess, courseController.getCourseDetailsForEdit);
 
-router.put("/editSectionDetails/:courseId/:sectionId", authenticateInstructor, upload.none(), courseController.editSectionDetails);
+router.delete("/deleteCourse/:courseId", authenticateCourseEditAccess, courseController.deleteCourse);
 
-router.put("/editVideoDetails/:videoId", authenticateInstructor, upload.fields([{ name: 'video', maxCount: 1 }, { name: 'thumbnail', maxCount: 1 }]), courseController.editVideoDetails);
+router.put("/editBasicCourseDetails/:courseId", authenticateCourseEditAccess, upload.single("thumbnail"), courseController.editBasicCourseDetails);
 
-router.delete("/deleteVideo/:videoId", authenticateInstructor, courseController.deleteVideo);
+router.post("/createSection", authenticateCourseEditAccess, upload.none(), courseController.createSection);
 
-router.delete("/deleteSection/:sectionId", authenticateInstructor, courseController.deleteSection);
+router.put("/editSectionDetails/:courseId/:sectionId", authenticateCourseEditAccess, upload.none(), courseController.editSectionDetails);
 
-router.post("/createSection", authenticateInstructor, upload.none(), courseController.createSection);
+router.delete("/deleteSection/:sectionId", authenticateCourseEditAccess, courseController.deleteSection);
 
-router.get("/getCourse/:id", authenticateInstructor, courseController.getCourse);
+router.post("/uploadCourseVideo", authenticateInstructor, upload.fields([{ name: 'video', maxCount: 1 }, { name: 'thumbnail', maxCount: 1 }]), courseController.uploadCourseVideo);
+
+router.put("/editVideoDetails/:videoId", authenticateCourseEditAccess, upload.fields([{ name: 'video', maxCount: 1 }, { name: 'thumbnail', maxCount: 1 }]), courseController.editVideoDetails);
+
+router.delete("/deleteVideo/:videoId", authenticateCourseEditAccess, courseController.deleteVideo);
+
+
+
 
 // router.post("/signup", upload.single("profileImage"), courseController.signuppost);
 

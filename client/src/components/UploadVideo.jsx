@@ -39,7 +39,7 @@ function UploadVideo(props) {
     form.append("thumbnail", formData.thumbnail);
     console.log(form);
 
-    fetch("http://localhost:8000/instructor/uploadVideo", {
+    fetch("http://localhost:8000/video/uploadVideo", {
       method: "POST",
       headers: {
         Authorization: localStorage.getItem("token")

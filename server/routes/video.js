@@ -2,9 +2,12 @@ const router = require("express").Router();
 const videoController = require("../controller/videoController");
 
 const multer = require("multer");
-const authenticateVideoAccess = require("../middlewares/videoAccess");
+const authenticateVideoAccess = require("../middlewares/authenticateVideoAccess");
+const authenticateInstructor = require("../middlewares/instructor");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
+
+router.post("/uploadVideo", authenticateInstructor, upload.fields([{ name: 'video', maxCount: 1 }, { name: 'thumbnail', maxCount: 1 }]), videoController.uploadVideo);
 
 router.use(authenticateVideoAccess);
 

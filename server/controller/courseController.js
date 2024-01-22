@@ -6,6 +6,8 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
 const Post = require("../models/post");
 const mongoose = require("mongoose");
+const streamifier = require('streamifier');
+const { getVideoDurationInSeconds } = require('get-video-duration');
 const cloudinary = require('cloudinary').v2;
 
 
@@ -14,7 +16,6 @@ cloudinary.config({
   api_key: '822224579263365',
   api_secret: 'kTX01qyk21TXjM3YPAdBd4YN6ps'
 });
-
 
 
 const uploadToCloudinary = (file) => {
@@ -47,6 +48,7 @@ module.exports.createCourse = async (req, res) => {
     const thumbnailUrl = await uploadToCloudinary(thumbnail);
 
     const course = new Course({
+      instructorId: req.user.id,
       title: title,
       description: description,
       duration: duration,
@@ -57,6 +59,12 @@ module.exports.createCourse = async (req, res) => {
     });
 
     course.save();
+
+    const updateResult = await Instructor.findByIdAndUpdate(
+      req.user.id,
+      { $push: { courses: course._id } },
+      { new: true } 
+    );
 
     res.status(200).json({
       ok: true,
@@ -109,13 +117,54 @@ module.exports.createSection = async (req, res) => {
 }
 
 
-module.exports.getCourse = async (req, res) => {
+module.exports.getCourseDetails = async (req, res) => {
   const { id } = req.params;
 
   console.log(id);
 
   try {
     const course = await Course.findById(id)
+      .populate({
+        path: 'sections',
+        populate: {
+          path: 'videoLectures',
+          model: 'VideoLecture',
+          select: '_id courseId sectionId title description duration thumbnail createdAt updatedAt',
+        },
+        select: '_id courseid title description', 
+      })
+      .exec();
+
+
+    console.log(course);
+    if (!course) {
+      res.status(400).json({
+        ok: false,
+        error: "Invalid courseId"
+      })
+      return;
+    }
+    console.log(course);
+    res.status(200).json({
+      ok: true,
+      course: course
+    })
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      ok: false,
+      error: "Internal Server Error"
+    })
+  }
+}
+
+
+module.exports.getCourseDetailsForEdit = async (req, res) => {
+  const { courseId } = req.params;
+
+
+  try {
+    const course = await Course.findById(courseId)
       .populate({
         path: 'sections',
         populate: {
@@ -153,6 +202,8 @@ module.exports.getCourse = async (req, res) => {
 
 module.exports.editBasicCourseDetails = async (req, res) => {
   try {
+    console.log("here1");
+    
     const courseId = req.params.courseId;
     const { title, description, duration, price, level, category } = req.body;
     const thumbnail = req.file;
@@ -164,6 +215,7 @@ module.exports.editBasicCourseDetails = async (req, res) => {
     console.log(req.body);
     console.log(courseId);
     console.log(thumbnailUrl);
+    console.log("here2");
 
     const updateFields = {};
     if(title) updateFields.title = title;
@@ -173,8 +225,10 @@ module.exports.editBasicCourseDetails = async (req, res) => {
     if(level) updateFields.level = level;
     if(category) updateFields.category = category;
     if(thumbnail) updateFields.thumbnail = thumbnailUrl;
+    console.log("here3");
 
     const course = await Course.findByIdAndUpdate(courseId, { $set: updateFields }, {new: true});
+    console.log("here4");
     
     res.status(200).json({
       ok: true,
@@ -232,6 +286,59 @@ module.exports.editSectionDetails = async (req, res) => {
   }
 }
 
+module.exports.uploadCourseVideo = async (req, res) => {
+  try {
+    console.log(req.body)
+    console.log(req.files);
+    const { courseId, sectionId } = req.body;
+    if(!courseId || !sectionId) {
+      res.status(400).json({ error: 'Invalid inputs' });
+    }
+
+    const videoFile = req.files['video'][0];
+    const thumbnail = req.files['thumbnail'][0];
+
+
+    const videoFileUrl = await uploadToCloudinary(videoFile);
+    const videoStream = streamifier.createReadStream(videoFile.buffer);
+    const duration = await getVideoDurationInSeconds(videoStream);
+
+    const thumbnailUrl = await uploadToCloudinary(thumbnail);
+
+    const videoLecture = new VideoLecture({
+      instructorId: req.user.id,
+      courseId: req.body?.courseId,
+      sectionId: req.body?.sectionId,
+      title: req.body.title,
+      description: req.body.description,
+      duration: duration,
+      videoFile: videoFileUrl,
+      thumbnail: thumbnailUrl
+    });
+
+    const result = await videoLecture.save();
+    console.log(result);
+
+    const updatedSection = await Section.findByIdAndUpdate(
+      req.body.sectionId,
+      { $push: { videoLectures: result._id } },
+      { new: true }
+    );
+
+    console.log(updatedSection);
+
+    res.status(200).json({
+      ok: true,
+      message: "Lecture added successfully",
+      video: result
+    })
+    return;
+  } catch (error) {
+    console.log('Error uploading video:' + error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
+
 
 module.exports.editVideoDetails = async (req, res) => {
   try {
@@ -280,41 +387,24 @@ module.exports.editVideoDetails = async (req, res) => {
   }
 }
 
-module.exports.deleteVideo = async (req, res) => {
+
+module.exports.deleteCourse = async (req, res) => {
   try {
-    const { videoId } = req.params;
+    const { courseId } = req.params;
 
-    // Find the video by videoId
-    const video = await VideoLecture.findById(videoId);
+    const course = await Course.findById(courseId);
 
-    if (!video) {
+    if (!course) {
       return res.status(404).json({
-        error: 'Video not found',
+        error: 'Course not found',
       });
     }
 
-    const sectionId = video.sectionId;
-    // Find the section by sectionId
-    const section = await Section.findById(sectionId);
-
-    if (!section) {
-      return res.status(404).json({
-        error: 'Section not found',
-      });
-    }
-
-    // Remove the video from the section's videoLectures array
-    section.videoLectures.pull({ _id: videoId });
-
-    // Save the updated section
-    await section.save();
-
-    // Delete the video from the VideoLecture collection
-    await VideoLecture.findByIdAndRemove(videoId);
+    await Course.findByIdAndRemove(courseId);
 
     res.status(200).json({
       ok: true,
-      message: 'Video deleted successfully',
+      message: 'Section deleted successfully',
     });
   } catch (err) {
     console.error(err);
@@ -323,7 +413,6 @@ module.exports.deleteVideo = async (req, res) => {
     });
   }
 };
-
 
 module.exports.deleteSection = async (req, res) => {
   try {
@@ -366,25 +455,36 @@ module.exports.deleteSection = async (req, res) => {
 };
 
 
-
-
-module.exports.deleteCourse = async (req, res) => {
+module.exports.deleteVideo = async (req, res) => {
   try {
-    const { courseId } = req.params;
+    const { videoId } = req.params;
 
-    const course = await Course.findById(courseId);
+    const video = await VideoLecture.findById(videoId);
 
-    if (!course) {
+    if (!video) {
       return res.status(404).json({
-        error: 'Course not found',
+        error: 'Video not found',
       });
     }
 
-    await Course.findByIdAndRemove(courseId);
+    const sectionId = video.sectionId;
+    const section = await Section.findById(sectionId);
+
+    if (!section) {
+      return res.status(404).json({
+        error: 'Section not found',
+      });
+    }
+
+    section.videoLectures.pull({ _id: videoId });
+
+    await section.save();
+
+    await VideoLecture.findByIdAndRemove(videoId);
 
     res.status(200).json({
       ok: true,
-      message: 'Section deleted successfully',
+      message: 'Video deleted successfully',
     });
   } catch (err) {
     console.error(err);
@@ -393,4 +493,6 @@ module.exports.deleteCourse = async (req, res) => {
     });
   }
 };
+
+
 

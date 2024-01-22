@@ -29,6 +29,57 @@ cloudinary.config({
   api_secret: 'kTX01qyk21TXjM3YPAdBd4YN6ps'
 });
 
+
+module.exports.uploadVideo = async (req, res) => {
+  try {
+    console.log(req.body)
+    console.log(req.files);
+
+    const videoFile = req.files['video'][0];
+    const thumbnail = req.files['thumbnail'][0];
+
+
+    const videoFileUrl = await uploadToCloudinary(videoFile);
+    const videoStream = streamifier.createReadStream(videoFile.buffer);
+    const duration = await getVideoDurationInSeconds(videoStream);
+
+    const thumbnailUrl = await uploadToCloudinary(thumbnail);
+
+    const videoLecture = new VideoLecture({
+      instructorId: req.user.id,
+      courseId: req.body?.courseId || null,
+      sectionId: req.body?.sectionId || null,
+      title: req.body.title,
+      description: req.body.description,
+      duration: duration,
+      videoFile: videoFileUrl,
+      thumbnail: thumbnailUrl
+    });
+
+    const result = await videoLecture.save();
+    console.log(result);
+
+    if (req.body.courseId && req.body.sectionId) {
+      const updatedSection = await Section.findByIdAndUpdate(
+        req.body.sectionId,
+        { $push: { videoLectures: result._id } },
+        { new: true }
+      );
+
+      console.log(updatedSection);
+    }
+
+    res.status(200).json({
+      message: "Lecture added successfully",
+      video: result
+    })
+    return;
+  } catch (error) {
+    console.log('Error uploading video:' + error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
+
 module.exports.signuppost = async (req, res) => {
   const { username, email, password } = req.body;
   try {
@@ -143,55 +194,74 @@ module.exports.getInstructorData = async (req, res) => {
 }
 
 
-module.exports.uploadVideo = async (req, res) => {
+module.exports.getInstructorCourses = async (req, res) => {
   try {
-    console.log(req.body)
-    console.log(req.files);
+    const id = req.user.id;
+    const pageSize = 10;
+    const { offset } = req.body;
 
-    const videoFile = req.files['video'][0];
-    const thumbnail = req.files['thumbnail'][0];
+    const coursesQuery = await Instructor.findById(id)
+      .populate({
+        path: 'courses',
+        select: 'instructorId title description duration price level category thumbnail publishDate enrollmentCount ratingc reatedAt updatedAt',
+        options: {
+          sort: { createdAt: -1 }, 
+          skip: offset * pageSize,
+          limit: pageSize,
+        },
+      })
+      .select('courses');
 
+    const courses = coursesQuery.courses;
+    console.log('Courses:', courses);
 
-    const videoFileUrl = await uploadToCloudinary(videoFile);
-    const videoStream = streamifier.createReadStream(videoFile.buffer);
-    const duration = await getVideoDurationInSeconds(videoStream);
-
-    const thumbnailUrl = await uploadToCloudinary(thumbnail);
-
-    const videoLecture = new VideoLecture({
-      instructorId: req.user.id,
-      courseId: req.body?.courseId || null,
-      sectionId: req.body?.sectionId || null,
-      title: req.body.title,
-      description: req.body.description,
-      duration: duration,
-      videoFile: videoFileUrl,
-      thumbnail: thumbnailUrl
-    });
-
-    const result = await videoLecture.save();
-    console.log(result);
-
-    if (req.body.courseId && req.body.sectionId) {
-      const updatedSection = await Section.findByIdAndUpdate(
-        req.body.sectionId,
-        { $push: { videoLectures: result._id } },
-        { new: true }
-      );
-
-      console.log(updatedSection);
-    }
-
-    res.status(200).json({
-      message: "Lecture added successfully",
-      video: result
+    return res.status(200).json({
+      ok: true,
+      courses: courses
     })
-    return;
-  } catch (error) {
-    console.log('Error uploading video:' + error);
-    res.status(500).json({ error: 'Internal Server Error' });
+
+  } catch (err) {
+    console.log(err);
+    res.status(404).json({
+      message: "Authorization failed"
+    })
   }
 }
+
+module.exports.getInstructorVideos = async (req, res) => {
+  try {
+    const id = req.user.id;
+    const pageSize = 10;
+    const { offset } = req.body;
+
+    const videosQuery = await Instructor.findById(id)
+      .populate({
+        path: 'videoLectures',
+        select: 'instructorId title description duration thumbnail likesCount createdAt updatedAt',
+        options: {
+          sort: { createdAt: -1 }, 
+          skip: offset * pageSize,
+          limit: pageSize,
+        },
+      })
+      .select('videoLectures');
+
+    const videos = videosQuery.videoLectures;
+    console.log('Videos:', videos);
+
+    return res.status(200).json({
+      ok: true,
+      videos: videos
+    })
+  } catch (err) {
+    console.log(err);
+    res.status(404).json({
+      message: "Authorization failed"
+    })
+  }
+}
+
+
 
 const uploadToCloudinary = (file) => {
   return new Promise((resolve, reject) => {

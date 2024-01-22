@@ -1,22 +1,23 @@
 const mongoose = require("mongoose");
-const Section = require("./section");
 
 const courseSchema = new mongoose.Schema({
-    title: { type: String, required: true },
-    description: String,
-    duration: { type: Number, required: true },
-    price: { type: Number, required: true },
-    level: String,
-    category: String,
-    thumbnail: String,
-    publishedDate: Date,
-    enrollmentCount: { type: Number, default: 0 },
-    rating: { type: Number, default: 0 },
-    reviews: [{ user: String, comment: String }],
-    sections: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Section' }],
-  });
+  instructorId: { type: mongoose.Schema.Types.ObjectId, ref: 'Instructor', required: true},
+  title: { type: String, required: true },
+  description: String,
+  duration: { type: Number, required: true },
+  price: { type: Number, required: true },
+  level: String,
+  category: String,
+  thumbnail: String,
+  publishedDate: Date,
+  enrollmentCount: { type: Number, default: 0 },
+  rating: { type: Number, default: 0 },
+  reviews: [{ user: String, comment: String }],
+  sections: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Section' }],
+}, { timestamps: true });
 
-  const Course = mongoose.model("course", courseSchema);
+courseSchema.index({ createdAt: -1 });
 
-  module.exports = Course;
-  
+const Course = mongoose.model("Course", courseSchema);
+
+module.exports = Course;

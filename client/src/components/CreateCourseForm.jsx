@@ -55,12 +55,14 @@ const CreateCourseForm = () => {
       if (data.ok) {
         const courseId = data.courseId;
         // show toast success
+        setLoading(false);
         navigate(`/course/${courseId}/edit`);
       } else {
         // show toast err
       }
     } catch (err) {
       console.log(err);
+    } finally {
       setLoading(false);
     }
   };

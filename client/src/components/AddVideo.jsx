@@ -21,6 +21,7 @@ const AddVideo = ({ courseId, sectionId, setCourseDetails, handleAddVideoClick, 
 
     const handleUpload = async (e) => {
         e.preventDefault();
+        console.log("here");
         try {
             setLocalLoading(true);
             setLoading(true);
@@ -33,7 +34,7 @@ const AddVideo = ({ courseId, sectionId, setCourseDetails, handleAddVideoClick, 
             form.append("thumbnail", videoDetails.thumbnail);
             console.log(videoDetails);
 
-            const res = await fetch("http://localhost:8000/instructor/uploadVideo", {
+            const res = await fetch("http://localhost:8000/course/uploadCourseVideo", {
                 method: "POST",
                 headers: {
                     Authorization: localStorage.getItem("token")
@@ -42,7 +43,8 @@ const AddVideo = ({ courseId, sectionId, setCourseDetails, handleAddVideoClick, 
             })
             const data = await res.json();
             const newVideo = data.video;
-
+            console.log("here2");
+            console.log(data);
             if (!newVideo) {
                 // show err
             } else {
@@ -70,7 +72,8 @@ const AddVideo = ({ courseId, sectionId, setCourseDetails, handleAddVideoClick, 
                     video: null,
                     thumbnail: null,
                 });
-
+                console.log("here");
+                console.log(sectionId);
                 handleAddVideoClick(sectionId);
             }
         } catch (err) {

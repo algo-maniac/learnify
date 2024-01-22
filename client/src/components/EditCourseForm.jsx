@@ -38,7 +38,7 @@ const EditCourseForm = () => {
   };
 
   const fetchCourseDetails = async () => {
-    const res = await fetch(`http://localhost:8000/course/getCourse/${ courseId }`, {
+    const res = await fetch(`http://localhost:8000/course/getCourseDetailsForEdit/${ courseId }`, {
       method: 'GET',
       headers: {
         Authorization: localStorage.getItem('token'),
@@ -294,7 +294,7 @@ const EditCourseForm = () => {
           <div className="test-details">
             <div className="all-details">
             <div className="details">
-              <h2>{courseDetails.title}</h2>
+              <h2>Title: {courseDetails.title}</h2>
               <p><span className='detais-heading'>Description:</span> {courseDetails.description}</p>
               <p><span className='detais-heading'>Duration:</span> {courseDetails.duration} months</p>
               <p><span className='detais-heading'>Price:</span> {courseDetails.price} INR</p>

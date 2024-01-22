@@ -8,18 +8,24 @@ const upload = multer({ storage: storage });
 
 
 router.post("/signup", upload.single("profileImage"), instructorController.signuppost);
+
 router.post("/login", instructorController.loginpost);
 
 router.get("/", authenticateGeneral, instructorController.getAllInstructors);
+
 router.get("/getInstructor/:id", authenticateGeneral, instructorController.getInstructorWithId);
+
+router.post("/getInstructorCourses/:id", authenticateGeneral, instructorController.getInstructorCourses);
+
+router.post("/getInstructorVideos/:id", authenticateGeneral, instructorController.getInstructorVideos);
 
 router.use(authenticateInstructor);
 
 router.get("/getInstructorData", instructorController.getInstructorData);
+
 // router.get("/getInstructorProfileImage/:id", authenticateGeneral, instructorController.getInstructorProfileImage);
 
 
-router.post("/uploadVideo", upload.fields([{ name: 'video', maxCount: 1 }, { name: 'thumbnail', maxCount: 1 }]), instructorController.uploadVideo);
 // router.post("/instructor/uploadSection", upload.single("image"), instructorController.uploadSection);
 
 // router.post("/instructor/updateVideo" ,upload.single("image"), instructorController.updateVideo);

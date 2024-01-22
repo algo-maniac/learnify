@@ -5,6 +5,9 @@ const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
 const cloudinary = require('cloudinary').v2;
+const streamifier = require('streamifier');
+const { getVideoDurationInSeconds } = require('get-video-duration');
+
 
 
 
@@ -35,6 +38,58 @@ const uploadToCloudinary = (file) => {
       .end(file.buffer);
   });
 };
+
+
+
+module.exports.uploadVideo = async (req, res) => {
+  try {
+    console.log('here');
+    console.log(req.body)
+    console.log(req.files);
+
+    const videoFile = req.files['video'][0];
+    const thumbnail = req.files['thumbnail'][0];
+
+
+    const videoFileUrl = await uploadToCloudinary(videoFile);
+    const videoStream = streamifier.createReadStream(videoFile.buffer);
+    const duration = await getVideoDurationInSeconds(videoStream);
+
+    const thumbnailUrl = await uploadToCloudinary(thumbnail);
+
+    const videoLecture = new VideoLecture({
+      instructorId: req.user.id,
+      courseId: null,
+      sectionId: null,
+      title: req.body.title,
+      description: req.body.description,
+      duration: duration,
+      videoFile: videoFileUrl,
+      thumbnail: thumbnailUrl
+    });
+
+    const result = await videoLecture.save();
+    console.log(result);
+
+    const instructorId = req.user.id;
+
+    const updateResult = await Instructor.findByIdAndUpdate(
+      instructorId,
+      { $push: { videoLectures: result._id } },
+      { new: true } 
+    );
+
+    res.status(200).json({
+      ok: true,
+      message: "Lecture added successfully",
+      video: result
+    })
+    return;
+  } catch (error) {
+    console.log('Error uploading video:' + error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+}
 
 module.exports.getVideoDetails = async (req, res) => {
   const { videoId } = req.query;
@@ -71,7 +126,6 @@ module.exports.getVideoDetails = async (req, res) => {
     })
   }
 }
-
 
 module.exports.createComment = async (req, res) => {
   try {

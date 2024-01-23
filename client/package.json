@@ -5,7 +5,8 @@
   "dependencies": {
     "@emotion/react": "^11.11.3",
     "@emotion/styled": "^11.11.0",
-    "@mui/icons-material": "^5.11.11",
+    "@material-ui/icons": "^4.11.3",
+    "@mui/icons-material": "^5.15.6",
     "@mui/material": "^5.15.4",
     "@mui/styled-engine-sc": "^5.11.11",
     "@testing-library/jest-dom": "^5.16.5",
@@ -16,6 +17,7 @@
     "dotenv": "^16.3.1",
     "jsonwebtoken": "^9.0.2",
     "jwt-decode": "^4.0.0",
+    "lodash": "^4.17.21",
     "react": "^18.2.0",
     "react-alert": "^7.0.3",
     "react-dom": "^18.2.0",

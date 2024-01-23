@@ -29,11 +29,11 @@ function Instructors(props) {
 
   return (
     <div className='teachers'>
-      <div className='sidebar'>
+      {/* <div className='sidebar'>
         {userdata.role === "instructor" && <div>
           <Sidebar email={""} />
         </div>}
-      </div>
+      </div> */}
       <div className="teachercards">
         {instructors && instructors.map(instructor => (
           <TeacherCard 

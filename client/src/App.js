@@ -1,4 +1,5 @@
 import { Routes, Route } from "react-router-dom";
+import styled from 'styled-components';
 import LogIn from "./pages/LogIn";
 import Random from "./pages/Random";
 import Random2 from "./pages/Random2";
@@ -8,6 +9,7 @@ import "./App.css";
 import HomepageTeacher from "./components/HomepageTeacher";
 import LiveStream from "./components/LiveStream";
 import Navbar from "./components/Navbar";
+import LeftMenu from "./components/LeftMenu";
 import UploadVideo from "./components/UploadVideo";
 import Doubt from "./components/Doubt";
 import Instructors from "./components/Instructors";
@@ -28,16 +30,22 @@ function App() {
     const storedUserData = localStorage.getItem('userdata');
     return storedUserData ? JSON.parse(storedUserData) : null;
   });
+  const [isSidebarExpanded, setisSidebarExpanded] = useState(true)
+  const toggleIsSearchExpanded = () => {
+    console.log('clilcked');
+    setisSidebarExpanded(prev => !prev);
+    console.log(isSidebarExpanded);
+  }
 
   const fetchUserdata = async () => {
     try {
       const token = localStorage.getItem('token');
 
-      if(!token) return;
-      
+      if (!token) return;
+
       const role = jwtDecode(token).role;
-      const requestRoute = `${role}/get${role.charAt(0).toUpperCase() + role.slice(1)}Data`
-      const data = await fetch(`http://localhost:8000/${requestRoute}`, {
+      const requestRoute = `${ role }/get${ role.charAt(0).toUpperCase() + role.slice(1) }Data`
+      const data = await fetch(`http://localhost:8000/${ requestRoute }`, {
         method: 'GET',
         headers: {
           "authorization": token
@@ -59,7 +67,7 @@ function App() {
 
   useEffect(() => {
     if (!userdata) {
-      if(localStorage.getItem("token"))
+      if (localStorage.getItem("token"))
         fetchUserdata();
     }
   });
@@ -73,32 +81,72 @@ function App() {
   return (
     <>
       <AuthContext.Provider value={contextValue}>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Home />}></Route>
-          <Route path="/doubt" element={<Doubt />}></Route>
-          <Route path="/SignUp" element={<SignUp />} />
-          <Route path="/LogIn" element={<LogIn />} />
-          <Route path="/Random" element={<Random />} />
-          <Route path="/home" element={<HomepageTeacher />} />
-          {userdata && userdata.role === 'teacher' && (
-            <Route path="/live" element={<LiveStream />}/>
-          )}
-          <Route path="/video/:id" element={<Video/>} />
-          <Route path="/adminpanel" element={<Admin />} />
-          <Route path="/uploadvideo" element={<UploadVideo/>} />
-          <Route path="/instructors" element={<Instructors/>} />
-          <Route path="/instructor/:id" element={<HomepageTeacher />} />
-          <Route path="/video/:id" element={<Random2 />} />
-          <Route path="/exam-corner" element={<ExamCorner />} />
-          <Route path="/course/create" element={<CreateCourseForm />} />
-          <Route path="/course/:courseId/edit" element={<EditCourseForm />} />
-          <Route path="/search" element={<Search />} />
-        </Routes>
-        <Footer />
+        <NavbarContainer>
+          <Navbar toggleIsSearchExpanded={toggleIsSearchExpanded} />
+        </NavbarContainer>
+
+        <LeftMenuConainer isSidebarExpanded={isSidebarExpanded}>
+          <LeftMenu isSidebarExpanded={isSidebarExpanded} pageId={1} />
+        </LeftMenuConainer>
+
+        <Content  isSidebarExpanded={isSidebarExpanded}>
+          <Routes>
+            <Route path="/" element={<Home />}></Route>
+            <Route path="/doubt" element={<Doubt />}></Route>
+            <Route path="/SignUp" element={<SignUp />} />
+            <Route path="/LogIn" element={<LogIn />} />
+            <Route path="/Random" element={<Random />} />
+            <Route path="/home" element={<HomepageTeacher />} />
+            {userdata && userdata.role === 'teacher' && (
+              <Route path="/live" element={<LiveStream />} />
+            )}
+            <Route path="/video/:id" element={<Video />} />
+            <Route path="/adminpanel" element={<Admin />} />
+            <Route path="/uploadvideo" element={<UploadVideo />} />
+            <Route path="/instructors" element={<Instructors />} />
+            <Route path="/instructor/:id" element={<HomepageTeacher />} />
+            <Route path="/video/:id" element={<Random2 />} />
+            <Route path="/exam-corner" element={<ExamCorner />} />
+            <Route path="/course/create" element={<CreateCourseForm />} />
+            <Route path="/course/:courseId/edit" element={<EditCourseForm />} />
+            <Route path="/search" element={<Search />} />
+          </Routes>
+
+        </Content>
+        <FooterContainer isSidebarExpanded={isSidebarExpanded}>
+          <Footer />
+        </FooterContainer>
       </AuthContext.Provider>
     </>
   );
 }
 
 export default App;
+
+const NavbarContainer = styled.div`
+  position: fixed;
+  width: 100vw;
+  top: 0;
+  right: 0;
+  z-index: 10000;
+`
+
+const LeftMenuConainer = styled.div`
+  width: ${({ isSidebarExpanded }) => (isSidebarExpanded ? "260px" : "65px")};
+  background-color: #333;
+  transition: width 0.3s;
+`;
+
+const Content = styled.div`
+  padding-left: ${({ isSidebarExpanded }) => (isSidebarExpanded ? "260px" : "65px")};
+  padding-top: 70px;
+  transition: padding-left 0.3s;
+`;
+
+const FooterContainer = styled.div`
+  margin-left: ${({ isSidebarExpanded }) => (isSidebarExpanded ? "260px" : "65px")};
+  position: sticky;
+  top: 100vh;
+  transition: margin-left 0.3s;
+`;
+

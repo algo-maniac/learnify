@@ -1,4 +1,4 @@
-import "./ExamCorner.css";
+// import "./ExamCorner.css";
 const ExamResources = () => {
   return(<>
     <div className={"resourceContainer"}>

@@ -1,154 +1,415 @@
-import React, { useState, useContext, useEffect } from "react";
-import { Link, Navigate, NavLink, useNavigate } from "react-router-dom";
-import "./Navbar.css";
-import { Avatar } from "@mui/material";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import React, { useState, useContext, useEffect, useRef } from "react";
+import styled from 'styled-components';
+import { Link, Navigate, useNavigate } from "react-router-dom";
+import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
+import SearchIcon from '@mui/icons-material/Search';
+import CancelIcon from '@mui/icons-material/Cancel';
+import PersonIcon from '@mui/icons-material/Person';
+import SettingsIcon from '@mui/icons-material/Settings';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 import AuthContext from "../store/auth-context";
-import { useHistory } from 'react-router-dom';
-function Navbar(props) {
+
+function Navbar({ toggleIsSearchExpanded }) {
   const { userdata, setUserdata, fetchUserdata } = useContext(AuthContext);
+
+  const navigate = useNavigate();
+  const [searchText, setSearchText] = useState('');
+  const [isSearchExpanded, setIsSearchExpanded] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [debounceTimeout, setDebounceTimeout] = useState(null);
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+
+  const onBlurSearch = () => {
+    setIsSearchFocused(false);
+  };
+  const dropdownRef = useRef(null);
+  const history = useNavigate();
+
+  const openSearchBar = () => {
+    setIsSearchFocused(true);
+    setIsSearchExpanded(true);
+  };
+  const cancelSearch = () => {
+    setSearchText('');
+    setIsSearchExpanded(false);
+  };
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const closeDropdown = () => {
+    setIsDropdownOpen(false);
+  };
+
+  const redirectToSearch = (text) => {
+    if (searchText && isSearchFocused) {
+      history(`/search?query=${ text }`);
+    }
+  };
+
   const logout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('userdata');
     setUserdata(null);
     Navigate("/");
   }
-  const history = useNavigate();
-  const [searchText, setSearchText] = useState('');
-  const redirectToSearch = (text) => {
-    history(`/search?query=${text}`)
-  };
+
+
+  useEffect(() => {
+    if (debounceTimeout) {
+      clearTimeout(debounceTimeout);
+    }
+
+    const newTimeout = setTimeout(() => {
+      redirectToSearch(searchText);
+    }, 1000);
+
+    setDebounceTimeout(newTimeout);
+
+    return () => {
+      clearTimeout(newTimeout);
+    };
+  }, [searchText]);
+
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [dropdownRef]);
+
 
   return (
-    <div className="navbar">
-      <Link to="/">
-      <div className="navbar_branding">
-        <img
-          src="/learnify_logo.png"
-          alt=""
-          className="navbar_logo"
-          style={{ backgroudColor: "white", width: "70px", height: "70px" }}
-        />
-        <h1
-          style={{letterSpacing: "2px" }}
-        >
-          Learnify
-        </h1>
+    <Container className="navbar">
+      <div className="left">
+        <MenuOutlinedIcon onClick={toggleIsSearchExpanded} />
+        <Link to="/">
+          <div className="navbar_branding">
+            <img src="/learnify_logo.png" alt="" className="navbar_logo" />
+            <h2> Learnify </h2>
+          </div>
+        </Link>
       </div>
-      </Link>
-      {userdata && (
-        <div className="login_details">
 
-          <div className="navbar_right">
-            <div className="navbar_options">
-              <ul>
-                <li>
-                  <Link to="/">Home</Link>
-                </li>
-                {userdata && userdata.role === 'teacher' && (
-                  <li>
-                    <Link exact to={"/teacher/" + userdata.id}>
-                      Dashboard
-                    </Link>
-                  </li>
-                )}
-                <li>
-                  <Link exact to="/doubt">
-                    Doubt
-                  </Link>
-                </li>
-                <li>
-                  <Link exact to="/teachers">
-                    Teachers
-                  </Link>
-                </li>
-                <li>
-                  <Link exact to="/exam-corner">
-                    Exam-Corner
-                  </Link>
-                </li>
-                <li>
-                  <Link exact to="/">
-                    About Us
-                  </Link>
-                </li>
-                <li>
-                <input
-                  type="text"
-                  placeholder="Search..."
-                  onChange={(e) => redirectToSearch(e.target.value)}
-                />
-                </li>
-              </ul>
+
+      <div className="right">
+        <div className={`search-mobile ${ isSearchExpanded ? 'expanded' : '' }`} >
+          <SearchIcon className="search-icon" onClick={openSearchBar} />
+          <input
+            type="text"
+            placeholder="Search..."
+            value={searchText}
+            onChange={(e) => {
+              setSearchText(e.target.value);
+            }}
+            onBlur={onBlurSearch}
+          />
+          <CancelIcon className="cancel-icon" onClick={cancelSearch} />
+        </div>
+
+        <div className='search'>
+          <SearchIcon className="search-icon" />
+          <input
+            type="text"
+            placeholder="Search..."
+            value={searchText}
+            onChange={(e) => {
+              setSearchText(e.target.value);
+            }}
+            onBlur={onBlurSearch}
+          />
+          <CancelIcon className={`cancel-icon  ${ searchText ? 'hasInputText' : '' }`} onClick={cancelSearch} />
+        </div>
+
+        {userdata && userdata.id ? (
+          <div className="right-profile">
+            <img src={userdata.profileImage} alt="profileImage" />
+            <div ref={dropdownRef}>
+              {isDropdownOpen ?
+                <KeyboardArrowUpIcon onClick={toggleDropdown} />
+                : <KeyboardArrowDownIcon onClick={toggleDropdown} />
+              }
+              {isDropdownOpen && (
+                <DropdownMenu>
+                  <div>
+                    <PersonIcon />
+                    {userdata.username}
+                  </div>
+                  <div>
+                    <SettingsIcon />
+                    Settings
+                  </div>
+                  <div onClick={logout}>
+                    <ExitToAppIcon />
+                    Logout
+                  </div>
+                </DropdownMenu>
+              )}
             </div>
           </div>
-          <div className="login_details">
-            <div className="userdetails">
-              <p>{userdata.username}</p>
-              <Avatar src={userdata.profileImage} sx={{ width: 50, height: 50 }} />
+        ) : (
+          <>
+            <div className="right-profile">
+              <button onClick={navigate('/signup')}>Signup</button>
+              <button onClick={navigate('/login')}>Login</button>
             </div>
-            <button
-            onClick={logout}
-            className="btn"
-            style={{
-              borderRadius: "30px 30px 30px 30px",
-              // borderLeft: "2px solid black",
-              // borderRight: "2px solid black",
-            }}
-          >
-            <Link
-              to="/"
-              style={{
-                textDecoration: "none",
-                color: "white",
-                paddingLeft: "15px",
-                paddingRight: "15px",
-                fontSize: "16px",
-              }}
-            >
-              Logout
-            </Link>
-          </button>
-          </div>
-        </div>
-      )}
-      {!userdata && (
-        <div className="login_signup">
-          <button className="btn" style={{ borderRight: "2px solid black" }}>
-            <Link
-              to="/signup"
-              style={{
-                textDecoration: "none",
-                color: "white",
-                paddingLeft: "5px",
-              }}
-            >
-              Sign Up
-            </Link>
-          </button>
-          <button
-            className="btn"
-            style={{
-              borderRadius: "0px 30px 30px 0px",
-              borderLeft: "2px solid black",
-            }}
-          >
-            <Link
-              to="/login"
-              style={{
-                textDecoration: "none",
-                color: "white",
-                paddingRight: "15px",
-                fontSize: "16px",
-              }}
-            >
-              Login
-            </Link>
-          </button>
-        </div>
-      )}
-    </div>
+          </>
+        )}
+      </div>
+
+    </Container>
   );
 }
 
 export default Navbar;
+
+const Container = styled.div`
+  background-color: #fff;
+  display: flex;
+  flex-direction: row;
+  border-bottom: 1px solid #d0d0d0;
+  height: 70px;
+  padding: 5px 20px;
+  margin: 0;
+
+  .left {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    a {
+      display: flex;
+      align-items: center;
+
+      .navbar_branding {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+
+        img {
+          width: 45px;
+          height: 45px;
+          margin: 0;
+          mix-blend-mode: luminosity;
+          box-shadow: 0;
+        }
+
+        h2 {
+          margin: 5px;
+          padding: 0;
+          color: #3455e4;
+        }
+      }
+    }
+  }
+
+
+
+  .right {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    .search {
+      position: relative;
+      cursor: pointer;
+
+      .search-icon {
+        position: absolute;
+        left: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+      }
+
+      input {
+        width: 30vw;
+        border: 0;
+        outline: none;
+        padding: 7px 45px;
+        background-color: #ebebeb;
+        border-radius: 30px;
+
+        &:focus {
+          outline: none;
+          border: 1px solid #3c54c0;
+        }
+      }
+
+      .cancel-icon {
+        position: absolute;
+        right: 10px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: none;
+         
+        &.hasInputText {
+          display: block;
+        }
+      }
+    }
+
+    .search-mobile {
+      display: none;
+    }
+
+
+    img {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+    }
+
+    .right-profile {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 5px;
+
+      button {
+        padding: 3px 5px;
+        margin: 0;
+        width: 5rem;
+        background-color: #3455e4;
+        color: white;
+        border: 0;
+        outline: 0;
+        border-radius: 10px;
+
+        &:hover {
+          background-color: #2c43a8;
+        }
+      }
+    }
+  }
+
+
+  @media screen and (max-width: 600px) {
+    padding: 3px 10px;
+    margin: 0;
+
+    .left {
+      h2 {
+        display: none;
+      }
+    }
+  
+
+    .right {
+      .search {
+        display: none;
+      }
+
+      .search-mobile {
+        display: flex;
+        position: relative;
+        input {
+          display: none; 
+        }
+        .cancel-icon {
+          display: none;
+        }
+         
+        &.expanded {
+          background-color: red; 
+          position: fixed;
+          top: 0;
+          left:0;
+          width: 100vw;
+          height: 70px;
+          background-color: white; // Change the background color as needed
+
+        
+
+          .search-icon {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+          }
+
+          input {
+            display: block;
+            width: calc(100% - 70px); 
+            margin: 10px;
+            width: 100%;
+            border: 0;
+            outline: none;
+            padding: 7px 40px;
+            background-color: #ebebeb;
+            border-radius: 30px;
+
+            &:focus {
+              outline: none;
+              border: 1px solid #3c54c0;
+            }
+          }
+
+          .cancel-icon {
+            display: block;
+            position: absolute;
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+          }
+        }
+      }
+    }
+  }
+`;
+
+const DropdownMenu = styled.div`
+  position: absolute;
+  top: 100%;
+  right: 5px;
+  background-color: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 100;
+  overflow: hidden;
+
+  div {
+    padding: 12px 20px; /* Increased padding for larger screens */
+    cursor: pointer;
+    font-size: 16px; /* Increased font size for larger screens */
+    color: #333;
+    transition: background-color 0.3s;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    gap: 10px;
+
+    &:hover {
+      background-color: #f5f5f5;
+    }
+
+    &:not(:last-child) {
+      border-bottom: 1px solid #e0e0e0;
+    }
+  }
+
+  @media screen and (min-width: 600px) {
+    div {
+      padding: 14px 40px; /* Further adjustments for screens wider than 600px */
+      font-size: 18px;
+    }
+  }
+`;

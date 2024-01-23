@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './EditBasicDetailsForm.css'
+// import './EditBasicDetailsForm.css'
 
 const EditBasicDetailsForm = ({ initialDetails, onSubmit, toggleShowEditForm, loading, setLoading }) => {
     console.log(initialDetails)

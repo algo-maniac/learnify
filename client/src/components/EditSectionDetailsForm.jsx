@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './EditSectionDetailsForm.css';
+// import './EditSectionDetailsForm.css';
 import EditVideoDetailsForm from './EditVideoDetailsForm';
 import { useEffect } from 'react';
 

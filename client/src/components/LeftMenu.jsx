@@ -94,6 +94,8 @@ const Container = styled.div`
     left: 0;
 
     background-color: #ffffff;
+    /* background-color: whitesmoke; */
+    /* background-color: #c2c2c2; */
     border-right: 1px solid #d0d0d0;
 
     display: flex;
@@ -137,7 +139,8 @@ const Container = styled.div`
         /* width: 220px; */
         width: 100%;
         background-color: whitesmoke;
-        height: 45px;
+        background-color: #ffffff;
+        height: 40px;
         display: flex;
         /* justify-content: center; */
         justify-content: flex-start;
@@ -147,29 +150,33 @@ const Container = styled.div`
         border-radius: 100px;
         overflow: hidden;
 
-        border: 1px solid #000;
-        box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 10px 0px;
-        background-color: rgba(229, 229, 229, 0.5);
+        /* border: 1px solid #000; */
+        /* box-shadow: rgba(0, 0, 0, 0.1) 1px 1px 10px 0px; */
+        /* background-color: rgba(229, 229, 229, 0.5); */
         text-decoration: none;
         font-weight: 400;
 
         p{
-          font-size: 0.7rem;
+          font-size: 0.75rem;
           margin-left: 10px;
           text-transform: uppercase;
-          letter-spacing: 0.1rem;
+          letter-spacing: 0.08rem;
+          color: black;
+          font-weight: 400;
         }
 
         svg{
-          font-size: 1.25rem;
+          font-size: 1.5rem;
+          color: black;
         }
   
         &:hover{
           box-shadow: rgba(0, 0, 0, 0.05) 1px 1px 10px 0px;
           background-color: #e5e5e5;
-          border: 1px solid black;
+          /* border: 1px solid black; */
           transition-duration: 250ms;
           cursor: pointer;
+          background-color: #a6c1ff;
         }
 
         &.collapsed {

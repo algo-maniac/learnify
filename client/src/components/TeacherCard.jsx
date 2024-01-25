@@ -1,5 +1,5 @@
 import React from 'react'
-import './TeacherCard.css'
+// import './TeacherCard.css'
 import { Avatar } from '@mui/material'
 import { Link } from 'react-router-dom'
 import LinkedInIcon from '@mui/icons-material/LinkedIn';

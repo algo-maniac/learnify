@@ -110,12 +110,12 @@ function App() {
             <Route path="/course/create" element={<CreateCourseForm />} />
             <Route path="/course/:courseId/edit" element={<EditCourseForm />} />
             <Route path="/search" element={<Search />} />
-          </Routes>
+          </Routes> 
 
         </Content>
-        <FooterContainer isSidebarExpanded={isSidebarExpanded}>
+        {/* <FooterContainer isSidebarExpanded={isSidebarExpanded}>
           <Footer />
-        </FooterContainer>
+        </FooterContainer> */}
       </AuthContext.Provider>
     </>
   );

@@ -176,6 +176,7 @@ export default Navbar;
 
 const Container = styled.div`
   background-color: #fff;
+  /* background-color: #000000; */
   display: flex;
   flex-direction: row;
   border-bottom: 1px solid #d0d0d0;
@@ -193,6 +194,7 @@ const Container = styled.div`
     a {
       display: flex;
       align-items: center;
+      text-decoration: none;
 
       .navbar_branding {
         display: flex;
@@ -204,7 +206,7 @@ const Container = styled.div`
           width: 45px;
           height: 45px;
           margin: 0;
-          mix-blend-mode: luminosity;
+          /* mix-blend-mode: ; */
           box-shadow: 0;
         }
 
@@ -212,6 +214,14 @@ const Container = styled.div`
           margin: 5px;
           padding: 0;
           color: #3455e4;
+          color: #000;
+          background: linear-gradient(to right, #000000, #0000ff, #0f18bb);
+          -webkit-background-clip: text;
+          color: transparent;
+          text-shadow: 1px 1px 2px rgba(55, 63, 169, 0.57);
+          font-weight: 650;
+           
+          
         }
       }
     }
@@ -283,14 +293,14 @@ const Container = styled.div`
       gap: 5px;
 
       button {
-        padding: 3px 5px;
+        padding: 6px 5px;
         margin: 0;
         width: 5rem;
         background-color: #3455e4;
         color: white;
         border: 0;
         outline: 0;
-        border-radius: 10px;
+        border-radius: 20px;
 
         &:hover {
           background-color: #2c43a8;

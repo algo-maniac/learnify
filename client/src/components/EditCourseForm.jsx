@@ -3,7 +3,7 @@ import AddSectionForm from './AddSectionForm'
 import AddVideo from './AddVideo'
 import EditBasicDetailsForm from './EditBasicDetailsForm'
 import React, { useState, useEffect } from 'react';
-// import './EditCourseForm.css'
+import './EditCourseForm.css'
 import EditSectionDetailsForm from './EditSectionDetailsForm';
 
 const EditCourseForm = () => {

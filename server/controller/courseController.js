@@ -83,7 +83,8 @@ module.exports.createCourse = async (req, res) => {
 
 module.exports.createSection = async (req, res) => {
   try {
-    const { courseId, title, description } = req.body;
+    const courseId = req.params.courseId;
+    const { title, description } = req.body;
 
     const section = new Section({
       courseId: courseId,

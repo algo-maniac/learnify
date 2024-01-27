@@ -22,11 +22,11 @@ const AddSectionForm = ({ setCourseDetails, handleAddSectionClick, loading, setL
     try {
       setLoading(true);
       const formData = new FormData();
-      formData.append('courseId', courseId);
+      // formData.append('courseId', courseId);
       formData.append('title', sectionDetails.title);
       formData.append('description', sectionDetails.description);
 
-      const res = await fetch('http://localhost:8000/course/createSection', {
+      const res = await fetch(`http://localhost:8000/course/createSection/${courseId}`, {
         method: 'POST',
         headers: {
           Authorization: localStorage.getItem('token'),

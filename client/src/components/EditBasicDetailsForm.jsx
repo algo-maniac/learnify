@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-// import './EditBasicDetailsForm.css'
+import './EditBasicDetailsForm.css'
+import styled from 'styled-components';
 
 const EditBasicDetailsForm = ({ initialDetails, onSubmit, toggleShowEditForm, loading, setLoading }) => {
     console.log(initialDetails)
@@ -81,6 +82,7 @@ const EditBasicDetailsForm = ({ initialDetails, onSubmit, toggleShowEditForm, lo
     };
 
     return (
+        <Container>
         <form onSubmit={handleSubmit} className='basic-edit-form'>
             <label>
                 <div className="checkbox-container">
@@ -249,7 +251,143 @@ const EditBasicDetailsForm = ({ initialDetails, onSubmit, toggleShowEditForm, lo
             {/* {localLoading && <div className="loader">Loading...</div>} */}
             {localLoading && <div className="toaster">Backend call in progress...</div>}
         </form>
+        </Container>
     );
 };
 
 export default EditBasicDetailsForm;
+
+const Container = styled.div`
+    width: 100%;
+
+    form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+    .basic-edit-form label {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+    }
+
+    .basic-edit-form  label .input-container {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .checkbox {
+        width: 20px;
+        height: 20px;
+        margin-right: 10px;
+    }
+
+    .input-container {
+        display: flex;
+        flex-direction: column;
+    }
+
+    /* ... (previous styles) */
+
+    .checkbox-label {
+        display: flex;
+        align-items: center;
+    }
+
+    .checkbox {
+    margin-right: 15px;
+    }
+
+    .input-container {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    }
+
+    .text-label {
+    margin-bottom: 5px;
+    }
+
+    /* ... (remaining styles) */
+
+    /* Styles for checked state */
+    .checkbox:checked + .input-container .text-label {
+    display: block;
+    }
+
+    .basic-edit-form
+    label,
+    input,
+    textarea,
+    select,
+    button {
+    margin-top: 5px;
+    padding: 5px;
+    font-size: 16px;
+    width: 100%;
+    }
+    
+  /* ... rest of the styles ... */
+  
+  
+  /* Adjust for checkboxes */
+  input[type="checkbox"] {
+    margin-top: 0; /* Remove default top margin */
+    margin-right: 5px; /* Add margin between checkbox and label */
+  }
+  
+  /* .edit-course-container button {
+    background-color: #4caf50;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    max-width: 200px !important;
+  }
+   */
+  /* button:hover {
+    background-color: #45a049;
+  } */
+  
+  img {
+    margin-top: 10px;
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+  }
+  
+
+
+
+
+  .not-editable {
+    background-color: #f2f2f2; /* Light gray background */
+    border: 1px solid #ccc; /* Light border color */
+    padding: 8px;
+    opacity: 0.7; /* Reduced opacity for a subtle effect */
+    cursor: not-allowed; /* Change cursor to not-allowed */
+    padding: 5px;
+  }
+  
+  .not-editable input,
+  .not-editable textarea,
+  .not-editable select {
+    background-color: transparent; /* Make input fields transparent within not-editable container */
+    border: none; /* Remove borders within not-editable container */
+    color: #555; /* Adjust text color */
+    padding: 0;
+  }
+  
+  .not-editable button {
+    background-color: #ddd; /* Light button background color */
+    color: #777; /* Adjust button text color */
+    cursor: not-allowed; /* Change cursor to not-allowed */
+  }
+  
+`;

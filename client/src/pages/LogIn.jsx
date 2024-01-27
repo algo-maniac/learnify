@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import styled from "styled-components";
-import { NavLink, useLocation, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 import './Home.css'
 import AuthContext from "../store/auth-context";

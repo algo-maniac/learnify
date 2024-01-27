@@ -3,6 +3,7 @@ import AddSectionForm from './AddSectionForm'
 import AddVideo from './AddVideo'
 import EditBasicDetailsForm from './EditBasicDetailsForm'
 import React, { useState, useEffect } from 'react';
+import styled from 'styled-components';
 import './EditCourseForm.css'
 import EditSectionDetailsForm from './EditSectionDetailsForm';
 
@@ -166,7 +167,7 @@ const EditCourseForm = () => {
   const handleVideoDetailsSubmit = async (formData, videoId, sectionId) => {
     try {
       console.log("inside handle video details submit");
-      const res = await fetch(`http://localhost:8000/course/editVideoDetails/${videoId}`, {
+      const res = await fetch(`http://localhost:8000/course/editVideoDetails/${ videoId }`, {
         method: 'PUT',
         headers: {
           Authorization: localStorage.getItem('token'),
@@ -280,139 +281,471 @@ const EditCourseForm = () => {
   })
 
   return (
-    <div className="edit-course-container">
-      <div className="basic-details">
-        {showEditForm ? (
-          <EditBasicDetailsForm
-            initialDetails={courseDetails}
-            onSubmit={handleBasicDetailsSubmit}
-            toggleShowEditForm={toggleShowEditForm}
-            loading={loading}
-            setLoading={setLoading}
-          />
-        ) : (
-          <div className="test-details">
-            <div className="all-details">
-            <div className="details">
-              <h2>Title: {courseDetails.title}</h2>
-              <p><span className='detais-heading'>Description:</span> {courseDetails.description}</p>
-              <p><span className='detais-heading'>Duration:</span> {courseDetails.duration} months</p>
-              <p><span className='detais-heading'>Price:</span> {courseDetails.price} INR</p>
-              <p><span className='detais-heading'>Level:</span> {courseDetails.level}</p>
-              <p><span className='detais-heading'>Category:</span> {courseDetails.category}</p>
-            </div>
-            {courseDetails && courseDetails.thumbnail && (
-              <div className="thumbnail-container">
-                <img
-                  src={courseDetails.thumbnail}
-                  alt="Course Thumbnail"
-                />
-              </div>
-            )}
-            </div>
-            <div className="buttons">
-              <button onClick={toggleShowEditForm} disabled={loading}>Edit Basic Details</button>
-              <button onClick={handleDeleteCourse} disabled={loading} className='delete'>Delete Course</button>
-            </div>
-          </div>
-        )}
-
-
-      </div>
-
-      <h3>Sections</h3>
-
-      {courseDetails.sections && courseDetails.sections.map((section) => (
-        <React.Fragment key={section._id}>
-          {showEditSectionForm && selectedSection && selectedSection._id === section._id ? (
-            <EditSectionDetailsForm
-              initialSectionDetails={{ ...section }}
-              onSubmit={handleSectionDetailsSubmit}
-              setCourseDetails={setCourseDetails}
-              handleVideoDetailsSubmit={handleVideoDetailsSubmit}
-              toggleShowEditSectionForm={() => setShowEditSectionForm(false)}
+    <Container>
+      <div className="edit-course-container">
+        <div className="basic-details">
+          {showEditForm ? (
+            <EditBasicDetailsForm
+              initialDetails={courseDetails}
+              onSubmit={handleBasicDetailsSubmit}
+              toggleShowEditForm={toggleShowEditForm}
               loading={loading}
               setLoading={setLoading}
             />
           ) : (
-            <ul className="sections-list">
-              <li className="section-item">
-                <div className="section-title">{section.title}</div>
-                <div className="section-description">{section.description}</div>
-                {section.videoLectures && section.videoLectures.length > 0 && (
-                  <div className="videos-container">
-                    {section.videoLectures.map((video) => (
-                      <div key={video._id} className="video-item">
-                        <div className='video-item-details'>
-                          <div className="video">
-                            <video
-                              id="my-player"
-                              className="video-js"
-                              controls
-                              controlsList="nodownload"
-                              poster={video.thumbnail}
-                              preload="auto"
-                              data-setup='{}'>
-                              {video.videoFile && <source src={video.videoFile}></source>}
-                            </video>
-                          </div>
-                          <div className="details">
-                            <div>{video.title}</div>
-                            <div>{video.description}</div>
-                          </div>
-                        </div>
-                      </div>
-                    ))}
+            <div className="test-details">
+              <div className="all-details">
+                <div className="details">
+                  <h2>Title: {courseDetails.title}</h2>
+                  <p><span className='detais-heading'>Description:</span> {courseDetails.description}</p>
+                  <p><span className='detais-heading'>Duration:</span> {courseDetails.duration} months</p>
+                  <p><span className='detais-heading'>Price:</span> {courseDetails.price} INR</p>
+                  <p><span className='detais-heading'>Level:</span> {courseDetails.level}</p>
+                  <p><span className='detais-heading'>Category:</span> {courseDetails.category}</p>
+                </div>
+                {courseDetails && courseDetails.thumbnail && (
+                  <div className="thumbnail-container">
+                    <img
+                      src={courseDetails.thumbnail}
+                      alt="Course Thumbnail"
+                    />
                   </div>
                 )}
-                {sectionAddVideoState[section._id] && (
-                  <AddVideo
-                    courseId={courseId}
-                    sectionId={section._id}
-                    setCourseDetails={setCourseDetails}
-                    handleAddVideoClick={handleAddVideoClick}
-                    loading={loading}
-                    setLoading={setLoading}
-                  />
-                )}
-                <button
-                  onClick={() => handleAddVideoClick(section._id)}
-                  className={sectionAddVideoState[section._id] ? 'cancel' : ''}
-                >
-                  {sectionAddVideoState[section._id] ? 'Cancel Add Video' : 'Add Video'}
-                </button>
-                <div className="buttons">
-
-                  <button onClick={() => handleEditSectionClick(section._id)}>
-                    Edit Section
-                  </button>
-                  <button onClick={() => handleDeleteSectionClick(section._id)} className='delete' disabled={loading}>
-                    Delete Section
-                  </button>
-                </div>
-              </li>
-            </ul>
+              </div>
+              <div className="buttons">
+                <button onClick={toggleShowEditForm} disabled={loading}>Edit Basic Details</button>
+                <button onClick={handleDeleteCourse} disabled={loading} className='delete'>Delete Course</button>
+              </div>
+            </div>
           )}
-        </React.Fragment>
-      ))}
 
 
-      {showAddSectionForm &&
-        <AddSectionForm
-          setCourseDetails={setCourseDetails}
-          handleAddSectionClick={handleAddSectionClick}
-          loading={loading}
-          setLoading={setLoading}
-        />}
-      <div className="buttons">
-        <button onClick={handleAddSectionClick} disabled={loading} className={showAddSectionForm ? 'cancel' : ''}>
-          {showAddSectionForm ? 'Cancel Add Section' : 'Add Section'}
-        </button>
+        </div>
+
+        <h3>Sections</h3>
+
+        {courseDetails.sections && courseDetails.sections.map((section) => (
+          <React.Fragment key={section._id}>
+            {showEditSectionForm && selectedSection && selectedSection._id === section._id ? (
+              <EditSectionDetailsForm
+                initialSectionDetails={{ ...section }}
+                onSubmit={handleSectionDetailsSubmit}
+                setCourseDetails={setCourseDetails}
+                handleVideoDetailsSubmit={handleVideoDetailsSubmit}
+                toggleShowEditSectionForm={() => setShowEditSectionForm(false)}
+                loading={loading}
+                setLoading={setLoading}
+              />
+            ) : (
+              <ul className="sections-list">
+                <li className="section-item">
+                  <div className="section-title">{section.title}</div>
+                  <div className="section-description">{section.description}</div>
+                  {section.videoLectures && section.videoLectures.length > 0 && (
+                    <div className="videos-container">
+                      {section.videoLectures.map((video) => (
+                        <div key={video._id} className="video-item">
+                          <div className='video-item-details'>
+                            <div className="video">
+                              <video
+                                id="my-player"
+                                className="video-js"
+                                controls
+                                controlsList="nodownload"
+                                poster={video.thumbnail}
+                                preload="auto"
+                                data-setup='{}'>
+                                {video.videoFile && <source src={video.videoFile}></source>}
+                              </video>
+                            </div>
+                            <div className="details">
+                              <div>{video.title}</div>
+                              <div>{video.description}</div>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                  {sectionAddVideoState[section._id] && (
+                    <AddVideo
+                      courseId={courseId}
+                      sectionId={section._id}
+                      setCourseDetails={setCourseDetails}
+                      handleAddVideoClick={handleAddVideoClick}
+                      loading={loading}
+                      setLoading={setLoading}
+                    />
+                  )}
+                  <button
+                    onClick={() => handleAddVideoClick(section._id)}
+                    className={sectionAddVideoState[section._id] ? 'cancel' : ''}
+                  >
+                    {sectionAddVideoState[section._id] ? 'Cancel Add Video' : 'Add Video'}
+                  </button>
+                  <div className="buttons">
+
+                    <button onClick={() => handleEditSectionClick(section._id)}>
+                      Edit Section
+                    </button>
+                    <button onClick={() => handleDeleteSectionClick(section._id)} className='delete' disabled={loading}>
+                      Delete Section
+                    </button>
+                  </div>
+                </li>
+              </ul>
+            )}
+          </React.Fragment>
+        ))}
+
+
+        {showAddSectionForm &&
+          <AddSectionForm
+            setCourseDetails={setCourseDetails}
+            handleAddSectionClick={handleAddSectionClick}
+            loading={loading}
+            setLoading={setLoading}
+          />}
+        <div className="buttons">
+          <button onClick={handleAddSectionClick} disabled={loading} className={showAddSectionForm ? 'cancel' : ''}>
+            {showAddSectionForm ? 'Cancel Add Section' : 'Add Section'}
+          </button>
+        </div>
+        {/* {loading && <div className="loader">Loading...</div>} */}
+        {loading && <div className="toaster">Backend call in progress...</div>}
       </div>
-      {/* {loading && <div className="loader">Loading...</div>} */}
-      {loading && <div className="toaster">Backend call in progress...</div>}
-    </div>
+    </Container>
   )
 }
 
 export default EditCourseForm
+
+const Container = styled.div`
+  width: 100%;
+  margin: 0;
+
+  .edit-course-container {
+    width: 70%;
+    max-width: 1000px;
+    margin: 15px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  .test-details {
+    width: 100%;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+  }
+  
+  .test-details h2 {
+    font-size: 2em;
+    margin-bottom: 10px;
+  }
+  
+  .test-details p {
+    color: #555;
+    margin-bottom: 15px;
+  }
+  
+  
+  /* Adjust colors and styles based on your design preferences */
+  
+  /* Header styling */
+  .edit-course-container h2 {
+    color: #333;
+    font-size: 24px;
+    margin-bottom: 10px;
+  }
+  
+  .edit-course-container h3 {
+    color: #333;
+    font-size: 20px;
+    margin-bottom: 10px;
+  }
+  
+  /* Details styling */
+  .edit-course-container p {
+    color: #555;
+    margin: 5px 0;
+    font-size: 16px;
+  }
+
+  .edit-course-container label {
+    width: 100%;
+  }
+  
+.basic-details {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  padding-bottom: 30px;
+}
+
+.all-details {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+}
+
+.details {
+  flex: 0 0 60%; /* Takes up 1/2 of the available space */
+  width: 60%; /* Same effect as flex: 1 */
+}
+
+.details .detais-heading {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.thumbnail-container {
+  flex: 0 0 40%; /* Takes up 1/2 of the available space */
+  width: 60%; /* Same effect as flex: 1 */
+}
+
+  /* Thumbnail styling */
+  .thumbnail-container {
+    padding: 10px;
+    margin-bottom: 10px;
+    /* width: 400px; */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+  }
+
+  
+  .thumbnail-container img {
+    width: 100%;
+    height: 100%; 
+    object-fit: contain;
+    border-radius: 4px;
+    position: relative;
+  }
+  
+  
+  /* Sections styling */
+  .edit-course-container ul {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0;
+  }
+  
+  .edit-course-container ul li {
+    color: #333;
+    font-size: 16px;
+    margin-bottom: 5px;
+  }
+  
+  /* Button styling */
+  /* .edit-course-container button {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+  } */
+  
+  /* .edit-course-container button:hover {
+    background-color: #45a049;
+  } */
+  
+  /* Add this CSS to your stylesheet or in your component style tag */
+
+.sections-list {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .section-item {
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
+    padding: 10px;
+    border-radius: 8px;
+    background-color: #f5f5f5;
+  }
+  
+  .section-title {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .section-description {
+    font-size: 14px;
+    color: #555;
+    margin-bottom: 10px;
+  }
+  
+  .videos-container {
+    /* width: 90%; */
+    display: flex;
+    flex-direction: column;
+    /* overflow-x: auto; */
+  }
+  
+  .video-item {
+    display: flex;
+    width: 100%;
+    gap: 20px;
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+  }
+  
+  .video-item img {
+    max-width: 100px;
+    height: auto;
+    border-radius: 6px;
+    margin-right: 20px;
+    position: relative;
+  }
+  
+  .video-item-details {
+    display: flex;
+    flex-direction: row;
+    /* justify-content: center; */
+    gap: 20px;
+    width: 100%;
+  }
+  
+  .video-item-details div {
+    width: 100%;
+    margin-bottom: 8px;
+    font-size: 14px;
+    color: #333;
+  }
+
+  .details {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  
+  .add-video-form {
+    margin-top: 20px;
+    background-color: white;
+  }
+  
+  /* Add more styles as needed */
+
+.video-js {
+  width: 180px;
+}
+
+/* .buttons {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+} */
+
+
+
+
+.loader {
+  display: inline-block;
+  border: 4px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 4px solid #3498db;
+  width: 20px;
+  height: 20px;
+  animation: spin 1s linear infinite;
+  margin-right: 8px; /* Adjust spacing as needed */
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.toaster {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background-color: #333;
+  color: #fff;
+  padding: 16px;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+  z-index: 1000; /* Ensure it's above other elements */
+  display: flex;
+  align-items: center;
+}
+
+/* Add animation for toaster */
+@keyframes slideIn {
+  from { transform: translateX(100%); }
+  to { transform: translateX(0); }
+}
+
+/* Apply animation to toaster */
+.toaster {
+  animation: slideIn 0.5s ease-in-out;
+}
+
+.buttons {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+
+  justify-content: flex-end;
+  gap: 40px;
+}
+
+.edit-course-container button {
+  background-color: #4caf50;
+  color: white;
+  padding: 5px 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  max-width: 200px;
+}
+
+.edit-course-container .cancel {
+  background-color: #f39c12;
+}
+
+
+.edit-course-container .delete {
+  background-color: rgb(253, 68, 68);
+  color: white
+}
+
+.edit-course-container .delete:hover {
+  background-color: rgb(193, 70, 70);
+  color: rgb(255, 255, 255)
+}
+
+.edit-course-container button[disabled] {
+  background-color: rgb(130, 194, 123); /* Semi-transparent version of the original delete button color */
+  color: #ffffff;
+  cursor: not-allowed;
+}
+
+.edit-course-container button.delete[disabled] {
+  background-color: rgba(231, 76, 60, 0.6);
+  color: #edecec;
+  cursor: not-allowed;
+}
+
+.edit-course-container button.delete[disabled] {
+  background-color: rgba(231, 76, 60, 0.6); 
+  color: #edecec;
+  cursor: not-allowed;
+}
+
+  
+`;

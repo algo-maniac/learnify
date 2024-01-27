@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-// import './EditSectionDetailsForm.css';
+import './EditSectionDetailsForm.css';
 import EditVideoDetailsForm from './EditVideoDetailsForm';
 import { useEffect } from 'react';
+import styled from 'styled-components';
 
 const EditSectionDetailsForm = ({ initialSectionDetails, onSubmit, setCourseDetails, handleVideoDetailsSubmit, toggleShowEditSectionForm, loading, setLoading }) => {
   const [localLoading, setLocalLoading] = useState(false);
@@ -119,6 +120,7 @@ const EditSectionDetailsForm = ({ initialSectionDetails, onSubmit, setCourseDeta
 
 
   return (
+    <Container>
     <form onSubmit={handleSubmit} className="section-edit-form">
       <label>
         <div className="checkbox-container">
@@ -205,7 +207,101 @@ const EditSectionDetailsForm = ({ initialSectionDetails, onSubmit, setCourseDeta
         <button onClick={toggleShowEditSectionForm} className='cancel'>Cancel Changes</button>
       </div>
     </form>
+    </Container>
   );
 }
 
 export default EditSectionDetailsForm;
+
+const Container = styled.div`
+  /* EditSectionDetailsForm.css */
+  width: 100%;
+
+  .section-edit-form {
+      width: 100%;
+      margin-top: 20px;
+      padding: 10px;
+      background-color: #f8f8f8;
+      box-shadow: 1px 1px 5px #ddd;
+    }
+
+  .section-edit-form label {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+  }
+
+  .section-edit-form label .input-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  
+  .checkbox-container {
+    display: inline-block;
+    margin-right: 10px;
+  }
+  
+  .checkbox {
+    margin-top: 2px;
+  }
+  
+  .input-container {
+    margin-bottom: 10px;
+  }
+  
+  .not-editable {
+    background-color: #f5f5f5;
+  }
+  
+  .text-label {
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+  }
+  
+  textarea, input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    margin-top: 5px;
+  }
+  
+  .file-preview {
+    margin-top: 10px;
+  }
+  
+  .file-preview img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+    margin-top: 5px;
+  }
+  
+  .buttons {
+    margin-top: 20px;
+  }
+  
+  /* .buttons button {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-right: 10px;
+  }
+  
+  .buttons button:hover {
+    background-color: #45a049;
+  } */
+  
+ 
+`

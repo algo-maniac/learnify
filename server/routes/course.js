@@ -20,7 +20,7 @@ router.delete("/deleteCourse/:courseId", authenticateCourseEditAccess, courseCon
 
 router.put("/editBasicCourseDetails/:courseId", authenticateCourseEditAccess, upload.single("thumbnail"), courseController.editBasicCourseDetails);
 
-router.post("/createSection", authenticateCourseEditAccess, upload.none(), courseController.createSection);
+router.post("/createSection/:courseId", authenticateCourseEditAccess, upload.none(), courseController.createSection);
 
 router.put("/editSectionDetails/:courseId/:sectionId", authenticateCourseEditAccess, upload.none(), courseController.editSectionDetails);
 

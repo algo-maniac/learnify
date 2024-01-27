@@ -58,7 +58,7 @@ const LeftMenu = ( { isSidebarExpanded, pageId, setIsSidebarExpanded }) => {
               key={index}
               href={item.link}
               className={`full-width-link ${ pageId == item.link ? 'selected' : '' } ${ isSidebarExpanded ? '' : 'collapsed' }`}
-              onClick={() => window.innerWidth <= 600 && setIsSidebarExpanded(false)}
+              onClick={() => window.innerWidth <= 786 && setIsSidebarExpanded(false)}
             >
               <img src={item.icon} alt="hello" style={{ width: "30px", height: "30px"}}/>
               <p>{item.text}</p>

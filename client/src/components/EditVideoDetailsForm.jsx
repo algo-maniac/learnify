@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-// import './EditVideoDetailsForm.css';
+import './EditVideoDetailsForm.css';
 import { useEffect } from 'react';
+import styled from 'styled-components';
 
 const EditVideoDetailsForm = ({ initialVideoDetails, handleCancelEdit, handleVideoDetailsSubmit, toggleShowEditForm }) => {
   console.log(initialVideoDetails);
@@ -60,6 +61,7 @@ const EditVideoDetailsForm = ({ initialVideoDetails, handleCancelEdit, handleVid
   })
 
   return (
+    <Container>
     <form onSubmit={handleSubmit} className="section-edit-form">
       <label>
         <div className="checkbox-container">
@@ -205,7 +207,97 @@ const EditVideoDetailsForm = ({ initialVideoDetails, handleCancelEdit, handleVid
         </button>
       </div>
     </form>
+    </Container>
   );
 };
 
+
 export default EditVideoDetailsForm;
+
+const Container = styled.div`
+  width: 100%;
+
+  .section-edit-form {
+    font-family: Arial, sans-serif;
+  }
+
+  .checkbox-container {
+    display: inline-block;
+    margin-right: 5px;
+  }
+
+  .checkbox {
+    margin-right: 5px;
+  }
+
+  .input-container {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+  }
+
+  .not-editable {
+    background-color: #f0f0f0; /* Add a background color for not editable fields */
+  }
+
+  .text-label {
+    margin-right: 10px;
+    /* width: 120px; Adjust the width as needed */
+  }
+
+  .thumbnailAndVideo {
+    width: 100%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+  }
+
+  .thumbnailDetails,
+  .videoDetails {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 20px;
+
+  }
+
+  .input-options {
+    display: flex;
+    align-items: center;
+  }
+
+  .file-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 10px;
+  }
+
+  .file-preview span {
+    margin-bottom: 5px;
+  }
+
+  .file-preview img,
+  .file-preview video {
+    width: 180px;
+    height: 128px; /* 180px / 1.4 */
+    object-fit: cover;
+  }
+
+  /* .buttons {
+    margin-top: 20px;
+  } */
+
+  button {
+    margin-right: 10px;
+    padding: 8px 12px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #4caf50;
+    color: white;
+  }
+
+  /* Add any additional styling as needed */
+
+`

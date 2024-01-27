@@ -30,7 +30,7 @@ function App() {
     const storedUserData = localStorage.getItem('userdata');
     return storedUserData ? JSON.parse(storedUserData) : null;
   });
-  const [isSidebarExpanded, setIsSidebarExpanded] = useState(true)
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(window.innerWidth <= 786 ? false : true)
   const toggleIsSearchExpanded = () => {
     console.log('clilcked');
     setIsSidebarExpanded(prev => !prev);
@@ -137,7 +137,7 @@ const LeftMenuConainer = styled.div`
   background-color: #333;
   transition: width 0.3s;
 
-  @media (max-width: 600px) {
+  @media (max-width: 786px) {
     display: ${({ isSidebarExpanded }) => (isSidebarExpanded ? "block" : "none")};
     /* width: ${({ isSidebarExpanded }) => (isSidebarExpanded ? "100%" : "0")}; */
     overflow-x: hidden;
@@ -151,7 +151,7 @@ const Content = styled.div`
   transition: padding-left 0.3s;
   position: relative;
 
-  @media (max-width: 600px) {
+  @media (max-width: 786px) {
     padding-left: 0;
   }
 `;
@@ -159,7 +159,7 @@ const Content = styled.div`
 const Overlay = styled.div`
   display: none;
 
-  @media (max-width: 600px) {
+  @media (max-width: 786px) {
     display: ${({ isSidebarExpanded }) => (isSidebarExpanded ? "block" : "none")};
     position: fixed;
     top: 0;
@@ -177,7 +177,7 @@ const FooterContainer = styled.div`
   top: 100vh;
   transition: margin-left 0.3s;
 
-  @media (max-width: 600px) {
+  @media (max-width: 786px) {
     padding-left: 0;
   }
 `;

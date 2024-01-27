@@ -208,7 +208,9 @@
 .home-page{
     display: flex;
     width: 96%;
-    margin: 0.7rem;
+    background-color: white;
+    /* margin: 0.7rem; */
+    padding: 10px 30px;
     flex-direction: column;
 }
 .home-page .header1{
@@ -218,17 +220,18 @@
     flex-direction: row;
 }
 .home-page .header1 h5{
-    font-weight: 600;
-    color: rgb(57, 57, 173);
+    font-weight: 400;
+    font-size: 18px;
+    color: rgb(0, 0, 0) !important;
 }
 .home-page .line1{
-    border: 1px solid rgb(192, 191, 189);
+    /* border: 1px solid rgb(192, 191, 189);
     width: 2%;
-    margin-right: 0.34rem;
+    margin-right: 0.34rem; */
 }
 .home-page .line2{
-    width: 90%;
+    /* width: 90%;
     margin-left: 0.34rem;
-    border: 1px solid rgb(192, 191, 189);
+    border: 1px solid rgb(192, 191, 189); */
 
 }

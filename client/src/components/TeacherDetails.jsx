@@ -39,8 +39,7 @@ function TeacherDetails(props) {
       </div>
       <div className="join-live">
         <Link to={`/live/?roomID=${id}&role=Audience`}>
-          <Button 
-            style={{fontSize: "1rem", color: 'whitesmoke', background: "#b82323"}}>
+          <Button>
             Join Live
           </Button>
         </Link>

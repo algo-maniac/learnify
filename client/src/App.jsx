@@ -1,11 +1,11 @@
+import React, { useEffect, useState } from "react";
+import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import styled from 'styled-components';
 import LogIn from "./pages/LogIn";
 import Random from "./pages/Random";
 import Random2 from "./pages/Random2";
 import SignUp from "./pages/SignUp";
-import React, { useEffect, useState } from "react";
-import "./App.css";
 import HomepageTeacher from "./components/HomepageTeacher";
 import LiveStream from "./components/LiveStream";
 import Navbar from "./components/Navbar";
@@ -30,10 +30,10 @@ function App() {
     const storedUserData = localStorage.getItem('userdata');
     return storedUserData ? JSON.parse(storedUserData) : null;
   });
-  const [isSidebarExpanded, setisSidebarExpanded] = useState(true)
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(true)
   const toggleIsSearchExpanded = () => {
     console.log('clilcked');
-    setisSidebarExpanded(prev => !prev);
+    setIsSidebarExpanded(prev => !prev);
     console.log(isSidebarExpanded);
   }
 
@@ -86,7 +86,7 @@ function App() {
         </NavbarContainer>
 
         <LeftMenuConainer isSidebarExpanded={isSidebarExpanded}>
-          <LeftMenu isSidebarExpanded={isSidebarExpanded} pageId={1} />
+          <LeftMenu isSidebarExpanded={isSidebarExpanded} pageId={1} setIsSidebarExpanded={setIsSidebarExpanded}/>
         </LeftMenuConainer>
 
         <Content  isSidebarExpanded={isSidebarExpanded}>
@@ -111,8 +111,9 @@ function App() {
             <Route path="/course/:courseId/edit" element={<EditCourseForm />} />
             <Route path="/search" element={<Search />} />
           </Routes> 
-
+          <Overlay isSidebarExpanded={isSidebarExpanded} onClick={toggleIsSearchExpanded} />
         </Content>
+
         {/* <FooterContainer isSidebarExpanded={isSidebarExpanded}>
           <Footer />
         </FooterContainer> */}
@@ -135,12 +136,39 @@ const LeftMenuConainer = styled.div`
   width: ${({ isSidebarExpanded }) => (isSidebarExpanded ? "260px" : "65px")};
   background-color: #333;
   transition: width 0.3s;
+
+  @media (max-width: 600px) {
+    display: ${({ isSidebarExpanded }) => (isSidebarExpanded ? "block" : "none")};
+    /* width: ${({ isSidebarExpanded }) => (isSidebarExpanded ? "100%" : "0")}; */
+    overflow-x: hidden;
+  }
 `;
 
 const Content = styled.div`
   padding-left: ${({ isSidebarExpanded }) => (isSidebarExpanded ? "260px" : "65px")};
   padding-top: 70px;
+  background-color: #eeeded;
   transition: padding-left 0.3s;
+  position: relative;
+
+  @media (max-width: 600px) {
+    padding-left: 0;
+  }
+`;
+
+const Overlay = styled.div`
+  display: none;
+
+  @media (max-width: 600px) {
+    display: ${({ isSidebarExpanded }) => (isSidebarExpanded ? "block" : "none")};
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 10;
+  }
 `;
 
 const FooterContainer = styled.div`
@@ -148,5 +176,9 @@ const FooterContainer = styled.div`
   position: sticky;
   top: 100vh;
   transition: margin-left 0.3s;
+
+  @media (max-width: 600px) {
+    padding-left: 0;
+  }
 `;
 

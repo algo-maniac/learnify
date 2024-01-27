@@ -54,7 +54,7 @@ function Navbar({ toggleIsSearchExpanded }) {
     localStorage.removeItem('token');
     localStorage.removeItem('userdata');
     setUserdata(null);
-    Navigate("/");
+    navigate("/");
   }
 
 
@@ -215,11 +215,11 @@ const Container = styled.div`
           padding: 0;
           color: #3455e4;
           color: #000;
-          background: linear-gradient(to right, #000000, #0000ff, #0f18bb);
+          /* background: linear-gradient(to right, #000000, #0000ff, #0f18bb);
           -webkit-background-clip: text;
-          color: transparent;
-          text-shadow: 1px 1px 2px rgba(55, 63, 169, 0.57);
-          font-weight: 650;
+          color: transparent; */
+          /* text-shadow: 1px 1px 2px rgba(55, 63, 169, 0.57); */
+          font-weight: 500;
            
           
         }
@@ -241,6 +241,7 @@ const Container = styled.div`
       cursor: pointer;
 
       .search-icon {
+        color: #13298b;
         position: absolute;
         left: 10px;
         top: 50%;
@@ -296,14 +297,25 @@ const Container = styled.div`
         padding: 6px 5px;
         margin: 0;
         width: 5rem;
-        background-color: #3455e4;
-        color: white;
+        color: #1732ac;
+        background-color: #ebebeb;
         border: 0;
         outline: 0;
         border-radius: 20px;
+        /* font-size: 1rem; */
+        font-weight: 500;
 
         &:hover {
-          background-color: #2c43a8;
+          background-color: #e2e2e2;
+        }
+      }
+
+      button:nth-child(2) {
+        background-color: #1732ac;
+        color: white;
+
+        &:hover {
+          background-color: #344aac;
         }
       }
     }

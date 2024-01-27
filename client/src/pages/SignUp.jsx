@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { NavLink, Navigate, useNavigate } from "react-router-dom";
 import './Home.css'
 import AuthContext from "../store/auth-context";
-import Modal from '@mui/material/Modal'; 
+import Modal from '@mui/material/Modal';
 import Box from '@mui/material/Box';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -11,9 +11,9 @@ import { Typography } from '@mui/material';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 const SignUp = () => {
   const { fetchUserdata } = useContext(AuthContext);
-  const [popup,setPopup]=useState(false);
-  const [loader,setLoader]=useState(false);
-  const [timeout,setTimeout]=useState(5);
+  const [popup, setPopup] = useState(false);
+  const [loader, setLoader] = useState(false);
+  const [timeout, setTimeout] = useState(5);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: '',
@@ -31,17 +31,17 @@ const SignUp = () => {
       [name]: name === 'profileImage' ? files[0] : value,
     }));
   };
-  const redirectHandler=()=>{
+  const redirectHandler = () => {
     navigate("/")
   }
-  const redirectToLogin=()=>{
+  const redirectToLogin = () => {
     navigate("/login")
   }
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoader(true);
-    toast("Signing up... Please wait ",{
-      position:'top-center'
+    toast("Signing up... Please wait ", {
+      position: 'top-center'
     });
     const formDataToSend = new FormData();
     formDataToSend.append('username', formData.username);
@@ -51,7 +51,7 @@ const SignUp = () => {
     formDataToSend.append('role', formData.role);
 
     try {
-      const data = await fetch(`http://localhost:8000/${formData.role}/signup`, {
+      const data = await fetch(`http://localhost:8000/${ formData.role }/signup`, {
         method: "POST",
         body: formDataToSend,
       });
@@ -60,14 +60,14 @@ const SignUp = () => {
       localStorage.setItem('token', token);
       fetchUserdata();
       setLoader(false)
-      if(res.message==="Sucessfully registered. Awaiting approval"){
+      if (res.message === "Sucessfully registered. Awaiting approval") {
         setInterval(() => {
-          setTimeout((prev)=>{
-            if(prev===0){
+          setTimeout((prev) => {
+            if (prev === 0) {
               navigate("/")
             }
-            else{
-              return prev-1;
+            else {
+              return prev - 1;
             }
           })
         }, 1000);
@@ -76,15 +76,15 @@ const SignUp = () => {
     } catch (err) {
       console.log(err);
       setLoader(true);
-      toast.error("Signup Failed, Try Again",{
-        position:'top-center'
+      toast.error("Signup Failed, Try Again", {
+        position: 'top-center'
       })
     }
   };
 
   return (
     <>
-    {loader && <ToastContainer />}
+      {loader && <ToastContainer />}
       {popup && <Modal
         open={true}
         aria-labelledby="modal-modal-title"
@@ -93,7 +93,7 @@ const SignUp = () => {
         <Box className="popup-box">
           <Typography id="modal-modal-title" variant="h6" component="h2">
             <div className="header">
-              <div className="icon"><ErrorOutlineIcon/></div>
+              <div className="icon"><ErrorOutlineIcon /></div>
               <div className="text"><h3>Approval Pending</h3></div>
             </div>
           </Typography>
@@ -115,60 +115,78 @@ const SignUp = () => {
           </Typography>
         </Box>
       </Modal>}
-      <ImageContainer src="./assets/back_img2.png" alt="Error" />
-      <ImageContainer
-        src="./assets/back_img1.png"
-        style={{ top: "460px", left: "400px", transform: "rotate(-10deg)" }}
-        alt="Error"
-      />
+
       <Container>
         <Heading>Sign Up</Heading>
         <Content>
           <Form onSubmit={handleSubmit}>
           <InputWrapper>
               <Label htmlFor="role">Role</Label>
-              <Select
-                name="role"
-                id="role"
-                value={formData.role}
-                onChange={handleInputChange}
-              >
-                <option value="user">User</option>
-                <option value="instructor">Instructor</option>
-                <option value="admin">Admin</option>
-              </Select>
+              <CustomSelect>
+                <StyledSelect
+                  name="role"
+                  id="role"
+                  value={formData.role}
+                  onChange={handleInputChange}
+                >
+                  <StyledOption value="user">User</StyledOption>
+                  <StyledOption value="instructor">Instructor</StyledOption>
+                  <StyledOption value="admin">Admin</StyledOption>
+                </StyledSelect>
+              </CustomSelect>
             </InputWrapper>
 
-            <InputWrapper style={{ marginTop: "10px" }}>
+            <InputWrapper>
               <Label>
                 Username:
-                <Input type="text" name="username" value={formData.username} onChange={handleInputChange} />
+                <Input
+                  type="text"
+                  name="username"
+                  value={formData.username}
+                  onChange={handleInputChange}
+                />
               </Label>
             </InputWrapper>
 
             <InputWrapper>
               <Label>
                 Email:
-                <Input type="email" name="email" value={formData.email} onChange={handleInputChange} />
+                <Input
+                  type="email"
+                  name="email"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                />
               </Label>
             </InputWrapper>
 
             <InputWrapper>
               <Label>
                 Password:
-                <Input type="password" name="password" value={formData.password} onChange={handleInputChange} />
+                <Input
+                  type="password"
+                  name="password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                />
               </Label>
             </InputWrapper>
 
             <InputWrapper>
               <Label>
                 Profile Image:
-                <Input type="file" name="profileImage" accept="image/*" onChange={handleInputChange} />
+                <Input
+                  type="file"
+                  name="profileImage"
+                  accept="image/*"
+                  onChange={handleInputChange}
+                />
               </Label>
             </InputWrapper>
             <Button className="signup-submit">Submit</Button>
             <Lognow>
-              <NavLink to="/LogIn">Already Logged In? Log In</NavLink>
+              Already Logged In? 
+              <NavLink to="/LogIn">  Log In</NavLink>
             </Lognow>
           </Form>
         </Content>
@@ -177,57 +195,65 @@ const SignUp = () => {
   );
 };
 
-const ImageContainer = styled.img`
-  position: absolute;
-  height: 300px;
-  width: 350px;
-  top: 130px;
-  left: 200px;
+
+const Container = styled.div`
+  max-width: 600px;
+  min-height: calc(100vh - 130px);
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  justify-content: space-evenly;
+  align-items: center;
+  margin: 30px auto 30px auto;
   border-radius: 10px;
-  transform: rotate(10deg);
-  box-shadow: 2px 7px 29px 4px rgba(0, 0, 0, 0.75);
-  z-index: -1;
+  box-shadow: 1px 1px 4px #ccc;
+  background-color: #fff;
 `;
 
-const Select = styled.select`
+const CustomSelect = styled.div`
+  position: relative;
+  width: 100%;
+`;
+
+const StyledSelect = styled.select`
+  appearance: none;
   width: 100%;
   padding: 10px;
   border: 1px solid #ccc;
   border-radius: 5px;
   font-size: 16px;
-  margin-bottom: 15px;
-`;
-
-
-const Container = styled.div`
-  height: 670px;
-  width: 540px;
-  margin-top: 30px;
-  margin-left: 60vw;
-  margin-bottom: 100px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-  border-radius: 10px;
-  box-shadow: 2px 7px 29px 4px rgba(0, 0, 0, 0.75);
+  /* color: #1732ac; */
   background-color: white;
-  background: linear-gradient(90deg, #e3ffe7 0%, #d9e7ff 100%);
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+
+  &:hover,
+  &:focus {
+    border-color: #1732ac;
+    box-shadow: 0 0 5px rgba(23, 50, 172, 0.5);
+  }
+`;
+const StyledOption = styled.option`
+  /* Styling options is limited, but you can apply some styles */
+  color: #1732ac;
+  background-color: white;
 `;
 
 const Heading = styled.div`
-  height: 10%;
-  width: 60%;
-  font-size: 40px;
+  /* height: 13%; */
+  /* width: 60%; */
+  font-size: 28px;
   text-align: center;
-  border: 2px solid #131c2c;
+  /* border: 2px solid #131c2c; */
   border-radius: 10px;
-  background-color: #131c2c;
-  color: white;
+  /* background-color: #3a62f5; */
+  /* color: white; */
+  color: black;
+  font-weight: 600;
+  margin-bottom: 20px;
 `;
+
 const Content = styled.div`
-  // z-index: 10;
-  height: 80%;
+  /* height: 80%; */
   width: 90%;
 `;
 
@@ -239,45 +265,56 @@ const Form = styled.form`
   justify-content: space-around;
   align-items: center;
 `;
+
 const Input = styled.input`
-  height: 55%;
-  width: 90%;
+  height: 40px;
+  width: 100%;
   margin-top: 5px;
-  font-size: 20px;
+  font-size: 16px;
   padding: 5px;
   border-radius: 5px;
-  color: #131c2c;
-  font-weight: 550;
-  letter-spacing: 1px;
+  border: 1px solid #ccc;
+
+  /* color: #131c2c; */
 `;
 
 const Label = styled.label`
-  font-size: 25px;
-  color: #131c2c;
+  font-size: 18px;
+  /* color: #131c2c; */
   font-weight: 700;
   letter-spacing: 1px;
-  border: none;
 `;
 
 const InputWrapper = styled.div`
-  height: 20%;
-  width: 90%;
-  padding: 15px 0px;
+  width: 100%;
+  margin-bottom: 15px;
 `;
 
 const Button = styled.button`
-  font-size: 25px;
-  height: 15%;
-  width: 40%;
+  height: 40px;
+  width: 100%;
   color: white;
-  border-radius: 10px;
-  background-color: #131c2c;
+  border-radius: 5px;
+  background-color: #1732ac;
+  border: none;
+  font-weight: 500;
   cursor: pointer;
+
+  &:hover {
+    background-color: #3c56cd;
+    color: white
+  }
 `;
 
 const Lognow = styled.div`
   margin-top: 10px;
   height: 10%;
-  font-size: 20px;
+  /* font-size: 20px; */
+  
+  a {
+    text-decoration: none;
+    color: #383fa0
+  }
 `;
+
 export default SignUp;

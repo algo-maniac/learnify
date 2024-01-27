@@ -25,9 +25,9 @@ const InstructorHome=()=>{
     return <>
         <div className="home-page">
             <div className="header1">
-                <span className="line1"></span>
+                {/* <span className="line1"></span> */}
                 <h5>Videos</h5>
-                <span className="line2"></span>
+                {/* <span className="line2"></span> */}
             </div>
             <div className="video-lists">
                 <div className="videos">

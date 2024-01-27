@@ -10,8 +10,9 @@ import ForumIcon from '@material-ui/icons/Forum';
 import TrendingUpIcon from '@material-ui/icons/TrendingUp';
 import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import AuthContext from '../store/auth-context';
+import { Link } from 'react-router-dom';
 
-const LeftMenu = ( { isSidebarExpanded, pageId }) => {
+const LeftMenu = ( { isSidebarExpanded, pageId, setIsSidebarExpanded }) => {
   const { userdata } = useContext(AuthContext);
   // const menuItems = [
   //   { link: '/course-structure', icon: <TrendingUpIcon />, text: "Course Structure" },
@@ -24,22 +25,24 @@ const LeftMenu = ( { isSidebarExpanded, pageId }) => {
 
   const menuItems = {
     user: [
-      { link: '/courses', icon: <AssignmentIcon />, text: "Courses" },
-      { link: '/instructor', icon: <AssignmentIcon />, text: "Instructors" },
-      { link: '/purchased-courses', icon: <AssignmentIcon />, text: "Purchased" },
-      { link: '/enrolled-courses', icon: <AssignmentIcon />, text: "Enrolled" },
+      { link: '/courses', icon: "/learnify_logo.png", text: "Courses" },
+      { link: '/instructor', icon: "/learnify_logo.png", text: "Instructors" },
+      // { link: '/purchased-courses', icon: "/learnify_logo.png", text: "Purchased" },
+      { link: '/enrolled-courses', icon: "/learnify_logo.png", text: "Enrolled" },
     ], 
     instructor: [
-      { link: '/courses', icon: <AssignmentIcon />, text: "Courses" },
-      { link: '/instructor', icon: <AssignmentIcon />, text: "Instructors" },
-      { link: '/purchased-courses', icon: <AssignmentIcon />, text: "Purchased" },
-      { link: '/enrolled-courses', icon: <AssignmentIcon />, text: "Enrolled" },
+      { link: '/courses', icon: "/assets/course.png", text: "Courses" },
+      { link: '/instructor', icon: "/assets/instructor.png", text: "Instructors" },
+      // { link: '/purchased-courses', icon: "/assets/enrolled.png", text: "Purchased" },
+      { link: '/enrolled-courses', icon: "/assets/enrolled.png", text: "Enrolled" },
+      { link: '/instructor-dashboard', icon: "/assets/dashboard.png", text: "DashBoard" },
     ],
     admin: [
-      { link: '/courses', icon: <AssignmentIcon />, text: "Courses" },
-      { link: '/instructor', icon: <AssignmentIcon />, text: "Instructors" },
-      { link: '/purchased-courses', icon: <AssignmentIcon />, text: "Purchased" },
-      { link: '/enrolled-courses', icon: <AssignmentIcon />, text: "Enrolled" },
+      { link: '/courses', icon: "/assets/course.png", text: "Courses" },
+      { link: '/instructor', icon: "/assets/instructor.png", text: "Instructors" },
+      // { link: '/purchased-courses', icon: "/assets/enrolled.png", text: "Purchased" },
+      { link: '/enrolled-courses', icon: "/assets/enrolled.png", text: "Enrolled" },
+      { link: '/admin-dashboard', icon: "/assets/dashboard.png", text: "DashBoard" },
     ]
   }
 
@@ -51,16 +54,18 @@ const LeftMenu = ( { isSidebarExpanded, pageId }) => {
       <div className="middle">
         <div className="main-features">
           {userdata && menuItems[userdata.role].map((item, index) => (
-            <a
+            <Link
               key={index}
               href={item.link}
               className={`full-width-link ${ pageId == item.link ? 'selected' : '' } ${ isSidebarExpanded ? '' : 'collapsed' }`}
+              onClick={() => window.innerWidth <= 600 && setIsSidebarExpanded(false)}
             >
-              {item.icon} <p>{item.text}</p>
-            </a>
+              <img src={item.icon} alt="hello" style={{ width: "30px", height: "30px"}}/>
+              <p>{item.text}</p>
+            </Link>
           ))}
         </div>
-        <div className="events">
+        {/* <div className="events">
           <a
             href="/upcoming-events"
             className={`full-width-link ${ pageId == "/upcoming-events" ? 'selected' : '' } ${ isSidebarExpanded ? '' : 'collapsed' }`}
@@ -74,7 +79,7 @@ const LeftMenu = ( { isSidebarExpanded, pageId }) => {
             <ForumIcon />
             <p>Discussion Forum</p>
           </a>
-        </div>
+        </div> */}
       </div>
       <div className={`bottom ${ isSidebarExpanded ? '' : 'collapsed' }`}>
         Product developed & maintained by <a href='/'>Learnify Business</a>
@@ -95,7 +100,7 @@ const Container = styled.div`
 
     background-color: #ffffff;
     /* background-color: whitesmoke; */
-    /* background-color: #c2c2c2; */
+    /* background-color: #dcdbdb; */
     border-right: 1px solid #d0d0d0;
 
     display: flex;
@@ -139,13 +144,13 @@ const Container = styled.div`
         /* width: 220px; */
         width: 100%;
         background-color: whitesmoke;
-        background-color: #ffffff;
+        /* background-color: #ffffff; */
         height: 40px;
         display: flex;
         /* justify-content: center; */
         justify-content: flex-start;
         place-items: center;
-        padding: 0 15px;
+        padding: 10px 30px;
         margin: 5px 0; 
         border-radius: 100px;
         overflow: hidden;
@@ -176,10 +181,12 @@ const Container = styled.div`
           /* border: 1px solid black; */
           transition-duration: 250ms;
           cursor: pointer;
-          background-color: #a6c1ff;
+          background-color: #bfcff6;
         }
 
         &.collapsed {
+          padding: 10px 10px;
+
           p {
             display: none;
           }

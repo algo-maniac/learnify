@@ -28,3 +28,14 @@
 .sidebar {
     background-color: #a9b9da;
 }
+.course-container .pagination{
+    margin-top: auto;
+}
+.course-container .pagination .pages{
+    margin: auto;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+}
+.course-container .loader-page{
+    text-align: center;
+}

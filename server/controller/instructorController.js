@@ -197,9 +197,15 @@ module.exports.getInstructorData = async (req, res) => {
 module.exports.getInstructorCourses = async (req, res) => {
   try {
     const id = req.user.id;
-    const pageSize = 10;
-    const { offset } = req.body;
-
+    let pageSize = 5;
+    const nof_courses=await Instructor.findById(id);
+    const length=nof_courses.courses.length
+    let { offset } = req.body;
+    if(offset*pageSize>length){
+      pageSize=length-(offset-1)*pageSize
+    }
+    offset-=1;
+    console.log(offset)
     const coursesQuery = await Instructor.findById(id)
       .populate({
         path: 'courses',
@@ -211,13 +217,12 @@ module.exports.getInstructorCourses = async (req, res) => {
         },
       })
       .select('courses');
-
     const courses = coursesQuery.courses;
-    console.log('Courses:', courses);
 
     return res.status(200).json({
       ok: true,
-      courses: courses
+      courses: courses,
+      length_of_courses:length
     })
 
   } catch (err) {

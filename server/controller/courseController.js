@@ -8,6 +8,8 @@ const Post = require("../models/post");
 const mongoose = require("mongoose");
 const streamifier = require('streamifier');
 const { getVideoDurationInSeconds } = require('get-video-duration');
+const User = require("../models/user");
+const Admin = require("../models/admin");
 const cloudinary = require('cloudinary').v2;
 
 
@@ -38,6 +40,106 @@ const uploadToCloudinary = (file) => {
     uploadStream.end(file.buffer);
   });
 };
+
+
+module.exports.getEnrolledCourses = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    let courses;
+    if(req.user.role == "user") {
+      const user = await User.findById(userId)
+      .populate({
+        path: 'enrolledCourses',
+        select: '_id instructorId title description duration price level category thumbnail publishedDate enrollmentCount rating reviews',
+      })
+      .exec();
+
+      courses = user.enrolledCourses;
+    } else if(req.user.role == "instructor") {
+      const instructor = await Instructor.findById(userId)
+      .populate({
+        path: 'enrolledCourses',
+        select: '_id instructorId title description duration price level category thumbnail publishedDate enrollmentCount rating reviews',
+      })
+      .exec();
+
+      courses = instructor.enrolledCourses;
+    } else if(req.user.role == "admin") {
+      const admin = await Admin.findById(userId)
+      .populate({
+        path: 'enrolledCourses',
+        select: '_id instructorId title description duration price level category thumbnail publishedDate enrollmentCount rating reviews',
+      })
+      .exec();
+
+      courses = admin.enrolledCourses;
+    } else {
+      res.status(500).json({
+        error: "Invalid role"
+      })
+    }
+
+    res.status(200).json({
+      ok: true,
+      enrolledCourses: courses
+    })
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      error: "There is some problem at our end"
+    })
+  }
+}
+
+
+module.exports.getPurchasedCourses = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    let courses;
+    if(req.user.role == "user") {
+      const user = await User.findById(userId)
+      .populate({
+        path: 'purchasedCourses',
+        select: '_id instructorId title description duration price level category thumbnail publishedDate enrollmentCount rating reviews',
+      })
+      .exec();
+
+      courses = user.purchasedCourses;
+    } else if(req.user.role == "instructor") {
+      const instructor = await Instructor.findById(userId)
+      .populate({
+        path: 'purchasedCourses',
+        select: '_id instructorId title description duration price level category thumbnail publishedDate enrollmentCount rating reviews',
+      })
+      .exec();
+
+      courses = instructor.purchasedCourses;
+    } else if(req.user.role == "admin") {
+      const admin = await Admin.findById(userId)
+      .populate({
+        path: 'purchasedCourses',
+        select: '_id instructorId title description duration price level category thumbnail publishedDate enrollmentCount rating reviews',
+      })
+      .exec();
+
+      courses = admin.purchasedCourses;
+    } else {
+      res.status(500).json({
+        error: "Invalid role"
+      })
+    }
+
+    res.status(200).json({
+      ok: true,
+      purchasedCourses: courses
+    })
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      error: "There is some problem at our end"
+    })
+  }
+}
 
 
 module.exports.createCourse = async (req, res) => {

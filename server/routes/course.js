@@ -4,15 +4,20 @@ const courseController = require("../controller/courseController");
 
 const multer = require("multer");
 const authenticateInstructor = require("../middlewares/instructor");
+const authenticateGeneral = require("../middlewares/authenticationGeneral")
 const authenticateCourseAccess = require("../middlewares/authenticateCourseAccess");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 
 
+router.get("/enrolledCourses", authenticateGeneral, courseController.getEnrolledCourses);
+
+router.get("/purchasedCourses", authenticateGeneral, courseController.getPurchasedCourses);
+
 router.post("/createCourse", authenticateInstructor, upload.single("thumbnail"), courseController.createCourse);
 
-router.get("/getCourse/:id", authenticateCourseAccess, courseController.getCourseDetails);
+router.get("/getCourse/:courseId", authenticateCourseAccess, courseController.getCourseDetails);
 
 router.get("/getCourseDetailsForEdit/:courseId", authenticateCourseEditAccess, courseController.getCourseDetailsForEdit);
 

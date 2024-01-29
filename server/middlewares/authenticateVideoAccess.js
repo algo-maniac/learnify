@@ -24,6 +24,8 @@ const authenticateVideoAccess = async (req, res, next) => {
         req.user = user;
 
         const video = await VideoLecture.findById(videoId, "_id instructorId courseId");
+        console.log(videoId);
+        console.log(video);
         if(video.courseId == null) {
             next();
             return;

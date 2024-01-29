@@ -33,7 +33,7 @@ const InstructorHome=()=>{
                 <div className="videos">
                     <div className='video'>
                         <VideoCard
-                            id={"65a90ff53567a3b1e6ebea26"}
+                            id={"65ae816ece773366e538d9ed"}
                             title={"Videos"}
                             description={"This video is created by spiderman"}
                             duration={toMin(125)}
@@ -43,7 +43,7 @@ const InstructorHome=()=>{
                     </div>
                     <div className='video'>
                         <VideoCard
-                            id={"65a90ff53567a3b1e6ebea26"}
+                            id={"65ae816ece773366e538d9ed"}
                             title={"Videos"}
                             description={"This video is created by spiderman"}
                             duration={toMin(125)}

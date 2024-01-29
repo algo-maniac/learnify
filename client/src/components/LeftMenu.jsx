@@ -1,63 +1,54 @@
 import React, { useState, useEffect, useContext } from 'react';
 import styled from 'styled-components';
-import MenuIcon from '@material-ui/icons/Menu';
-import GitHubIcon from '@material-ui/icons/GitHub';
-import WhatshotIcon from '@material-ui/icons/Whatshot';
-import VideocamIcon from '@material-ui/icons/Videocam';
-import AssignmentIcon from '@material-ui/icons/Assignment';
-import EventIcon from '@material-ui/icons/Event';
-import ForumIcon from '@material-ui/icons/Forum';
-import TrendingUpIcon from '@material-ui/icons/TrendingUp';
-import LocalOfferIcon from '@material-ui/icons/LocalOffer';
 import AuthContext from '../store/auth-context';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+
 
 const LeftMenu = ( { isSidebarExpanded, pageId, setIsSidebarExpanded }) => {
   const { userdata } = useContext(AuthContext);
-  // const menuItems = [
-  //   { link: '/course-structure', icon: <TrendingUpIcon />, text: "Course Structure" },
-  //   // { link: '/lecture', icon: <VideocamIcon />, text: "Course Lectures" },
-  //   { link: '/course-lectures', icon: <VideocamIcon />, text: "Course Lectures" },
-  //   { link: '/leaderboard', icon: <WhatshotIcon />, text: "Leaderboard" },
-  //   // { link: '/learning-resources', icon: <LocalOfferIcon />, text: "Resources" },
-  //   { link: '/assignments', icon: <AssignmentIcon />, text: "Assignments" },
-  // ];
 
   const menuItems = {
     user: [
-      { link: '/courses', icon: "/learnify_logo.png", text: "Courses" },
-      { link: '/instructor', icon: "/learnify_logo.png", text: "Instructors" },
-      // { link: '/purchased-courses', icon: "/learnify_logo.png", text: "Purchased" },
-      { link: '/enrolled-courses', icon: "/learnify_logo.png", text: "Enrolled" },
+      { link: '/course', icon: "/assets/course.png", text: "Courses" },
+      { link: '/video', icon: "/assets/video.png", text: "Videos" },
+      { link: '/instructor', icon: "/assets/instructor.png", text: "Instructors" },
+      { link: '/purchased-course', icon: "/assets/purchase.png", text: "Purchases" },
+      { link: '/enrolled-courses', icon: "/assets/enrolled.png", text: "Enrolled" },
+      { link: '/dashboard-user', icon: "/assets/dashboard.png", text: "DashBoard" },
     ], 
     instructor: [
-      { link: '/courses', icon: "/assets/course.png", text: "Courses" },
+      { link: '/course', icon: "/assets/course.png", text: "Courses" },
+      { link: '/video', icon: "/assets/video.png", text: "Videos" },
       { link: '/instructor', icon: "/assets/instructor.png", text: "Instructors" },
-      // { link: '/purchased-courses', icon: "/assets/enrolled.png", text: "Purchased" },
+      { link: '/purchased-course', icon: "/assets/purchase.png", text: "Purchases" },
       { link: '/enrolled-courses', icon: "/assets/enrolled.png", text: "Enrolled" },
-      { link: '/instructor-dashboard', icon: "/assets/dashboard.png", text: "DashBoard" },
+      { link: '/edit-course', icon: "/assets/edit-course.png", text: "Edit Courses" },
+      { link: '/edit-video', icon: "/assets/edit-video.png", text: "Edit Videos" },
+      { link: '/dashboard-instructor', icon: "/assets/dashboard.png", text: "DashBoard" },
     ],
     admin: [
-      { link: '/courses', icon: "/assets/course.png", text: "Courses" },
+      { link: '/course', icon: "/assets/course.png", text: "Courses" },
+      { link: '/video', icon: "/assets/video.png", text: "Videos" },
       { link: '/instructor', icon: "/assets/instructor.png", text: "Instructors" },
-      // { link: '/purchased-courses', icon: "/assets/enrolled.png", text: "Purchased" },
+      { link: '/purchased-course', icon: "/assets/purchase.png", text: "Purchases" },
       { link: '/enrolled-courses', icon: "/assets/enrolled.png", text: "Enrolled" },
-      { link: '/admin-dashboard', icon: "/assets/dashboard.png", text: "DashBoard" },
+      { link: '/dashboard-admin', icon: "/assets/dashboard.png", text: "DashBoard" },
     ]
   }
 
-
-
+  const location = useLocation();
+  console.log(location);
 
   return (
     <Container className={`${ isSidebarExpanded ? '' : 'collapsed' }`}>
       <div className="middle">
         <div className="main-features">
-          {userdata && menuItems[userdata.role].map((item, index) => (
+        {(userdata && menuItems[userdata.role] ? menuItems[userdata.role] : menuItems['user']).map((item, index) => (
             <Link
               key={index}
-              href={item.link}
-              className={`full-width-link ${ pageId == item.link ? 'selected' : '' } ${ isSidebarExpanded ? '' : 'collapsed' }`}
+              to={item.link}
+              // className={`full-width-link ${ pageId == item.link ? 'selected' : '' } ${ isSidebarExpanded ? '' : 'collapsed' }`}
+              className={`full-width-link ${ location.pathname.startsWith(item.link) ? 'selected' : '' } ${ isSidebarExpanded ? '' : 'collapsed' }`}
               onClick={() => window.innerWidth <= 786 && setIsSidebarExpanded(false)}
             >
               <img src={item.icon} alt="hello" style={{ width: "30px", height: "30px"}}/>
@@ -143,7 +134,7 @@ const Container = styled.div`
       .full-width-link{
         /* width: 220px; */
         width: 100%;
-        background-color: whitesmoke;
+        background-color: #f0f0f0;
         /* background-color: #ffffff; */
         height: 40px;
         display: flex;
@@ -175,14 +166,7 @@ const Container = styled.div`
           color: black;
         }
   
-        &:hover{
-          box-shadow: rgba(0, 0, 0, 0.05) 1px 1px 10px 0px;
-          background-color: #e5e5e5;
-          /* border: 1px solid black; */
-          transition-duration: 250ms;
-          cursor: pointer;
-          background-color: #bfcff6;
-        }
+        
 
         &.collapsed {
           padding: 10px 10px;
@@ -190,6 +174,24 @@ const Container = styled.div`
           p {
             display: none;
           }
+        }
+
+        &.selected {
+          box-shadow: rgba(0, 0, 0, 0.05) 1px 1px 10px 0px;
+          background-color: #e5e5e5;
+          /* border: 1px solid black; */
+          transition-duration: 250ms;
+          cursor: pointer;
+          background-color: #cfdbf9;
+        }
+
+        &:hover{
+          box-shadow: rgba(0, 0, 0, 0.05) 1px 1px 10px 0px;
+          background-color: #e5e5e5;
+          /* border: 1px solid black; */
+          transition-duration: 250ms;
+          cursor: pointer;
+          background-color: #bfcff6;
         }
       }
       

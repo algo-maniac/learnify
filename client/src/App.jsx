@@ -16,6 +16,7 @@ import Instructors from "./components/Instructors";
 import ExamCorner from "./components/ExamCorner";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
+import Home2 from "./pages/Home2";
 import Search from "./pages/Search";
 import CreateCourseForm from "./components/CreateCourseForm";
 import AuthContext from "./store/auth-context";
@@ -91,7 +92,8 @@ function App() {
 
         <Content  isSidebarExpanded={isSidebarExpanded}>
           <Routes>
-            <Route path="/" element={<Home />}></Route>
+            {/* <Route path="/" element={<Home />}></Route> */}
+            <Route path="/" element={<Home2 />}></Route>
             <Route path="/doubt" element={<Doubt />}></Route>
             <Route path="/SignUp" element={<SignUp />} />
             <Route path="/LogIn" element={<LogIn />} />
@@ -103,7 +105,7 @@ function App() {
             <Route path="/video/:id" element={<Video />} />
             <Route path="/adminpanel" element={<Admin />} />
             <Route path="/uploadvideo" element={<UploadVideo />} />
-            <Route path="/instructors" element={<Instructors />} />
+            <Route path="/instructor" element={<Instructors />} />
             <Route path="/instructor/:id" element={<HomepageTeacher />} />
             <Route path="/video/:id" element={<Random2 />} />
             <Route path="/exam-corner" element={<ExamCorner />} />

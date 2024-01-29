@@ -24,6 +24,7 @@ const authenticateGeneral = (req, res, next) => {
                 break;
         }
         req.user = user;
+        req.role = user.role;
         next();
     } catch (err) {
         console.log(err);

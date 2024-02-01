@@ -44,9 +44,9 @@ const InstructorPlaylist=()=>{
 
     return <>
     <div className="course-container" >
-        <div className="header-text">
+        {/* <div className="header-text">
             <h6>All Courses</h6>
-        </div>
+        </div> */}
         {loading && <div className='loader-page'><CircularProgress className='loading'/></div>}
         {!loading && <div className="courses-list">
                 {course.length>0 && course.map((data)=>(

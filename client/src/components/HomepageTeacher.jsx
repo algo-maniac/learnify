@@ -60,7 +60,8 @@ const Container = styled.div`
   /* margin: 20px; */
 
   .homepage {
-    
+    margin: 0;
+
     /* padding: 100px; */
   }
 
@@ -84,11 +85,12 @@ const Container = styled.div`
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    gap: 30px;
   }
 
   .videos > * {
     width: calc(33.333% - 20px);
-    margin: 10px;
+    /* margin: 10px; */
   }
 
   .navbar_branding {
@@ -104,10 +106,11 @@ const Container = styled.div`
   }
 
   .about-page {
-    width: 96%;
-    margin: auto;
-    margin-top: 0.7rem;
-    font-family: "Roboto", sans-serif;
+    width: 100%;
+    /* margin: auto; */
+    /* margin-top: 0.7rem; */
+    /* font-family: "Roboto", sans-serif; */
+    padding: 20px 30px;
   }
 
   .about-page .about-desc h3 {
@@ -147,19 +150,26 @@ const Container = styled.div`
   }
   .about-page .links .link .icon-info a{
       font-size: 0.8rem;
-      color: #485fc7;
+      /* color: #485fc7; */
   }
   .about-page .links .link .icon-info svg{
       font-size: 0.8rem;
+  }
+  /* Videos page css */
+  .videos-page {
+    background-color: white;
+    padding: 20px 30px
   }
 
   /* Courses css */
 
   .course-container{
-      width: 96%;
-      margin: auto;
-      margin-top: 0.7rem;
-      font-family: "Roboto",sans-serif;
+      width: 100%;
+      background-color: white;
+      padding: 20px 30px;
+      /* margin: auto; */
+      /* margin-top: 0.7rem; */
+      /* font-family: "Roboto",sans-serif; */
   }
   .course-container .header-text h6{
       font-weight: 400;
@@ -217,16 +227,25 @@ const Container = styled.div`
       flex-direction: row;
       height: 100%;
       flex-wrap: wrap;
+      display: flex;
+      flex-direction: row;
+      flex-wrap: wrap;
+      gap: 30px;
+  }
+
+  .courses-list > * {
+    width: calc(33.333% - 20px);
   }
   .courses-list .courses{
-      margin-right: 1rem;
-      margin-bottom: 1rem;
+      /* margin-right: 1rem;
+      margin-bottom: 1rem; */
+      width: 
   }
   .courses-list .courses .level{
       font-weight: 700;
       background: -webkit-linear-gradient(90deg,#6980b5, #3f469d,blue);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
   }
   .courses-list .courses .price{
       font-weight: 700;
@@ -250,10 +269,13 @@ const Container = styled.div`
   /* css for home page */
   .home-page{
       display: flex;
-      width: 96%;
-      margin: 0.7rem;
+      width: 100%;
       flex-direction: column;
+      background-color: white;
+      padding: 20px 30px;
   }
+
+
   .home-page .header1{
       display: flex;
       font-family: "Roboto",sans-serif;
@@ -262,7 +284,7 @@ const Container = styled.div`
   }
   .home-page .header1 h5{
       font-weight: 600;
-      color: rgb(57, 57, 173);
+      /* color: rgb(57, 57, 173); */
   }
   .home-page .line1{
       border: 1px solid rgb(192, 191, 189);

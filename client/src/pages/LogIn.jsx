@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -6,7 +6,7 @@ import './Home.css'
 import AuthContext from "../store/auth-context";
 import { toast } from "react-toastify";
 const LogIn = () => {
-  const { fetchUserdata } = useContext(AuthContext);
+  const { userdata, fetchUserdata } = useContext(AuthContext);
   const [currUser, setCurrUser] = useState({
     role: "user",
     email: "",
@@ -42,6 +42,13 @@ const LogIn = () => {
       console.log(err);
     }
   };
+
+  useEffect(() => {
+    if(userdata) {
+      navigate('/');
+    }
+  }, [userdata])
+
   return (
     <Container>
       <Heading>Log In</Heading>

@@ -87,7 +87,7 @@
 .tabpanel{
     width: fit-content;
     /* border: 1px solid green; */
-
+    padding: 0 30px;
 }
 .tabpanel .one{
     border: none;

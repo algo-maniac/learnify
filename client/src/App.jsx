@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import { Routes, Route } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import styled from 'styled-components';
 import LogIn from "./pages/LogIn";
 import Random from "./pages/Random";
@@ -20,13 +20,13 @@ import Home2 from "./pages/Home2";
 import Search from "./pages/Search";
 import CreateCourseForm from "./components/CreateCourseForm";
 import AuthContext from "./store/auth-context";
-import axios from 'axios';
 import { jwtDecode } from "jwt-decode";
 import Admin from "./pages/Admin";
 import Video from "./pages/Video";
 import EditCourseForm from "./components/EditCourseForm";
 
 function App() {
+  const navigate = useNavigate();
   const [userdata, setUserdata] = useState(() => {
     const storedUserData = localStorage.getItem('userdata');
     return storedUserData ? JSON.parse(storedUserData) : null;
@@ -66,12 +66,33 @@ function App() {
     }
   }
 
+  const logout = (e) => {
+    console.log(e);
+    localStorage.removeItem('token');
+    localStorage.removeItem('userdata');
+    setUserdata(null);
+    navigate("/");
+  }
+
+
   useEffect(() => {
-    if (!userdata) {
-      if (localStorage.getItem("token"))
-        fetchUserdata();
-    }
-  });
+    const checkTokenExpiration = () => {
+      const storedToken = localStorage.getItem('token');
+      if (storedToken) {
+        const { exp } = jwtDecode(storedToken);
+        if (Date.now() > exp * 1000) {
+          logout();
+        } else {
+          if (!userdata) {
+            if (localStorage.getItem("token"))
+              fetchUserdata();
+          }
+        }
+      }
+    };
+
+    checkTokenExpiration();
+  }, []);
 
   const contextValue = {
     userdata,
@@ -83,7 +104,7 @@ function App() {
     <>
       <AuthContext.Provider value={contextValue}>
         <NavbarContainer>
-          <Navbar toggleIsSearchExpanded={toggleIsSearchExpanded} />
+          <Navbar toggleIsSearchExpanded={toggleIsSearchExpanded} logout={logout}/>
         </NavbarContainer>
 
         <LeftMenuConainer isSidebarExpanded={isSidebarExpanded}>

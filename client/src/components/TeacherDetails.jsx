@@ -65,104 +65,104 @@ function TeacherDetails(props) {
 }
 
 const ParentTeacherDetails = styled.div`
-.teacher_details {
-  /* width: 100; */
-  /* background-color: #2B3467; */
-  /* background-color: rgb(244, 244, 244); */
-  background-color: rgb(255, 255, 255);
-  display: flex;
-  /* padding-left: 20px;
-  padding-right: 20px;
-  padding-top: 8px;
-  padding-bottom: 8px; */
-  padding: 2rem;
-  flex-direction: row;
-  align-items: flex-start;
-  color: black;
-  height: fit-content;
-  gap: 30px;
-}
-
-.user-info{
-  width: 80%;
-}
-.user-info .username h2{
-  font-family: "Roboto",sans-serif;
-  font-weight: 600;
-  margin: 0px;
-}
-.user-info .subscriber-count span{
-  color: rgb(121, 121, 121);
-  font-weight: 500;
-  font-size: 0.84rem;
-}
-.user-info .subscriber-btn{
-  margin-top: 0.4rem;
-}
-.button-60 {
-align-items: center;
-appearance: none;
-background-color: hsl(0, 96%, 41%);
-/* border: 1px solid #dbdbdb; */
-border: none;
-border-radius: 1.275em;
-
-box-shadow: none;
-box-sizing: border-box;
-color: #ffffff;
-cursor: pointer;
-display: inline-flex;
-font-family: BlinkMacSystemFont,-apple-system,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
-font-size: 0.9rem;
-font-weight: 500;
-height: 2.5em;
-justify-content: center;
-line-height: 1.5;
-padding: calc(.5em - 1px) 1em;
-position: relative;
-text-align: center;
-user-select: none;
--webkit-user-select: none;
-touch-action: manipulation;
-vertical-align: top;
-white-space: nowrap;
-}
-
-.join-live {
-  background-color: rgb(213, 2, 2);
-  color: white;
-  border-radius: 10px;
-
-  &:hover {
-      background-color: rgb(182, 9, 9);
+  .teacher_details {
+    /* width: 100; */
+    /* background-color: #2B3467; */
+    /* background-color: rgb(244, 244, 244); */
+    background-color: rgb(255, 255, 255);
+    display: flex;
+    /* padding-left: 20px;
+    padding-right: 20px;
+    padding-top: 8px;
+    padding-bottom: 8px; */
+    padding: 2rem;
+    flex-direction: row;
+    align-items: flex-start;
+    color: black;
+    height: fit-content;
+    gap: 30px;
   }
 
-  button {
-      color: white;
+  .user-info{
+    width: 80%;
   }
-}
-
-.tab-panel{
-  border-bottom: 1.5px solid rgb(202, 202, 202);
-  text-align: center;
-  /* background-color: rgb(244, 244, 244); */
-  background-color: white;
-  padding: 0px 4px;
-  width: 100%;
-  /* border: 1px solid red; */
-}
-.tabpanel{
-  width: fit-content;
-  /* border: 1px solid green; */
-
-}
-.tabpanel .one{
+  .user-info .username h2{
+    font-family: "Roboto",sans-serif;
+    font-weight: 600;
+    margin: 0px;
+  }
+  .user-info .subscriber-count span{
+    color: rgb(121, 121, 121);
+    font-weight: 500;
+    font-size: 0.84rem;
+  }
+  .user-info .subscriber-btn{
+    margin-top: 0.4rem;
+  }
+  .button-60 {
+  align-items: center;
+  appearance: none;
+  background-color: hsl(0, 96%, 41%);
+  /* border: 1px solid #dbdbdb; */
   border: none;
-}
-button:focus{
-  border:none;
-  outline: none;
-}
+  border-radius: 1.275em;
+
+  box-shadow: none;
+  box-sizing: border-box;
+  color: #ffffff;
+  cursor: pointer;
+  display: inline-flex;
+  /* font-family: BlinkMacSystemFont,-apple-system,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",Helvetica,Arial,sans-serif; */
+  font-size: 0.9rem;
+  font-weight: 500;
+  height: 2.5em;
+  justify-content: center;
+  line-height: 1.5;
+  padding: calc(.5em - 1px) 1em;
+  position: relative;
+  text-align: center;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: top;
+  white-space: nowrap;
+  }
+
+  .join-live {
+    background-color: rgb(213, 2, 2);
+    color: white;
+    border-radius: 10px;
+
+    &:hover {
+        background-color: rgb(182, 9, 9);
+    }
+
+    button {
+        color: white;
+    }
+  }
+
+  .tab-panel{
+    border-bottom: 1.5px solid rgb(202, 202, 202);
+    text-align: center;
+    /* background-color: rgb(244, 244, 244); */
+    background-color: white;
+    padding: 0px 4px;
+    width: 100%;
+    /* border: 1px solid red; */
+  }
+  .tabpanel{
+    width: fit-content;
+    /* border: 1px solid green; */
+    padding: 0 30px;
+  }
+  .tabpanel .one{
+    border: none;
+  }
+  button:focus{
+    border:none;
+    outline: none;
+  }
 `
 
 export default TeacherDetails

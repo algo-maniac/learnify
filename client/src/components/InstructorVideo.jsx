@@ -41,6 +41,7 @@ const InstructorVideo=()=>{
     return duration
   }
     return <>
+      <div className="videos-page">
         <div className="videos">
           {instructordata && instructordata.videoLectures &&
             instructordata.videoLectures.map(vid => {
@@ -57,6 +58,7 @@ const InstructorVideo=()=>{
             })
           }
         </div>
+      </div>
     </>
 }
 export default InstructorVideo

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
 import { NavLink, Navigate, useNavigate } from "react-router-dom";
 import './Home.css'
@@ -10,7 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import { Typography } from '@mui/material';
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
 const SignUp = () => {
-  const { fetchUserdata } = useContext(AuthContext);
+  const { userdata, fetchUserdata } = useContext(AuthContext);
   const [popup, setPopup] = useState(false);
   const [loader, setLoader] = useState(false);
   const [timeout, setTimeout] = useState(5);
@@ -81,6 +81,12 @@ const SignUp = () => {
       })
     }
   };
+
+  useEffect(() => {
+    if(userdata) {
+      navigate('/');
+    }
+  }, [userdata])
 
   return (
     <>

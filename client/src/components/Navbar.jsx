@@ -11,7 +11,7 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 import AuthContext from "../store/auth-context";
 
-function Navbar({ toggleIsSearchExpanded }) {
+function Navbar({ toggleIsSearchExpanded, logout }) {
   const { userdata, setUserdata, fetchUserdata } = useContext(AuthContext);
 
   const navigate = useNavigate();
@@ -49,13 +49,6 @@ function Navbar({ toggleIsSearchExpanded }) {
       history(`/search?query=${ text }`);
     }
   };
-
-  const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('userdata');
-    setUserdata(null);
-    navigate("/");
-  }
 
 
   useEffect(() => {
@@ -161,8 +154,8 @@ function Navbar({ toggleIsSearchExpanded }) {
         ) : (
           <>
             <div className="right-profile">
-              <button onClick={navigate('/signup')}>Signup</button>
-              <button onClick={navigate('/login')}>Login</button>
+              <button onClick={() => navigate('/signup')}>Signup</button>
+              <button onClick={() => navigate('/login')}>Login</button>
             </div>
           </>
         )}

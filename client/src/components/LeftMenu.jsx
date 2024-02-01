@@ -37,7 +37,7 @@ const LeftMenu = ( { isSidebarExpanded, pageId, setIsSidebarExpanded }) => {
   }
 
   const location = useLocation();
-  console.log(location);
+  // console.log(location);
 
   return (
     <Container className={`${ isSidebarExpanded ? '' : 'collapsed' }`}>

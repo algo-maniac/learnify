@@ -7,6 +7,7 @@ import { useEffect, useState } from 'react';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import "./Search.css"
 import { Link, useLocation } from 'react-router-dom';
+
 const Search=()=>{
     const location = useLocation();
     const queryParams = new URLSearchParams(location.search);

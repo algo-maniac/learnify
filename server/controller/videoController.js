@@ -91,6 +91,39 @@ module.exports.uploadVideo = async (req, res) => {
   }
 }
 
+module.exports.getVideos = async (req, res) => {
+  try {
+    const pageSize = 10;
+    const { offset } = req.body;
+
+    const videosQuery = await VideoLecture.find({ courseId: null })
+      .sort({ createdAt: -1 })
+      .skip(offset * pageSize)
+      .limit(pageSize)
+      .populate({
+        path: 'instructorId',
+        select: '_id username profileImage',
+      })
+      .select('-videoFile -comments') // Exclude videoFile and comments
+
+    const videos = videosQuery;
+    const totalVideos = await VideoLecture.countDocuments({ courseId: null });
+
+    console.log('Videos:', videos);
+
+    return res.status(200).json({
+      ok: true,
+      videos: videos,
+      totalVideos: totalVideos,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json({
+      error: "There is some issue"
+    });
+  }
+}
+
 module.exports.getVideoDetails = async (req, res) => {
   const { videoId } = req.query;
 
@@ -121,7 +154,7 @@ module.exports.getVideoDetails = async (req, res) => {
     })
   } catch (err) {
     console.log(err);
-    res.status(200).json({
+    res.status(400).json({
       error: "can't video the the video you requested"
     })
   }

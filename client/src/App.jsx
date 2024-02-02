@@ -23,7 +23,10 @@ import AuthContext from "./store/auth-context";
 import { jwtDecode } from "jwt-decode";
 import Admin from "./pages/Admin";
 import Video from "./pages/Video";
+import Videos from "./pages/Videos";
 import EditCourseForm from "./components/EditCourseForm";
+import Course from "./pages/Courses";
+import Courses from "./pages/Courses";
 
 function App() {
   const navigate = useNavigate();
@@ -98,6 +101,7 @@ function App() {
     userdata,
     setUserdata,
     fetchUserdata,
+    isSidebarExpanded
   };
 
   return (
@@ -123,6 +127,7 @@ function App() {
             {userdata && userdata.role === 'teacher' && (
               <Route path="/live" element={<LiveStream />} />
             )}
+            <Route path="/video" element={<Videos />} />
             <Route path="/video/:id" element={<Video />} />
             <Route path="/adminpanel" element={<Admin />} />
             <Route path="/uploadvideo" element={<UploadVideo />} />
@@ -130,6 +135,7 @@ function App() {
             <Route path="/instructor/:id" element={<HomepageTeacher />} />
             <Route path="/video/:id" element={<Random2 />} />
             <Route path="/exam-corner" element={<ExamCorner />} />
+            <Route path="/course" element={<Courses />} />
             <Route path="/course/create" element={<CreateCourseForm />} />
             <Route path="/course/:courseId/edit" element={<EditCourseForm />} />
             <Route path="/search" element={<Search />} />
@@ -152,7 +158,7 @@ const NavbarContainer = styled.div`
   width: 100vw;
   top: 0;
   right: 0;
-  z-index: 10000;
+  z-index: 1000;
 `
 
 const LeftMenuConainer = styled.div`

@@ -100,32 +100,32 @@ const ParentTeacherDetails = styled.div`
     margin-top: 0.4rem;
   }
   .button-60 {
-  align-items: center;
-  appearance: none;
-  background-color: hsl(0, 96%, 41%);
-  /* border: 1px solid #dbdbdb; */
-  border: none;
-  border-radius: 1.275em;
+    align-items: center;
+    appearance: none;
+    background-color: hsl(0, 96%, 41%);
+    /* border: 1px solid #dbdbdb; */
+    border: none;
+    border-radius: 1.275em;
 
-  box-shadow: none;
-  box-sizing: border-box;
-  color: #ffffff;
-  cursor: pointer;
-  display: inline-flex;
-  /* font-family: BlinkMacSystemFont,-apple-system,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",Helvetica,Arial,sans-serif; */
-  font-size: 0.9rem;
-  font-weight: 500;
-  height: 2.5em;
-  justify-content: center;
-  line-height: 1.5;
-  padding: calc(.5em - 1px) 1em;
-  position: relative;
-  text-align: center;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  vertical-align: top;
-  white-space: nowrap;
+    box-shadow: none;
+    box-sizing: border-box;
+    color: #ffffff;
+    cursor: pointer;
+    display: inline-flex;
+    /* font-family: BlinkMacSystemFont,-apple-system,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",Helvetica,Arial,sans-serif; */
+    font-size: 0.9rem;
+    font-weight: 500;
+    height: 2.5em;
+    justify-content: center;
+    line-height: 1.5;
+    padding: calc(.5em - 1px) 1em;
+    position: relative;
+    text-align: center;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    vertical-align: top;
+    white-space: nowrap;
   }
 
   .join-live {
@@ -139,6 +139,7 @@ const ParentTeacherDetails = styled.div`
 
     button {
         color: white;
+        white-space: nowrap;
     }
   }
 
@@ -162,6 +163,15 @@ const ParentTeacherDetails = styled.div`
   button:focus{
     border:none;
     outline: none;
+  }
+
+  @media only screen and (max-width: 800px) {
+    .user-info .username h2{
+      font-family: "Roboto",sans-serif;
+      font-weight: 600;
+      margin: 0px;
+      font-size: 18px;
+    }
   }
 `
 

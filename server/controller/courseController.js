@@ -42,35 +42,68 @@ const uploadToCloudinary = (file) => {
 };
 
 
+module.exports.getCourses = async (req, res) => {
+  try {
+    const pageSize = 5;
+    const { offset } = req.body;
+
+    const coursesQuery = await Course.find()
+      .sort({ createdAt: -1 })
+      .skip(offset * pageSize)
+      .limit(pageSize)
+      .populate({
+        path: 'instructorId',
+        select: '_id username profileImage',
+      })
+      .select('-sections');
+
+    const length = await Course.countDocuments();
+
+    return res.status(200).json({
+      ok: true,
+      courses: coursesQuery,
+      length_of_courses: length
+    });
+
+
+  } catch (err) {
+    console.log(err);
+    res.status(404).json({
+      message: "Authorization failed"
+    })
+  }
+}
+
+
 module.exports.getEnrolledCourses = async (req, res) => {
   try {
     const userId = req.user.id;
     let courses;
-    if(req.user.role == "user") {
+    if (req.user.role == "user") {
       const user = await User.findById(userId)
-      .populate({
-        path: 'enrolledCourses',
-        select: '_id instructorId title description duration price level category thumbnail publishedDate enrollmentCount rating reviews',
-      })
-      .exec();
+        .populate({
+          path: 'enrolledCourses',
+          select: '_id instructorId title description duration price level category thumbnail publishedDate enrollmentCount rating reviews',
+        })
+        .exec();
 
       courses = user.enrolledCourses;
-    } else if(req.user.role == "instructor") {
+    } else if (req.user.role == "instructor") {
       const instructor = await Instructor.findById(userId)
-      .populate({
-        path: 'enrolledCourses',
-        select: '_id instructorId title description duration price level category thumbnail publishedDate enrollmentCount rating reviews',
-      })
-      .exec();
+        .populate({
+          path: 'enrolledCourses',
+          select: '_id instructorId title description duration price level category thumbnail publishedDate enrollmentCount rating reviews',
+        })
+        .exec();
 
       courses = instructor.enrolledCourses;
-    } else if(req.user.role == "admin") {
+    } else if (req.user.role == "admin") {
       const admin = await Admin.findById(userId)
-      .populate({
-        path: 'enrolledCourses',
-        select: '_id instructorId title description duration price level category thumbnail publishedDate enrollmentCount rating reviews',
-      })
-      .exec();
+        .populate({
+          path: 'enrolledCourses',
+          select: '_id instructorId title description duration price level category thumbnail publishedDate enrollmentCount rating reviews',
+        })
+        .exec();
 
       courses = admin.enrolledCourses;
     } else {
@@ -96,31 +129,31 @@ module.exports.getPurchasedCourses = async (req, res) => {
   try {
     const userId = req.user.id;
     let courses;
-    if(req.user.role == "user") {
+    if (req.user.role == "user") {
       const user = await User.findById(userId)
-      .populate({
-        path: 'purchasedCourses',
-        select: '_id instructorId title description duration price level category thumbnail publishedDate enrollmentCount rating reviews',
-      })
-      .exec();
+        .populate({
+          path: 'purchasedCourses',
+          select: '_id instructorId title description duration price level category thumbnail publishedDate enrollmentCount rating reviews',
+        })
+        .exec();
 
       courses = user.purchasedCourses;
-    } else if(req.user.role == "instructor") {
+    } else if (req.user.role == "instructor") {
       const instructor = await Instructor.findById(userId)
-      .populate({
-        path: 'purchasedCourses',
-        select: '_id instructorId title description duration price level category thumbnail publishedDate enrollmentCount rating reviews',
-      })
-      .exec();
+        .populate({
+          path: 'purchasedCourses',
+          select: '_id instructorId title description duration price level category thumbnail publishedDate enrollmentCount rating reviews',
+        })
+        .exec();
 
       courses = instructor.purchasedCourses;
-    } else if(req.user.role == "admin") {
+    } else if (req.user.role == "admin") {
       const admin = await Admin.findById(userId)
-      .populate({
-        path: 'purchasedCourses',
-        select: '_id instructorId title description duration price level category thumbnail publishedDate enrollmentCount rating reviews',
-      })
-      .exec();
+        .populate({
+          path: 'purchasedCourses',
+          select: '_id instructorId title description duration price level category thumbnail publishedDate enrollmentCount rating reviews',
+        })
+        .exec();
 
       courses = admin.purchasedCourses;
     } else {
@@ -165,7 +198,7 @@ module.exports.createCourse = async (req, res) => {
     const updateResult = await Instructor.findByIdAndUpdate(
       req.user.id,
       { $push: { courses: course._id } },
-      { new: true } 
+      { new: true }
     );
 
     res.status(200).json({
@@ -234,7 +267,7 @@ module.exports.getCourseDetails = async (req, res) => {
           model: 'VideoLecture',
           select: '_id courseId sectionId title description duration thumbnail createdAt updatedAt',
         },
-        select: '_id courseid title description', 
+        select: '_id courseid title description',
       })
       .exec();
 
@@ -273,9 +306,9 @@ module.exports.getCourseDetailsForEdit = async (req, res) => {
         populate: {
           path: 'videoLectures',
           model: 'VideoLecture',
-          select: '_id courseId sectionId title description duration thumbnail videoFile createdAt updatedAt', 
+          select: '_id courseId sectionId title description duration thumbnail videoFile createdAt updatedAt',
         },
-        select: '_id courseid title description', 
+        select: '_id courseid title description',
       })
       .exec();
 
@@ -306,12 +339,12 @@ module.exports.getCourseDetailsForEdit = async (req, res) => {
 module.exports.editBasicCourseDetails = async (req, res) => {
   try {
     console.log("here1");
-    
+
     const courseId = req.params.courseId;
     const { title, description, duration, price, level, category } = req.body;
     const thumbnail = req.file;
     let thumbnailUrl;
-    if(thumbnail) {
+    if (thumbnail) {
       thumbnailUrl = await uploadToCloudinary(thumbnail);
     }
     console.log(thumbnail);
@@ -321,18 +354,18 @@ module.exports.editBasicCourseDetails = async (req, res) => {
     console.log("here2");
 
     const updateFields = {};
-    if(title) updateFields.title = title;
-    if(description) updateFields.description = description;
-    if(duration) updateFields.duration = duration;
-    if(price) updateFields.price = price;
-    if(level) updateFields.level = level;
-    if(category) updateFields.category = category;
-    if(thumbnail) updateFields.thumbnail = thumbnailUrl;
+    if (title) updateFields.title = title;
+    if (description) updateFields.description = description;
+    if (duration) updateFields.duration = duration;
+    if (price) updateFields.price = price;
+    if (level) updateFields.level = level;
+    if (category) updateFields.category = category;
+    if (thumbnail) updateFields.thumbnail = thumbnailUrl;
     console.log("here3");
 
-    const course = await Course.findByIdAndUpdate(courseId, { $set: updateFields }, {new: true});
+    const course = await Course.findByIdAndUpdate(courseId, { $set: updateFields }, { new: true });
     console.log("here4");
-    
+
     res.status(200).json({
       ok: true,
       course: {
@@ -346,7 +379,7 @@ module.exports.editBasicCourseDetails = async (req, res) => {
       }
     });
     return;
-  } catch(err) {
+  } catch (err) {
     console.log(err);
     res.status(500).json({
       error: "Error occured"
@@ -363,8 +396,8 @@ module.exports.editSectionDetails = async (req, res) => {
 
 
     const updateFields = {};
-    if(title) updateFields.title = title;
-    if(description) updateFields.description = description;
+    if (title) updateFields.title = title;
+    if (description) updateFields.description = description;
     console.log(updateFields);
 
     const updatedSection = await Section.findByIdAndUpdate(
@@ -381,7 +414,7 @@ module.exports.editSectionDetails = async (req, res) => {
       }
     });
     return;
-  } catch(err) {
+  } catch (err) {
     console.log(err);
     res.status(500).json({
       error: "Error occured"
@@ -394,7 +427,7 @@ module.exports.uploadCourseVideo = async (req, res) => {
     console.log(req.body)
     console.log(req.files);
     const { courseId, sectionId } = req.body;
-    if(!courseId || !sectionId) {
+    if (!courseId || !sectionId) {
       res.status(400).json({ error: 'Invalid inputs' });
     }
 
@@ -450,24 +483,24 @@ module.exports.editVideoDetails = async (req, res) => {
 
     let videoFile, thumbnail, thumbnailUrl, videoFileUrl, duration;
 
-    if(req.files['video'] && req.files['video'][0]) {
+    if (req.files['video'] && req.files['video'][0]) {
       videoFile = req.files['video'][0];
       videoFileUrl = await uploadToCloudinary(videoFile);
       const videoStream = streamifier.createReadStream(videoFile.buffer);
       duration = await getVideoDurationInSeconds(videoStream);
     }
 
-    if(req.files['thumbnail'] && req.files['thumbnail'][0]) {
+    if (req.files['thumbnail'] && req.files['thumbnail'][0]) {
       thumbnail = req.files['thumbnail'][0];
       thumbnailUrl = await uploadToCloudinary(thumbnail);
     }
-    
+
     const updateFields = {};
-    if(title) updateFields.title = title;
-    if(description) updateFields.description = description;
-    if(videoFile) updateFields.videoFile = videoFileUrl;
-    if(duration) updateFields.duration = duration;
-    if(thumbnail) updateFields.thumbnail = thumbnailUrl;
+    if (title) updateFields.title = title;
+    if (description) updateFields.description = description;
+    if (videoFile) updateFields.videoFile = videoFileUrl;
+    if (duration) updateFields.duration = duration;
+    if (thumbnail) updateFields.thumbnail = thumbnailUrl;
 
 
     const video = await VideoLecture.findByIdAndUpdate(
@@ -476,13 +509,13 @@ module.exports.editVideoDetails = async (req, res) => {
       { new: true }
     )
     console.log(video);
-    
+
     res.status(200).json({
       ok: true,
       video: video
     });
     return;
-  } catch(err) {
+  } catch (err) {
     console.log(err);
     res.status(500).json({
       error: "Error occured"

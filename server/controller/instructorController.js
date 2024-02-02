@@ -197,7 +197,7 @@ module.exports.getInstructorData = async (req, res) => {
 module.exports.getInstructorCourses = async (req, res) => {
   try {
     const id = req.user.id;
-    let pageSize = 5;
+    let pageSize = 6;
     const nof_courses=await Instructor.findById(id);
     const length=nof_courses.courses.length
     let { offset } = req.body;
@@ -235,36 +235,43 @@ module.exports.getInstructorCourses = async (req, res) => {
 
 module.exports.getInstructorVideos = async (req, res) => {
   try {
-    const id = req.user.id;
-    const pageSize = 10;
+    const { id } = req.params;
+    const pageSize = 6;
     const { offset } = req.body;
 
-    const videosQuery = await Instructor.findById(id)
-      .populate({
-        path: 'videoLectures',
-        select: 'instructorId title description duration thumbnail likesCount createdAt updatedAt',
-        options: {
-          sort: { createdAt: -1 }, 
-          skip: offset * pageSize,
-          limit: pageSize,
-        },
-      })
-      .select('videoLectures');
+    const instructor = await Instructor.findById(id).populate({
+      path: 'videoLectures',
+      select: '-comments -videoFile',
+      match: { courseId: null },
+      options: {
+        sort: { createdAt: -1 },
+        skip: offset * pageSize,
+        limit: pageSize,
+      },
+    });
 
-    const videos = videosQuery.videoLectures;
+    const videos = instructor.videoLectures;
+    const totalVideos = videos.filter(video => video.courseId === null).length;
+
     console.log('Videos:', videos);
 
     return res.status(200).json({
       ok: true,
-      videos: videos
-    })
+      videos: videos,
+      instructorDetails: {
+        _id: id,
+        username: instructor.username,
+        profileImage: instructor.profileImage,
+      },
+      totalVideos: totalVideos,
+    });
   } catch (err) {
     console.log(err);
     res.status(404).json({
-      message: "Authorization failed"
-    })
+      message: 'Authorization failed',
+    });
   }
-}
+};
 
 
 

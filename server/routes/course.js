@@ -9,7 +9,7 @@ const authenticateCourseAccess = require("../middlewares/authenticateCourseAcces
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
-
+router.post("/getCourses", authenticateGeneral, courseController.getCourses);
 
 router.get("/enrolledCourses", authenticateGeneral, courseController.getEnrolledCourses);
 

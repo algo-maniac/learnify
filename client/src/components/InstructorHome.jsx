@@ -7,6 +7,7 @@ import CardMedia from '@mui/material/CardMedia';
 import Fab from "@mui/material/Fab"
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import styled from 'styled-components';
 const InstructorHome=()=>{
     const filterDesc=(text)=>{
         return text.slice(0,100);
@@ -23,6 +24,7 @@ const InstructorHome=()=>{
         return duration
     }
     return <>
+        <Container>
         <div className="home-page">
             <div className="header1">
                 {/* <span className="line1"></span> */}
@@ -267,6 +269,219 @@ const InstructorHome=()=>{
             </div>
         </div>
         </div>
+        </Container>
     </>
 }
 export default InstructorHome
+
+const Container = styled.div`
+    width: 100%;
+    min-height: 100vh - 70px;
+
+    .videos{
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 30px;
+    }
+
+    .videos > * {
+        width: calc(25% - 24.5px);
+    }
+
+    .videos.sidebarExpanded > * {
+        width: calc(25% - 24.5px);
+    }
+
+    @media only screen and (max-width: 600px) {
+        .videos > * {
+            width: calc(100%);
+        }
+    }
+
+    @media only screen and (min-width: 601px) and (max-width: 800px) {
+        .videos > * {
+            width: calc(50% - 15px);
+        }
+    }
+
+    @media only screen and (min-width: 801px) and (max-width: 1200px) {
+        .videos > * {
+            width: calc(33.333% - 20px);
+        }
+
+        .videos.sidebarExpanded > * {
+          width: calc(50% - 15px);
+        }
+    }
+
+    @media only screen and (min-width: 1201px) and (max-width: 1400px) {
+        .videos > * {
+            width: calc(33.333% - 20px);
+        }
+
+        .videos.sidebarExpanded > * {
+            width: calc(33.333% - 20px);
+        }
+    }
+
+
+    .course-container{
+        width: 100%;
+        background-color: white;
+        padding: 20px 30px;
+        /* margin: auto; */
+        /* margin-top: 0.7rem; */
+        /* font-family: "Roboto",sans-serif; */
+    }
+    .course-container .header-text h6{
+        font-weight: 400;
+        color: rgb(77, 76, 76);
+    }
+    /* CSS */
+    .button-61 {
+        align-items: center;
+        appearance: none;
+        background-color: #4a56b8;
+        border-radius: .375em;
+        box-shadow: none;
+        box-sizing: border-box;
+        color: #ffffff;
+        cursor: pointer;
+        margin-left: 0.7rem;
+        display: inline-flex;
+        font-family: BlinkMacSystemFont,-apple-system,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+        font-size: 0.85rem;
+        height: 2.8em;
+        justify-content: center;
+        line-height: 1.5;
+        padding: calc(.5em - 1px) 1em;
+        position: relative;
+        padding-left: 1.3rem;
+        padding-right: 1.3rem;
+        text-align: center;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+        vertical-align: top;
+        white-space: nowrap;
+    }
+
+    .button-61:active {
+        border-color: #4a4a4a;
+        outline: 0;
+    }
+
+    .button-61:focus {
+        border-color: #485fc7;
+        outline: 0;
+    }
+
+    .button-61:hover {
+        background-color: rgb(71, 89, 206);
+    }
+
+    .button-61:focus:not(:active) {
+        box-shadow: rgba(72, 95, 199, .25) 0 0 0 .125em;
+    }
+    .courses-list{
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        height: 100%;
+        flex-wrap: wrap;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 30px;
+    }
+
+    .courses-list > * {
+        width: calc(25% - 24.5px);
+    }
+
+    .courses-list.sidebarExpanded > * {
+        width: calc(25% - 24.5px);
+    }
+
+    @media only screen and (max-width: 600px) {
+        .courses-list > * {
+            width: calc(100%);
+        }
+    }
+
+    @media only screen and (min-width: 601px) and (max-width: 800px) {
+        .courses-list > * {
+            width: calc(50% - 15px);
+        }
+    }
+
+    @media only screen and (min-width: 801px) and (max-width: 1200px) {
+        .courses-list > * {
+            width: calc(33.333% - 20px);
+        }
+
+        .courses-list.sidebarExpanded > * {
+            width: calc(33.333% - 20px);
+        }
+    }
+
+    @media only screen and (min-width: 1201px) and (max-width: 1400px) {
+        .courses-list > * {
+            width: calc(33.333% - 20px);
+        }
+
+        .courses-list.sidebarExpanded > * {
+            width: calc(33.333% - 20px);
+        }
+    }
+
+    .courses-list .courses{
+        /* margin-right: 1rem;
+        margin-bottom: 1rem; */
+        /* width:  */
+    }
+    .courses-list .courses .level{
+        font-weight: 700;
+        background: -webkit-linear-gradient(90deg,#6980b5, #3f469d,blue);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+    .courses-list .courses .price{
+        font-weight: 700;
+        color: black;
+    }
+    .courses-list .courses .desc{
+        padding: 0px;
+        padding-top: 0.2rem;
+        padding-bottom: 0.2rem;
+    }
+    .courses-list .courses .tag{
+        background-color: black;
+        color: white;
+        text-transform: none;
+        font-size: 0.72rem;
+        margin: 0.1rem;
+        z-index: 1;
+    }
+    .courses-list .courses .box1{
+        height: fit-content;
+    }
+
+    .pagination{
+        margin-top: auto;
+    }
+    .pagination .pages{
+        margin: auto;
+        margin-top: 2rem;
+        margin-bottom: 1rem;
+    }
+    .loader-page{
+        text-align: center;
+  }
+`

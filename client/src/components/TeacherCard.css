@@ -21,6 +21,7 @@
     text-decoration: none;
     color: black;
     gap: 10px;
+    overflow: hidden;
 }
 
 .username {

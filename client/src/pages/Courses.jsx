@@ -2,56 +2,57 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
+import Button from '@mui/material/Button';
 import Fab from "@mui/material/Fab"
 import Typography from '@mui/material/Typography';
 import { useContext, useEffect, useRef, useState } from 'react';
-import "./Instructors.css"
+// import "./Instructors.css"
 import { CircularProgress, Pagination } from '@mui/material';
 import styled from 'styled-components';
 import AuthContext from '../store/auth-context';
-const InstructorPlaylist=()=>{
-    const { isSidebarExpanded } = useContext(AuthContext);
 
+const Courses = () => {
+    const { isSidebarExpanded } = useContext(AuthContext);
     const [latestCourses, setLatestCourses] = useState([]);
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
-    const [course,setCourses]=useState([]);
-    const [courseLength,setLength]=useState(0);
-    const filterDesc=(text)=>{
-        return text.slice(0,100);
+    const [course, setCourses] = useState([]);
+    const [courseLength, setLength] = useState(0);
+    const filterDesc = (text) => {
+        return text.slice(0, 100);
     }
     const handlePageChange = (event, value) => {
         setPage(value);
     };
-    const fetchHandler=async()=>{
+    const fetchHandler = async () => {
         setLoading(true)
-        const data = await fetch(`http://localhost:8000/instructor/getInstructorCourses/65a16be384dda50de26b9584`, {
+        const data = await fetch(`http://localhost:8000/course/getCourses`, {
             method: 'POST',
             headers: {
                 Authorization: localStorage.getItem("token"),
-                'Content-type':'application/json'
+                'Content-type': 'application/json'
             },
-            body:JSON.stringify({offset:page})
+            body: JSON.stringify({ offset: page })
         });
         const json = await data.json();
         console.log(json)
-        if(json){
+        if (json) {
             setCourses(json.courses);
             setLength(json.length_of_courses)
             setLoading(false);
         }
     }
-    useEffect(()=>{
+    useEffect(() => {
         fetchHandler();
-    },[page])
+    }, [page])
 
     return <>
-    <Container>
+        <Container>
             <div className="course-container">
                 {loading && <div className='loader-page'><CircularProgress className='loading' /></div>}
                 {!loading && <div className={`courses-list ${isSidebarExpanded ? 'sidebarExpanded' : ''}`}>
                     {course.length > 0 && course.map((data) => (
-                        <div className="courses">
+                        <div className={`courses ${isSidebarExpanded ? 'sidebarExpanded' : ''}`}>
                             <Card key={data._id}>
                                 <CardMedia
                                     sx={{ width: "100%", aspectRatio: "2/1" }}
@@ -88,7 +89,7 @@ const InstructorPlaylist=()=>{
     </>
 }
 
-export default InstructorPlaylist
+export default Courses
 
 const Container = styled.div`
     width: 100%;
@@ -185,18 +186,22 @@ const Container = styled.div`
         }
     }
 
-    @media only screen and (min-width: 801px) and (max-width: 1400px) {
+    @media only screen and (min-width: 801px) and (max-width: 1200px) {
         .courses-list > * {
             width: calc(33.333% - 20px);
         }
 
         .courses-list.sidebarExpanded > * {
-            width: calc(33.333% - 20px);
+            width: calc(50% - 15px);
         }
     }
 
     @media only screen and (min-width: 1201px) and (max-width: 1400px) {
         .courses-list > * {
+            width: calc(33.333% - 20px);
+        }
+
+        .courses-list.sidebarExpanded > * {
             width: calc(33.333% - 20px);
         }
     }

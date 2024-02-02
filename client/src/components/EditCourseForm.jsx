@@ -678,7 +678,7 @@ const Container = styled.div`
   padding: 16px;
   border-radius: 8px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
-  z-index: 1000; /* Ensure it's above other elements */
+  z-index: 100000; /* Ensure it's above other elements */
   display: flex;
   align-items: center;
 }

@@ -1,15 +1,13 @@
 import React, { useContext, useEffect } from "react";
-import "./UploadVideo.css";
 import { useState } from "react";
 // import '/assets/logo192.png'
 import { Navigate, useNavigate } from "react-router-dom";
-import { Container } from "@mui/system";
 import styled from "styled-components";
-import AuthContext from '../store/auth-context'
+import AuthContext from "../store/auth-context";
 
 function UploadVideo(props) {
   const navigate = useNavigate();
-  
+
   const [formData, setFormData] = useState({
     title: "",
     description: "",
@@ -42,7 +40,7 @@ function UploadVideo(props) {
     fetch("http://localhost:8000/video/uploadVideo", {
       method: "POST",
       headers: {
-        Authorization: localStorage.getItem("token")
+        Authorization: localStorage.getItem("token"),
       },
       body: form,
     })
@@ -114,6 +112,53 @@ function UploadVideo(props) {
   );
 }
 
+const Container = styled.div`
+  width: 100%;
+  margin: 20px auto;
+
+  .uploadvideo {
+    /* background-image: url(); */
+  }
+
+  .uploadvideo_form {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    width: 33%;
+    padding: 90px 30px;
+    margin: 60px auto;
+    background-color: rgb(210, 210, 210);
+    border: 0;
+    border-radius: 10px;
+  }
+
+  .uploadvideo_form > label {
+    display: flex;
+    flex-direction: column;
+    font-size: 1.5rem;
+    gap: 15px;
+    font-weight: bolder;
+  }
+
+  .uploadvideo_form > button {
+    margin-top: 40px;
+    text-align: center;
+    height: 2.5rem;
+    font-size: 1.5rem;
+    background-color: green;
+    border: 0;
+    border-radius: 10px;
+  }
+
+  .uploadvideo_form > label > input {
+    height: 2.5rem;
+    border: 0;
+    border-radius: 10px;
+    background-color: white;
+    font-size: 1.3rem;
+    padding: 0 5px;
+  }
+`;
 const ImageContainer = styled.img`
   position: absolute;
   height: 300px;

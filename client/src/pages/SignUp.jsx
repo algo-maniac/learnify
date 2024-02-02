@@ -1,14 +1,13 @@
 import React, { useContext, useState, useEffect } from "react";
 import styled from "styled-components";
 import { NavLink, Navigate, useNavigate } from "react-router-dom";
-import './Home.css'
 import AuthContext from "../store/auth-context";
-import Modal from '@mui/material/Modal';
-import Box from '@mui/material/Box';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-import { Typography } from '@mui/material';
-import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline';
+import Modal from "@mui/material/Modal";
+import Box from "@mui/material/Box";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import { Typography } from "@mui/material";
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 const SignUp = () => {
   const { userdata, fetchUserdata } = useContext(AuthContext);
   const [popup, setPopup] = useState(false);
@@ -16,11 +15,11 @@ const SignUp = () => {
   const [timeout, setTimeout] = useState(5);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
+    username: "",
+    email: "",
+    password: "",
     profileImage: null,
-    role: 'user',
+    role: "user",
   });
 
   const handleInputChange = (e) => {
@@ -28,105 +27,117 @@ const SignUp = () => {
 
     setFormData((prevData) => ({
       ...prevData,
-      [name]: name === 'profileImage' ? files[0] : value,
+      [name]: name === "profileImage" ? files[0] : value,
     }));
   };
   const redirectHandler = () => {
-    navigate("/")
-  }
+    navigate("/");
+  };
   const redirectToLogin = () => {
-    navigate("/login")
-  }
+    navigate("/login");
+  };
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoader(true);
     toast("Signing up... Please wait ", {
-      position: 'top-center'
+      position: "top-center",
     });
     const formDataToSend = new FormData();
-    formDataToSend.append('username', formData.username);
-    formDataToSend.append('email', formData.email);
-    formDataToSend.append('password', formData.password);
-    formDataToSend.append('profileImage', formData.profileImage);
-    formDataToSend.append('role', formData.role);
+    formDataToSend.append("username", formData.username);
+    formDataToSend.append("email", formData.email);
+    formDataToSend.append("password", formData.password);
+    formDataToSend.append("profileImage", formData.profileImage);
+    formDataToSend.append("role", formData.role);
 
     try {
-      const data = await fetch(`http://localhost:8000/${ formData.role }/signup`, {
-        method: "POST",
-        body: formDataToSend,
-      });
+      const data = await fetch(
+        `http://localhost:8000/${formData.role}/signup`,
+        {
+          method: "POST",
+          body: formDataToSend,
+        }
+      );
       const res = await data.json();
       const token = res.token;
-      localStorage.setItem('token', token);
+      localStorage.setItem("token", token);
       fetchUserdata();
-      setLoader(false)
+      setLoader(false);
       if (res.message === "Sucessfully registered. Awaiting approval") {
         setInterval(() => {
           setTimeout((prev) => {
             if (prev === 0) {
-              navigate("/")
-            }
-            else {
+              navigate("/");
+            } else {
               return prev - 1;
             }
-          })
+          });
         }, 1000);
-        setPopup(true)
+        setPopup(true);
       }
     } catch (err) {
       console.log(err);
       setLoader(true);
       toast.error("Signup Failed, Try Again", {
-        position: 'top-center'
-      })
+        position: "top-center",
+      });
     }
   };
 
   useEffect(() => {
-    if(userdata) {
-      navigate('/');
+    if (userdata) {
+      navigate("/");
     }
-  }, [userdata])
+  }, [userdata]);
 
   return (
     <>
       {loader && <ToastContainer />}
-      {popup && <Modal
-        open={true}
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
-        <Box className="popup-box">
-          <Typography id="modal-modal-title" variant="h6" component="h2">
-            <div className="header">
-              <div className="icon"><ErrorOutlineIcon /></div>
-              <div className="text"><h3>Approval Pending</h3></div>
-            </div>
-          </Typography>
-          <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-            <div className="content">
-              <div>
-                <p>Successfully Registered, Awaiting Approval</p>
-              </div>
-              <div className="redirect">
-                <div className="content-box">
-                  <p>Redirecting to Home Page in {timeout}...</p>
+      {popup && (
+        <Modal
+          open={true}
+          aria-labelledby="modal-modal-title"
+          aria-describedby="modal-modal-description"
+        >
+          <Box className="popup-box">
+            <Typography id="modal-modal-title" variant="h6" component="h2">
+              <div className="header">
+                <div className="icon">
+                  <ErrorOutlineIcon />
                 </div>
-                <div className="content-box">
-                  <button className="button-70" onClick={redirectHandler}>Home</button>
-                  <button className="button-70" onClick={redirectToLogin}>Login</button>
+                <div className="text">
+                  <h3>Approval Pending</h3>
                 </div>
               </div>
-            </div>
-          </Typography>
-        </Box>
-      </Modal>}
+            </Typography>
+            <Typography id="modal-modal-description" sx={{ mt: 2 }}>
+              <div className="content">
+                <div>
+                  <p>Successfully Registered, Awaiting Approval</p>
+                </div>
+                <div className="redirect">
+                  <div className="content-box">
+                    <p>Redirecting to Home Page in {timeout}...</p>
+                  </div>
+                  <div className="content-box">
+                    <button className="button-70" onClick={redirectHandler}>
+                      Home
+                    </button>
+                    <button className="button-70" onClick={redirectToLogin}>
+                      Login
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </Typography>
+          </Box>
+        </Modal>
+      )}
 
       <Container>
         <Heading>Sign Up</Heading>
         <Content>
           <Form onSubmit={handleSubmit}>
-          <InputWrapper>
+            <InputWrapper>
               <Label htmlFor="role">Role</Label>
               <CustomSelect>
                 <StyledSelect
@@ -191,8 +202,8 @@ const SignUp = () => {
             </InputWrapper>
             <Button className="signup-submit">Submit</Button>
             <Lognow>
-              Already Logged In? 
-              <NavLink to="/LogIn">  Log In</NavLink>
+              Already Logged In?
+              <NavLink to="/LogIn"> Log In</NavLink>
             </Lognow>
           </Form>
         </Content>
@@ -200,7 +211,6 @@ const SignUp = () => {
     </>
   );
 };
-
 
 const Container = styled.div`
   max-width: 600px;
@@ -308,7 +318,7 @@ const Button = styled.button`
 
   &:hover {
     background-color: #3c56cd;
-    color: white
+    color: white;
   }
 `;
 
@@ -316,10 +326,10 @@ const Lognow = styled.div`
   margin-top: 10px;
   height: 10%;
   /* font-size: 20px; */
-  
+
   a {
     text-decoration: none;
-    color: #383fa0
+    color: #383fa0;
   }
 `;
 

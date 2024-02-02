@@ -1,11 +1,17 @@
-import React, { useState } from 'react';
-import './EditVideoDetailsForm.css';
-import { useEffect } from 'react';
-import styled from 'styled-components';
+import React, { useState } from "react";
+import { useEffect } from "react";
+import styled from "styled-components";
 
-const EditVideoDetailsForm = ({ initialVideoDetails, handleCancelEdit, handleVideoDetailsSubmit, toggleShowEditForm }) => {
+const EditVideoDetailsForm = ({
+  initialVideoDetails,
+  handleCancelEdit,
+  handleVideoDetailsSubmit,
+  toggleShowEditForm,
+}) => {
   console.log(initialVideoDetails);
-  const [editedVideoDetails, setEditedVideoDetails] = useState({ ...initialVideoDetails });
+  const [editedVideoDetails, setEditedVideoDetails] = useState({
+    ...initialVideoDetails,
+  });
   const [editableFields, setEditableFields] = useState({
     title: false,
     description: false,
@@ -37,15 +43,23 @@ const EditVideoDetailsForm = ({ initialVideoDetails, handleCancelEdit, handleVid
     e.preventDefault();
     // Include thumbnail and video files in the form data for submission
     const formData = new FormData();
-    if (editableFields['title']) formData.append('title', editedVideoDetails.title);
-    if (editableFields['description']) formData.append('description', editedVideoDetails.description);
-    if (editableFields['video'] && videoFile) formData.append('video', videoFile);
-    if (editableFields['thumbnail'] && thumbnailFile) formData.append('description', editedVideoDetails);
+    if (editableFields["title"])
+      formData.append("title", editedVideoDetails.title);
+    if (editableFields["description"])
+      formData.append("description", editedVideoDetails.description);
+    if (editableFields["video"] && videoFile)
+      formData.append("video", videoFile);
+    if (editableFields["thumbnail"] && thumbnailFile)
+      formData.append("description", editedVideoDetails);
 
     // Add more fields as needed
     handleCancelEdit();
     // Submit the form data
-    handleVideoDetailsSubmit(formData, initialVideoDetails._id, initialVideoDetails.sectionId);
+    handleVideoDetailsSubmit(
+      formData,
+      initialVideoDetails._id,
+      initialVideoDetails.sectionId
+    );
   };
 
   const handleCheckboxToggle = (fieldName) => {
@@ -58,159 +72,180 @@ const EditVideoDetailsForm = ({ initialVideoDetails, handleCancelEdit, handleVid
 
   useEffect(() => {
     console.log("Edit video details re rendered");
-  })
+  });
 
   return (
     <Container>
-    <form onSubmit={handleSubmit} className="section-edit-form">
-      <label>
-        <div className="checkbox-container">
-          <input
-            type="checkbox"
-            className="checkbox"
-            checked={editableFields.title}
-            onChange={() => handleCheckboxToggle('title')}
-          />
-        </div>
-        <div className={`input-container ${!editableFields.title ? 'not-editable' : ''}`}>
-          <span className="text-label">Video Title:</span>
-          <input
-            type="text"
-            name="title"
-            value={editedVideoDetails.title}
-            onChange={handleChange}
-            readOnly={!editableFields.title}
-          />
-        </div>
-      </label>
-      <label>
-        <div className="checkbox-container">
-          <input
-            type="checkbox"
-            className="checkbox"
-            checked={editableFields.description}
-            onChange={() => handleCheckboxToggle('description')}
-          />
-        </div>
-        <div className={`input-container ${!editableFields.description ? 'not-editable' : ''}`}>
-          <span className="text-label">Video Description:</span>
-          <textarea
-            name="description"
-            value={editedVideoDetails.description}
-            onChange={handleChange}
-            readOnly={!editableFields.description}
-          />
-        </div>
-      </label>
-
-      <div className="thumbnailAndVideo">
+      <form onSubmit={handleSubmit} className="section-edit-form">
         <label>
-          <div className="thumbnailDetails">
-            <div className="input-options">
-              <div className="checkbox-container">
-                <input
-                  type="checkbox"
-                  className="checkbox"
-                  checked={editableFields.thumbnail}
-                  onChange={() => handleCheckboxToggle('thumbnail')}
-                />
-              </div>
-              <span className="text-label">Thumbnail:</span>
-              <input
-                type="file"
-                name="thumbnail"
-                onChange={handleThumbnailChange}
-                accept="image/*"
-                disabled={!editableFields.thumbnail}
-              />
-            </div>
-            <div className="preview">
-              {editableFields.thumbnail && thumbnailFile && (
-                <div className="file-preview">
-                  <span>Thumbnail Preview:</span>
-                  <img
-                    src={URL.createObjectURL(thumbnailFile)}
-                    alt="Thumbnail Preview"
-                  />
-                </div>
-              )}
-              {(!editableFields.thumbnail || !thumbnailFile) && (
-                <div className="file-preview">
-                  <span>Thumbnail Preview:</span>
-                  <img
-                    src={initialVideoDetails.thumbnail}
-                    alt="Thumbnail Preview"
-                  />
-                </div>
-              )}
-            </div>
+          <div className="checkbox-container">
+            <input
+              type="checkbox"
+              className="checkbox"
+              checked={editableFields.title}
+              onChange={() => handleCheckboxToggle("title")}
+            />
+          </div>
+          <div
+            className={`input-container ${
+              !editableFields.title ? "not-editable" : ""
+            }`}
+          >
+            <span className="text-label">Video Title:</span>
+            <input
+              type="text"
+              name="title"
+              value={editedVideoDetails.title}
+              onChange={handleChange}
+              readOnly={!editableFields.title}
+            />
+          </div>
+        </label>
+        <label>
+          <div className="checkbox-container">
+            <input
+              type="checkbox"
+              className="checkbox"
+              checked={editableFields.description}
+              onChange={() => handleCheckboxToggle("description")}
+            />
+          </div>
+          <div
+            className={`input-container ${
+              !editableFields.description ? "not-editable" : ""
+            }`}
+          >
+            <span className="text-label">Video Description:</span>
+            <textarea
+              name="description"
+              value={editedVideoDetails.description}
+              onChange={handleChange}
+              readOnly={!editableFields.description}
+            />
           </div>
         </label>
 
-        {/* Video Input */}
-        <label>
-          <div className="videoDetails">
-            <div className="input-options">
-              <div className="checkbox-container">
+        <div className="thumbnailAndVideo">
+          <label>
+            <div className="thumbnailDetails">
+              <div className="input-options">
+                <div className="checkbox-container">
+                  <input
+                    type="checkbox"
+                    className="checkbox"
+                    checked={editableFields.thumbnail}
+                    onChange={() => handleCheckboxToggle("thumbnail")}
+                  />
+                </div>
+                <span className="text-label">Thumbnail:</span>
                 <input
-                  type="checkbox"
-                  className="checkbox"
-                  checked={editableFields.video}
-                  onChange={() => handleCheckboxToggle('video')}
+                  type="file"
+                  name="thumbnail"
+                  onChange={handleThumbnailChange}
+                  accept="image/*"
+                  disabled={!editableFields.thumbnail}
                 />
               </div>
-              <span className="text-label">Video:</span>
-              <input
-                type="file"
-                name="video"
-                onChange={handleVideoChange}
-                accept="video/*"
-                disabled={!editableFields.video}
-              />
+              <div className="preview">
+                {editableFields.thumbnail && thumbnailFile && (
+                  <div className="file-preview">
+                    <span>Thumbnail Preview:</span>
+                    <img
+                      src={URL.createObjectURL(thumbnailFile)}
+                      alt="Thumbnail Preview"
+                    />
+                  </div>
+                )}
+                {(!editableFields.thumbnail || !thumbnailFile) && (
+                  <div className="file-preview">
+                    <span>Thumbnail Preview:</span>
+                    <img
+                      src={initialVideoDetails.thumbnail}
+                      alt="Thumbnail Preview"
+                    />
+                  </div>
+                )}
+              </div>
             </div>
-            <div className="preview">
-              {(!editableFields.video || !videoFile) && initialVideoDetails.videoFile && (
-                <div className="file-preview">
-                  <span>Video Preview:</span>
-                  <video
-                    id="my-player"
-                    className="video-js"
-                    controls
-                    controlsList="nodownload"
-                    poster={initialVideoDetails.thumbnail}
-                    preload="auto"
-                    data-setup='{}'>
-                    {initialVideoDetails.videoFile && <source src={initialVideoDetails.videoFile} type="video/mp4" />}
-                    Your browser does not support the video tag.
-                  </video>
+          </label>
+
+          {/* Video Input */}
+          <label>
+            <div className="videoDetails">
+              <div className="input-options">
+                <div className="checkbox-container">
+                  <input
+                    type="checkbox"
+                    className="checkbox"
+                    checked={editableFields.video}
+                    onChange={() => handleCheckboxToggle("video")}
+                  />
                 </div>
-              )}
-              {(editableFields.video || !initialVideoDetails.videoFile) && videoFile && (
-                <div className="file-preview">
-                  <span>Video Preview:</span>
-                  <video controls className='video-js'>
-                    {videoFile && <source src={URL.createObjectURL(videoFile)} type="video/mp4" />}
-                    Your browser does not support the video tag.
-                  </video>
-                </div>
-              )}
+                <span className="text-label">Video:</span>
+                <input
+                  type="file"
+                  name="video"
+                  onChange={handleVideoChange}
+                  accept="video/*"
+                  disabled={!editableFields.video}
+                />
+              </div>
+              <div className="preview">
+                {(!editableFields.video || !videoFile) &&
+                  initialVideoDetails.videoFile && (
+                    <div className="file-preview">
+                      <span>Video Preview:</span>
+                      <video
+                        id="my-player"
+                        className="video-js"
+                        controls
+                        controlsList="nodownload"
+                        poster={initialVideoDetails.thumbnail}
+                        preload="auto"
+                        data-setup="{}"
+                      >
+                        {initialVideoDetails.videoFile && (
+                          <source
+                            src={initialVideoDetails.videoFile}
+                            type="video/mp4"
+                          />
+                        )}
+                        Your browser does not support the video tag.
+                      </video>
+                    </div>
+                  )}
+                {(editableFields.video || !initialVideoDetails.videoFile) &&
+                  videoFile && (
+                    <div className="file-preview">
+                      <span>Video Preview:</span>
+                      <video controls className="video-js">
+                        {videoFile && (
+                          <source
+                            src={URL.createObjectURL(videoFile)}
+                            type="video/mp4"
+                          />
+                        )}
+                        Your browser does not support the video tag.
+                      </video>
+                    </div>
+                  )}
+              </div>
             </div>
-          </div>
-        </label>
-      </div>
+          </label>
+        </div>
 
-
-      <div className="buttons">
-        <button type="submit" onClick={handleSubmit}>Save Video Changes</button>
-        <button type="button" onClick={toggleShowEditForm}>
-          Cancel Video Changes
-        </button>
-      </div>
-    </form>
+        <div className="buttons">
+          <button type="submit" onClick={handleSubmit}>
+            Save Video Changes
+          </button>
+          <button type="button" onClick={toggleShowEditForm}>
+            Cancel Video Changes
+          </button>
+        </div>
+      </form>
     </Container>
   );
 };
-
 
 export default EditVideoDetailsForm;
 
@@ -257,7 +292,6 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
     margin-bottom: 20px;
-
   }
 
   .input-options {
@@ -299,5 +333,4 @@ const Container = styled.div`
   }
 
   /* Add any additional styling as needed */
-
-`
+`;

@@ -1,11 +1,9 @@
-import React, { useEffect, useState, useContext } from 'react'
-import './Instructors.css'
+import React, { useEffect, useState, useContext } from "react";
 
-import TeacherCard from './TeacherCard'
-import Sidebar from './Sidebar'
-import Loader from './Loader'
-import AuthContext from '../store/auth-context'
-import styled from 'styled-components'
+import TeacherCard from "../components/TeacherCard";
+import Loader from "../components/Loader";
+import AuthContext from "../store/auth-context";
+import styled from "styled-components";
 function Instructors(props) {
   const [instructors, setInstructors] = useState([]);
 
@@ -13,40 +11,44 @@ function Instructors(props) {
   console.log(userdata);
 
   const fetchInstructors = async () => {
-    const data = await fetch('http://localhost:8000/instructor', {
+    const data = await fetch("http://localhost:8000/instructor", {
       headers: {
-        Authorization: localStorage.getItem("token")
-      }
-    })
+        Authorization: localStorage.getItem("token"),
+      },
+    });
 
     const json = await data.json();
     setInstructors(json.instructors);
-  }
+  };
 
   useEffect(() => {
-    if (localStorage.getItem("token"))
-      fetchInstructors();
+    if (localStorage.getItem("token")) fetchInstructors();
   }, []);
 
   return (
     <Container>
-      <div className='teachers' >
-        <div className={`teachercards  ${isSidebarExpanded ? 'sidebarExpanded' : ''}`}>
-          {instructors && instructors.map(instructor => (
-            <TeacherCard
-              id={instructor._id}
-              username={instructor.username}
-              profileImage={instructor.profileImage}
-              socialMediaLinks={instructor.socialMediaLinks}
-            />
-          ))}
+      <div className="teachers">
+        <div
+          className={`teachercards  ${
+            isSidebarExpanded ? "sidebarExpanded" : ""
+          }`}
+        >
+          {instructors &&
+            instructors.map((instructor) => (
+              <TeacherCard
+                id={instructor._id}
+                username={instructor.username}
+                profileImage={instructor.profileImage}
+                socialMediaLinks={instructor.socialMediaLinks}
+              />
+            ))}
         </div>
       </div>
     </Container>
-  )
+  );
 }
 
-export default Instructors
+export default Instructors;
 
 const Container = styled.div`
   width: 100%;
@@ -63,8 +65,8 @@ const Container = styled.div`
   }
 
   .sidebar {
-      width: 25%;
-      min-height: calc(100vh - var(--navbar-height, 60px));
+    width: 25%;
+    min-height: calc(100vh - var(--navbar-height, 60px));
   }
 
   .teachercards {
@@ -78,10 +80,10 @@ const Container = styled.div`
   }
 
   .teachercards > * {
-    width: calc(20% - 30px); 
+    width: calc(20% - 30px);
     /* overflow: hidden; */
   }
-/* 
+  /* 
   .teachercards.sidebarExpanded > * {
     width: calc(33.33% - 24.5px);
   } */
@@ -96,7 +98,7 @@ const Container = styled.div`
     .teachercards > * {
       width: calc(33.33% - 24.5px);
     }
-/* 
+    /* 
     .teachercards.sidebarExpanded > * {
       width: calc(50% - 15px);
     } */
@@ -104,12 +106,11 @@ const Container = styled.div`
 
   @media only screen and (min-width: 801px) and (max-width: 1400px) {
     .teachercards > * {
-      width: calc(25% - 24.5px); 
+      width: calc(25% - 24.5px);
     }
 
     .teachercards.sidebarExpanded > * {
       width: calc(33.33% - 24.5px);
     }
   }
-
-`
+`;

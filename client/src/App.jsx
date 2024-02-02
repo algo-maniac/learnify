@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
 import { Routes, Route, useNavigate } from "react-router-dom";
-import styled from 'styled-components';
+import styled from "styled-components";
 import LogIn from "./pages/LogIn";
 import Random from "./pages/Random";
 import Random2 from "./pages/Random2";
 import SignUp from "./pages/SignUp";
-import HomepageTeacher from "./components/HomepageTeacher";
-import LiveStream from "./components/LiveStream";
+import Instructor from "./pages/Instructor";
+import LiveStream from "./pages/LiveStream.jsx";
 import Navbar from "./components/Navbar";
 import LeftMenu from "./components/LeftMenu";
-import UploadVideo from "./components/UploadVideo";
+import UploadVideo from "./pages/UploadVideo";
 import Doubt from "./components/Doubt";
-import Instructors from "./components/Instructors";
+import Instructors from "./pages/Instructors";
 import ExamCorner from "./components/ExamCorner";
 import Footer from "./components/Footer";
 import Home from "./pages/Home";
@@ -31,28 +31,32 @@ import Courses from "./pages/Courses";
 function App() {
   const navigate = useNavigate();
   const [userdata, setUserdata] = useState(() => {
-    const storedUserData = localStorage.getItem('userdata');
+    const storedUserData = localStorage.getItem("userdata");
     return storedUserData ? JSON.parse(storedUserData) : null;
   });
-  const [isSidebarExpanded, setIsSidebarExpanded] = useState(window.innerWidth <= 786 ? false : true)
+  const [isSidebarExpanded, setIsSidebarExpanded] = useState(
+    window.innerWidth <= 786 ? false : true
+  );
   const toggleIsSearchExpanded = () => {
-    console.log('clilcked');
-    setIsSidebarExpanded(prev => !prev);
+    console.log("clilcked");
+    setIsSidebarExpanded((prev) => !prev);
     console.log(isSidebarExpanded);
-  }
+  };
 
   const fetchUserdata = async () => {
     try {
-      const token = localStorage.getItem('token');
+      const token = localStorage.getItem("token");
 
       if (!token) return;
 
       const role = jwtDecode(token).role;
-      const requestRoute = `${ role }/get${ role.charAt(0).toUpperCase() + role.slice(1) }Data`
-      const data = await fetch(`http://localhost:8000/${ requestRoute }`, {
-        method: 'GET',
+      const requestRoute = `${role}/get${
+        role.charAt(0).toUpperCase() + role.slice(1)
+      }Data`;
+      const data = await fetch(`http://localhost:8000/${requestRoute}`, {
+        method: "GET",
         headers: {
-          "authorization": token
+          authorization: token,
         },
       });
 
@@ -60,35 +64,33 @@ function App() {
         const newUserdata = await data.json();
 
         setUserdata(newUserdata);
-        localStorage.setItem('userdata', JSON.stringify(newUserdata));
+        localStorage.setItem("userdata", JSON.stringify(newUserdata));
       } else {
-        console.error('Error fetching user data');
+        console.error("Error fetching user data");
       }
     } catch (error) {
-      console.error('Error fetching user data', error);
+      console.error("Error fetching user data", error);
     }
-  }
+  };
 
   const logout = (e) => {
     console.log(e);
-    localStorage.removeItem('token');
-    localStorage.removeItem('userdata');
+    localStorage.removeItem("token");
+    localStorage.removeItem("userdata");
     setUserdata(null);
     navigate("/");
-  }
-
+  };
 
   useEffect(() => {
     const checkTokenExpiration = () => {
-      const storedToken = localStorage.getItem('token');
+      const storedToken = localStorage.getItem("token");
       if (storedToken) {
         const { exp } = jwtDecode(storedToken);
         if (Date.now() > exp * 1000) {
           logout();
         } else {
           if (!userdata) {
-            if (localStorage.getItem("token"))
-              fetchUserdata();
+            if (localStorage.getItem("token")) fetchUserdata();
           }
         }
       }
@@ -101,21 +103,28 @@ function App() {
     userdata,
     setUserdata,
     fetchUserdata,
-    isSidebarExpanded
+    isSidebarExpanded,
   };
 
   return (
     <>
       <AuthContext.Provider value={contextValue}>
         <NavbarContainer>
-          <Navbar toggleIsSearchExpanded={toggleIsSearchExpanded} logout={logout}/>
+          <Navbar
+            toggleIsSearchExpanded={toggleIsSearchExpanded}
+            logout={logout}
+          />
         </NavbarContainer>
 
         <LeftMenuConainer isSidebarExpanded={isSidebarExpanded}>
-          <LeftMenu isSidebarExpanded={isSidebarExpanded} pageId={1} setIsSidebarExpanded={setIsSidebarExpanded}/>
+          <LeftMenu
+            isSidebarExpanded={isSidebarExpanded}
+            pageId={1}
+            setIsSidebarExpanded={setIsSidebarExpanded}
+          />
         </LeftMenuConainer>
 
-        <Content  isSidebarExpanded={isSidebarExpanded}>
+        <Content isSidebarExpanded={isSidebarExpanded}>
           <Routes>
             {/* <Route path="/" element={<Home />}></Route> */}
             <Route path="/" element={<Home2 />}></Route>
@@ -123,8 +132,8 @@ function App() {
             <Route path="/SignUp" element={<SignUp />} />
             <Route path="/LogIn" element={<LogIn />} />
             <Route path="/Random" element={<Random />} />
-            <Route path="/home" element={<HomepageTeacher />} />
-            {userdata && userdata.role === 'teacher' && (
+            <Route path="/home" element={<Instructor />} />
+            {userdata && userdata.role === "teacher" && (
               <Route path="/live" element={<LiveStream />} />
             )}
             <Route path="/video" element={<Videos />} />
@@ -132,15 +141,18 @@ function App() {
             <Route path="/adminpanel" element={<Admin />} />
             <Route path="/uploadvideo" element={<UploadVideo />} />
             <Route path="/instructor" element={<Instructors />} />
-            <Route path="/instructor/:id" element={<HomepageTeacher />} />
+            <Route path="/instructor/:id" element={<Instructor />} />
             <Route path="/video/:id" element={<Random2 />} />
             <Route path="/exam-corner" element={<ExamCorner />} />
             <Route path="/course" element={<Courses />} />
             <Route path="/course/create" element={<CreateCourseForm />} />
             <Route path="/course/:courseId/edit" element={<EditCourseForm />} />
             <Route path="/search" element={<Search />} />
-          </Routes> 
-          <Overlay isSidebarExpanded={isSidebarExpanded} onClick={toggleIsSearchExpanded} />
+          </Routes>
+          <Overlay
+            isSidebarExpanded={isSidebarExpanded}
+            onClick={toggleIsSearchExpanded}
+          />
         </Content>
 
         {/* <FooterContainer isSidebarExpanded={isSidebarExpanded}>
@@ -159,7 +171,7 @@ const NavbarContainer = styled.div`
   top: 0;
   right: 0;
   z-index: 1000;
-`
+`;
 
 const LeftMenuConainer = styled.div`
   width: ${({ isSidebarExpanded }) => (isSidebarExpanded ? "260px" : "65px")};
@@ -167,14 +179,17 @@ const LeftMenuConainer = styled.div`
   transition: width 0.3s;
 
   @media (max-width: 786px) {
-    display: ${({ isSidebarExpanded }) => (isSidebarExpanded ? "block" : "none")};
-    /* width: ${({ isSidebarExpanded }) => (isSidebarExpanded ? "100%" : "0")}; */
+    display: ${({ isSidebarExpanded }) =>
+      isSidebarExpanded ? "block" : "none"};
+    /* width: ${({ isSidebarExpanded }) =>
+      isSidebarExpanded ? "100%" : "0"}; */
     overflow-x: hidden;
   }
 `;
 
 const Content = styled.div`
-  padding-left: ${({ isSidebarExpanded }) => (isSidebarExpanded ? "260px" : "65px")};
+  padding-left: ${({ isSidebarExpanded }) =>
+    isSidebarExpanded ? "260px" : "65px"};
   padding-top: 70px;
   background-color: #eeeded;
   transition: padding-left 0.3s;
@@ -189,7 +204,8 @@ const Overlay = styled.div`
   display: none;
 
   @media (max-width: 786px) {
-    display: ${({ isSidebarExpanded }) => (isSidebarExpanded ? "block" : "none")};
+    display: ${({ isSidebarExpanded }) =>
+      isSidebarExpanded ? "block" : "none"};
     position: fixed;
     top: 0;
     left: 0;
@@ -201,7 +217,8 @@ const Overlay = styled.div`
 `;
 
 const FooterContainer = styled.div`
-  margin-left: ${({ isSidebarExpanded }) => (isSidebarExpanded ? "260px" : "65px")};
+  margin-left: ${({ isSidebarExpanded }) =>
+    isSidebarExpanded ? "260px" : "65px"};
   position: sticky;
   top: 100vh;
   transition: margin-left 0.3s;
@@ -210,4 +227,3 @@ const FooterContainer = styled.div`
     padding-left: 0;
   }
 `;
-

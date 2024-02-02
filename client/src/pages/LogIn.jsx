@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from "react";
 import styled from "styled-components";
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
-import './Home.css'
 import AuthContext from "../store/auth-context";
 import { toast } from "react-toastify";
 const LogIn = () => {
@@ -17,11 +16,14 @@ const LogIn = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(`http://localhost:8000/${ currUser.role }/login`, {
-        role: currUser.role,
-        email: currUser.email,
-        password: currUser.password,
-      });
+      const res = await axios.post(
+        `http://localhost:8000/${currUser.role}/login`,
+        {
+          role: currUser.role,
+          email: currUser.email,
+          password: currUser.password,
+        }
+      );
       if (res.status === 404) {
         console.log("User Not Found");
         return;
@@ -31,23 +33,23 @@ const LogIn = () => {
         return;
       }
       const { token } = res.data;
-      localStorage.setItem('token', token);
+      localStorage.setItem("token", token);
       console.log(res);
       fetchUserdata();
-      navigate('/', { state: { toast: true, data: res.message } });
+      navigate("/", { state: { toast: true, data: res.message } });
     } catch (err) {
       toast.error("Error in Logging", {
-        position: 'top-center'
-      })
+        position: "top-center",
+      });
       console.log(err);
     }
   };
 
   useEffect(() => {
-    if(userdata) {
-      navigate('/');
+    if (userdata) {
+      navigate("/");
     }
-  }, [userdata])
+  }, [userdata]);
 
   return (
     <Container>
@@ -108,96 +110,96 @@ const LogIn = () => {
 };
 
 const Container = styled.div`
-max-width: 600px;
-min-height: calc(100vh - 130px);
-display: flex;
-flex-direction: column;
-/* justify-content: center; */
-justify-content: space-evenly;
-align-items: center;
-margin: 30px auto 30px auto;
-border-radius: 10px;
-box-shadow: 1px 1px 4px #ccc;
-background-color: #fff;
+  max-width: 600px;
+  min-height: calc(100vh - 130px);
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  justify-content: space-evenly;
+  align-items: center;
+  margin: 30px auto 30px auto;
+  border-radius: 10px;
+  box-shadow: 1px 1px 4px #ccc;
+  background-color: #fff;
 `;
 
 const Select = styled.select`
-width: 100%;
-padding: 10px;
-border: 1px solid #ccc;
-border-radius: 5px;
-font-size: 16px;
-margin-bottom: 15px;
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  font-size: 16px;
+  margin-bottom: 15px;
 `;
 
 const StyledOption = styled.option`
-color: #1732ac;
-background-color: white;
+  color: #1732ac;
+  background-color: white;
 `;
 
 const Heading = styled.div`
-font-size: 28px;
-text-align: center;
-color: black;
-font-weight: 600;
-margin-bottom: 20px;
+  font-size: 28px;
+  text-align: center;
+  color: black;
+  font-weight: 600;
+  margin-bottom: 20px;
 `;
 
 const Content = styled.div`
-width: 90%;
+  width: 90%;
 `;
 
 const Form = styled.form`
-height: 100%;
-width: 100%;
-display: flex;
-flex-direction: column;
-justify-content: space-around;
-align-items: center;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
 `;
 
 const Input = styled.input`
-height: 40px;
-width: 100%;
-margin-top: 5px;
-font-size: 16px;
-padding: 5px;
-border-radius: 5px;
-border: 1px solid #ccc;
+  height: 40px;
+  width: 100%;
+  margin-top: 5px;
+  font-size: 16px;
+  padding: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
 `;
 
 const Label = styled.label`
-font-size: 18px;
-font-weight: 700;
-letter-spacing: 1px;
+  font-size: 18px;
+  font-weight: 700;
+  letter-spacing: 1px;
 `;
 
 const InputWrapper = styled.div`
-width: 100%;
-margin-bottom: 15px;
+  width: 100%;
+  margin-bottom: 15px;
 `;
 
 const Button = styled.button`
-height: 40px;
-width: 100%;
-color: white;
-border-radius: 5px;
-background-color: #1732ac;
-border: none;
-font-weight: 500;
-cursor: pointer;
+  height: 40px;
+  width: 100%;
+  color: white;
+  border-radius: 5px;
+  background-color: #1732ac;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
 
-&hover {
+  &hover {
     background-color: #3c56cd;
   }
 `;
 
 const Signnow = styled.div`
-margin-top: 10px;
-a {
-  text-decoration: none;
-  color: #383fa0
-}
+  margin-top: 10px;
+  a {
+    text-decoration: none;
+    color: #383fa0;
+  }
 `;
 
 export default LogIn;

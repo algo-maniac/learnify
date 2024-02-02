@@ -1,10 +1,10 @@
 import { useNavigate, useParams } from "react-router-dom";
-import AddSectionForm from "./AddSectionForm";
-import AddVideo from "./AddVideo";
-import EditBasicDetailsForm from "./EditBasicDetailsForm";
+import AddSectionForm from "../components/AddSectionForm";
+import AddVideo from "../components/AddVideo";
+import EditBasicDetailsForm from "../components/EditBasicDetailsForm";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import EditSectionDetailsForm from "./EditSectionDetailsForm";
+import EditSectionDetailsForm from "../components/EditSectionDetailsForm";
 
 const EditCourseForm = () => {
   const { courseId } = useParams();

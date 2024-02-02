@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import CreateCourseForm from "../components/CreateCourseForm";
+import CreateCourseForm from "./CreateCourseForm";
 import { useParams } from "react-router-dom";
 
 const Random = () => {

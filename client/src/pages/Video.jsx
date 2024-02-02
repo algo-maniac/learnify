@@ -39,8 +39,9 @@ const Video = () => {
       }
     );
     const data = await res.json();
+    console.log(data);
 
-    const sortedComments = data.video.comments
+    const sortedComments = (!data.video.comments) ? [] : data.video.comments
       .map((comment) => ({
         ...comment,
         replies: comment.replies.sort(

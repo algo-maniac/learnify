@@ -75,104 +75,141 @@ module.exports.getCourses = async (req, res) => {
 }
 
 
-module.exports.getEnrolledCourses = async (req, res) => {
+module.exports.enrollInCourse = async (req, res) => {
   try {
     const userId = req.user.id;
-    let courses;
-    if (req.user.role == "user") {
-      const user = await User.findById(userId)
-        .populate({
-          path: 'enrolledCourses',
-          select: '_id instructorId title description duration price level category thumbnail publishedDate enrollmentCount rating reviews',
-        })
-        .exec();
+    let enrolledCourses;
 
-      courses = user.enrolledCourses;
-    } else if (req.user.role == "instructor") {
-      const instructor = await Instructor.findById(userId)
-        .populate({
-          path: 'enrolledCourses',
-          select: '_id instructorId title description duration price level category thumbnail publishedDate enrollmentCount rating reviews',
-        })
-        .exec();
+    if (req.user.role == "user" || req.user.role == "instructor" || req.user.role == "admin") {
+      // Get the user, instructor, or admin based on the role
+      const userOrInstructorOrAdmin = await getModelByRole(req.user.role).findById(userId);
 
-      courses = instructor.enrolledCourses;
-    } else if (req.user.role == "admin") {
-      const admin = await Admin.findById(userId)
-        .populate({
-          path: 'enrolledCourses',
-          select: '_id instructorId title description duration price level category thumbnail publishedDate enrollmentCount rating reviews',
-        })
-        .exec();
+      // Check if the courseId is already in the enrolledCourses array
+      const courseId = req.params.courseId;
+      if (!userOrInstructorOrAdmin.enrolledCourses.includes(courseId)) {
+        // If not, push the courseId to the enrolledCourses array
+        userOrInstructorOrAdmin.enrolledCourses.push(courseId);
+        await userOrInstructorOrAdmin.save();
+      }
 
-      courses = admin.enrolledCourses;
+      enrolledCourses = userOrInstructorOrAdmin.enrolledCourses;
     } else {
-      res.status(500).json({
+      return res.status(500).json({
         error: "Invalid role"
-      })
+      });
     }
 
     res.status(200).json({
       ok: true,
-      enrolledCourses: courses
-    })
+      enrolledCourses: enrolledCourses
+    });
   } catch (err) {
     console.log(err);
     res.status(500).json({
       error: "There is some problem at our end"
-    })
+    });
   }
-}
+};
+
+
+
+module.exports.getEnrolledCourses = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    let courses;
+    let totalCourses;
+
+    if (req.user.role == "user" || req.user.role == "instructor" || req.user.role == "admin") {
+      const userOrInstructorOrAdmin = await getModelByRole(req.user.role)
+        .findById(userId)
+        .populate({
+          path: 'enrolledCourses',
+          select: '-sections',
+        })
+        .exec();
+      const pageSize = 6;
+      let { offset } = req.body;
+      offset--;
+      const startIndex = offset * pageSize;
+      const endIndex = startIndex + pageSize;
+
+      courses = userOrInstructorOrAdmin.enrolledCourses.slice(startIndex, endIndex);
+      totalCourses = userOrInstructorOrAdmin.enrolledCourses.length;
+    } else {
+      return res.status(500).json({
+        error: "Invalid role"
+      });
+    }
+
+    console.log(courses);
+    res.status(200).json({
+      ok: true,
+      courses: courses,
+      totalCourses: totalCourses
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      error: "There is some problem at our end"
+    });
+  }
+};
 
 
 module.exports.getPurchasedCourses = async (req, res) => {
   try {
     const userId = req.user.id;
     let courses;
-    if (req.user.role == "user") {
-      const user = await User.findById(userId)
+    let totalCourses;
+
+    if (req.user.role == "user" || req.user.role == "instructor" || req.user.role == "admin") {
+      const userOrInstructorOrAdmin = await getModelByRole(req.user.role)
+        .findById(userId)
         .populate({
           path: 'purchasedCourses',
-          select: '_id instructorId title description duration price level category thumbnail publishedDate enrollmentCount rating reviews',
+          select: '-sections',
         })
         .exec();
+      const pageSize = 6;
+      let { offset } = req.body;
+      offset--;
+      const startIndex = offset * pageSize;
+      const endIndex = startIndex + pageSize;
 
-      courses = user.purchasedCourses;
-    } else if (req.user.role == "instructor") {
-      const instructor = await Instructor.findById(userId)
-        .populate({
-          path: 'purchasedCourses',
-          select: '_id instructorId title description duration price level category thumbnail publishedDate enrollmentCount rating reviews',
-        })
-        .exec();
-
-      courses = instructor.purchasedCourses;
-    } else if (req.user.role == "admin") {
-      const admin = await Admin.findById(userId)
-        .populate({
-          path: 'purchasedCourses',
-          select: '_id instructorId title description duration price level category thumbnail publishedDate enrollmentCount rating reviews',
-        })
-        .exec();
-
-      courses = admin.purchasedCourses;
+      courses = userOrInstructorOrAdmin.purchasedCourses.slice(startIndex, endIndex);
+      totalCourses = userOrInstructorOrAdmin.purchasedCourses.length;
     } else {
-      res.status(500).json({
+      return res.status(500).json({
         error: "Invalid role"
-      })
+      });
     }
 
+    console.log(courses);
     res.status(200).json({
       ok: true,
-      purchasedCourses: courses
-    })
+      courses: courses,
+      totalCourses: totalCourses
+    });
   } catch (err) {
     console.log(err);
     res.status(500).json({
       error: "There is some problem at our end"
-    })
+    });
   }
-}
+};
+
+const getModelByRole = (role) => {
+  switch (role) {
+    case "user":
+      return User;
+    case "instructor":
+      return Instructor;
+    case "admin":
+      return Admin;
+    default:
+      return null;
+  }
+};
 
 
 module.exports.createCourse = async (req, res) => {
@@ -254,12 +291,12 @@ module.exports.createSection = async (req, res) => {
 
 
 module.exports.getCourseDetails = async (req, res) => {
-  const { id } = req.params;
+  const { courseId } = req.params;
 
-  console.log(id);
+  console.log(courseId);
 
   try {
-    const course = await Course.findById(id)
+    const course = await Course.findById(courseId)
       .populate({
         path: 'sections',
         populate: {
@@ -267,7 +304,7 @@ module.exports.getCourseDetails = async (req, res) => {
           model: 'VideoLecture',
           select: '_id courseId sectionId title description duration thumbnail createdAt updatedAt',
         },
-        select: '_id courseid title description',
+        select: '_id courseid title description videoLectures',
       })
       .exec();
 
@@ -297,7 +334,6 @@ module.exports.getCourseDetails = async (req, res) => {
 
 module.exports.getCourseDetailsForEdit = async (req, res) => {
   const { courseId } = req.params;
-
 
   try {
     const course = await Course.findById(courseId)
@@ -502,7 +538,9 @@ module.exports.editVideoDetails = async (req, res) => {
     if (duration) updateFields.duration = duration;
     if (thumbnail) updateFields.thumbnail = thumbnailUrl;
 
-
+    console.log(updateFields);
+    console.log(videoFile);
+    console.log(thumbnail);
     const video = await VideoLecture.findByIdAndUpdate(
       videoId,
       { $set: updateFields },

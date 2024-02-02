@@ -1,7 +1,7 @@
 // CreateCourse.jsx
 import React, { useState } from 'react';
 import { Navigate, useNavigate } from 'react-router-dom';
-import './CreateCourseForm.css'
+// import './CreateCourseForm.css'
 import styled from 'styled-components';
 
 const CreateCourseForm = () => {

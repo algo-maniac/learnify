@@ -196,7 +196,8 @@ module.exports.getInstructorData = async (req, res) => {
 
 module.exports.getInstructorCourses = async (req, res) => {
   try {
-    const id = req.user.id;
+    const id = req.params.id
+    console.log(id);
     let pageSize = 6;
     const nof_courses=await Instructor.findById(id);
     const length=nof_courses.courses.length
@@ -218,6 +219,7 @@ module.exports.getInstructorCourses = async (req, res) => {
       })
       .select('courses');
     const courses = coursesQuery.courses;
+    console.log(courses);
 
     return res.status(200).json({
       ok: true,

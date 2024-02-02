@@ -40,7 +40,7 @@ const authenticateVideoAccess = async (req, res, next) => {
             case "instructor":
                 const isInEnrolledCourses = await Instructor.exists({
                     _id: user.id,
-                    enrolledCourses: { $in: [courseId] }
+                    enrolledCourses: { $in: [video.courseId] }
                 });
                 if (video.instructorId == user.id || isInEnrolledCourses) {
                     next();

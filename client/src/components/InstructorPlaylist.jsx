@@ -192,44 +192,53 @@ const Container = styled.div`
   }
 
   .courses-list > * {
-    width: calc(25% - 24.5px);
-  }
-
-  .courses-list.sidebarExpanded > * {
-    width: calc(25% - 24.5px);
-  }
-
-  @media only screen and (max-width: 600px) {
-    .courses-list > * {
-      width: calc(100%);
+        width: calc(25% - 24.5px);
     }
-  }
+
+    .courses-list.sidebarExpanded > * {
+        width: calc(25% - 24.5px);
+    }
+
+    @media only screen and (max-width: 600px) {
+      .courses-list > * {
+        width: 100%;
+      }
+
+      .courses-list.sidebarExpanded > * {
+          width: 100%;
+      }
+    }
 
   @media only screen and (min-width: 601px) and (max-width: 800px) {
-    .courses-list > * {
-      width: calc(50% - 15px);
-    }
-  }
+        .courses-list > * {
+            width: calc(50% - 15px);
+        }
 
-  @media only screen and (min-width: 801px) and (max-width: 1200px) {
-    .courses-list > * {
-      width: calc(33.333% - 20px);
-    }
-
-    .courses-list.sidebarExpanded > * {
-      width: calc(50% - 15px);
-    }
-  }
-
-  @media only screen and (min-width: 1201px) and (max-width: 1400px) {
-    .courses-list > * {
-      width: calc(33.333% - 20px);
+        .courses-list.sidebarExpanded > * {
+            width: calc(50% - 15px);
+        }
     }
 
-    .courses-list.sidebarExpanded > * {
-      width: calc(33.333% - 20px);
+
+    @media only screen and (min-width: 801px) and (max-width: 1200px) {
+        .courses-list > * {
+            width: calc(33.333% - 20px);
+        }
+
+        .courses-list.sidebarExpanded > * {
+            width: calc(50% - 15px);
+        }
     }
-  }
+
+    @media only screen and (min-width: 1201px) and (max-width: 1400px) {
+        .courses-list > * {
+            width: calc(33.333% - 20px);
+        }
+
+        .courses-list.sidebarExpanded > * {
+            width: calc(33.333% - 20px);
+        }
+    }
 
   .courses-list .courses {
     /* margin-right: 1rem;

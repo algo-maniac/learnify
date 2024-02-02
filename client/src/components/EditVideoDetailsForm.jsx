@@ -41,20 +41,20 @@ const EditVideoDetailsForm = ({
   const handleSubmit = (e) => {
     console.log("inside handle submit");
     e.preventDefault();
-    // Include thumbnail and video files in the form data for submission
-    const formData = new FormData();
-    if (editableFields["title"])
-      formData.append("title", editedVideoDetails.title);
-    if (editableFields["description"])
-      formData.append("description", editedVideoDetails.description);
-    if (editableFields["video"] && videoFile)
-      formData.append("video", videoFile);
-    if (editableFields["thumbnail"] && thumbnailFile)
-      formData.append("description", editedVideoDetails);
 
-    // Add more fields as needed
+    console.log(editableFields);
+    const formData = new FormData();
+    if (editableFields["title"]) 
+        formData.append("title", editedVideoDetails.title);
+    if (editableFields["description"]) 
+        formData.append("description", editedVideoDetails.description);
+    if (editableFields["video"] && videoFile) 
+        formData.append("video", videoFile);
+    if (editableFields["thumbnail"] && thumbnailFile) 
+        formData.append("description", editedVideoDetails);
+
     handleCancelEdit();
-    // Submit the form data
+
     handleVideoDetailsSubmit(
       formData,
       initialVideoDetails._id,

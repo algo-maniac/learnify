@@ -12,7 +12,7 @@ import styled from 'styled-components';
 import AuthContext from '../store/auth-context';
 import { useNavigate } from 'react-router-dom';
 
-const Courses = () => {
+const PurchasedCourses = () => {
     const { isSidebarExpanded } = useContext(AuthContext);
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
@@ -28,7 +28,7 @@ const Courses = () => {
     };
     const fetchHandler = async () => {
         setLoading(true)
-        const data = await fetch(`http://localhost:8000/course/getCourses`, {
+        const data = await fetch(`http://localhost:8000/course/purchasedCourses`, {
             method: 'POST',
             headers: {
                 Authorization: localStorage.getItem("token"),
@@ -42,24 +42,6 @@ const Courses = () => {
             setCourses(json.courses);
             setLength(json.length_of_courses)
             setLoading(false);
-        }
-    }
-
-    const enroll = async (courseId) => {
-        const data = await fetch(`http://localhost:8000/course/enroll/${courseId}`, {
-            method: 'POST',
-            headers: {
-                Authorization: localStorage.getItem("token"),
-                'Content-type': 'application/json'
-            },
-            // body: JSON.stringify({ offset: page })
-        });
-        const json = await data.json();
-        console.log(json)
-        if (json) {
-            // setCourses(json.courses);
-            // setLength(json.length_of_courses)
-            // setLoading(false);
         }
     }
     useEffect(() => {
@@ -95,8 +77,7 @@ const Courses = () => {
                                     <span className='price'>{data.price}</span>
                                 </CardContent>
                                 <CardActions className='box1'>
-                                    <button className='button-61' onClick={() => navigate(`/course/${data._id}/`)}>Buy</button>
-                                    <button className='button-61' onClick={() => enroll(data._id)}>Enroll</button>
+                                    <button className='button-61' onClick={() => navigate(`/course/${data._id}`)}>Buy</button>
                                 </CardActions>
                             </Card>
                         </div>
@@ -110,7 +91,7 @@ const Courses = () => {
     </>
 }
 
-export default Courses
+export default PurchasedCourses
 
 const Container = styled.div`
     width: 100%;
@@ -188,13 +169,22 @@ const Container = styled.div`
     }
 
     .courses-list > * {
-        width: 100%;
-      }
+        width: calc(25% - 24.5px);
+    }
 
-      .courses-list.sidebarExpanded > * {
-          width: 100%;
-      }
+    .courses-list.sidebarExpanded > * {
+        width: calc(25% - 24.5px);
+    }
 
+    @media only screen and (max-width: 600px) {
+    .courses-list > * {
+      width: calc(100%);
+    }
+
+    .courses-list.sidebarExpanded > * {
+        width: calc(100%);
+    }
+  }
 
   @media only screen and (min-width: 601px) and (max-width: 800px) {
         .courses-list > * {
@@ -227,15 +217,6 @@ const Container = styled.div`
         }
     }
 
-    @media only screen and (min-width: 1401px) {
-        .courses-list > * {
-            width: calc(25% - 24.5px);
-        }
-
-        .courses-list.sidebarExpanded > * {
-            width: calc(25% - 24.5px);
-        }
-    }
 
     .courses-list .courses{
         /* margin-right: 1rem;

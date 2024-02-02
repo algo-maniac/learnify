@@ -18,15 +18,19 @@ import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import Home2 from "./pages/Home2";
 import Search from "./pages/Search";
-import CreateCourseForm from "./components/CreateCourseForm";
+import CreateCourseForm from "./pages/CreateCourseForm.jsx";
 import AuthContext from "./store/auth-context";
 import { jwtDecode } from "jwt-decode";
-import Admin from "./pages/Admin";
+import AdminDashboard from "./pages/AdminDashboard.jsx";
 import Video from "./pages/Video";
 import Videos from "./pages/Videos";
-import EditCourseForm from "./components/EditCourseForm";
-import Course from "./pages/Courses";
+import EditCourseForm from "./pages/EditCourseForm.jsx";
+import Course from "./pages/Course";
 import Courses from "./pages/Courses";
+import EditableCourses from "./pages/EditableCourses.jsx";
+import EditableVideos from "./pages/EditableVideos.jsx";
+import PurchasedCourses from "./pages/PurchasedCourses.jsx";
+import EnrolledCourses from "./pages/EnrolledCourses.jsx";
 
 function App() {
   const navigate = useNavigate();
@@ -62,7 +66,7 @@ function App() {
 
       if (data.ok) {
         const newUserdata = await data.json();
-
+        console.log(newUserdata);
         setUserdata(newUserdata);
         localStorage.setItem("userdata", JSON.stringify(newUserdata));
       } else {
@@ -138,13 +142,18 @@ function App() {
             )}
             <Route path="/video" element={<Videos />} />
             <Route path="/video/:id" element={<Video />} />
-            <Route path="/adminpanel" element={<Admin />} />
+            <Route path="/edit-video" element={<EditableVideos />} />
+            <Route path="/dashboard-admin" element={<AdminDashboard />} />
             <Route path="/uploadvideo" element={<UploadVideo />} />
             <Route path="/instructor" element={<Instructors />} />
             <Route path="/instructor/:id" element={<Instructor />} />
             <Route path="/video/:id" element={<Random2 />} />
             <Route path="/exam-corner" element={<ExamCorner />} />
             <Route path="/course" element={<Courses />} />
+            <Route path="/course/:courseId" element={<Course />} />
+            <Route path="/enrolled-course" element={<EnrolledCourses />} />
+            <Route path="/purchased-course" element={<PurchasedCourses />} />
+            <Route path="/edit-course" element={<EditableCourses />} />
             <Route path="/course/create" element={<CreateCourseForm />} />
             <Route path="/course/:courseId/edit" element={<EditCourseForm />} />
             <Route path="/search" element={<Search />} />

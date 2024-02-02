@@ -5,7 +5,8 @@ import PlaylistAddIcon from "@mui/icons-material/PlaylistAdd";
 import MapsUgcIcon from "@mui/icons-material/MapsUgc";
 import RequestBox from "../components/RequestBox";
 import styled from "styled-components";
-function Admin() {
+
+function AdminDashboard() {
   return (
     <Container>
       <div className="outer">
@@ -81,7 +82,7 @@ function Admin() {
   );
 }
 
-export default Admin;
+export default AdminDashboard;
 
 const Container = styled.div`
   @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700");

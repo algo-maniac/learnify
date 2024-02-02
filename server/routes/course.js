@@ -5,15 +5,18 @@ const courseController = require("../controller/courseController");
 const multer = require("multer");
 const authenticateInstructor = require("../middlewares/instructor");
 const authenticateGeneral = require("../middlewares/authenticationGeneral")
+const authenticateVideoEditAccess = require("../middlewares/authenticateVideoEditAccess");
 const authenticateCourseAccess = require("../middlewares/authenticateCourseAccess");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
 
 router.post("/getCourses", authenticateGeneral, courseController.getCourses);
 
-router.get("/enrolledCourses", authenticateGeneral, courseController.getEnrolledCourses);
+router.post("/enrolledCourses", authenticateGeneral, courseController.getEnrolledCourses);
 
-router.get("/purchasedCourses", authenticateGeneral, courseController.getPurchasedCourses);
+router.post("/enroll/:courseId", authenticateGeneral, courseController.enrollInCourse);
+
+router.post("/purchasedCourses", authenticateGeneral, courseController.getPurchasedCourses);
 
 router.post("/createCourse", authenticateInstructor, upload.single("thumbnail"), courseController.createCourse);
 
@@ -33,9 +36,9 @@ router.delete("/deleteSection/:sectionId", authenticateCourseEditAccess, courseC
 
 router.post("/uploadCourseVideo", authenticateInstructor, upload.fields([{ name: 'video', maxCount: 1 }, { name: 'thumbnail', maxCount: 1 }]), courseController.uploadCourseVideo);
 
-router.put("/editVideoDetails/:videoId", authenticateCourseEditAccess, upload.fields([{ name: 'video', maxCount: 1 }, { name: 'thumbnail', maxCount: 1 }]), courseController.editVideoDetails);
+router.put("/editVideoDetails/:videoId", authenticateVideoEditAccess, upload.fields([{ name: 'video', maxCount: 1 }, { name: 'thumbnail', maxCount: 1 }]), courseController.editVideoDetails);
 
-router.delete("/deleteVideo/:videoId", authenticateCourseEditAccess, courseController.deleteVideo);
+router.delete("/deleteVideo/:videoId", authenticateVideoEditAccess, courseController.deleteVideo);
 
 
 

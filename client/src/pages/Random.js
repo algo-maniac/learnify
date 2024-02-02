@@ -1,5 +1,5 @@
 import React from "react";
-import CreateCourseForm from "../components/CreateCourseForm";
+import CreateCourseForm from "./CreateCourseForm";
 
 const Random = () => {
   return <div>

@@ -45,7 +45,7 @@ const LeftMenu = ({ isSidebarExpanded, pageId, setIsSidebarExpanded }) => {
         text: "Purchases",
       },
       {
-        link: "/enrolled-courses",
+        link: "/enrolled-course",
         icon: "/assets/enrolled.png",
         text: "Enrolled",
       },
@@ -72,16 +72,6 @@ const LeftMenu = ({ isSidebarExpanded, pageId, setIsSidebarExpanded }) => {
         link: "/instructor",
         icon: "/assets/instructor.png",
         text: "Instructors",
-      },
-      {
-        link: "/purchased-course",
-        icon: "/assets/purchase.png",
-        text: "Purchases",
-      },
-      {
-        link: "/enrolled-courses",
-        icon: "/assets/enrolled.png",
-        text: "Enrolled",
       },
       {
         link: "/dashboard-admin",
@@ -204,7 +194,7 @@ const Container = styled.div`
       /* background-color: #ffffff; */
       height: 40px;
       display: flex;
-      /* justify-content: center; */
+      margin: 0;
       justify-content: flex-start;
       align-items: center;
       place-items: center;
@@ -221,6 +211,7 @@ const Container = styled.div`
 
       p {
         font-size: 0.75rem;
+        margin: 0;
         margin-left: 10px;
         text-transform: uppercase;
         letter-spacing: 0.08rem;

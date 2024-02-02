@@ -10,6 +10,7 @@ const InstructorVideo = () => {
     const [page, setPage] = useState(1);
     const [videoLength, setLength] = useState(0);
     const [videos, setVideos] = useState();
+    const navigate = useNavigate();
 
     const handlePageChange = (event, value) => {
         setPage(value);
@@ -60,6 +61,7 @@ const InstructorVideo = () => {
                                 thumbnail={vid.thumbnail}
                                 profileImage={vid.instructorId.profileImage}
                             />
+                            <button onClick={() => navigate(`/video/${vid._id}/edit`)} className='button-61'>Edit</button>
                         </div>
                     })
                     }
@@ -142,7 +144,15 @@ const Container = styled.div`
         }
     }
 
+    .video {
+        position: relative;
 
+        button {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+        }
+    }
 
   .pagination{
     margin-top: auto;
@@ -154,5 +164,53 @@ const Container = styled.div`
   }
   .loader-page{
       text-align: center;
+  }
+
+  .button-61 {
+    align-items: center;
+    appearance: none;
+    background-color: #4a56b8;
+    border-radius: 0.375em;
+    box-shadow: none;
+    box-sizing: border-box;
+    color: #ffffff;
+    cursor: pointer;
+    margin-left: 0.7rem;
+    display: inline-flex;
+    font-family: BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen,
+      Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Helvetica,
+      Arial, sans-serif;
+    font-size: 0.85rem;
+    height: 2.8em;
+    justify-content: center;
+    line-height: 1.5;
+    padding: calc(0.5em - 1px) 1em;
+    position: relative;
+    padding-left: 1.3rem;
+    padding-right: 1.3rem;
+    text-align: center;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    vertical-align: top;
+    white-space: nowrap;
+  }
+
+  .button-61:active {
+    border-color: #4a4a4a;
+    outline: 0;
+  }
+
+  .button-61:focus {
+    border-color: #485fc7;
+    outline: 0;
+  }
+
+  .button-61:hover {
+    background-color: rgb(71, 89, 206);
+  }
+
+  .button-61:focus:not(:active) {
+    box-shadow: rgba(72, 95, 199, 0.25) 0 0 0 0.125em;
   }
 `

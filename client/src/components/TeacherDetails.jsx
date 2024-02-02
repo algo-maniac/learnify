@@ -78,6 +78,7 @@ const Container = styled.div`
   padding-right: 20px;
   padding-top: 8px;
   padding-bottom: 8px; */
+    width: 100%;
     padding: 2rem;
     flex-direction: row;
     align-items: flex-start;
@@ -137,6 +138,7 @@ const Container = styled.div`
     background-color: rgb(213, 2, 2);
     color: white;
     border-radius: 10px;
+    
 
     &:hover {
       background-color: rgb(182, 9, 9);
@@ -233,7 +235,7 @@ const ParentTeacherDetails = styled.div`
     background-color: rgb(213, 2, 2);
     color: white;
     border-radius: 10px;
-
+    margin-left: auto;
     &:hover {
       background-color: rgb(182, 9, 9);
     }

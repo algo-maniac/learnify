@@ -137,6 +137,7 @@ module.exports.getAdminData = async (req, res) => {
   try {
     const id = req.user.id;
     const admin = await Admin.findById(id);
+    console.log(admin);
 
     return res.status(200).json({
       id: admin.id,

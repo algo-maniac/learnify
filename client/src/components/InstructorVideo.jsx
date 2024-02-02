@@ -108,10 +108,18 @@ const Container = styled.div`
         .videos > * {
             width: calc(100%);
         }
+
+        .videos.sidebarExpanded > * {
+            width: calc(100%);
+        }
     }
 
     @media only screen and (min-width: 601px) and (max-width: 800px) {
         .videos > * {
+            width: calc(50% - 15px);
+        }
+
+        .videos.sidebarExpanded > * {
             width: calc(50% - 15px);
         }
     }
@@ -122,7 +130,7 @@ const Container = styled.div`
         }
 
         .videos.sidebarExpanded > * {
-          width: calc(50% - 15px);
+            width: calc(50% - 15px);
         }
     }
 

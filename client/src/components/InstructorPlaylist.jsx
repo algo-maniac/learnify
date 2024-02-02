@@ -185,18 +185,22 @@ const Container = styled.div`
         }
     }
 
-    @media only screen and (min-width: 801px) and (max-width: 1400px) {
+    @media only screen and (min-width: 801px) and (max-width: 1200px) {
         .courses-list > * {
             width: calc(33.333% - 20px);
         }
 
         .courses-list.sidebarExpanded > * {
-            width: calc(33.333% - 20px);
+            width: calc(50% - 15px);
         }
     }
 
     @media only screen and (min-width: 1201px) and (max-width: 1400px) {
         .courses-list > * {
+            width: calc(33.333% - 20px);
+        }
+
+        .courses-list.sidebarExpanded > * {
             width: calc(33.333% - 20px);
         }
     }

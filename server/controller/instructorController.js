@@ -388,15 +388,20 @@ module.exports.getAllInstructors = async (req, res) => {
 module.exports.getInstructorWithId = async (req, res) => {
   const { id } = req.params;
   try {
-    const instructor = await Instructor.findOne({
-      _id: id,
-      isApproved: true
-    },
+    const instructor = await Instructor.findOne(
+      { _id: id, isApproved: true },
       "_id username profileImage videoLectures courses"
-    ).populate({
-      path: 'videoLectures',
-      select: '_id title description duration thumbnail',
-    })
+    )
+      .populate({
+        path: 'videoLectures',
+        select: '_id title description duration thumbnail',
+        options: { limit: 8 },
+      })
+      .populate({
+        path: 'courses',
+        select: '-sections', // Exclude sections
+        options: { limit: 8 },
+      });
     // .populate({
     //   path: 'courses',
     //   select: '_id title description duration thumbnail price rating enrollmentCount category level',

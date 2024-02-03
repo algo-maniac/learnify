@@ -10,7 +10,7 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import { CircularProgress, Pagination } from '@mui/material';
 import styled from 'styled-components';
 import AuthContext from '../store/auth-context';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const PurchasedCourses = () => {
     const { isSidebarExpanded } = useContext(AuthContext);
@@ -54,7 +54,8 @@ const PurchasedCourses = () => {
                 {loading && <div className='loader-page'><CircularProgress className='loading' /></div>}
                 {!loading && <div className={`courses-list ${isSidebarExpanded ? 'sidebarExpanded' : ''}`}>
                     {course.length > 0 && course.map((data) => (
-                        <div className={`courses ${isSidebarExpanded ? 'sidebarExpanded' : ''}`}>
+                        <div className={`courses ${ isSidebarExpanded ? 'sidebarExpanded' : '' }`}>
+                        <Link to={`/course/${ data._id }`} >
                             <Card key={data._id}>
                                 <CardMedia
                                     sx={{ width: "100%", aspectRatio: "2/1" }}
@@ -74,13 +75,15 @@ const PurchasedCourses = () => {
                                             {data.category}
                                         </Fab>
                                     </div>
-                                    <span className='price'>{data.price}</span>
+                                    <span className='price'>Rs. {data.price}</span>
                                 </CardContent>
-                                <CardActions className='box1'>
-                                    <button className='button-61' onClick={() => navigate(`/course/${data._id}`)}>Buy</button>
-                                </CardActions>
+                                {/* <CardActions className='box1'>
+                                <button className='button-61' onClick={() => navigate(`/course/${data._id}/`)}>Buy</button>
+                                <button className='button-61' onClick={() => enroll(data._id)}>Enroll</button>
+                            </CardActions> */}
                             </Card>
-                        </div>
+                        </Link>
+                    </div>
                     ))}
                 </div>}
                 <div className='pagination'>
@@ -95,7 +98,7 @@ export default PurchasedCourses
 
 const Container = styled.div`
     width: 100%;
-    min-height: 100vh - 70px;
+    min-height: calc(100vh - 70px);
     background-color: white;
 
     .course-container{
@@ -222,6 +225,9 @@ const Container = styled.div`
         /* margin-right: 1rem;
         margin-bottom: 1rem; */
         /* width:  */
+        a {
+            text-decoration: none;
+        }
     }
     .courses-list .courses .level{
         font-weight: 700;

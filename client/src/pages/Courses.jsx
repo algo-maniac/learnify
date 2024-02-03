@@ -10,7 +10,7 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import { CircularProgress, Pagination } from '@mui/material';
 import styled from 'styled-components';
 import AuthContext from '../store/auth-context';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Courses = () => {
     const { isSidebarExpanded } = useContext(AuthContext);
@@ -46,7 +46,7 @@ const Courses = () => {
     }
 
     const enroll = async (courseId) => {
-        const data = await fetch(`http://localhost:8000/course/enroll/${courseId}`, {
+        const data = await fetch(`http://localhost:8000/course/enroll/${ courseId }`, {
             method: 'POST',
             headers: {
                 Authorization: localStorage.getItem("token"),
@@ -70,35 +70,37 @@ const Courses = () => {
         <Container>
             <div className="course-container">
                 {loading && <div className='loader-page'><CircularProgress className='loading' /></div>}
-                {!loading && <div className={`courses-list ${isSidebarExpanded ? 'sidebarExpanded' : ''}`}>
+                {!loading && <div className={`courses-list ${ isSidebarExpanded ? 'sidebarExpanded' : '' }`}>
                     {course.length > 0 && course.map((data) => (
-                        <div className={`courses ${isSidebarExpanded ? 'sidebarExpanded' : ''}`}>
-                            <Card key={data._id}>
-                                <CardMedia
-                                    sx={{ width: "100%", aspectRatio: "2/1" }}
-                                    image={data.thumbnail}
-                                    title={data.title}
-                                />
-                                <CardContent className='box'>
-                                    <Typography variant="h6" component="div">
-                                        {data.title}
-                                    </Typography>
-                                    <span className='level'>{data.level}</span>
-                                    <Typography variant="body2" color="text.secondary" className='desc'>
-                                        {filterDesc(data.description)}
-                                    </Typography>
-                                    <div className='tags'>
-                                        <Fab variant="extended" size="small" className='tag'>
-                                            {data.category}
-                                        </Fab>
-                                    </div>
-                                    <span className='price'>{data.price}</span>
-                                </CardContent>
-                                <CardActions className='box1'>
+                        <div className={`courses ${ isSidebarExpanded ? 'sidebarExpanded' : '' }`}>
+                            <Link to={`/course/${ data._id }`} >
+                                <Card key={data._id}>
+                                    <CardMedia
+                                        sx={{ width: "100%", aspectRatio: "2/1" }}
+                                        image={data.thumbnail}
+                                        title={data.title}
+                                    />
+                                    <CardContent className='box'>
+                                        <Typography variant="h6" component="div">
+                                            {data.title}
+                                        </Typography>
+                                        <span className='level'>{data.level}</span>
+                                        <Typography variant="body2" color="text.secondary" className='desc'>
+                                            {filterDesc(data.description)}
+                                        </Typography>
+                                        <div className='tags'>
+                                            <Fab variant="extended" size="small" className='tag'>
+                                                {data.category}
+                                            </Fab>
+                                        </div>
+                                        <span className='price'>Rs. {data.price}</span>
+                                    </CardContent>
+                                    {/* <CardActions className='box1'>
                                     <button className='button-61' onClick={() => navigate(`/course/${data._id}/`)}>Buy</button>
                                     <button className='button-61' onClick={() => enroll(data._id)}>Enroll</button>
-                                </CardActions>
-                            </Card>
+                                </CardActions> */}
+                                </Card>
+                            </Link>
                         </div>
                     ))}
                 </div>}
@@ -114,7 +116,7 @@ export default Courses
 
 const Container = styled.div`
     width: 100%;
-    min-height: 100vh - 70px;
+    min-height: calc(100vh - 70px);
     background-color: white;
 
     .course-container{
@@ -241,6 +243,9 @@ const Container = styled.div`
         /* margin-right: 1rem;
         margin-bottom: 1rem; */
         /* width:  */
+        a {
+            text-decoration: none;
+        }
     }
     .courses-list .courses .level{
         font-weight: 700;

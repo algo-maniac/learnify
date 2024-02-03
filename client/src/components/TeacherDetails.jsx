@@ -14,6 +14,9 @@ import styled from "styled-components";
 
 function TeacherDetails(props) {
   console.log(props);
+  return (
+    <></>
+  );
   const { id, username, profileImage } = props;
   const [tabValue, setTabvalue] = useState(0);
   const joinLiveClass = () => {

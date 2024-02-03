@@ -94,7 +94,7 @@ export default EnrolledCourses
 
 const Container = styled.div`
     width: 100%;
-    min-height: 100vh - 70px;
+    min-height: calc(100vh - 70px);
     background-color: white;
 
     .course-container{
@@ -221,6 +221,9 @@ const Container = styled.div`
         /* margin-right: 1rem;
         margin-bottom: 1rem; */
         /* width:  */
+        a {
+            text-decoration: none;
+        }
     }
     .courses-list .courses .level{
         font-weight: 700;

@@ -40,10 +40,7 @@ function Instructor() {
         <div className="instructorDetails">
           {instructordata && (
             <TeacherDetails
-              className="instructorDetails"
-              id={instructordata._id}
-              username={instructordata.username}
-              profileImage={instructordata.profileImage}
+              instructordata={instructordata}
             />
           )}
         </div>

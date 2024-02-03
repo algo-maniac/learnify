@@ -459,7 +459,7 @@ export default Video;
 
 const Container = styled.div`
   .video-box {
-    min-height: 100vh - 70px;
+    min-height: calc(100vh - 70px);
     width: 100%;
     display: flex;
     flex-direction: column;

@@ -82,10 +82,9 @@ const LeftMenu = ({ isSidebarExpanded, pageId, setIsSidebarExpanded }) => {
   };
 
   const location = useLocation();
-  // console.log(location);
 
   return (
-    <Container className={`${isSidebarExpanded ? "" : "collapsed"}`}>
+    <Container className={`${ isSidebarExpanded ? "" : "collapsed" }`}>
       <div className="middle">
         <div className="main-features">
           {(userdata && menuItems[userdata.role]
@@ -96,9 +95,8 @@ const LeftMenu = ({ isSidebarExpanded, pageId, setIsSidebarExpanded }) => {
               key={index}
               to={item.link}
               // className={`full-width-link ${ pageId == item.link ? 'selected' : '' } ${ isSidebarExpanded ? '' : 'collapsed' }`}
-              className={`full-width-link ${
-                location.pathname.startsWith(item.link) ? "selected" : ""
-              } ${isSidebarExpanded ? "" : "collapsed"}`}
+              className={`full-width-link ${ location.pathname.startsWith(item.link) ? "selected" : ""
+                } ${ isSidebarExpanded ? "" : "collapsed" }`}
               onClick={() =>
                 window.innerWidth <= 786 && setIsSidebarExpanded(false)
               }
@@ -128,7 +126,7 @@ const LeftMenu = ({ isSidebarExpanded, pageId, setIsSidebarExpanded }) => {
           </a>
         </div> */}
       </div>
-      <div className={`bottom ${isSidebarExpanded ? "" : "collapsed"}`}>
+      <div className={`bottom ${ isSidebarExpanded ? "" : "collapsed" }`}>
         Product developed & maintained by <a href="/">Learnify Business</a>
       </div>
     </Container>

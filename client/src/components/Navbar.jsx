@@ -141,10 +141,20 @@ function Navbar({ toggleIsSearchExpanded, logout }) {
               }
               {isDropdownOpen && (
                 <DropdownMenu>
-                  <div>
-                    <PersonIcon />
-                    {userdata.username}
-                  </div>
+                  {userdata.role === 'user' 
+                    ? (
+                      <div>
+                        <PersonIcon />
+                        {userdata.username}
+                      </div>
+                    ) : (
+                      <div>
+                        <Link to={`/dashboard-${userdata.role}`}>
+                          <PersonIcon />
+                          {userdata.username}
+                        </Link>
+                      </div>
+                  )}
                   <div>
                     <SettingsIcon />
                     Settings
@@ -407,6 +417,8 @@ const DropdownMenu = styled.div`
   z-index: 100;
   overflow: hidden;
 
+  
+
   div {
     padding: 12px 20px; /* Increased padding for larger screens */
     cursor: pointer;
@@ -417,6 +429,24 @@ const DropdownMenu = styled.div`
     justify-content: flex-start;
     align-items: center;
     gap: 10px;
+
+    a {
+      width: 100%;
+      text-decoration: none;
+      color: black;
+
+      div {
+        padding: 12px 20px; /* Increased padding for larger screens */
+        cursor: pointer;
+        font-size: 16px; /* Increased font size for larger screens */
+        color: #333;
+        transition: background-color 0.3s;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 10px;
+      }
+    }
 
     &:hover {
       background-color: #f5f5f5;

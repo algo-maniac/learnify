@@ -23,6 +23,7 @@ function Navbar({ toggleIsSearchExpanded, logout }) {
 
   const onBlurSearch = () => {
     setIsSearchFocused(false);
+    console.log("inside blur search bar");
   };
   const dropdownRef = useRef(null);
   const history = useNavigate();
@@ -30,6 +31,7 @@ function Navbar({ toggleIsSearchExpanded, logout }) {
   const openSearchBar = () => {
     setIsSearchFocused(true);
     setIsSearchExpanded(true);
+    console.log("inside open search bar");
   };
   const cancelSearch = () => {
     setSearchText('');
@@ -45,6 +47,7 @@ function Navbar({ toggleIsSearchExpanded, logout }) {
   };
 
   const redirectToSearch = (text) => {
+    console.log(searchText, isSearchFocused);
     if (searchText && isSearchFocused) {
       history(`/search?query=${ text }`);
     }
@@ -52,20 +55,22 @@ function Navbar({ toggleIsSearchExpanded, logout }) {
 
 
   useEffect(() => {
-    if (debounceTimeout) {
-      clearTimeout(debounceTimeout);
+    let newTimeout;
+    if(isSearchFocused) {
+      if (debounceTimeout) {
+        clearTimeout(debounceTimeout);
+      }
+
+      newTimeout = setTimeout(() => {
+        redirectToSearch(searchText);
+      }, 1000);
+
+      setDebounceTimeout(newTimeout);
     }
-
-    const newTimeout = setTimeout(() => {
-      redirectToSearch(searchText);
-    }, 1000);
-
-    setDebounceTimeout(newTimeout);
-
     return () => {
       clearTimeout(newTimeout);
     };
-  }, [searchText]);
+  }, [searchText, isSearchFocused]);
 
 
   useEffect(() => {
@@ -121,6 +126,7 @@ function Navbar({ toggleIsSearchExpanded, logout }) {
               setSearchText(e.target.value);
             }}
             onBlur={onBlurSearch}
+            onClick={openSearchBar}
           />
           <CancelIcon className={`cancel-icon  ${ searchText ? 'hasInputText' : '' }`} onClick={cancelSearch} />
         </div>

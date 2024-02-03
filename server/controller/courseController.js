@@ -10,6 +10,7 @@ const streamifier = require('streamifier');
 const { getVideoDurationInSeconds } = require('get-video-duration');
 const User = require("../models/user");
 const Admin = require("../models/admin");
+const { ObjectId } = require('mongoose').Types;
 const cloudinary = require('cloudinary').v2;
 
 
@@ -80,7 +81,7 @@ module.exports.enrollInCourse = async (req, res) => {
     const userId = req.user.id;
     let enrolledCourses;
 
-    if (req.user.role == "user" || req.user.role == "instructor" || req.user.role == "admin") {
+    if (req.user.role == "user") {
       // Get the user, instructor, or admin based on the role
       const userOrInstructorOrAdmin = await getModelByRole(req.user.role).findById(userId);
 
@@ -89,6 +90,85 @@ module.exports.enrollInCourse = async (req, res) => {
       if (!userOrInstructorOrAdmin.enrolledCourses.includes(courseId)) {
         // If not, push the courseId to the enrolledCourses array
         userOrInstructorOrAdmin.enrolledCourses.push(courseId);
+        await userOrInstructorOrAdmin.save();
+      }
+
+      enrolledCourses = userOrInstructorOrAdmin.enrolledCourses;
+    } else if (req.user.role == "instructor") {
+      const userOrInstructorOrAdmin = await getModelByRole(req.user.role).findById(userId);
+
+      // Check if the courseId is already in the enrolledCourses array
+      const courseId = req.params.courseId;
+
+      if (userOrInstructorOrAdmin.courses.includes(courseId)) {
+        // If not, push the courseId to the enrolledCourses array
+        return res.status(500).json({
+          error: "You are the creator"
+        });
+      }
+
+      if (!userOrInstructorOrAdmin.enrolledCourses.includes(courseId)) {
+        // If not, push the courseId to the enrolledCourses array
+        userOrInstructorOrAdmin.enrolledCourses.push(courseId);
+        await userOrInstructorOrAdmin.save();
+      }
+
+      enrolledCourses = userOrInstructorOrAdmin.enrolledCourses;
+    } else {
+      return res.status(500).json({
+        error: "Invalid role"
+      });
+    }
+
+
+    res.status(200).json({
+      ok: true,
+      enrolledCourses: enrolledCourses
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({
+      error: "There is some problem at our end"
+    });
+  }
+};
+
+
+module.exports.revertEnrollInCourse = async (req, res) => {
+  try {
+    const userId = req.user.id;
+    let enrolledCourses;
+
+    if (req.user.role == "user") {
+      // Get the user, instructor, or admin based on the role
+      const userOrInstructorOrAdmin = await getModelByRole(req.user.role).findById(userId);
+
+      const courseId = req.params.courseId;
+
+      // Check if the courseId is already in the enrolledCourses array
+      const indexOfCourse = userOrInstructorOrAdmin.enrolledCourses.indexOf(courseId);
+      if (indexOfCourse !== -1) {
+        // If found, remove the courseId from the enrolledCourses array
+        userOrInstructorOrAdmin.enrolledCourses.splice(indexOfCourse, 1);
+        await userOrInstructorOrAdmin.save();
+      }
+      
+      enrolledCourses = userOrInstructorOrAdmin.enrolledCourses;
+    } else if (req.user.role == "instructor") {
+      const userOrInstructorOrAdmin = await getModelByRole(req.user.role).findById(userId);
+
+      // Check if the courseId is already in the enrolledCourses array
+      const courseId = req.params.courseId;
+      if (userOrInstructorOrAdmin.courses.includes(courseId)) {
+        // If not, push the courseId to the enrolledCourses array
+        return res.status(500).json({
+          error: "You are the creator"
+        });
+      }
+      const indexOfCourse = userOrInstructorOrAdmin.enrolledCourses.indexOf(courseId);
+      if (indexOfCourse !== -1) {
+        // If found, remove the courseId from the enrolledCourses array
+        userOrInstructorOrAdmin.enrolledCourses.splice(indexOfCourse, 1);
         await userOrInstructorOrAdmin.save();
       }
 
@@ -291,21 +371,83 @@ module.exports.createSection = async (req, res) => {
 
 
 module.exports.getCourseDetails = async (req, res) => {
-  const { courseId } = req.params;
-
-  console.log(courseId);
-
   try {
-    const course = await Course.findById(courseId)
-      .populate({
+    const { courseId } = req.params;
+    const token = req.headers['authorization'];
+
+    let hasAccess = false;
+    const courseObjectId = new ObjectId(courseId);
+
+    if (!token) {
+      return res.status(401).json({ message: 'Unauthorized' });
+    }
+
+    const decoded = jwt.decode(token);
+
+    if (decoded.role === 'admin') {
+      hasAccess = true;
+    }
+    else if (decoded.role === 'instructor') {
+      const instructor = await Instructor.findOne({ _id: new ObjectId(decoded.id), isApproved: true });
+      if (!instructor) {
+        return res.status(401).json({ message: 'Unauthorized' });
+      }
+      console.log(instructor.courses);
+      console.log(courseObjectId);
+      const hasCourse = (
+        instructor.courses.includes(courseObjectId) ||
+        instructor.enrolledCourses.includes(courseObjectId) ||
+        instructor.purchasedCourses.includes(courseObjectId)
+      );
+
+      if (hasCourse) {
+        hasAccess = true;
+      }
+
+      req.user = instructor;
+
+    }
+    else if (decoded.role === 'user') {
+      const user = await User.findById(new ObjectId(decoded.id));
+
+      console.log(decoded);
+      console.log(user);
+      if (!user) {
+        console.log("no user");
+        return res.status(401).json({ message: 'Unauthorized' });
+      }
+
+      const hasCourse = (
+        user.enrolledCourses.includes(courseObjectId) ||
+        user.purchasedCourses.includes(courseObjectId)
+      );
+
+      if (hasCourse) {
+        hasAccess = true;
+      }
+      req.user = user;
+
+    }
+
+    let populateObject = {
+      path: 'sections',
+      populate: {
+        path: 'videoLectures',
+        model: 'VideoLecture',
+        select: '_id courseId sectionId title description duration thumbnail createdAt updatedAt',
+      },
+      select: '_id courseid title description videoLectures',
+    };
+
+    if (!hasAccess) {
+      populateObject = {
         path: 'sections',
-        populate: {
-          path: 'videoLectures',
-          model: 'VideoLecture',
-          select: '_id courseId sectionId title description duration thumbnail createdAt updatedAt',
-        },
-        select: '_id courseid title description videoLectures',
-      })
+        select: '_id courseid title description',
+      };
+    }
+
+    const course = await Course.findById(courseId)
+      .populate(populateObject)
       .exec();
 
 
@@ -320,7 +462,8 @@ module.exports.getCourseDetails = async (req, res) => {
     console.log(course);
     res.status(200).json({
       ok: true,
-      course: course
+      course: course,
+      hasAccess: hasAccess
     })
   } catch (err) {
     console.log(err);

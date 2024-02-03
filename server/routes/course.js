@@ -16,11 +16,13 @@ router.post("/enrolledCourses", authenticateGeneral, courseController.getEnrolle
 
 router.post("/enroll/:courseId", authenticateGeneral, courseController.enrollInCourse);
 
+router.post("/revertEnroll/:courseId", authenticateCourseAccess, courseController.revertEnrollInCourse);
+
 router.post("/purchasedCourses", authenticateGeneral, courseController.getPurchasedCourses);
 
 router.post("/createCourse", authenticateInstructor, upload.single("thumbnail"), courseController.createCourse);
 
-router.get("/getCourse/:courseId", authenticateCourseAccess, courseController.getCourseDetails);
+router.get("/getCourse/:courseId", authenticateGeneral, courseController.getCourseDetails);
 
 router.get("/getCourseDetailsForEdit/:courseId", authenticateCourseEditAccess, courseController.getCourseDetailsForEdit);
 

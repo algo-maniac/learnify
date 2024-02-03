@@ -1,7 +1,5 @@
-// CreateCourse.jsx
 import React, { useState } from 'react';
-import { Navigate, useNavigate } from 'react-router-dom';
-// import './CreateCourseForm.css'
+import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 
 const CreateCourseForm = () => {
@@ -146,7 +144,8 @@ const Container = styled.div`
   width: 100%;
   /* BasicDetailsForm.css */
 .basic-details-form {
-    max-width: 600px;
+    width: 95%;
+    max-width: 1000px;
     margin: 0 auto;
     padding: 20px;
     border: 1px solid #eaeaea;
@@ -155,6 +154,12 @@ const Container = styled.div`
     margin: 15px auto;
     background-color: rgb(255, 255, 255);
 }
+
+@media (min-width: 1401px) {
+    .basic-details-form {
+      width: 70%;
+    }
+  }
 
 .details-heading {
     font-size: 16px;

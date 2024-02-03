@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom'
 import VideoCard from "./VideoCard";
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
@@ -8,7 +9,10 @@ import Typography from "@mui/material/Typography";
 import { useContext } from "react";
 import styled from "styled-components";
 import AuthContext from "../store/auth-context";
-const InstructorHome = () => {
+
+
+const InstructorHome = ({ instructordata }) => {
+    const { profileImage, videoLectures, courses } = instructordata;
     const { isSidebarExpanded } = useContext(AuthContext);
     const filterDesc = (text) => {
         return text.slice(0, 100);
@@ -23,6 +27,7 @@ const InstructorHome = () => {
         }
         return duration;
     };
+
     return (
         <>
             <Container>
@@ -35,7 +40,7 @@ const InstructorHome = () => {
                     <br />
                     <div className="video-lists">
                         <div className={`videos ${ isSidebarExpanded ? 'sidebarExpanded' : '' }`}>
-                            {/* {videos && videos.map(vid => {
+                            {videoLectures && videoLectures.map(vid => {
                                 return <div className="video">
                                     <VideoCard
                                         id={vid._id}
@@ -43,11 +48,11 @@ const InstructorHome = () => {
                                         description={vid.description}
                                         duration={toMin(vid.duration)}
                                         thumbnail={vid.thumbnail}
-                                        profileImage={vid.instructorId.profileImage}
+                                        profileImage={profileImage}
                                     />
                                 </div>
                             })
-                            } */}
+                            }
                         </div>
                     </div>
                 </div>
@@ -60,39 +65,41 @@ const InstructorHome = () => {
                         {/* <span className="line2"></span> */}
                     </div>
                     <br />
-                    {/* {loading && <div className='loader-page'><CircularProgress className='loading' /></div>}
-                    {!loading && <div className={`courses-list ${ isSidebarExpanded ? 'sidebarExpanded' : '' }`}> */}
-                    {/* {course.length > 0 && course.map((data) => (
-                        <div className={`courses ${ isSidebarExpanded ? 'sidebarExpanded' : '' }`}>
-                            <Link to={`/course/${ data._id }`} >
-                                <Card key={data._id}>
-                                    <CardMedia
-                                        sx={{ width: "100%", aspectRatio: "2/1" }}
-                                        image={data.thumbnail}
-                                        title={data.title}
-                                    />
-                                    <CardContent className='box'>
-                                        <Typography variant="h6" component="div">
-                                            {data.title}
-                                        </Typography>
-                                        <span className='level'>{data.level}</span>
-                                        <Typography variant="body2" color="text.secondary" className='desc'>
-                                            {filterDesc(data.description)}
-                                        </Typography>
-                                        <div className='tags'>
-                                            <Fab variant="extended" size="small" className='tag'>
-                                                {data.category}
-                                            </Fab>
-                                        </div>
-                                        <span className='price'>Rs. {data.price}</span>
-                                    </CardContent>
-                                    
-                                </Card>
-                            </Link>
-                        </div>
-                    ))} */}
+                    {/* {loading && <div className='loader-page'><CircularProgress className='loading' /></div>} */}
+                    {/* {!loading &&  */}
+                    <div className={`courses-list ${ isSidebarExpanded ? 'sidebarExpanded' : '' }`}>
+                        {courses && courses.map((data) => (
+                            <div className={`courses ${ isSidebarExpanded ? 'sidebarExpanded' : '' }`}>
+                                <Link to={`/course/${ data._id }`} >
+                                    <Card key={data._id}>
+                                        <CardMedia
+                                            sx={{ width: "100%", aspectRatio: "2/1" }}
+                                            image={data.thumbnail}
+                                            title={data.title}
+                                        />
+                                        <CardContent className='box'>
+                                            <Typography variant="h6" component="div">
+                                                {data.title}
+                                            </Typography>
+                                            <span className='level'>{data.level}</span>
+                                            <Typography variant="body2" color="text.secondary" className='desc'>
+                                                {filterDesc(data.description)}
+                                            </Typography>
+                                            <div className='tags'>
+                                                <Fab variant="extended" size="small" className='tag'>
+                                                    {data.category}
+                                                </Fab>
+                                            </div>
+                                            <span className='price'>Rs. {data.price}</span>
+                                        </CardContent>
+
+                                    </Card>
+                                </Link>
+                            </div>
+                        ))}
+                    </div>
                 </div>
-        </Container >
+            </Container >
         </>
     );
 };
@@ -291,6 +298,10 @@ const Container = styled.div`
     /* margin-right: 1rem;
         margin-bottom: 1rem; */
     /* width:  */
+
+    a {
+        text-decoration: none;
+    }
   }
   .courses-list .courses .level {
     font-weight: 700;
@@ -308,11 +319,11 @@ const Container = styled.div`
     padding-bottom: 0.2rem;
   }
   .courses-list .courses .tag {
-    background-color: black;
+    background-color: #282727;
     color: white;
     text-transform: none;
-    font-size: 0.72rem;
-    margin: 0.1rem;
+    font-size: 0.8rem;
+    /* margin: 0.1rem; */
     z-index: 1;
   }
   .courses-list .courses .box1 {

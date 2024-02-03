@@ -46,10 +46,11 @@ const authenticateCourseAccess = async (req, res, next) => {
             return;
         } 
         else if(decoded.role === 'user') {
-            const userFromToken = jwt.verify(token, process.env.USER_JWT_SECRET).id;
+            const userFromToken = jwt.verify(token, process.env.USER_JWT_SECRET);
             const userId = userFromToken.id;
-            const user = await Instructor.findById(userId);
-
+            const user = await User.findById(userId);
+            console.log(userId);
+            console.log("Here");
             if (!user) {
                 return res.status(401).json({ message: 'Unauthorized' });
             }

@@ -489,13 +489,19 @@ const Container = styled.div`
   margin: 0;
 
   .edit-course-container {
-    width: 70%;
+    width: 95%;
     max-width: 1000px;
     margin: 15px auto;
     padding: 20px;
     background-color: #fff;
     border-radius: 10px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+
+  @media (min-width: 1401px) {
+    .edit-course-container {
+      width: 70%;
+    }
   }
 
   .test-details {

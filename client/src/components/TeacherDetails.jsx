@@ -14,10 +14,8 @@ import styled from "styled-components";
 
 function TeacherDetails(props) {
   console.log(props);
-  return (
-    <></>
-  );
-  const { id, username, profileImage } = props;
+
+  const { _id, username, profileImage, videoLectures, courses } = props.instructordata;
   const [tabValue, setTabvalue] = useState(0);
   const joinLiveClass = () => {
     console.log("Hello!!!!!!!!");
@@ -33,7 +31,7 @@ function TeacherDetails(props) {
           </div>
           <div className="user-info">
             <div className="username">
-              <h2>{props.username}</h2>
+              <h2>{username}</h2>
             </div>
             <div className="subscriber-count">
               <span>12 subscribers</span>
@@ -43,7 +41,7 @@ function TeacherDetails(props) {
             </div>
           </div>
           <div className="join-live">
-            <Link to={`/live/?roomID=${id}&role=Audience`}>
+            <Link to={`/live/?roomID=${_id}&role=Audience`}>
               <Button>Join Live</Button>
             </Link>
           </div>
@@ -61,7 +59,7 @@ function TeacherDetails(props) {
             <Tab label="About" onClick={() => setTabvalue(3)} />
           </Tabs>
         </div>
-        {tabValue === 0 && <InstructorHome />}
+        {tabValue === 0 && <InstructorHome instructordata={props.instructordata}/>}
         {tabValue === 1 && <InstructorVideo />}
         {tabValue === 2 && <InstructorPlaylist />}
         {tabValue === 3 && <InstructorAbout />}

@@ -13,7 +13,7 @@ import AuthContext from "../store/auth-context";
 import styled from "styled-components";
 
 const Video = () => {
-  const { userdata } = useContext(AuthContext);
+  const { userdata, isSidebarExpanded } = useContext(AuthContext);
   const { id } = useParams();
   const [data, setData] = useState({});
   const [isLiked, setIsLiked] = useState(false);
@@ -271,8 +271,8 @@ const Video = () => {
     <Container>
       <ToastContainer />
       <LoadingBar color="black" ref={ref} className="loading-bar" />
-      <div className="video-box">
-        <div className="video-player">
+      <div className={`video-box ${ isSidebarExpanded ? 'sidebarExpanded' : '' }`}>
+        <div className={`video-player ${ isSidebarExpanded ? 'sidebarExpanded' : '' }`}>
           <div className="video">
             <video
               id="my-player"
@@ -329,7 +329,7 @@ const Video = () => {
             </div>
           </div>
         </div>
-        <div className="comment-box">
+        <div className={`comment-box ${ isSidebarExpanded ? 'sidebarExpanded' : '' }`}>
           <div className="header1">
             <h4>
               <span>{comments.length}</span> Comments
@@ -419,27 +419,27 @@ const Video = () => {
                           <div className="header-text">
                             <span>All replies</span>
                           </div>
-                          {data.replies.map((data, index) => (
+                          {data.replies.map((reply, index) => (
                             <div
                               className={`reply-chats ${
-                                data.role === "admin"
+                                reply.role === "admin"
                                   ? "admin-chat"
-                                  : data.role === "instructor"
+                                  : reply.role === "instructor"
                                   ? "instructor-chat"
                                   : "user-chat"
                               }`}
                             >
                               <div className="username">
-                                <span>Chandrachur</span>
+                                <span>{reply.username}</span>
                               </div>
                               <div className="time">
                                 <span>
-                                  {getTime(data.timestamp)},{" "}
-                                  {getDate(data.timestamp)}
+                                  {getTime(reply.timestamp)},{" "}
+                                  {getDate(reply.timestamp)}
                                 </span>
                               </div>
                               <div className="text">
-                                <span>{data.text}</span>
+                                <span>{reply.text}</span>
                               </div>
                             </div>
                           ))}
@@ -465,36 +465,77 @@ const Container = styled.div`
     flex-direction: column;
   }
 
-  @media (max-width: 768px) {
+  @media (min-width: 768px) and (max-width: 1400px) {
     .video-box {
+      flex-direction: row;
+    }
+
+    .video-box.sidebarExpanded {
+      flex-direction: column;
+    }
+  }
+
+  @media (min-width: 1401px) {
+    .video-box {
+      flex-direction: row;
+    }
+
+    .video-box.sidebarExpanded {
       flex-direction: row;
     }
   }
 
   .video-player {
-    display: flex;
-    flex-direction: column;
-    width: 70vw;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.video-player.sidebarExpanded {
+  width: 100%;
+}
+
+@media (min-width: 768px) and (max-width: 1400px) {
+  .video-player {
+    width: 70%;
   }
+
+  .video-player.sidebarExpanded {
+    width: 100%;
+  }
+}
+
+@media (min-width: 1401px) {
+  .video-player {
+    width: 70%;
+  }
+
+  .video-player.sidebarExpanded {
+    width: 70%;
+  }
+}
   .video-player .video {
-    width: 70vw;
+    width: 100%;
     min-height: 78.2vh;
   }
   .video-player .video-js {
-    width: 68.5vw;
+    width: 100%;
     height: 76vh;
+    border-radius: 15px;
   }
   .video-player img {
-    width: 68.5vw;
+    width: 100%;
     min-height: 60vh;
   }
   .video-player .video {
     min-height: 60vh;
-    min-width: 70vw;
+    width: 100%;
+    border-radius: 15px;
   }
   .video-player video {
     border-radius: 15px;
-    margin: 0.8rem;
+    /* margin: 0.8rem; */
+    padding: 0.8rem;
   }
   .video-player .video-info {
     min-height: 50vh;
@@ -596,6 +637,31 @@ const Container = styled.div`
     display: flex;
     flex-direction: column;
   }
+
+  .comment-box.sidebarExpanded {
+    width: 100%;
+  }
+
+  @media (min-width: 768px) and (max-width: 1400px) {
+    .comment-box {
+      width: 30%;
+    }
+
+    .comment-box.sidebarExpanded {
+      width: 100%;
+    }
+  }
+
+  @media (min-width: 1401px) {
+    .comment-box {
+      width: 30%;
+    }
+
+    .comment-box.sidebarExpanded {
+      width: 30%;
+    }
+  }
+  
   .comment-box .header1 {
     margin-top: 0.5rem;
     padding-left: 1%;

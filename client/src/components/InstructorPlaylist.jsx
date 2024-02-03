@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import Card from "@mui/material/Card";
 import CardActions from "@mui/material/CardActions";
 import CardContent from "@mui/material/CardContent";
@@ -8,10 +9,10 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { CircularProgress, Pagination } from "@mui/material";
 import styled from "styled-components";
 import AuthContext from "../store/auth-context";
+
+
 const InstructorPlaylist = () => {
   const { isSidebarExpanded } = useContext(AuthContext);
-
-  const [latestCourses, setLatestCourses] = useState([]);
   const [page, setPage] = useState(1);
   const [loading, setLoading] = useState(false);
   const [course, setCourses] = useState([]);
@@ -58,42 +59,40 @@ const InstructorPlaylist = () => {
           )}
           {!loading && (
             <div
-              className={`courses-list ${
-                isSidebarExpanded ? "sidebarExpanded" : ""
-              }`}
+              className={`courses-list ${ isSidebarExpanded ? "sidebarExpanded" : ""
+                }`}
             >
               {course.length > 0 &&
                 course.map((data) => (
-                  <div className="courses">
-                    <Card key={data._id}>
-                      <CardMedia
-                        sx={{ width: "100%", aspectRatio: "2/1" }}
-                        image={data.thumbnail}
-                        title={data.title}
-                      />
-                      <CardContent className="box">
-                        <Typography variant="h6" component="div">
-                          {data.title}
-                        </Typography>
-                        <span className="level">{data.level}</span>
-                        <Typography
-                          variant="body2"
-                          color="text.secondary"
-                          className="desc"
-                        >
-                          {filterDesc(data.description)}
-                        </Typography>
-                        <div className="tags">
-                          <Fab variant="extended" size="small" className="tag">
-                            {data.category}
-                          </Fab>
-                        </div>
-                        <span className="price">{data.price}</span>
-                      </CardContent>
-                      <CardActions className="box1">
-                        <button className="button-61">Buy</button>
-                      </CardActions>
-                    </Card>
+                  <div className={`courses ${ isSidebarExpanded ? 'sidebarExpanded' : '' }`}>
+                    <Link to={`/course/${ data._id }`} >
+                      <Card key={data._id}>
+                        <CardMedia
+                          sx={{ width: "100%", aspectRatio: "2/1" }}
+                          image={data.thumbnail}
+                          title={data.title}
+                        />
+                        <CardContent className='box'>
+                          <Typography variant="h6" component="div">
+                            {data.title}
+                          </Typography>
+                          <span className='level'>{data.level}</span>
+                          <Typography variant="body2" color="text.secondary" className='desc'>
+                            {filterDesc(data.description)}
+                          </Typography>
+                          <div className='tags'>
+                            <Fab variant="extended" size="small" className='tag'>
+                              {data.category}
+                            </Fab>
+                          </div>
+                          <span className='price'>Rs. {data.price}</span>
+                        </CardContent>
+                        {/* <CardActions className='box1'>
+                                    <button className='button-61' onClick={() => navigate(`/course/${data._id}/`)}>Buy</button>
+                                    <button className='button-61' onClick={() => enroll(data._id)}>Enroll</button>
+                                </CardActions> */}
+                      </Card>
+                    </Link>
                   </div>
                 ))}
             </div>
@@ -244,6 +243,10 @@ const Container = styled.div`
     /* margin-right: 1rem;
         margin-bottom: 1rem; */
     /* width:  */
+
+    a {
+      text-decoration: none;
+    }
   }
   .courses-list .courses .level {
     font-weight: 700;

@@ -58,15 +58,10 @@ const Container = styled.div`
 
   .teachers {
     display: flex;
-    min-height: calc(100vh - var(--navbar-height, 60px));
+    min-height: calc(100vh - 70px);
     align-items: flex-start;
     /* background-color: #e7e7e7;
     background-color: white; */
-  }
-
-  .sidebar {
-    width: 25%;
-    min-height: calc(100vh - var(--navbar-height, 60px));
   }
 
   .teachercards {

@@ -1,9 +1,11 @@
 import { Link, useNavigate, useParams } from "react-router-dom";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import styled from "styled-components";
+import AuthContext from "../store/auth-context";
 
 const Course = () => {
   const { courseId } = useParams();
+  const {userdata} = useContext(AuthContext);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [courseDetails, setCourseDetails] = useState({
@@ -17,12 +19,14 @@ const Course = () => {
     thumbnail: "",
     videoFile: "",
     sections: [],
+    hasAccess: null
   });
+  const [hasAccess, setHasAccess] = useState(null);
 
 
   const fetchCourseDetails = async () => {
     const res = await fetch(
-      `http://localhost:8000/course/getCourse/${courseId}`,
+      `http://localhost:8000/course/getCourse/${ courseId }`,
       {
         method: "GET",
         headers: {
@@ -35,14 +39,57 @@ const Course = () => {
     console.log(data);
     if (data.ok) {
       setCourseDetails(data.course);
+      setCourseDetails(prev => ({...prev, hasAccess: data.hasAccess}));
+      setHasAccess(data.hasAccess);
       console.log(data.course);
       console.log(data.course.thumbnail);
     } else {
     }
   };
+
+  const handleEnrollment = async () => {
+      const data = await fetch(`http://localhost:8000/course/enroll/${ courseId }`, {
+          method: 'POST',
+          headers: {
+              Authorization: localStorage.getItem("token"),
+              'Content-type': 'application/json'
+          },
+      });
+      const json = await data.json();
+      console.log(json)
+      if (json.ok) {
+        // setCourseDetails(prev => {
+        //   return {
+        //     ...prev, hasAccess: !prev.hasAccess
+        //   }
+        // })
+        setHasAccess(prev => !prev);
+      }
+  }
+
+  const handleRevertEnrollment = async () => {
+      const data = await fetch(`http://localhost:8000/course/revertEnroll/${ courseId }`, {
+          method: 'POST',
+          headers: {
+              Authorization: localStorage.getItem("token"),
+              'Content-type': 'application/json'
+          },
+      });
+      const json = await data.json();
+      console.log(json)
+      if (json.ok) {
+        // setCourseDetails(prev => {
+        //   return {
+        //     ...prev, hasAccess: !prev.hasAccess
+        //   }
+        // })
+        setHasAccess(prev => !prev);
+      }
+  }
+
   useEffect(() => {
     fetchCourseDetails();
-  }, []);
+  }, [hasAccess]);
 
   useEffect(() => {
     console.log("Edit course form re rendered");
@@ -52,38 +99,38 @@ const Course = () => {
     <Container>
       <div className="edit-course-container">
         <div className="basic-details">
-            <div className="test-details">
-              <div className="all-details">
-                <div className="details">
-                  <h2>Title: {courseDetails.title}</h2>
-                  <p>
-                    <span className="detais-heading">Description:</span>{" "}
-                    {courseDetails.description}
-                  </p>
-                  <p>
-                    <span className="detais-heading">Duration:</span>{" "}
-                    {courseDetails.duration} months
-                  </p>
-                  <p>
-                    <span className="detais-heading">Price:</span>{" "}
-                    {courseDetails.price} INR
-                  </p>
-                  <p>
-                    <span className="detais-heading">Level:</span>{" "}
-                    {courseDetails.level}
-                  </p>
-                  <p>
-                    <span className="detais-heading">Category:</span>{" "}
-                    {courseDetails.category}
-                  </p>
-                </div>
-                {courseDetails && courseDetails.thumbnail && (
-                  <div className="thumbnail-container">
-                    <img src={courseDetails.thumbnail} alt="Course Thumbnail" />
-                  </div>
-                )}
+          <div className="test-details">
+            <div className="all-details">
+              <div className="details">
+                <h2>Title: {courseDetails.title}</h2>
+                <p>
+                  <span className="detais-heading">Description:</span>{" "}
+                  {courseDetails.description}
+                </p>
+                <p>
+                  <span className="detais-heading">Duration:</span>{" "}
+                  {courseDetails.duration} months
+                </p>
+                <p>
+                  <span className="detais-heading">Price:</span>{" "}
+                  {courseDetails.price} INR
+                </p>
+                <p>
+                  <span className="detais-heading">Level:</span>{" "}
+                  {courseDetails.level}
+                </p>
+                <p>
+                  <span className="detais-heading">Category:</span>{" "}
+                  {courseDetails.category}
+                </p>
               </div>
+              {courseDetails && courseDetails.thumbnail && (
+                <div className="thumbnail-container">
+                  <img src={courseDetails.thumbnail} alt="Course Thumbnail" />
+                </div>
+              )}
             </div>
+          </div>
         </div>
 
         <h3>Sections</h3>
@@ -91,50 +138,53 @@ const Course = () => {
         {courseDetails.sections &&
           courseDetails.sections.map((section) => (
             <React.Fragment key={section._id}>
-                <ul className="sections-list">
-                  <li className="section-item">
-                    <div className="section-title">{section.title}</div>
-                    <div className="section-description">
-                      {section.description}
-                    </div>
-                    {section.videoLectures &&
-                      section.videoLectures.length > 0 && (
-                        <div className="videos-container">
-                          {section.videoLectures.map((video) => (
-                            <Link to={`/video/${video._id}`} key={video._id} className="video-item">
-                              <div className="video-item-details">
-                                <div className="video">
-                                  <video
-                                    id="my-player"
-                                    className="video-js"
-                                    controls
-                                    controlsList="nodownload"
-                                    poster={video.thumbnail}
-                                    preload="auto"
-                                    data-setup="{}"
-                                  >
-                                    {video.videoFile && (
-                                      <source src={video.videoFile}></source>
-                                    )}
-                                  </video>
-                                </div>
-                                <div className="details">
-                                  <div>{video.title}</div>
-                                  <div>{video.description}</div>
-                                </div>
+              <ul className="sections-list">
+                <li className="section-item">
+                  <div className="section-title">{section.title}</div>
+                  <div className="section-description">
+                    {section.description}
+                  </div>
+                  {section.videoLectures &&
+                    section.videoLectures.length > 0 && (
+                      <div className="videos-container">
+                        {section.videoLectures.map((video) => (
+                          <Link to={`/video/${ video._id }`} key={video._id} className="video-item">
+                            <div className="video-item-details">
+                              <div className="video">
+                                <video
+                                  id="my-player"
+                                  className="video-js"
+                                  controls
+                                  controlsList="nodownload"
+                                  poster={video.thumbnail}
+                                  preload="auto"
+                                  data-setup="{}"
+                                >
+                                  {video.videoFile && (
+                                    <source src={video.videoFile}></source>
+                                  )}
+                                </video>
                               </div>
-                            </Link>
-                          ))}
-                        </div>
-                      )}
-                
-                    
-                  </li>
-                </ul>
+                              <div className="details">
+                                <div>{video.title}</div>
+                                <div>{video.description}</div>
+                              </div>
+                            </div>
+                          </Link>
+                        ))}
+                      </div>
+                    )}
+
+
+                </li>
+              </ul>
             </React.Fragment>
           ))}
 
         {/* {loading && <div className="loader">Loading...</div>} */}
+        {courseDetails.instructorId !== userdata.id && (courseDetails.hasAccess 
+          ? <button onClick={handleRevertEnrollment}>Revert Enrollment</button>
+          : <button onClick={handleEnrollment}>Enroll</button>)}
         {loading && <div className="toaster">Backend call in progress...</div>}
       </div>
     </Container>

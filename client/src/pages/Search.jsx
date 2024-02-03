@@ -2,14 +2,19 @@ import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
 import Typography from "@mui/material/Typography";
+import VideoCard from "../components/VideoCard";
+import TeacherCard from "../components/TeacherCard";
 import { CardActionArea } from "@mui/material";
-import { useEffect, useState } from "react";
+import Fab from "@mui/material/Fab"
+import { useContext, useEffect, useState } from "react";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import styled from "styled-components";
 import { Link, useLocation } from "react-router-dom";
+import AuthContext from "../store/auth-context";
 
 const Search = () => {
   const location = useLocation();
+  const { isSidebarExpanded } = useContext(AuthContext);
   const queryParams = new URLSearchParams(location.search);
   const query = queryParams.get("query");
   const [courses, setCourses] = useState([]);
@@ -33,116 +38,122 @@ const Search = () => {
       console.log(data);
     }
   };
+  const filterDesc = (text) => {
+    return text.slice(0, 100);
+  }
+  const toMin = (val) => {
+    var duration = "";
+    var min = parseInt(val);
+    if (min) {
+      duration += min + " m";
+    } else {
+      duration += "1 m";
+    }
+    return duration;
+  };
   useEffect(() => {
     fetchHandler();
   }, [query]);
+
   return (
     <Container>
-      <div className="search-box">
-        <div className="video-box">
-          <div className="header1">
-            <span className="line1"></span>
-            <h5>Instructors</h5>
-            <span className="line2"></span>
-          </div>
-          <div className="video-list instructor-list">
-            {users.length > 0 &&
-              users.map((data) => (
-                <Card sx={{ maxWidth: 255 }}>
-                  <Link to={`/instructor/${data._id}`}>
-                    <CardActionArea>
-                      <CardMedia
-                        component="img"
-                        height="150"
-                        image={data.profileImage}
-                      />
-                      <CardContent>
-                        <Typography variant="h6" component="div">
-                          <h5>{data.username}</h5>
-                        </Typography>
-                      </CardContent>
-                    </CardActionArea>
-                  </Link>
-                </Card>
+      <div className="video-box">
+        <div className="header1">
+          <h5>Instructors</h5>
+        </div>
+        <div className="teachers">
+          <div
+            className={`teachercards  ${ isSidebarExpanded ? "sidebarExpanded" : ""
+              }`}
+          >
+            {users &&
+              users.map((instructor) => (
+                <TeacherCard
+                  id={instructor._id}
+                  username={instructor.username}
+                  profileImage={instructor.profileImage}
+                  socialMediaLinks={instructor.socialMediaLinks}
+                />
               ))}
-            {users.length === 0 && <h4>No Instructor Found</h4>}
           </div>
         </div>
-        <div className="video-box">
-          <div className="header1">
-            <span className="line1"></span>
-            <h5>Videos</h5>
-            <span className="line2"></span>
+        {users.length === 0 && <p>No Instructor Found</p>}
+      </div>
+      <br />
+      <div className="video-box">
+        <div className="header1">
+          <h5>Videos</h5>
+        </div>
+        <div className="video-list">
+          <div className={`videos ${ isSidebarExpanded ? 'sidebarExpanded' : '' }`}>
+            {videos && videos.map(vid => {
+              return <div className="video">
+                <VideoCard
+                  id={vid._id}
+                  title={vid.title}
+                  description={vid.description}
+                  duration={toMin(vid.duration)}
+                  thumbnail={vid.thumbnail}
+                // profileImage={profileImage}
+                />
+              </div>
+            })
+            }
           </div>
-          <div className="video-list">
-            {videos.length > 0 &&
-              videos.map((data) => (
-                <Card sx={{ maxWidth: 255 }}>
-                  <Link to={`/video/${data._id}`}>
-                    <CardActionArea>
-                      <CardMedia
-                        component="img"
-                        height="150"
-                        image={data.thumbnail}
-                      />
-                      <CardContent>
-                        <Typography variant="h5" component="div">
-                          <h5>{data.title}</h5>
-                        </Typography>
-                        <p className="description">{data.description}</p>
-                        <p className="likecount">
-                          <ThumbUpIcon /> {1}
-                        </p>
-                      </CardContent>
-                    </CardActionArea>
-                  </Link>
-                </Card>
-              ))}
-            {videos.length === 0 && (
+          {videos.length === 0 && <p>No Videos Found</p>}
+          {/* {videos.length === 0 && (
               <img
                 src="https://cdn.vectorstock.com/i/preview-1x/04/93/no-data-empty-concept-vector-41830493.jpg"
                 className="not-found-image"
               ></img>
-            )}
-          </div>
+            )} */}
         </div>
+      </div>
+      <br />
+      <br />
+      <div className="video-box">
+        <div className="header1">
+          <h5>Courses</h5>
+        </div>
+        <div className={`courses-list ${ isSidebarExpanded ? 'sidebarExpanded' : '' }`}>
+          {courses.length > 0 && courses.map((data) => (
+            <div className={`courses ${ isSidebarExpanded ? 'sidebarExpanded' : '' }`}>
+              <Link to={`/course/${ data._id }`} >
+                <Card key={data._id}>
+                  <CardMedia
+                    sx={{ width: "100%", aspectRatio: "2/1" }}
+                    image={data.thumbnail}
+                    title={data.title}
+                  />
+                  <CardContent className='box'>
+                    <Typography variant="h6" component="div">
+                      {data.title}
+                    </Typography>
+                    <span className='level'>{data.level}</span>
+                    <Typography variant="body2" color="text.secondary" className='desc'>
+                      {filterDesc(data.description)}
+                    </Typography>
+                    <div className='tags'>
+                      <Fab variant="extended" size="small" className='tag'>
+                        {data.category}
+                      </Fab>
+                    </div>
+                    <span className='price'>Rs. {data.price}</span>
+                  </CardContent>
 
-        <div className="video-box">
-          <div className="header1">
-            <span className="line1"></span>
-            <h5>Courses</h5>
-            <span className="line2"></span>
-          </div>
-          <div className="video-list">
-            {courses.length > 0 &&
-              courses.map((data) => (
-                <Card sx={{ maxWidth: 255 }}>
-                  <CardActionArea>
-                    <CardMedia
-                      component="img"
-                      height="150"
-                      image={data.thumbnail}
-                    />
-                    <CardContent>
-                      <Typography variant="h5" component="div">
-                        <h5>Title</h5>
-                      </Typography>
-                      <p className="description">This is a video</p>
-                      <p className="likecount">
-                        <ThumbUpIcon /> {1}
-                      </p>
-                    </CardContent>
-                  </CardActionArea>
                 </Card>
-              ))}
-            {courses.length === 0 && (
+              </Link>
+            </div>
+          ))}
+        </div>
+        {courses.length === 0 && <p>No Course Found</p>}
+
+        {/* {courses.length === 0 && (
               <img
                 src="https://cdn.vectorstock.com/i/preview-1x/04/93/no-data-empty-concept-vector-41830493.jpg"
                 className="not-found-image"
               ></img>
-            )}
-          </div>
-        </div>
+            )} */}
       </div>
     </Container>
   );
@@ -150,103 +161,296 @@ const Search = () => {
 export default Search;
 
 const Container = styled.div`
-  .search-box {
-    margin: 0.7rem;
-    overflow-y: auto;
-    overflow-x: hidden;
+  width: 100%;
+  min-height: calc(100vh - 70px);
+  padding: 20px 30px;
+  background-color: white;
+
+  .teachers {
     display: flex;
-    min-height: 100vh;
-    flex-direction: column;
+    align-items: flex-start;
+    /* background-color: #e7e7e7;
+    background-color: white; */
   }
-  .search-box .video-box {
+
+  .teachercards {
     display: flex;
-    width: 96%;
-    padding-bottom: 0px;
-    min-width: fit-content;
-    min-height: fit-content;
-    flex-direction: column;
-  }
-  .video-box .header1 {
-    display: flex;
-    width: 100%;
-    height: fit-content;
-    font-family: "Roboto", sans-serif;
     flex-direction: row;
-  }
-  .video-box .header1 h5 {
-    font-weight: 600;
-    width: fit-content;
-    color: rgb(57, 57, 173);
-  }
-  .video-box .line1 {
-    border: 1px solid rgb(192, 191, 189);
-    width: 2%;
-    height: 1%;
-    margin-top: auto;
-    margin-bottom: auto;
-    margin-right: 0.34rem;
-  }
-  .video-box .line2 {
-    width: 90%;
-    height: 1%;
-    margin-left: 0.34rem;
-    margin-top: auto;
-    margin-bottom: auto;
-    border: 1px solid rgb(192, 191, 189);
-  }
-  .video-box .video-list {
-    margin: 0.3rem;
-    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
     flex-wrap: wrap;
+    width: 100%;
+    gap: 30px;
   }
-  .video-box .video-list .css-46bh2p-MuiCardContent-root {
-    margin: 5px;
-    padding: 5px;
+
+  .teachercards > * {
+    width: calc(20% - 30px);
+    /* overflow: hidden; */
   }
-  .video-box .video-list h5 {
-    font-family: "Roboto", sans-serif;
-    font-weight: 900;
-    margin: 0px;
-    color: black;
-    font-size: 1.35rem;
-    padding: 0px;
+  /* 
+  .teachercards.sidebarExpanded > * {
+    width: calc(33.33% - 24.5px);
+  } */
+
+  @media only screen and (max-width: 600px) {
+    .teachercards > * {
+      width: calc(100%);
+    }
   }
-  .video-box .video-list .MuiPaper-root {
-    margin-left: 0.4rem;
-    margin-right: 0.4rem;
-    margin-bottom: 0.6rem;
-    width: 35%;
+
+  @media only screen and (min-width: 601px) and (max-width: 800px) {
+    .teachercards > * {
+      width: calc(33.33% - 24.5px);
+    }
+    /* 
+    .teachercards.sidebarExpanded > * {
+      width: calc(50% - 15px);
+    } */
   }
-  .video-box .video-list .description {
-    color: gray;
+
+  @media only screen and (min-width: 801px) and (max-width: 1400px) {
+    .teachercards > * {
+      width: calc(25% - 24.5px);
+    }
+
+    .teachercards.sidebarExpanded > * {
+      width: calc(33.33% - 24.5px);
+    }
   }
-  .video-box .video-list .likecount svg {
-    color: rgb(80, 89, 184);
+
+  .videos-page {
+    width: 100%;
+    height: 100%;
   }
-  .video-box .video-list .link {
-    color: rgb(60, 60, 135);
-    font-weight: 700;
-    font-size: 0.78rem;
+
+  .videos {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 30px;
   }
-  .video-box button:hover {
+
+  .videos > * {
+        width: calc(100%);
+        a {
+        text-decoration: none;
+    }
+    }
+
+    .videos.sidebarExpanded > * {
+        width: calc(100%);
+    }
+
+    @media only screen and (min-width: 601px) and (max-width: 800px) {
+        .videos > * {
+            width: calc(50% - 15px);
+        }
+
+        .videos.sidebarExpanded > * {
+            width: calc(50% - 15px);
+        }
+    }
+
+    @media only screen and (min-width: 801px) and (max-width: 1200px) {
+        .videos > * {
+            width: calc(33.333% - 20px);
+        }
+
+        .videos.sidebarExpanded > * {
+            width: calc(50% - 15px);
+        }
+    }
+
+    @media only screen and (min-width: 1201px) and (max-width: 1400px) {
+        .videos > * {
+            width: calc(33.333% - 20px);
+        }
+
+        .videos.sidebarExpanded > * {
+            width: calc(33.333% - 20px);
+        }
+    }
+
+    @media only screen and (min-width: 1401px) {
+        .videos > * {
+            width: calc(25% - 24.5px);
+        }
+
+        .videos.sidebarExpanded > * {
+            width: calc(25% - 24.5px);
+        }
+    }
+
+  .course-container {
+    width: 100%;
     background-color: white;
+    padding: 20px 30px;
+    /* margin: auto; */
+    /* margin-top: 0.7rem; */
+    /* font-family: "Roboto",sans-serif; */
   }
-  .video-box .instructor-list .MuiPaper-root {
-    width: 15%;
+  .course-container .header-text h6 {
+    font-weight: 400;
+    color: rgb(77, 76, 76);
   }
-  .video-box .instructor-list .MuiPaper-root {
+  /* CSS */
+  .button-61 {
+    align-items: center;
+    appearance: none;
+    background-color: #4a56b8;
+    border-radius: 0.375em;
+    box-shadow: none;
+    box-sizing: border-box;
+    color: #ffffff;
+    cursor: pointer;
+    margin-left: 0.7rem;
+    display: inline-flex;
+    font-family: BlinkMacSystemFont, -apple-system, "Segoe UI", Roboto, Oxygen,
+      Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Helvetica,
+      Arial, sans-serif;
+    font-size: 0.85rem;
+    height: 2.8em;
+    justify-content: center;
+    line-height: 1.5;
+    padding: calc(0.5em - 1px) 1em;
+    position: relative;
+    padding-left: 1.3rem;
+    padding-right: 1.3rem;
     text-align: center;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+    vertical-align: top;
+    white-space: nowrap;
   }
-  .video-box .instructor-list img {
-    border-radius: 70%;
-    height: 100px;
-    width: 100px;
+
+  .button-61:active {
+    border-color: #4a4a4a;
+    outline: 0;
+  }
+
+  .button-61:focus {
+    border-color: #485fc7;
+    outline: 0;
+  }
+
+  .button-61:hover {
+    background-color: rgb(71, 89, 206);
+  }
+
+  .button-61:focus:not(:active) {
+    box-shadow: rgba(72, 95, 199, 0.25) 0 0 0 0.125em;
+  }
+  .courses-list {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    flex-wrap: wrap;
+    gap: 30px;
+  }
+
+
+    .courses-list > * {
+        width: 100%;
+      }
+
+      .courses-list.sidebarExpanded > * {
+          width: 100%;
+      }
+
+
+  @media only screen and (min-width: 601px) and (max-width: 800px) {
+        .courses-list > * {
+            width: calc(50% - 15px);
+        }
+
+        .courses-list.sidebarExpanded > * {
+            width: calc(50% - 15px);
+        }
+    }
+
+
+    @media only screen and (min-width: 801px) and (max-width: 1200px) {
+        .courses-list > * {
+            width: calc(33.333% - 20px);
+        }
+
+        .courses-list.sidebarExpanded > * {
+            width: calc(50% - 15px);
+        }
+    }
+
+    @media only screen and (min-width: 1201px) and (max-width: 1400px) {
+        .courses-list > * {
+            width: calc(33.333% - 20px);
+        }
+
+        .courses-list.sidebarExpanded > * {
+            width: calc(33.333% - 20px);
+        }
+    }
+
+    @media only screen and (min-width: 1401px) {
+        .courses-list > * {
+            width: calc(25% - 24.5px);
+        }
+
+        .courses-list.sidebarExpanded > * {
+            width: calc(25% - 24.5px);
+        }
+    }
+
+  .courses-list .courses {
+    /* margin-right: 1rem;
+        margin-bottom: 1rem; */
+    /* width:  */
+
+    a {
+        text-decoration: none;
+    }
+  }
+  .courses-list .courses .level {
+    font-weight: 700;
+    background: -webkit-linear-gradient(90deg, #6980b5, #3f469d, blue);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .courses-list .courses .price {
+    font-weight: 700;
+    color: black;
+  }
+  .courses-list .courses .desc {
+    padding: 0px;
+    padding-top: 0.2rem;
+    padding-bottom: 0.2rem;
+  }
+  .courses-list .courses .tag {
+    background-color: #282727;
+    color: white;
+    text-transform: none;
+    font-size: 0.8rem;
+    /* margin: 0.1rem; */
+    z-index: 1;
+  }
+  .courses-list .courses .box1 {
+    height: fit-content;
+  }
+
+  .pagination {
+    margin-top: auto;
+  }
+  .pagination .pages {
     margin: auto;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
   }
-  .video-box .video-list a {
-    text-decoration: none;
-  }
-  .video-box .not-found-image {
-    margin: auto;
+  .loader-page {
+    text-align: center;
   }
 `;

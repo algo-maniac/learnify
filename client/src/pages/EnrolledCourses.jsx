@@ -10,7 +10,7 @@ import { useContext, useEffect, useRef, useState } from 'react';
 import { CircularProgress, Pagination } from '@mui/material';
 import styled from 'styled-components';
 import AuthContext from '../store/auth-context';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const EnrolledCourses = () => {
     const { isSidebarExpanded } = useContext(AuthContext);
@@ -43,6 +43,8 @@ const EnrolledCourses = () => {
             setLoading(false);
         }
     }
+
+    
     useEffect(() => {
         fetchHandler();
     }, [page])
@@ -53,7 +55,8 @@ const EnrolledCourses = () => {
                 {loading && <div className='loader-page'><CircularProgress className='loading' /></div>}
                 {!loading && <div className={`courses-list ${isSidebarExpanded ? 'sidebarExpanded' : ''}`}>
                     {course.length > 0 && course.map((data) => (
-                        <div className={`courses ${isSidebarExpanded ? 'sidebarExpanded' : ''}`}>
+                        <div className={`courses ${ isSidebarExpanded ? 'sidebarExpanded' : '' }`}>
+                        <Link to={`/course/${ data._id }`} >
                             <Card key={data._id}>
                                 <CardMedia
                                     sx={{ width: "100%", aspectRatio: "2/1" }}
@@ -73,13 +76,15 @@ const EnrolledCourses = () => {
                                             {data.category}
                                         </Fab>
                                     </div>
-                                    <span className='price'>{data.price}</span>
+                                    <span className='price'>Rs. {data.price}</span>
                                 </CardContent>
-                                <CardActions className='box1'>
-                                    <button className='button-61' onClick={() => navigate(`/course/${data._id}`)}>Buy</button>
-                                </CardActions>
+                                {/* <CardActions className='box1'>
+                                <button className='button-61' onClick={() => navigate(`/course/${data._id}/`)}>Buy</button>
+                                <button className='button-61' onClick={() => enroll(data._id)}>Enroll</button>
+                            </CardActions> */}
                             </Card>
-                        </div>
+                        </Link>
+                    </div>
                     ))}
                 </div>}
                 <div className='pagination'>

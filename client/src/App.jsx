@@ -31,6 +31,11 @@ import EditableCourses from "./pages/EditableCourses.jsx";
 import EditableVideos from "./pages/EditableVideos.jsx";
 import PurchasedCourses from "./pages/PurchasedCourses.jsx";
 import EnrolledCourses from "./pages/EnrolledCourses.jsx";
+import {
+  AdminProtected,
+  InstructorProtected,
+  SignupLoginProtected,
+} from "./ProtectedRoutes.jsx";
 
 function App() {
   const navigate = useNavigate();
@@ -133,18 +138,22 @@ function App() {
             {/* <Route path="/" element={<Home />}></Route> */}
             <Route path="/" element={<Home2 />}></Route>
             <Route path="/doubt" element={<Doubt />}></Route>
-            <Route path="/SignUp" element={<SignUp />} />
-            <Route path="/LogIn" element={<LogIn />} />
+
+            <Route element={<SignupLoginProtected />}>
+              <Route path="/SignUp" element={<SignUp />} />
+              <Route path="/LogIn" element={<LogIn />} />
+            </Route>
             <Route path="/Random" element={<Random />} />
-            <Route path="/home" element={<Instructor />} />
+
             {userdata && userdata.role === "teacher" && (
               <Route path="/live" element={<LiveStream />} />
             )}
             <Route path="/video" element={<Videos />} />
             <Route path="/video/:id" element={<Video />} />
-            <Route path="/edit-video" element={<EditableVideos />} />
-            <Route path="/dashboard-admin" element={<AdminDashboard />} />
-            <Route path="/uploadvideo" element={<UploadVideo />} />
+
+            <Route element={<AdminProtected />}>
+              <Route path="/dashboard-admin" element={<AdminDashboard />} />
+            </Route>
             <Route path="/instructor" element={<Instructors />} />
             <Route path="/instructor/:id" element={<Instructor />} />
             <Route path="/video/:id" element={<Random2 />} />
@@ -153,9 +162,18 @@ function App() {
             <Route path="/course/:courseId" element={<Course />} />
             <Route path="/enrolled-course" element={<EnrolledCourses />} />
             <Route path="/purchased-course" element={<PurchasedCourses />} />
-            <Route path="/edit-course" element={<EditableCourses />} />
-            <Route path="/course/create" element={<CreateCourseForm />} />
-            <Route path="/course/:courseId/edit" element={<EditCourseForm />} />
+
+            <Route element={<InstructorProtected />}>
+              <Route path="/home" element={<Instructor />} />
+              <Route path="/uploadvideo" element={<UploadVideo />} />
+              <Route path="/edit-video" element={<EditableVideos />} />
+              <Route path="/edit-course" element={<EditableCourses />} />
+              <Route path="/course/create" element={<CreateCourseForm />} />
+              <Route
+                path="/course/:courseId/edit"
+                element={<EditCourseForm />}
+              />
+            </Route>
             <Route path="/search" element={<Search />} />
           </Routes>
           <Overlay

@@ -1,36 +1,33 @@
 const User = require("../models/user");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
-const bcrypt = require('bcrypt');
-const { Readable } = require('stream');
-const cloudinary = require('cloudinary').v2;
-
+const bcrypt = require("bcrypt");
+const { Readable } = require("stream");
+const cloudinary = require("cloudinary").v2;
 
 const conn = mongoose.connection;
 let gfs;
-conn.once('open', () => {
+conn.once("open", () => {
   gfs = new mongoose.mongo.GridFSBucket(conn.db, {
-    bucketName: 'uploads',
+    bucketName: "uploads",
   });
 });
 
-
-          
-cloudinary.config({ 
-  cloud_name: 'desdkbhvz', 
-  api_key: '822224579263365', 
-  api_secret: 'kTX01qyk21TXjM3YPAdBd4YN6ps' 
+cloudinary.config({
+  cloud_name: process.env.cloud_name,
+  api_key: process.env.api_key,
+  api_secret: process.env.api_secret,
 });
 
 // Function to upload file to Cloudinary
 const uploadToCloudinary = (file) => {
   return new Promise((resolve, reject) => {
-      cloudinary.uploader.upload_stream({ resource_type: 'auto' },
-          (error, result) => {
-              if (error) reject(error);
-              resolve(result.secure_url);
-          })
-          .end(file.buffer);
+    cloudinary.uploader
+      .upload_stream({ resource_type: "auto" }, (error, result) => {
+        if (error) reject(error);
+        resolve(result.secure_url);
+      })
+      .end(file.buffer);
   });
 };
 
@@ -47,8 +44,8 @@ module.exports.signuppost = async (req, res) => {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       res.status(400).json({
-        message: "User with this eamil alread exists!"
-      })
+        message: "User with this eamil alread exists!",
+      });
       return;
     }
 
@@ -61,16 +58,19 @@ module.exports.signuppost = async (req, res) => {
 
     await user.save();
     console.log(user);
-    const token = jwt.sign({ id: user.id, username: user.username, role: "user" }, process.env.USER_JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign(
+      { id: user.id, username: user.username, role: "user" },
+      process.env.USER_JWT_SECRET,
+      { expiresIn: "1h" }
+    );
     res.status(200).json({
       message: "SignUp successfull",
-      token: token
+      token: token,
     });
   } catch (err) {
     console.log(err);
   }
-}
-
+};
 
 module.exports.loginpost = async (req, res) => {
   try {
@@ -88,23 +88,22 @@ module.exports.loginpost = async (req, res) => {
     }
 
     const token = jwt.sign(
-      { 
-        id: user.id, 
-        role: "user" 
-      }, 
-      process.env.USER_JWT_SECRET, 
-      { expiresIn: '24h' }
+      {
+        id: user.id,
+        role: "user",
+      },
+      process.env.USER_JWT_SECRET,
+      { expiresIn: "24h" }
     );
-    
+
     res.status(200).json({
       message: "Login successfull",
-      token: token
+      token: token,
     });
   } catch (err) {
     console.log(err);
   }
 };
-
 
 module.exports.getUserData = async (req, res) => {
   try {
@@ -118,15 +117,12 @@ module.exports.getUserData = async (req, res) => {
       username: user.username,
       email: user.email,
       role: "user",
-      profileImage: user.profileImage
+      profileImage: user.profileImage,
     });
-    
   } catch (err) {
     console.log(err);
     res.status(404).json({
-      message: "Authorization failed"
-    })
+      message: "Authorization failed",
+    });
   }
-}
-
-
+};

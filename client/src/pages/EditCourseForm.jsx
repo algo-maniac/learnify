@@ -111,6 +111,8 @@ const EditCourseForm = () => {
             ...data.course,
           };
         });
+
+        // Toast Basic Details Updated Succ.
         console.log(data.course);
         console.log(data.course.thumbnail);
         toggleShowEditForm();
@@ -169,7 +171,7 @@ const EditCourseForm = () => {
               ...updatedSection,
             };
           }
-
+          // Toast Section Updated Successfully
           return updatedCourseDetails;
         });
         setShowEditSectionForm(false);
@@ -230,6 +232,7 @@ const EditCourseForm = () => {
           }
 
           console.log(updatedCourseDetails);
+          // Toast Video Uploaded Successfully
           return updatedCourseDetails;
         });
       } else {
@@ -261,6 +264,7 @@ const EditCourseForm = () => {
             (section) => section._id !== sectionId
           );
           updatedCourseDetails.sections = updatedSections;
+          // Toast Section Deleted Successfully
           return updatedCourseDetails;
         });
       } else {
@@ -288,6 +292,7 @@ const EditCourseForm = () => {
       const data = await res.json();
 
       if (data.ok) {
+        // Toast Deleted Course Successfully
         navigate("/courses");
       } else {
         //

@@ -15,13 +15,30 @@ import styled from "styled-components";
 function TeacherDetails(props) {
   console.log(props);
 
-  const { _id, username, profileImage, videoLectures, courses } = props.instructordata;
+  const { _id, username, profileImage, videoLectures, courses } =
+    props.instructordata;
   const [tabValue, setTabvalue] = useState(0);
   const joinLiveClass = () => {
     console.log("Hello!!!!!!!!");
     // Navigate(`/live/roomId=${id}`);
     Navigate("/");
   };
+
+  // const subscribe = () => {
+  //   try {
+  //     if (data.ok) {
+  //       // Toast add
+  //     }
+  //   } catch (error) {}
+  // };
+
+  // const unSubscribe = () => {
+  //   try {
+  //     if (data.ok) {
+  //       // Toast add
+  //     }
+  //   } catch (error) {}
+  // };
   return (
     <Container>
       <ParentTeacherDetails>
@@ -59,7 +76,9 @@ function TeacherDetails(props) {
             <Tab label="About" onClick={() => setTabvalue(3)} />
           </Tabs>
         </div>
-        {tabValue === 0 && <InstructorHome instructordata={props.instructordata}/>}
+        {tabValue === 0 && (
+          <InstructorHome instructordata={props.instructordata} />
+        )}
         {tabValue === 1 && <InstructorVideo />}
         {tabValue === 2 && <InstructorPlaylist />}
         {tabValue === 3 && <InstructorAbout />}
@@ -139,7 +158,6 @@ const Container = styled.div`
     background-color: rgb(213, 2, 2);
     color: white;
     border-radius: 10px;
-    
 
     &:hover {
       background-color: rgb(182, 9, 9);

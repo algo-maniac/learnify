@@ -5,31 +5,32 @@ import Typography from "@mui/material/Typography";
 import VideoCard from "../components/VideoCard";
 import TeacherCard from "../components/TeacherCard";
 import { CardActionArea } from "@mui/material";
-import Fab from "@mui/material/Fab"
+import Fab from "@mui/material/Fab";
 import { useContext, useEffect, useState } from "react";
 import ThumbUpIcon from "@mui/icons-material/ThumbUp";
 import styled from "styled-components";
 import { Link, useLocation } from "react-router-dom";
 import AuthContext from "../store/auth-context";
+import { Provider, useDispatch, useSelector } from "react-redux";
+import { setSearch } from "../store/searchSlice";
 
 const Search = () => {
   const location = useLocation();
   const { isSidebarExpanded } = useContext(AuthContext);
-  const queryParams = new URLSearchParams(location.search);
-  const query = queryParams.get("query");
   const [courses, setCourses] = useState([]);
   const [users, setUsers] = useState([]);
   const [videos, setVideos] = useState([]);
+
+  const searchValue = useSelector((state) => state.search.searchValue);
   const fetchHandler = async () => {
-    console.log("API Called");
-    console.log(query);
-    if (query !== "") {
+    console.log(searchValue);
+    if (searchValue !== "") {
       const res = await fetch("/search", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ query: query }),
+        body: JSON.stringify({ query: searchValue }),
       });
       const data = await res.json();
       setCourses(data.courses);
@@ -40,7 +41,7 @@ const Search = () => {
   };
   const filterDesc = (text) => {
     return text.slice(0, 100);
-  }
+  };
   const toMin = (val) => {
     var duration = "";
     var min = parseInt(val);
@@ -53,7 +54,7 @@ const Search = () => {
   };
   useEffect(() => {
     fetchHandler();
-  }, [query]);
+  }, [searchValue]);
 
   return (
     <Container>
@@ -63,12 +64,14 @@ const Search = () => {
         </div>
         <div className="teachers">
           <div
-            className={`teachercards  ${ isSidebarExpanded ? "sidebarExpanded" : ""
-              }`}
+            className={`teachercards  ${
+              isSidebarExpanded ? "sidebarExpanded" : ""
+            }`}
           >
             {users &&
               users.map((instructor) => (
                 <TeacherCard
+                  key={instructor._id}
                   id={instructor._id}
                   username={instructor.username}
                   profileImage={instructor.profileImage}
@@ -85,20 +88,25 @@ const Search = () => {
           <h5>Videos</h5>
         </div>
         <div className="video-list">
-          <div className={`videos ${ isSidebarExpanded ? 'sidebarExpanded' : '' }`}>
-            {videos && videos.map(vid => {
-              return <div className="video">
-                <VideoCard
-                  id={vid._id}
-                  title={vid.title}
-                  description={vid.description}
-                  duration={toMin(vid.duration)}
-                  thumbnail={vid.thumbnail}
-                // profileImage={profileImage}
-                />
-              </div>
-            })
-            }
+          <div
+            className={`videos ${isSidebarExpanded ? "sidebarExpanded" : ""}`}
+          >
+            {videos &&
+              videos.map((vid) => {
+                return (
+                  <div className="video">
+                    <VideoCard
+                      key={vid._id}
+                      id={vid._id}
+                      title={vid.title}
+                      description={vid.description}
+                      duration={toMin(vid.duration)}
+                      thumbnail={vid.thumbnail}
+                      // profileImage={profileImage}
+                    />
+                  </div>
+                );
+              })}
           </div>
           {videos.length === 0 && <p>No Videos Found</p>}
           {/* {videos.length === 0 && (
@@ -115,36 +123,49 @@ const Search = () => {
         <div className="header1">
           <h5>Courses</h5>
         </div>
-        <div className={`courses-list ${ isSidebarExpanded ? 'sidebarExpanded' : '' }`}>
-          {courses.length > 0 && courses.map((data) => (
-            <div className={`courses ${ isSidebarExpanded ? 'sidebarExpanded' : '' }`}>
-              <Link to={`/course/${ data._id }`} >
-                <Card key={data._id}>
-                  <CardMedia
-                    sx={{ width: "100%", aspectRatio: "2/1" }}
-                    image={data.thumbnail}
-                    title={data.title}
-                  />
-                  <CardContent className='box'>
-                    <Typography variant="h6" component="div">
-                      {data.title}
-                    </Typography>
-                    <span className='level'>{data.level}</span>
-                    <Typography variant="body2" color="text.secondary" className='desc'>
-                      {filterDesc(data.description)}
-                    </Typography>
-                    <div className='tags'>
-                      <Fab variant="extended" size="small" className='tag'>
-                        {data.category}
-                      </Fab>
-                    </div>
-                    <span className='price'>Rs. {data.price}</span>
-                  </CardContent>
-
-                </Card>
-              </Link>
-            </div>
-          ))}
+        <div
+          className={`courses-list ${
+            isSidebarExpanded ? "sidebarExpanded" : ""
+          }`}
+        >
+          {courses.length > 0 &&
+            courses.map((data) => (
+              <div
+                key={data._id}
+                className={`courses ${
+                  isSidebarExpanded ? "sidebarExpanded" : ""
+                }`}
+              >
+                <Link to={`/course/${data._id}`}>
+                  <Card key={data._id}>
+                    <CardMedia
+                      sx={{ width: "100%", aspectRatio: "2/1" }}
+                      image={data.thumbnail}
+                      title={data.title}
+                    />
+                    <CardContent className="box">
+                      <Typography variant="h6" component="div">
+                        {data.title}
+                      </Typography>
+                      <span className="level">{data.level}</span>
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        className="desc"
+                      >
+                        {filterDesc(data.description)}
+                      </Typography>
+                      <div className="tags">
+                        <Fab variant="extended" size="small" className="tag">
+                          {data.category}
+                        </Fab>
+                      </div>
+                      <span className="price">Rs. {data.price}</span>
+                    </CardContent>
+                  </Card>
+                </Link>
+              </div>
+            ))}
         </div>
         {courses.length === 0 && <p>No Course Found</p>}
 
@@ -236,55 +257,55 @@ const Container = styled.div`
   }
 
   .videos > * {
-        width: calc(100%);
-        a {
-        text-decoration: none;
+    width: calc(100%);
+    a {
+      text-decoration: none;
     }
+  }
+
+  .videos.sidebarExpanded > * {
+    width: calc(100%);
+  }
+
+  @media only screen and (min-width: 601px) and (max-width: 800px) {
+    .videos > * {
+      width: calc(50% - 15px);
     }
 
     .videos.sidebarExpanded > * {
-        width: calc(100%);
+      width: calc(50% - 15px);
+    }
+  }
+
+  @media only screen and (min-width: 801px) and (max-width: 1200px) {
+    .videos > * {
+      width: calc(33.333% - 20px);
     }
 
-    @media only screen and (min-width: 601px) and (max-width: 800px) {
-        .videos > * {
-            width: calc(50% - 15px);
-        }
+    .videos.sidebarExpanded > * {
+      width: calc(50% - 15px);
+    }
+  }
 
-        .videos.sidebarExpanded > * {
-            width: calc(50% - 15px);
-        }
+  @media only screen and (min-width: 1201px) and (max-width: 1400px) {
+    .videos > * {
+      width: calc(33.333% - 20px);
     }
 
-    @media only screen and (min-width: 801px) and (max-width: 1200px) {
-        .videos > * {
-            width: calc(33.333% - 20px);
-        }
+    .videos.sidebarExpanded > * {
+      width: calc(33.333% - 20px);
+    }
+  }
 
-        .videos.sidebarExpanded > * {
-            width: calc(50% - 15px);
-        }
+  @media only screen and (min-width: 1401px) {
+    .videos > * {
+      width: calc(25% - 24.5px);
     }
 
-    @media only screen and (min-width: 1201px) and (max-width: 1400px) {
-        .videos > * {
-            width: calc(33.333% - 20px);
-        }
-
-        .videos.sidebarExpanded > * {
-            width: calc(33.333% - 20px);
-        }
+    .videos.sidebarExpanded > * {
+      width: calc(25% - 24.5px);
     }
-
-    @media only screen and (min-width: 1401px) {
-        .videos > * {
-            width: calc(25% - 24.5px);
-        }
-
-        .videos.sidebarExpanded > * {
-            width: calc(25% - 24.5px);
-        }
-    }
+  }
 
   .course-container {
     width: 100%;
@@ -355,56 +376,53 @@ const Container = styled.div`
     gap: 30px;
   }
 
+  .courses-list > * {
+    width: 100%;
+  }
 
-    .courses-list > * {
-        width: 100%;
-      }
-
-      .courses-list.sidebarExpanded > * {
-          width: 100%;
-      }
-
+  .courses-list.sidebarExpanded > * {
+    width: 100%;
+  }
 
   @media only screen and (min-width: 601px) and (max-width: 800px) {
-        .courses-list > * {
-            width: calc(50% - 15px);
-        }
-
-        .courses-list.sidebarExpanded > * {
-            width: calc(50% - 15px);
-        }
+    .courses-list > * {
+      width: calc(50% - 15px);
     }
 
+    .courses-list.sidebarExpanded > * {
+      width: calc(50% - 15px);
+    }
+  }
 
-    @media only screen and (min-width: 801px) and (max-width: 1200px) {
-        .courses-list > * {
-            width: calc(33.333% - 20px);
-        }
-
-        .courses-list.sidebarExpanded > * {
-            width: calc(50% - 15px);
-        }
+  @media only screen and (min-width: 801px) and (max-width: 1200px) {
+    .courses-list > * {
+      width: calc(33.333% - 20px);
     }
 
-    @media only screen and (min-width: 1201px) and (max-width: 1400px) {
-        .courses-list > * {
-            width: calc(33.333% - 20px);
-        }
+    .courses-list.sidebarExpanded > * {
+      width: calc(50% - 15px);
+    }
+  }
 
-        .courses-list.sidebarExpanded > * {
-            width: calc(33.333% - 20px);
-        }
+  @media only screen and (min-width: 1201px) and (max-width: 1400px) {
+    .courses-list > * {
+      width: calc(33.333% - 20px);
     }
 
-    @media only screen and (min-width: 1401px) {
-        .courses-list > * {
-            width: calc(25% - 24.5px);
-        }
-
-        .courses-list.sidebarExpanded > * {
-            width: calc(25% - 24.5px);
-        }
+    .courses-list.sidebarExpanded > * {
+      width: calc(33.333% - 20px);
     }
+  }
+
+  @media only screen and (min-width: 1401px) {
+    .courses-list > * {
+      width: calc(25% - 24.5px);
+    }
+
+    .courses-list.sidebarExpanded > * {
+      width: calc(25% - 24.5px);
+    }
+  }
 
   .courses-list .courses {
     /* margin-right: 1rem;
@@ -412,7 +430,7 @@ const Container = styled.div`
     /* width:  */
 
     a {
-        text-decoration: none;
+      text-decoration: none;
     }
   }
   .courses-list .courses .level {

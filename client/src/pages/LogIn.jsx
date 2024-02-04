@@ -36,6 +36,7 @@ const LogIn = () => {
       localStorage.setItem("token", token);
       console.log(res);
       fetchUserdata();
+      // Login Toast
       navigate("/", { state: { toast: true, data: res.message } });
     } catch (err) {
       toast.error("Error in Logging", {

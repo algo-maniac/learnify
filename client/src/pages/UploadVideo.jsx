@@ -47,6 +47,8 @@ function UploadVideo(props) {
       .then((data) => data.json())
       .then((result) => {
         console.log(result);
+
+        // Upload Video
         // navigate(`/teacher/${props.data.id}`);
       })
       .catch((err) => {

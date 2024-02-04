@@ -84,6 +84,8 @@ const AddVideo = ({
         console.log("here");
         console.log(sectionId);
         handleAddVideoClick(sectionId);
+
+        // Toast Video Uploaded Successfully
       }
     } catch (err) {
     } finally {

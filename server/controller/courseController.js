@@ -3,27 +3,26 @@ const { VideoLecture } = require("../models/videoLecture");
 const Course = require("../models/course");
 const Section = require("../models/section");
 const jwt = require("jsonwebtoken");
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 const Post = require("../models/post");
 const mongoose = require("mongoose");
-const streamifier = require('streamifier');
-const { getVideoDurationInSeconds } = require('get-video-duration');
+const streamifier = require("streamifier");
+const { getVideoDurationInSeconds } = require("get-video-duration");
 const User = require("../models/user");
 const Admin = require("../models/admin");
-const { ObjectId } = require('mongoose').Types;
-const cloudinary = require('cloudinary').v2;
-
+const { ObjectId } = require("mongoose").Types;
+const cloudinary = require("cloudinary").v2;
 
 cloudinary.config({
-  cloud_name: 'desdkbhvz',
-  api_key: '822224579263365',
-  api_secret: 'kTX01qyk21TXjM3YPAdBd4YN6ps'
+  cloud_name: process.env.cloud_name,
+  api_key: process.env.api_key,
+  api_secret: process.env.api_secret,
 });
-
 
 const uploadToCloudinary = (file) => {
   return new Promise((resolve, reject) => {
-    const uploadStream = cloudinary.uploader.upload_stream({ resource_type: 'auto' },
+    const uploadStream = cloudinary.uploader.upload_stream(
+      { resource_type: "auto" },
       (error, result) => {
         if (error) {
           console.error("Error uploading to Cloudinary:", error);
@@ -33,15 +32,17 @@ const uploadToCloudinary = (file) => {
           if (result && result.secure_url) {
             resolve(result.secure_url);
           } else {
-            reject(new Error("Cloudinary upload result is missing 'secure_url'."));
+            reject(
+              new Error("Cloudinary upload result is missing 'secure_url'.")
+            );
           }
         }
-      });
+      }
+    );
 
     uploadStream.end(file.buffer);
   });
 };
-
 
 module.exports.getCourses = async (req, res) => {
   try {
@@ -53,28 +54,25 @@ module.exports.getCourses = async (req, res) => {
       .skip(offset * pageSize)
       .limit(pageSize)
       .populate({
-        path: 'instructorId',
-        select: '_id username profileImage',
+        path: "instructorId",
+        select: "_id username profileImage",
       })
-      .select('-sections');
+      .select("-sections");
 
     const length = await Course.countDocuments();
 
     return res.status(200).json({
       ok: true,
       courses: coursesQuery,
-      length_of_courses: length
+      length_of_courses: length,
     });
-
-
   } catch (err) {
     console.log(err);
     res.status(404).json({
-      message: "Authorization failed"
-    })
+      message: "Authorization failed",
+    });
   }
-}
-
+};
 
 module.exports.enrollInCourse = async (req, res) => {
   try {
@@ -83,7 +81,9 @@ module.exports.enrollInCourse = async (req, res) => {
 
     if (req.user.role == "user") {
       // Get the user, instructor, or admin based on the role
-      const userOrInstructorOrAdmin = await getModelByRole(req.user.role).findById(userId);
+      const userOrInstructorOrAdmin = await getModelByRole(
+        req.user.role
+      ).findById(userId);
 
       // Check if the courseId is already in the enrolledCourses array
       const courseId = req.params.courseId;
@@ -95,7 +95,9 @@ module.exports.enrollInCourse = async (req, res) => {
 
       enrolledCourses = userOrInstructorOrAdmin.enrolledCourses;
     } else if (req.user.role == "instructor") {
-      const userOrInstructorOrAdmin = await getModelByRole(req.user.role).findById(userId);
+      const userOrInstructorOrAdmin = await getModelByRole(
+        req.user.role
+      ).findById(userId);
 
       // Check if the courseId is already in the enrolledCourses array
       const courseId = req.params.courseId;
@@ -103,7 +105,7 @@ module.exports.enrollInCourse = async (req, res) => {
       if (userOrInstructorOrAdmin.courses.includes(courseId)) {
         // If not, push the courseId to the enrolledCourses array
         return res.status(500).json({
-          error: "You are the creator"
+          error: "You are the creator",
         });
       }
 
@@ -116,23 +118,21 @@ module.exports.enrollInCourse = async (req, res) => {
       enrolledCourses = userOrInstructorOrAdmin.enrolledCourses;
     } else {
       return res.status(500).json({
-        error: "Invalid role"
+        error: "Invalid role",
       });
     }
 
-
     res.status(200).json({
       ok: true,
-      enrolledCourses: enrolledCourses
+      enrolledCourses: enrolledCourses,
     });
   } catch (err) {
     console.log(err);
     res.status(500).json({
-      error: "There is some problem at our end"
+      error: "There is some problem at our end",
     });
   }
 };
-
 
 module.exports.revertEnrollInCourse = async (req, res) => {
   try {
@@ -141,31 +141,37 @@ module.exports.revertEnrollInCourse = async (req, res) => {
 
     if (req.user.role == "user") {
       // Get the user, instructor, or admin based on the role
-      const userOrInstructorOrAdmin = await getModelByRole(req.user.role).findById(userId);
+      const userOrInstructorOrAdmin = await getModelByRole(
+        req.user.role
+      ).findById(userId);
 
       const courseId = req.params.courseId;
 
       // Check if the courseId is already in the enrolledCourses array
-      const indexOfCourse = userOrInstructorOrAdmin.enrolledCourses.indexOf(courseId);
+      const indexOfCourse =
+        userOrInstructorOrAdmin.enrolledCourses.indexOf(courseId);
       if (indexOfCourse !== -1) {
         // If found, remove the courseId from the enrolledCourses array
         userOrInstructorOrAdmin.enrolledCourses.splice(indexOfCourse, 1);
         await userOrInstructorOrAdmin.save();
       }
-      
+
       enrolledCourses = userOrInstructorOrAdmin.enrolledCourses;
     } else if (req.user.role == "instructor") {
-      const userOrInstructorOrAdmin = await getModelByRole(req.user.role).findById(userId);
+      const userOrInstructorOrAdmin = await getModelByRole(
+        req.user.role
+      ).findById(userId);
 
       // Check if the courseId is already in the enrolledCourses array
       const courseId = req.params.courseId;
       if (userOrInstructorOrAdmin.courses.includes(courseId)) {
         // If not, push the courseId to the enrolledCourses array
         return res.status(500).json({
-          error: "You are the creator"
+          error: "You are the creator",
         });
       }
-      const indexOfCourse = userOrInstructorOrAdmin.enrolledCourses.indexOf(courseId);
+      const indexOfCourse =
+        userOrInstructorOrAdmin.enrolledCourses.indexOf(courseId);
       if (indexOfCourse !== -1) {
         // If found, remove the courseId from the enrolledCourses array
         userOrInstructorOrAdmin.enrolledCourses.splice(indexOfCourse, 1);
@@ -175,23 +181,21 @@ module.exports.revertEnrollInCourse = async (req, res) => {
       enrolledCourses = userOrInstructorOrAdmin.enrolledCourses;
     } else {
       return res.status(500).json({
-        error: "Invalid role"
+        error: "Invalid role",
       });
     }
 
     res.status(200).json({
       ok: true,
-      enrolledCourses: enrolledCourses
+      enrolledCourses: enrolledCourses,
     });
   } catch (err) {
     console.log(err);
     res.status(500).json({
-      error: "There is some problem at our end"
+      error: "There is some problem at our end",
     });
   }
 };
-
-
 
 module.exports.getEnrolledCourses = async (req, res) => {
   try {
@@ -199,12 +203,16 @@ module.exports.getEnrolledCourses = async (req, res) => {
     let courses;
     let totalCourses;
 
-    if (req.user.role == "user" || req.user.role == "instructor" || req.user.role == "admin") {
+    if (
+      req.user.role == "user" ||
+      req.user.role == "instructor" ||
+      req.user.role == "admin"
+    ) {
       const userOrInstructorOrAdmin = await getModelByRole(req.user.role)
         .findById(userId)
         .populate({
-          path: 'enrolledCourses',
-          select: '-sections',
+          path: "enrolledCourses",
+          select: "-sections",
         })
         .exec();
       const pageSize = 6;
@@ -213,11 +221,14 @@ module.exports.getEnrolledCourses = async (req, res) => {
       const startIndex = offset * pageSize;
       const endIndex = startIndex + pageSize;
 
-      courses = userOrInstructorOrAdmin.enrolledCourses.slice(startIndex, endIndex);
+      courses = userOrInstructorOrAdmin.enrolledCourses.slice(
+        startIndex,
+        endIndex
+      );
       totalCourses = userOrInstructorOrAdmin.enrolledCourses.length;
     } else {
       return res.status(500).json({
-        error: "Invalid role"
+        error: "Invalid role",
       });
     }
 
@@ -225,16 +236,15 @@ module.exports.getEnrolledCourses = async (req, res) => {
     res.status(200).json({
       ok: true,
       courses: courses,
-      totalCourses: totalCourses
+      totalCourses: totalCourses,
     });
   } catch (err) {
     console.log(err);
     res.status(500).json({
-      error: "There is some problem at our end"
+      error: "There is some problem at our end",
     });
   }
 };
-
 
 module.exports.getPurchasedCourses = async (req, res) => {
   try {
@@ -242,12 +252,16 @@ module.exports.getPurchasedCourses = async (req, res) => {
     let courses;
     let totalCourses;
 
-    if (req.user.role == "user" || req.user.role == "instructor" || req.user.role == "admin") {
+    if (
+      req.user.role == "user" ||
+      req.user.role == "instructor" ||
+      req.user.role == "admin"
+    ) {
       const userOrInstructorOrAdmin = await getModelByRole(req.user.role)
         .findById(userId)
         .populate({
-          path: 'purchasedCourses',
-          select: '-sections',
+          path: "purchasedCourses",
+          select: "-sections",
         })
         .exec();
       const pageSize = 6;
@@ -256,11 +270,14 @@ module.exports.getPurchasedCourses = async (req, res) => {
       const startIndex = offset * pageSize;
       const endIndex = startIndex + pageSize;
 
-      courses = userOrInstructorOrAdmin.purchasedCourses.slice(startIndex, endIndex);
+      courses = userOrInstructorOrAdmin.purchasedCourses.slice(
+        startIndex,
+        endIndex
+      );
       totalCourses = userOrInstructorOrAdmin.purchasedCourses.length;
     } else {
       return res.status(500).json({
-        error: "Invalid role"
+        error: "Invalid role",
       });
     }
 
@@ -268,12 +285,12 @@ module.exports.getPurchasedCourses = async (req, res) => {
     res.status(200).json({
       ok: true,
       courses: courses,
-      totalCourses: totalCourses
+      totalCourses: totalCourses,
     });
   } catch (err) {
     console.log(err);
     res.status(500).json({
-      error: "There is some problem at our end"
+      error: "There is some problem at our end",
     });
   }
 };
@@ -291,7 +308,6 @@ const getModelByRole = (role) => {
   }
 };
 
-
 module.exports.createCourse = async (req, res) => {
   try {
     const { title, description, duration, price, level, category } = req.body;
@@ -307,7 +323,7 @@ module.exports.createCourse = async (req, res) => {
       price: price,
       level: level,
       category: category,
-      thumbnail: thumbnailUrl
+      thumbnail: thumbnailUrl,
     });
 
     course.save();
@@ -321,17 +337,15 @@ module.exports.createCourse = async (req, res) => {
     res.status(200).json({
       ok: true,
       message: "Created Course Successfully",
-      courseId: course._id
-    })
-
+      courseId: course._id,
+    });
   } catch (err) {
     console.log(err);
     res.status(500).json({
-      error: "There is some problem at our end"
-    })
+      error: "There is some problem at our end",
+    });
   }
-}
-
+};
 
 module.exports.createSection = async (req, res) => {
   try {
@@ -354,95 +368,90 @@ module.exports.createSection = async (req, res) => {
 
     console.log(updatedCourse);
 
-
     res.status(200).json({
       ok: true,
       message: "Section Course Successfully",
-      section: section
-    })
-
+      section: section,
+    });
   } catch (err) {
     console.log(err);
     res.status(500).json({
-      error: "There is some problem at our end"
-    })
+      error: "There is some problem at our end",
+    });
   }
-}
-
+};
 
 module.exports.getCourseDetails = async (req, res) => {
   try {
     const { courseId } = req.params;
-    const token = req.headers['authorization'];
+    const token = req.headers["authorization"];
 
     let hasAccess = false;
     const courseObjectId = new ObjectId(courseId);
 
     if (!token) {
-      return res.status(401).json({ message: 'Unauthorized' });
+      return res.status(401).json({ message: "Unauthorized" });
     }
 
     const decoded = jwt.decode(token);
 
-    if (decoded.role === 'admin') {
+    if (decoded.role === "admin") {
       hasAccess = true;
-    }
-    else if (decoded.role === 'instructor') {
-      const instructor = await Instructor.findOne({ _id: new ObjectId(decoded.id), isApproved: true });
+    } else if (decoded.role === "instructor") {
+      const instructor = await Instructor.findOne({
+        _id: new ObjectId(decoded.id),
+        isApproved: true,
+      });
       if (!instructor) {
-        return res.status(401).json({ message: 'Unauthorized' });
+        return res.status(401).json({ message: "Unauthorized" });
       }
       console.log(instructor.courses);
       console.log(courseObjectId);
-      const hasCourse = (
+      const hasCourse =
         instructor.courses.includes(courseObjectId) ||
         instructor.enrolledCourses.includes(courseObjectId) ||
-        instructor.purchasedCourses.includes(courseObjectId)
-      );
+        instructor.purchasedCourses.includes(courseObjectId);
 
       if (hasCourse) {
         hasAccess = true;
       }
 
       req.user = instructor;
-
-    }
-    else if (decoded.role === 'user') {
+    } else if (decoded.role === "user") {
       const user = await User.findById(new ObjectId(decoded.id));
 
       console.log(decoded);
       console.log(user);
       if (!user) {
         console.log("no user");
-        return res.status(401).json({ message: 'Unauthorized' });
+        return res.status(401).json({ message: "Unauthorized" });
       }
 
-      const hasCourse = (
+      const hasCourse =
         user.enrolledCourses.includes(courseObjectId) ||
-        user.purchasedCourses.includes(courseObjectId)
-      );
+        user.purchasedCourses.includes(courseObjectId);
 
       if (hasCourse) {
         hasAccess = true;
       }
       req.user = user;
-
     }
 
     let populateObject = {
-      path: 'sections',
+      path: "sections",
       populate: {
-        path: 'videoLectures',
-        model: 'VideoLecture',
-        select: '_id courseId sectionId title description duration thumbnail createdAt updatedAt',
+        path: "videoLectures",
+        model: "VideoLecture",
+        select:
+          "_id courseId sectionId title description duration thumbnail createdAt updatedAt",
       },
-      select: '_id courseid title description videoLectures',
+      select: "_id courseid title description videoLectures",
     };
 
     if (!hasAccess) {
       populateObject = {
-        path: 'sections',
-        select: '_id courseid title description',
+        path: "sections",
+        select: "_id courseid title description",
       };
     }
 
@@ -450,30 +459,28 @@ module.exports.getCourseDetails = async (req, res) => {
       .populate(populateObject)
       .exec();
 
-
     console.log(course);
     if (!course) {
       res.status(400).json({
         ok: false,
-        error: "Invalid courseId"
-      })
+        error: "Invalid courseId",
+      });
       return;
     }
     console.log(course);
     res.status(200).json({
       ok: true,
       course: course,
-      hasAccess: hasAccess
-    })
+      hasAccess: hasAccess,
+    });
   } catch (err) {
     console.log(err);
     res.status(500).json({
       ok: false,
-      error: "Internal Server Error"
-    })
+      error: "Internal Server Error",
+    });
   }
-}
-
+};
 
 module.exports.getCourseDetailsForEdit = async (req, res) => {
   const { courseId } = req.params;
@@ -481,39 +488,38 @@ module.exports.getCourseDetailsForEdit = async (req, res) => {
   try {
     const course = await Course.findById(courseId)
       .populate({
-        path: 'sections',
+        path: "sections",
         populate: {
-          path: 'videoLectures',
-          model: 'VideoLecture',
-          select: '_id courseId sectionId title description duration thumbnail videoFile createdAt updatedAt',
+          path: "videoLectures",
+          model: "VideoLecture",
+          select:
+            "_id courseId sectionId title description duration thumbnail videoFile createdAt updatedAt",
         },
-        select: '_id courseid title description',
+        select: "_id courseid title description",
       })
       .exec();
-
 
     console.log(course);
     if (!course) {
       res.status(400).json({
         ok: false,
-        error: "Invalid courseId"
-      })
+        error: "Invalid courseId",
+      });
       return;
     }
     console.log(course);
     res.status(200).json({
       ok: true,
-      course: course
-    })
+      course: course,
+    });
   } catch (err) {
     console.log(err);
     res.status(500).json({
       ok: false,
-      error: "Internal Server Error"
-    })
+      error: "Internal Server Error",
+    });
   }
-}
-
+};
 
 module.exports.editBasicCourseDetails = async (req, res) => {
   try {
@@ -542,7 +548,11 @@ module.exports.editBasicCourseDetails = async (req, res) => {
     if (thumbnail) updateFields.thumbnail = thumbnailUrl;
     console.log("here3");
 
-    const course = await Course.findByIdAndUpdate(courseId, { $set: updateFields }, { new: true });
+    const course = await Course.findByIdAndUpdate(
+      courseId,
+      { $set: updateFields },
+      { new: true }
+    );
     console.log("here4");
 
     res.status(200).json({
@@ -554,25 +564,23 @@ module.exports.editBasicCourseDetails = async (req, res) => {
         duration: course.duration,
         price: course.price,
         category: course.category,
-        thumbnail: course.thumbnail
-      }
+        thumbnail: course.thumbnail,
+      },
     });
     return;
   } catch (err) {
     console.log(err);
     res.status(500).json({
-      error: "Error occured"
+      error: "Error occured",
     });
   }
-}
-
+};
 
 module.exports.editSectionDetails = async (req, res) => {
   try {
     const { courseId, sectionId } = req.params;
     console.log(req.body);
     const { title, description } = req.body;
-
 
     const updateFields = {};
     if (title) updateFields.title = title;
@@ -584,35 +592,34 @@ module.exports.editSectionDetails = async (req, res) => {
       { $set: updateFields },
       { new: true }
     );
-    console.log(updatedSection)
+    console.log(updatedSection);
     res.status(200).json({
       ok: true,
       updatedSection: {
         title: updatedSection.title,
-        description: updatedSection.description
-      }
+        description: updatedSection.description,
+      },
     });
     return;
   } catch (err) {
     console.log(err);
     res.status(500).json({
-      error: "Error occured"
+      error: "Error occured",
     });
   }
-}
+};
 
 module.exports.uploadCourseVideo = async (req, res) => {
   try {
-    console.log(req.body)
+    console.log(req.body);
     console.log(req.files);
     const { courseId, sectionId } = req.body;
     if (!courseId || !sectionId) {
-      res.status(400).json({ error: 'Invalid inputs' });
+      res.status(400).json({ error: "Invalid inputs" });
     }
 
-    const videoFile = req.files['video'][0];
-    const thumbnail = req.files['thumbnail'][0];
-
+    const videoFile = req.files["video"][0];
+    const thumbnail = req.files["thumbnail"][0];
 
     const videoFileUrl = await uploadToCloudinary(videoFile);
     const videoStream = streamifier.createReadStream(videoFile.buffer);
@@ -628,7 +635,7 @@ module.exports.uploadCourseVideo = async (req, res) => {
       description: req.body.description,
       duration: duration,
       videoFile: videoFileUrl,
-      thumbnail: thumbnailUrl
+      thumbnail: thumbnailUrl,
     });
 
     const result = await videoLecture.save();
@@ -645,15 +652,14 @@ module.exports.uploadCourseVideo = async (req, res) => {
     res.status(200).json({
       ok: true,
       message: "Lecture added successfully",
-      video: result
-    })
+      video: result,
+    });
     return;
   } catch (error) {
-    console.log('Error uploading video:' + error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.log("Error uploading video:" + error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
-}
-
+};
 
 module.exports.editVideoDetails = async (req, res) => {
   try {
@@ -662,15 +668,15 @@ module.exports.editVideoDetails = async (req, res) => {
 
     let videoFile, thumbnail, thumbnailUrl, videoFileUrl, duration;
 
-    if (req.files['video'] && req.files['video'][0]) {
-      videoFile = req.files['video'][0];
+    if (req.files["video"] && req.files["video"][0]) {
+      videoFile = req.files["video"][0];
       videoFileUrl = await uploadToCloudinary(videoFile);
       const videoStream = streamifier.createReadStream(videoFile.buffer);
       duration = await getVideoDurationInSeconds(videoStream);
     }
 
-    if (req.files['thumbnail'] && req.files['thumbnail'][0]) {
-      thumbnail = req.files['thumbnail'][0];
+    if (req.files["thumbnail"] && req.files["thumbnail"][0]) {
+      thumbnail = req.files["thumbnail"][0];
       thumbnailUrl = await uploadToCloudinary(thumbnail);
     }
 
@@ -688,22 +694,21 @@ module.exports.editVideoDetails = async (req, res) => {
       videoId,
       { $set: updateFields },
       { new: true }
-    )
+    );
     console.log(video);
 
     res.status(200).json({
       ok: true,
-      video: video
+      video: video,
     });
     return;
   } catch (err) {
     console.log(err);
     res.status(500).json({
-      error: "Error occured"
+      error: "Error occured",
     });
   }
-}
-
+};
 
 module.exports.deleteCourse = async (req, res) => {
   try {
@@ -713,7 +718,7 @@ module.exports.deleteCourse = async (req, res) => {
 
     if (!course) {
       return res.status(404).json({
-        error: 'Course not found',
+        error: "Course not found",
       });
     }
 
@@ -721,12 +726,12 @@ module.exports.deleteCourse = async (req, res) => {
 
     res.status(200).json({
       ok: true,
-      message: 'Section deleted successfully',
+      message: "Section deleted successfully",
     });
   } catch (err) {
     console.error(err);
     res.status(500).json({
-      error: 'Error occurred while deleting the video',
+      error: "Error occurred while deleting the video",
     });
   }
 };
@@ -740,7 +745,7 @@ module.exports.deleteSection = async (req, res) => {
 
     if (!section) {
       return res.status(404).json({
-        error: 'Section not found',
+        error: "Section not found",
       });
     }
 
@@ -749,7 +754,7 @@ module.exports.deleteSection = async (req, res) => {
 
     if (!course) {
       return res.status(404).json({
-        error: 'Course not found',
+        error: "Course not found",
       });
     }
 
@@ -761,16 +766,15 @@ module.exports.deleteSection = async (req, res) => {
 
     res.status(200).json({
       ok: true,
-      message: 'Section deleted successfully',
+      message: "Section deleted successfully",
     });
   } catch (err) {
     console.error(err);
     res.status(500).json({
-      error: 'Error occurred while deleting the video',
+      error: "Error occurred while deleting the video",
     });
   }
 };
-
 
 module.exports.deleteVideo = async (req, res) => {
   try {
@@ -780,7 +784,7 @@ module.exports.deleteVideo = async (req, res) => {
 
     if (!video) {
       return res.status(404).json({
-        error: 'Video not found',
+        error: "Video not found",
       });
     }
 
@@ -789,7 +793,7 @@ module.exports.deleteVideo = async (req, res) => {
 
     if (!section) {
       return res.status(404).json({
-        error: 'Section not found',
+        error: "Section not found",
       });
     }
 
@@ -801,15 +805,12 @@ module.exports.deleteVideo = async (req, res) => {
 
     res.status(200).json({
       ok: true,
-      message: 'Video deleted successfully',
+      message: "Video deleted successfully",
     });
   } catch (err) {
     console.error(err);
     res.status(500).json({
-      error: 'Error occurred while deleting the video',
+      error: "Error occurred while deleting the video",
     });
   }
 };
-
-
-

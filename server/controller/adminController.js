@@ -1,46 +1,42 @@
 const Admin = require("../models/admin");
 const Instructor = require("../models/instructor");
 const mongoose = require("mongoose");
-const nodemailer = require('nodemailer');
+const nodemailer = require("nodemailer");
 const jwt = require("jsonwebtoken");
-const bcrypt = require('bcrypt');
-const { Readable } = require('stream');
-const cloudinary = require('cloudinary').v2;
-
+const bcrypt = require("bcrypt");
+const { Readable } = require("stream");
+const cloudinary = require("cloudinary").v2;
 
 const conn = mongoose.connection;
 let gfs;
-conn.once('open', () => {
+conn.once("open", () => {
   gfs = new mongoose.mongo.GridFSBucket(conn.db, {
-    bucketName: 'doubts',
+    bucketName: "doubts",
   });
 });
 
-          
-cloudinary.config({ 
-  cloud_name: 'desdkbhvz', 
-  api_key: '822224579263365', 
-  api_secret: 'kTX01qyk21TXjM3YPAdBd4YN6ps' 
+cloudinary.config({
+  cloud_name: process.env.cloud_name,
+  api_key: process.env.api_key,
+  api_secret: process.env.api_secret,
 });
-
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  service: "gmail",
   auth: {
-    user: 'nibarond94@gmail.com', // Your Gmail email address
-    pass: 'mfeu ndqh rnju dbnp', // Your Gmail password or an app-specific password
+    user: process.env.user, // Your Gmail email address
+    pass: process.env.pass, // Your Gmail password or an app-specific password
   },
 });
-
 
 // Function to upload file to Cloudinary
 const uploadToCloudinary = (file) => {
   return new Promise((resolve, reject) => {
-      cloudinary.uploader.upload_stream({ resource_type: 'auto' },
-          (error, result) => {
-              if (error) reject(error);
-              resolve(result.secure_url);
-          })
-          .end(file.buffer);
+    cloudinary.uploader
+      .upload_stream({ resource_type: "auto" }, (error, result) => {
+        if (error) reject(error);
+        resolve(result.secure_url);
+      })
+      .end(file.buffer);
   });
 };
 
@@ -58,8 +54,8 @@ module.exports.signuppost = async (req, res) => {
     const existingUser = await Admin.findOne({ email });
     if (existingUser) {
       res.status(400).json({
-        message: "User with this eamil alread exists!"
-      })
+        message: "User with this eamil alread exists!",
+      });
       return;
     }
 
@@ -71,18 +67,17 @@ module.exports.signuppost = async (req, res) => {
     });
 
     await admin.save();
-    
+
     return res.status(200).json({
       message: "Registered successfull! Approval pending",
     });
   } catch (err) {
     console.log(err);
     return res.status(500).json({
-      message: "Something went wrong at our end"
-    })
+      message: "Something went wrong at our end",
+    });
   }
-}
-
+};
 
 module.exports.loginpost = async (req, res) => {
   try {
@@ -93,19 +88,19 @@ module.exports.loginpost = async (req, res) => {
 
     if (!admin) {
       return res.status(404).json({
-        message: "User Not Present"
+        message: "User Not Present",
       });
     }
 
     if (!validPassword) {
       return res.status(404).json({
-        message: "Invalid Password"
+        message: "Invalid Password",
       });
     }
 
     if (!admin.isApproved) {
       return res.status(400).json({
-        message: "Approval Pending"
+        message: "Approval Pending",
       });
     }
 
@@ -113,25 +108,23 @@ module.exports.loginpost = async (req, res) => {
       {
         id: admin.id,
         username: admin.username,
-        role: "admin"
+        role: "admin",
       },
       process.env.ADMIN_JWT_SECRET,
-      { expiresIn: '24h' }
+      { expiresIn: "24h" }
     );
 
     return res.status(200).json({
       message: "Login successfull",
-      token: token
+      token: token,
     });
-
   } catch (err) {
     console.log(err);
     return res.status(500).json({
-      message: "There is some problem at our end"
+      message: "There is some problem at our end",
     });
   }
-}
-
+};
 
 module.exports.getAdminData = async (req, res) => {
   try {
@@ -144,16 +137,14 @@ module.exports.getAdminData = async (req, res) => {
       username: admin.username,
       email: admin.email,
       role: "admin",
-      profileImage: admin.profileImage
+      profileImage: admin.profileImage,
     });
-
   } catch (err) {
     res.status(404).json({
-      message: "Authorization failed"
-    })
+      message: "Authorization failed",
+    });
   }
-}
-
+};
 
 module.exports.approveAccount = async (req, res) => {
   try {
@@ -164,40 +155,47 @@ module.exports.approveAccount = async (req, res) => {
     let account;
     switch (role) {
       case "Admin":
-        account = await Admin.findByIdAndUpdate(id, { isApproved: true }, { new: true });
+        account = await Admin.findByIdAndUpdate(
+          id,
+          { isApproved: true },
+          { new: true }
+        );
         break;
-        
+
       case "Instructor":
-        account = await Instructor.findByIdAndUpdate(id, { isApproved: true }, { new: true });
+        account = await Instructor.findByIdAndUpdate(
+          id,
+          { isApproved: true },
+          { new: true }
+        );
         break;
 
       default:
         return res.status(400).json({
-          message: "invalid request"
-        })
+          message: "invalid request",
+        });
         break;
     }
 
     if (!account) {
-      return res.status(404).json({ error: 'Account not found.' });
+      return res.status(404).json({ error: "Account not found." });
     }
 
     // sending approval mail to instructor / admin
     await sendApprovalEmail(account.email, role);
 
-    res.status(200).json({ message: 'Account approved successfully.' });
-
+    res.status(200).json({ message: "Account approved successfully." });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Account approving instructor.' });
+    res.status(500).json({ error: "Account approving instructor." });
   }
-}
+};
 
 async function sendApprovalEmail(userEmail, userRole) {
   const mailOptions = {
-    from: 'your-email@gmail.com',
+    from: "your-email@gmail.com",
     to: userEmail,
-    subject: 'Your Account has been Approved',
+    subject: "Your Account has been Approved",
     html: `
       <!DOCTYPE html>
       <html lang="en">
@@ -269,14 +267,14 @@ async function sendApprovalEmail(userEmail, userRole) {
       </body>
       
       </html>
-    `
+    `,
   };
 
   try {
     await transporter.sendMail(mailOptions);
-    console.log('Approval email sent to:', userEmail);
+    console.log("Approval email sent to:", userEmail);
   } catch (error) {
-    console.error('Error sending approval email:', error);
+    console.error("Error sending approval email:", error);
     throw error;
   }
 }
@@ -292,16 +290,16 @@ module.exports.denyAccount = async (req, res) => {
       case "Admin":
         account = await Admin.findById(id);
         if (!account) {
-          return res.status(404).json({ error: 'Account not found.' });
+          return res.status(404).json({ error: "Account not found." });
         }
         await sendDenialEmail(account.email, role);
         await Admin.deleteOne({ _id: id });
         break;
-        
+
       case "Instructor":
         account = await Instructor.findById(id);
         if (!account) {
-          return res.status(404).json({ error: 'Account not found.' });
+          return res.status(404).json({ error: "Account not found." });
         }
         await sendDenialEmail(account.email, role);
         await Instructor.deleteOne({ _id: id });
@@ -309,21 +307,22 @@ module.exports.denyAccount = async (req, res) => {
 
       default:
         return res.status(400).json({
-          message: "invalid request"
-        })
+          message: "invalid request",
+        });
         break;
     }
-    res.status(200).json({ message: 'Account denied and deleted successfully.' });
-
+    res
+      .status(200)
+      .json({ message: "Account denied and deleted successfully." });
   } catch (err) {
     console.error(err);
-    res.status(500).json({ error: 'Error denying Account.' });
+    res.status(500).json({ error: "Error denying Account." });
   }
-}
+};
 
 async function sendDenialEmail(userEmail, userRole) {
   const rejectionMailOptions = {
-    from: 'your-email@gmail.com',
+    from: "your-email@gmail.com",
     to: userEmail,
     html: `
         <!DOCTYPE html>
@@ -396,14 +395,14 @@ async function sendDenialEmail(userEmail, userRole) {
         </body>
 
         </html>
-    `
+    `,
   };
 
   try {
     await transporter.sendMail(rejectionMailOptions);
-    console.log('Rejection email sent to:', userEmail);
+    console.log("Rejection email sent to:", userEmail);
   } catch (error) {
-    console.error('Error sending rejection email:', error);
+    console.error("Error sending rejection email:", error);
     throw error;
   }
 }
@@ -412,7 +411,7 @@ module.exports.getPendingRequests = async (req, res) => {
   const pendingInstructors = await Instructor.find({ isApproved: false });
   const pendingAdmins = await Admin.find({ isApproved: false });
 
-  const result1 = pendingInstructors.map(val => {
+  const result1 = pendingInstructors.map((val) => {
     return {
       id: val.id,
       role: "Instructor",
@@ -420,10 +419,10 @@ module.exports.getPendingRequests = async (req, res) => {
       email: val.email,
       profileImage: val.profileImage,
       createdAt: val.createdAt,
-      updatedAt: val.updatedAt
-    }
+      updatedAt: val.updatedAt,
+    };
   });
-  const result2 = pendingAdmins.map(val => {
+  const result2 = pendingAdmins.map((val) => {
     return {
       id: val.id,
       role: "Admin",
@@ -431,15 +430,13 @@ module.exports.getPendingRequests = async (req, res) => {
       email: val.email,
       profileImage: val.profileImage,
       createdAt: val.createdAt,
-      updatedAt: val.updatedAt
-    }
+      updatedAt: val.updatedAt,
+    };
   });
 
   const result = [...result1, ...result2];
 
   res.json({
-    pendingRequests: result
+    pendingRequests: result,
   });
-}
-
-
+};

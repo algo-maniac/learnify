@@ -56,6 +56,7 @@ const AddSectionForm = ({
           };
         });
 
+        // Toast Section Added Successfully
         setSectionDetails({
           title: "",
           description: "",

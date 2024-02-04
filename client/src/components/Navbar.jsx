@@ -1,25 +1,42 @@
 import React, { useState, useContext, useEffect, useRef } from "react";
-import styled from 'styled-components';
+import styled from "styled-components";
 import { Link, Navigate, useNavigate } from "react-router-dom";
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-import SearchIcon from '@mui/icons-material/Search';
-import CancelIcon from '@mui/icons-material/Cancel';
-import PersonIcon from '@mui/icons-material/Person';
-import SettingsIcon from '@mui/icons-material/Settings';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
+import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
+import SearchIcon from "@mui/icons-material/Search";
+import CancelIcon from "@mui/icons-material/Cancel";
+import PersonIcon from "@mui/icons-material/Person";
+import SettingsIcon from "@mui/icons-material/Settings";
+import ExitToAppIcon from "@mui/icons-material/ExitToApp";
+import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import AuthContext from "../store/auth-context";
+import { Provider, useDispatch, useSelector } from "react-redux";
+import { setSearch } from "../store/searchSlice";
+
+const useDebounce = (searchText) => {
+  const dispatch = useDispatch();
+  useEffect(() => {
+    let timeoutValue = setTimeout(() => {
+      // console.log(searchText);
+      dispatch(setSearch({ searchValue: searchText }));
+    }, 500);
+
+    return () => {
+      clearInterval(timeoutValue);
+    };
+  }, [searchText]);
+};
 
 function Navbar({ toggleIsSearchExpanded, logout }) {
   const { userdata, setUserdata, fetchUserdata } = useContext(AuthContext);
 
   const navigate = useNavigate();
-  const [searchText, setSearchText] = useState('');
+  const [searchText, setSearchText] = useState("");
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [debounceTimeout, setDebounceTimeout] = useState(null);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+
+  useDebounce(searchText);
 
   const onBlurSearch = () => {
     setIsSearchFocused(false);
@@ -34,7 +51,7 @@ function Navbar({ toggleIsSearchExpanded, logout }) {
     console.log("inside open search bar");
   };
   const cancelSearch = () => {
-    setSearchText('');
+    setSearchText("");
     setIsSearchExpanded(false);
   };
 
@@ -49,29 +66,9 @@ function Navbar({ toggleIsSearchExpanded, logout }) {
   const redirectToSearch = (text) => {
     console.log(searchText, isSearchFocused);
     if (searchText && isSearchFocused) {
-      history(`/search?query=${ text }`);
+      history(`/search?query=${text}`);
     }
   };
-
-
-  useEffect(() => {
-    let newTimeout;
-    if(isSearchFocused) {
-      if (debounceTimeout) {
-        clearTimeout(debounceTimeout);
-      }
-
-      newTimeout = setTimeout(() => {
-        redirectToSearch(searchText);
-      }, 1000);
-
-      setDebounceTimeout(newTimeout);
-    }
-    return () => {
-      clearTimeout(newTimeout);
-    };
-  }, [searchText, isSearchFocused]);
-
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -87,7 +84,6 @@ function Navbar({ toggleIsSearchExpanded, logout }) {
     };
   }, [dropdownRef]);
 
-
   return (
     <Container className="navbar">
       <div className="left">
@@ -100,9 +96,8 @@ function Navbar({ toggleIsSearchExpanded, logout }) {
         </Link>
       </div>
 
-
       <div className="right">
-        <div className={`search-mobile ${ isSearchExpanded ? 'expanded' : '' }`} >
+        <div className={`search-mobile ${isSearchExpanded ? "expanded" : ""}`}>
           <SearchIcon className="search-icon" onClick={openSearchBar} />
           <input
             type="text"
@@ -116,7 +111,7 @@ function Navbar({ toggleIsSearchExpanded, logout }) {
           <CancelIcon className="cancel-icon" onClick={cancelSearch} />
         </div>
 
-        <div className='search'>
+        <div className="search">
           <SearchIcon className="search-icon" />
           <input
             type="text"
@@ -128,32 +123,35 @@ function Navbar({ toggleIsSearchExpanded, logout }) {
             onBlur={onBlurSearch}
             onClick={openSearchBar}
           />
-          <CancelIcon className={`cancel-icon  ${ searchText ? 'hasInputText' : '' }`} onClick={cancelSearch} />
+          <CancelIcon
+            className={`cancel-icon  ${searchText ? "hasInputText" : ""}`}
+            onClick={cancelSearch}
+          />
         </div>
 
         {userdata && userdata.id ? (
           <div className="right-profile">
             <img src={userdata.profileImage} alt="profileImage" />
             <div ref={dropdownRef}>
-              {isDropdownOpen ?
+              {isDropdownOpen ? (
                 <KeyboardArrowUpIcon onClick={toggleDropdown} />
-                : <KeyboardArrowDownIcon onClick={toggleDropdown} />
-              }
+              ) : (
+                <KeyboardArrowDownIcon onClick={toggleDropdown} />
+              )}
               {isDropdownOpen && (
                 <DropdownMenu>
-                  {userdata.role === 'user' 
-                    ? (
-                      <div>
+                  {userdata.role === "user" ? (
+                    <div>
+                      <PersonIcon />
+                      {userdata.username}
+                    </div>
+                  ) : (
+                    <div>
+                      <Link to={`/dashboard-${userdata.role}`}>
                         <PersonIcon />
                         {userdata.username}
-                      </div>
-                    ) : (
-                      <div>
-                        <Link to={`/dashboard-${userdata.role}`}>
-                          <PersonIcon />
-                          {userdata.username}
-                        </Link>
-                      </div>
+                      </Link>
+                    </div>
                   )}
                   <div>
                     <SettingsIcon />
@@ -170,13 +168,12 @@ function Navbar({ toggleIsSearchExpanded, logout }) {
         ) : (
           <>
             <div className="right-profile">
-              <button onClick={() => navigate('/signup')}>Signup</button>
-              <button onClick={() => navigate('/login')}>Login</button>
+              <button onClick={() => navigate("/signup")}>Signup</button>
+              <button onClick={() => navigate("/login")}>Login</button>
             </div>
           </>
         )}
       </div>
-
     </Container>
   );
 }
@@ -229,14 +226,10 @@ const Container = styled.div`
           color: transparent; */
           /* text-shadow: 1px 1px 2px rgba(55, 63, 169, 0.57); */
           font-weight: 500;
-           
-          
         }
       }
     }
   }
-
-
 
   .right {
     display: flex;
@@ -277,7 +270,7 @@ const Container = styled.div`
         top: 50%;
         transform: translateY(-50%);
         display: none;
-         
+
         &.hasInputText {
           display: block;
         }
@@ -287,7 +280,6 @@ const Container = styled.div`
     .search-mobile {
       display: none;
     }
-
 
     img {
       width: 50px;
@@ -330,7 +322,6 @@ const Container = styled.div`
     }
   }
 
-
   @media screen and (max-width: 600px) {
     padding: 3px 10px;
     margin: 0;
@@ -340,7 +331,6 @@ const Container = styled.div`
         display: none;
       }
     }
-  
 
     .right {
       .search {
@@ -351,22 +341,20 @@ const Container = styled.div`
         display: flex;
         position: relative;
         input {
-          display: none; 
+          display: none;
         }
         .cancel-icon {
           display: none;
         }
-         
+
         &.expanded {
-          background-color: red; 
+          background-color: red;
           position: fixed;
           top: 0;
-          left:0;
+          left: 0;
           width: 100vw;
           height: 70px;
           background-color: white; // Change the background color as needed
-
-        
 
           .search-icon {
             position: absolute;
@@ -377,7 +365,7 @@ const Container = styled.div`
 
           input {
             display: block;
-            width: calc(100% - 70px); 
+            width: calc(100% - 70px);
             margin: 10px;
             width: 100%;
             border: 0;
@@ -416,8 +404,6 @@ const DropdownMenu = styled.div`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   z-index: 100;
   overflow: hidden;
-
-  
 
   div {
     padding: 12px 20px; /* Increased padding for larger screens */

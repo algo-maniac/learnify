@@ -3,35 +3,30 @@ const { VideoLecture, Comment } = require("../models/videoLecture");
 const Instructor = require("../models/instructor");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
-const bcrypt = require('bcrypt');
-const cloudinary = require('cloudinary').v2;
-const streamifier = require('streamifier');
-const { getVideoDurationInSeconds } = require('get-video-duration');
-
-
-
+const bcrypt = require("bcrypt");
+const cloudinary = require("cloudinary").v2;
+const streamifier = require("streamifier");
+const { getVideoDurationInSeconds } = require("get-video-duration");
 
 const conn = mongoose.connection;
 let gfs;
-conn.once('open', () => {
+conn.once("open", () => {
   gfs = new mongoose.mongo.GridFSBucket(conn.db, {
-    bucketName: 'uploads',
+    bucketName: "uploads",
   });
 });
 
-
-
 cloudinary.config({
-  cloud_name: 'desdkbhvz',
-  api_key: '822224579263365',
-  api_secret: 'kTX01qyk21TXjM3YPAdBd4YN6ps'
+  cloud_name: process.env.cloud_name,
+  api_key: process.env.api_key,
+  api_secret: process.env.api_secret,
 });
 
 // Function to upload file to Cloudinary
 const uploadToCloudinary = (file) => {
   return new Promise((resolve, reject) => {
-    cloudinary.uploader.upload_stream({ resource_type: 'auto' },
-      (error, result) => {
+    cloudinary.uploader
+      .upload_stream({ resource_type: "auto" }, (error, result) => {
         if (error) reject(error);
         resolve(result.secure_url);
       })
@@ -39,17 +34,14 @@ const uploadToCloudinary = (file) => {
   });
 };
 
-
-
 module.exports.uploadVideo = async (req, res) => {
   try {
-    console.log('here');
-    console.log(req.body)
+    console.log("here");
+    console.log(req.body);
     console.log(req.files);
 
-    const videoFile = req.files['video'][0];
-    const thumbnail = req.files['thumbnail'][0];
-
+    const videoFile = req.files["video"][0];
+    const thumbnail = req.files["thumbnail"][0];
 
     const videoFileUrl = await uploadToCloudinary(videoFile);
     const videoStream = streamifier.createReadStream(videoFile.buffer);
@@ -65,7 +57,7 @@ module.exports.uploadVideo = async (req, res) => {
       description: req.body.description,
       duration: duration,
       videoFile: videoFileUrl,
-      thumbnail: thumbnailUrl
+      thumbnail: thumbnailUrl,
     });
 
     const result = await videoLecture.save();
@@ -76,20 +68,20 @@ module.exports.uploadVideo = async (req, res) => {
     const updateResult = await Instructor.findByIdAndUpdate(
       instructorId,
       { $push: { videoLectures: result._id } },
-      { new: true } 
+      { new: true }
     );
 
     res.status(200).json({
       ok: true,
       message: "Lecture added successfully",
-      video: result
-    })
+      video: result,
+    });
     return;
   } catch (error) {
-    console.log('Error uploading video:' + error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.log("Error uploading video:" + error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
-}
+};
 
 module.exports.getVideos = async (req, res) => {
   try {
@@ -101,15 +93,15 @@ module.exports.getVideos = async (req, res) => {
       .skip(offset * pageSize)
       .limit(pageSize)
       .populate({
-        path: 'instructorId',
-        select: '_id username profileImage',
+        path: "instructorId",
+        select: "_id username profileImage",
       })
-      .select('-videoFile -comments') // Exclude videoFile and comments
+      .select("-videoFile -comments"); // Exclude videoFile and comments
 
     const videos = videosQuery;
     const totalVideos = await VideoLecture.countDocuments({ courseId: null });
 
-    console.log('Videos:', videos);
+    console.log("Videos:", videos);
 
     return res.status(200).json({
       ok: true,
@@ -119,18 +111,18 @@ module.exports.getVideos = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(400).json({
-      error: "There is some issue"
+      error: "There is some issue",
     });
   }
-}
+};
 
 module.exports.getVideoDetails = async (req, res) => {
   const { videoId } = req.query;
 
   try {
     const video = await VideoLecture.findById(videoId).populate({
-      path: 'instructorId',
-      select: '_id username profileImage'
+      path: "instructorId",
+      select: "_id username profileImage",
     });
 
     // const video = await VideoLecture.findById(id)
@@ -146,19 +138,18 @@ module.exports.getVideoDetails = async (req, res) => {
     //     path: 'comments.replies.userId',
     //     select: '_id username profileImage',
     //   });
-    console.log(video)
-
+    console.log(video);
 
     res.status(200).json({
-      video: video
-    })
+      video: video,
+    });
   } catch (err) {
     console.log(err);
     res.status(400).json({
-      error: "can't video the the video you requested"
-    })
+      error: "can't video the the video you requested",
+    });
   }
-}
+};
 
 module.exports.createComment = async (req, res) => {
   try {
@@ -180,23 +171,22 @@ module.exports.createComment = async (req, res) => {
 
     if (!videoLecture) {
       return res.status(400).json({
-        message: "Wrong Info"
-      })
+        message: "Wrong Info",
+      });
     }
 
     res.status(200).json({
       message: "Successfully added comment",
-      comment: comment
-    })
+      comment: comment,
+    });
     return;
   } catch (err) {
     console.log(err);
     res.status(500).json({
-      message: "There is some problem at our end"
-    })
+      message: "There is some problem at our end",
+    });
   }
 };
-
 
 module.exports.addReply = async (req, res) => {
   try {
@@ -211,34 +201,34 @@ module.exports.addReply = async (req, res) => {
     };
 
     const videoLecture = await VideoLecture.findOneAndUpdate(
-      { _id: videoId, 'comments._id': commentId },
-      { $push: { 'comments.$.replies': reply } },
+      { _id: videoId, "comments._id": commentId },
+      { $push: { "comments.$.replies": reply } },
       { new: true }
     );
 
     if (!videoLecture) {
       return res.status(400).json({
-        message: "Wrong Info"
-      })
+        message: "Wrong Info",
+      });
     }
     // console.log(videoLecture.comments[0].replies);
-    const updatedComment = videoLecture.comments.find(comment => comment._id.toString() === commentId);
+    const updatedComment = videoLecture.comments.find(
+      (comment) => comment._id.toString() === commentId
+    );
     console.log(videoLecture);
     console.log(updatedComment);
 
     return res.status(200).json({
       message: "Successfully added reply",
-      comment: updatedComment
+      comment: updatedComment,
     });
   } catch (err) {
     console.log(err);
     return res.status(500).json({
-      message: "There is some problem at our end"
-    })
+      message: "There is some problem at our end",
+    });
   }
 };
-
-
 
 // Add Like Endpoint
 module.exports.addLike = async (req, res) => {
@@ -246,16 +236,20 @@ module.exports.addLike = async (req, res) => {
     const { videoId } = req.query;
     const userId = req.user.id;
 
-    const result = await toggleLikeStatus(videoId, userId, 'add');
+    const result = await toggleLikeStatus(videoId, userId, "add");
 
     if (result.success) {
-      return res.status(200).json({ message: result.message, likeCount: result.likeCount });
+      return res
+        .status(200)
+        .json({ message: result.message, likeCount: result.likeCount });
     } else {
-      return res.status(400).json({ message: result.message, likeCount: result.likeCount });
+      return res
+        .status(400)
+        .json({ message: result.message, likeCount: result.likeCount });
     }
   } catch (err) {
     console.log(err);
-    return res.status(500).json({ message: 'Internal server error.' });
+    return res.status(500).json({ message: "Internal server error." });
   }
 };
 
@@ -265,16 +259,20 @@ module.exports.removeLike = async (req, res) => {
     const { videoId } = req.query;
     const userId = req.user.id;
 
-    const result = await toggleLikeStatus(videoId, userId, 'remove');
+    const result = await toggleLikeStatus(videoId, userId, "remove");
 
     if (result.success) {
-      return res.status(200).json({ message: result.message, likeCount: result.likeCount });
+      return res
+        .status(200)
+        .json({ message: result.message, likeCount: result.likeCount });
     } else {
-      return res.status(400).json({ message: result.message, likeCount: result.likeCount });
+      return res
+        .status(400)
+        .json({ message: result.message, likeCount: result.likeCount });
     }
   } catch (err) {
     console.error(err);
-    return res.status(500).json({ message: 'Internal server error.' });
+    return res.status(500).json({ message: "Internal server error." });
   }
 };
 
@@ -288,15 +286,18 @@ async function toggleLikeStatus(videoId, userId, action) {
     const userIndex = video.likes.indexOf(userId);
     const userLiked = userIndex !== -1;
 
-    if ((action === 'add' && !userLiked) || (action === 'remove' && userLiked)) {
+    if (
+      (action === "add" && !userLiked) ||
+      (action === "remove" && userLiked)
+    ) {
       let updateQuery;
 
-      if (action === 'add') {
+      if (action === "add") {
         updateQuery = {
           $addToSet: { likes: userId },
           $inc: { likeCount: 1 },
         };
-      } else if (action === 'remove') {
+      } else if (action === "remove") {
         updateQuery = {
           $pull: { likes: userId },
           $inc: { likeCount: -1 },
@@ -306,18 +307,34 @@ async function toggleLikeStatus(videoId, userId, action) {
       }
 
       // Save the updated video to the database
-      const video = await VideoLecture.findByIdAndUpdate(videoId, updateQuery, { new: true }).exec();
+      const video = await VideoLecture.findByIdAndUpdate(videoId, updateQuery, {
+        new: true,
+      }).exec();
       console.log(video);
       console.log(video.likes);
 
-
-      return { success: true, message: `Like ${action === 'add' ? 'added' : 'removed'} successfully.`, likeCount: video.likeCount };
+      return {
+        success: true,
+        message: `Like ${action === "add" ? "added" : "removed"} successfully.`,
+        likeCount: video.likeCount,
+      };
     } else {
-      return { success: false, message: `User already ${action === 'add' ? 'liked' : 'not liked'} the video.`, likeCount: video.likeCount };
+      return {
+        success: false,
+        message: `User already ${
+          action === "add" ? "liked" : "not liked"
+        } the video.`,
+        likeCount: video.likeCount,
+      };
     }
   } catch (error) {
-    console.log(`Error ${action === 'add' ? 'adding' : 'removing'} like:`, error);
-    return { success: false, message: 'Error occurred while toggling like status.' };
+    console.log(
+      `Error ${action === "add" ? "adding" : "removing"} like:`,
+      error
+    );
+    return {
+      success: false,
+      message: "Error occurred while toggling like status.",
+    };
   }
 }
-

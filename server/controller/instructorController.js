@@ -5,39 +5,35 @@ const { VideoLecture } = require("../models/videoLecture");
 const Course = require("../models/course");
 const Section = require("../models/section");
 const jwt = require("jsonwebtoken");
-const bcrypt = require('bcrypt');
+const bcrypt = require("bcrypt");
 const Post = require("../models/post");
 const mongoose = require("mongoose");
-const ffmpeg = require('fluent-ffmpeg');
-const streamifier = require('streamifier');
-const ffmpegInstaller = require('@ffmpeg-installer/ffmpeg');
-const { getVideoDurationInSeconds } = require('get-video-duration');
-const cloudinary = require('cloudinary').v2;
+const ffmpeg = require("fluent-ffmpeg");
+const streamifier = require("streamifier");
+const ffmpegInstaller = require("@ffmpeg-installer/ffmpeg");
+const { getVideoDurationInSeconds } = require("get-video-duration");
+const cloudinary = require("cloudinary").v2;
 
 const conn = mongoose.connection;
 let gfs;
-conn.once('open', () => {
+conn.once("open", () => {
   gfs = new mongoose.mongo.GridFSBucket(conn.db, {
-    bucketName: 'doubts',
+    bucketName: "doubts",
   });
 });
 
-
 cloudinary.config({
-  cloud_name: 'desdkbhvz',
-  api_key: '822224579263365',
-  api_secret: 'kTX01qyk21TXjM3YPAdBd4YN6ps'
+  cloud_name: process.env.cloud_name,
+  api_key: process.env.api_key,
+  api_secret: process.env.api_secret,
 });
-
-
 module.exports.uploadVideo = async (req, res) => {
   try {
-    console.log(req.body)
+    console.log(req.body);
     console.log(req.files);
 
-    const videoFile = req.files['video'][0];
-    const thumbnail = req.files['thumbnail'][0];
-
+    const videoFile = req.files["video"][0];
+    const thumbnail = req.files["thumbnail"][0];
 
     const videoFileUrl = await uploadToCloudinary(videoFile);
     const videoStream = streamifier.createReadStream(videoFile.buffer);
@@ -53,7 +49,7 @@ module.exports.uploadVideo = async (req, res) => {
       description: req.body.description,
       duration: duration,
       videoFile: videoFileUrl,
-      thumbnail: thumbnailUrl
+      thumbnail: thumbnailUrl,
     });
 
     const result = await videoLecture.save();
@@ -71,14 +67,14 @@ module.exports.uploadVideo = async (req, res) => {
 
     res.status(200).json({
       message: "Lecture added successfully",
-      video: result
-    })
+      video: result,
+    });
     return;
   } catch (error) {
-    console.log('Error uploading video:' + error);
-    res.status(500).json({ error: 'Internal Server Error' });
+    console.log("Error uploading video:" + error);
+    res.status(500).json({ error: "Internal Server Error" });
   }
-}
+};
 
 module.exports.signuppost = async (req, res) => {
   const { username, email, password } = req.body;
@@ -93,8 +89,8 @@ module.exports.signuppost = async (req, res) => {
     const existingInstructor = await Instructor.findOne({ email });
     if (existingInstructor) {
       return res.status(400).json({
-        message: "Instructor with this eamil alread exists!"
-      })
+        message: "Instructor with this eamil alread exists!",
+      });
     }
 
     const instructor = new Instructor({
@@ -116,8 +112,7 @@ module.exports.signuppost = async (req, res) => {
       message: "There is some problem at our end. Please retry",
     });
   }
-}
-
+};
 
 module.exports.loginpost = async (req, res) => {
   try {
@@ -127,23 +122,22 @@ module.exports.loginpost = async (req, res) => {
     const instructor = await Instructor.findOne({ email: email });
     console.log("hello from login" + instructor);
 
-
     if (!instructor) {
       return res.status(404).json({
-        message: "Instructor Not Present"
+        message: "Instructor Not Present",
       });
     }
 
     const validPassword = await bcrypt.compare(password, instructor.password);
     if (!validPassword) {
       return res.status(404).json({
-        message: "Invalid Password"
+        message: "Invalid Password",
       });
     }
 
     if (!instructor.isApproved) {
       return res.status(401).json({
-        message: "Approval pending!"
+        message: "Approval pending!",
       });
     }
 
@@ -151,18 +145,16 @@ module.exports.loginpost = async (req, res) => {
       {
         id: instructor.id,
         username: instructor.username,
-        role: "instructor"
+        role: "instructor",
       },
       process.env.INSTRUCTOR_JWT_SECRET,
-      { expiresIn: '24h' }
+      { expiresIn: "24h" }
     );
-
 
     return res.status(200).json({
       message: "Login successfull",
-      token: token
+      token: token,
     });
-
   } catch (err) {
     console.log(err);
     return res.status(500).json({
@@ -170,7 +162,6 @@ module.exports.loginpost = async (req, res) => {
     });
   }
 };
-
 
 module.exports.getInstructorData = async (req, res) => {
   try {
@@ -182,58 +173,56 @@ module.exports.getInstructorData = async (req, res) => {
       username: instructor.username,
       email: instructor.email,
       role: "instructor",
-      profileImage: instructor.profileImage
+      profileImage: instructor.profileImage,
     });
-
   } catch (err) {
     console.log(err);
     res.status(404).json({
-      message: "Authorization failed"
-    })
+      message: "Authorization failed",
+    });
   }
-}
-
+};
 
 module.exports.getInstructorCourses = async (req, res) => {
   try {
-    const id = req.params.id
+    const id = req.params.id;
     console.log(id);
     let pageSize = 6;
-    const nof_courses=await Instructor.findById(id);
-    const length=nof_courses.courses.length
+    const nof_courses = await Instructor.findById(id);
+    const length = nof_courses.courses.length;
     let { offset } = req.body;
-    if(offset*pageSize>length){
-      pageSize=length-(offset-1)*pageSize
+    if (offset * pageSize > length) {
+      pageSize = length - (offset - 1) * pageSize;
     }
-    offset-=1;
-    console.log(offset)
+    offset -= 1;
+    console.log(offset);
     const coursesQuery = await Instructor.findById(id)
       .populate({
-        path: 'courses',
-        select: 'instructorId title description duration price level category thumbnail publishDate enrollmentCount ratingc reatedAt updatedAt',
+        path: "courses",
+        select:
+          "instructorId title description duration price level category thumbnail publishDate enrollmentCount ratingc reatedAt updatedAt",
         options: {
-          sort: { createdAt: -1 }, 
+          sort: { createdAt: -1 },
           skip: offset * pageSize,
           limit: pageSize,
         },
       })
-      .select('courses');
+      .select("courses");
     const courses = coursesQuery.courses;
     console.log(courses);
 
     return res.status(200).json({
       ok: true,
       courses: courses,
-      length_of_courses:length
-    })
-
+      length_of_courses: length,
+    });
   } catch (err) {
     console.log(err);
     res.status(404).json({
-      message: "Authorization failed"
-    })
+      message: "Authorization failed",
+    });
   }
-}
+};
 
 module.exports.getInstructorVideos = async (req, res) => {
   try {
@@ -242,8 +231,8 @@ module.exports.getInstructorVideos = async (req, res) => {
     const { offset } = req.body;
 
     const instructor = await Instructor.findById(id).populate({
-      path: 'videoLectures',
-      select: '-comments -videoFile',
+      path: "videoLectures",
+      select: "-comments -videoFile",
       match: { courseId: null },
       options: {
         sort: { createdAt: -1 },
@@ -253,9 +242,11 @@ module.exports.getInstructorVideos = async (req, res) => {
     });
 
     const videos = instructor.videoLectures;
-    const totalVideos = videos.filter(video => video.courseId === null).length;
+    const totalVideos = videos.filter(
+      (video) => video.courseId === null
+    ).length;
 
-    console.log('Videos:', videos);
+    console.log("Videos:", videos);
 
     return res.status(200).json({
       ok: true,
@@ -270,16 +261,15 @@ module.exports.getInstructorVideos = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(404).json({
-      message: 'Authorization failed',
+      message: "Authorization failed",
     });
   }
 };
 
-
-
 const uploadToCloudinary = (file) => {
   return new Promise((resolve, reject) => {
-    const uploadStream = cloudinary.uploader.upload_stream({ resource_type: 'auto' },
+    const uploadStream = cloudinary.uploader.upload_stream(
+      { resource_type: "auto" },
       (error, result) => {
         if (error) {
           console.error("Error uploading to Cloudinary:", error);
@@ -289,21 +279,21 @@ const uploadToCloudinary = (file) => {
           if (result && result.secure_url) {
             resolve(result.secure_url);
           } else {
-            reject(new Error("Cloudinary upload result is missing 'secure_url'."));
+            reject(
+              new Error("Cloudinary upload result is missing 'secure_url'.")
+            );
           }
         }
-      });
+      }
+    );
 
     uploadStream.end(file.buffer);
   });
 };
 
-
-
 // module.exports.createSection = async (req, res) => {
 //   try {
 //     const { courseId, title, description } = req.body;
-
 
 //   }
 // }
@@ -363,7 +353,7 @@ const uploadToCloudinary = (file) => {
 //       publishedDate,
 //       sections: [newSection._id], // Reference the new section
 //     });
-// 
+//
 //     // Save the new course to the database
 //     await newCourse.save();
 
@@ -374,16 +364,15 @@ const uploadToCloudinary = (file) => {
 //   }
 // });
 
-
 module.exports.getAllInstructors = async (req, res) => {
   const instructors = await Instructor.find(
     { isApproved: true },
-    'id username profileImage socialMediaLinks'
+    "id username profileImage socialMediaLinks"
   );
   res.json({
-    instructors: instructors
-  })
-}
+    instructors: instructors,
+  });
+};
 
 module.exports.getInstructorWithId = async (req, res) => {
   const { id } = req.params;
@@ -393,13 +382,13 @@ module.exports.getInstructorWithId = async (req, res) => {
       "_id username profileImage videoLectures courses"
     )
       .populate({
-        path: 'videoLectures',
-        select: '_id title description duration thumbnail',
+        path: "videoLectures",
+        select: "_id title description duration thumbnail",
         options: { limit: 8 },
       })
       .populate({
-        path: 'courses',
-        select: '-sections', // Exclude sections
+        path: "courses",
+        select: "-sections", // Exclude sections
         options: { limit: 8 },
       });
     // .populate({
@@ -408,12 +397,11 @@ module.exports.getInstructorWithId = async (req, res) => {
     //   options: { lean: true }
     // });
 
-
     console.log(instructor);
     res.json({
-      instructor: instructor
-    })
+      instructor: instructor,
+    });
   } catch (err) {
     console.log(err);
   }
-}
+};

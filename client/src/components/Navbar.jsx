@@ -422,9 +422,9 @@ const DropdownMenu = styled.div`
       color: black;
 
       div {
-        padding: 12px 20px; /* Increased padding for larger screens */
+        padding: 12px 20px;
         cursor: pointer;
-        font-size: 16px; /* Increased font size for larger screens */
+        font-size: 16px;
         color: #333;
         transition: background-color 0.3s;
         display: flex;
@@ -445,7 +445,7 @@ const DropdownMenu = styled.div`
 
   @media screen and (min-width: 600px) {
     div {
-      padding: 14px 40px; /* Further adjustments for screens wider than 600px */
+      padding: 14px 40px;
       font-size: 18px;
     }
   }

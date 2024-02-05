@@ -5,7 +5,7 @@ const instructorController = require("../controller/instructorController");
 const multer = require("multer");
 const storage = multer.memoryStorage();
 const upload = multer({ storage: storage });
-
+const pdfController=require('../controller/pdfController')
 
 router.post("/signup", upload.single("profileImage"), instructorController.signuppost);
 
@@ -16,7 +16,8 @@ router.get("/", authenticateGeneral, instructorController.getAllInstructors);
 router.get("/getInstructor/:id", authenticateGeneral, instructorController.getInstructorWithId);
 
 router.post("/getInstructorCourses/:id", authenticateGeneral, instructorController.getInstructorCourses);
-
+router.post("/youtube",pdfController.uploadYoutube)
+router.get("/youtube/:category",pdfController.getyoutube)
 router.post("/getInstructorVideos/:id", authenticateGeneral, instructorController.getInstructorVideos);
 
 router.use(authenticateInstructor);

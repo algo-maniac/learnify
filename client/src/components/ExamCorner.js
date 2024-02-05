@@ -2,6 +2,7 @@ import { useParams } from 'react-router-dom';
 import ExamHeader from './ExamHeader';
 import ExamResources from './ExamResources';
 import styled from '@emotion/styled';
+import "./ExamCorner.css"
 const ExamCorner=()=>{
     const param=useParams();
     return (
@@ -67,12 +68,12 @@ const Container = styled.div`
     outline:none;
   }
   .exam-container .blog-card{
-    width: 70%;
-    min-height: 40vh;
+    width: 80%;
+    min-height: 50vh;
     margin-left: auto;
     margin-right: auto;
     margin-top: 30px;
-    border-radius: 25px;
+    border-radius: 15px;
     background: white;
     box-shadow: 0px 10px 50px rgba(40, 114, 193, 0.3);
   }
@@ -197,11 +198,11 @@ const Container = styled.div`
     display: none;
   }
   .exam-container .resourceContainer{
-    width: 70%;
+    width: 80%;
     margin-top: 30px;
     margin: auto;
     transition: all 1s;
-    border-radius: 25px;
+    border-radius: 15px;
     padding: 10px;
     background: white;
     box-sizing: border-box;
@@ -234,6 +235,7 @@ const Container = styled.div`
   .exam-container .channel1{
     display: flex;
     flex-direction: row;
+    justify-content:space-around;
 
   }
   .exam-container .card{
@@ -252,11 +254,20 @@ const Container = styled.div`
     border-radius:5px;
   }
   .exam-container .cards{
-    width:30%;
-    margin:0.5rem
+    width:26%;
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+    margin:0.6rem;
+    border-radius:5px;
+  }
+  .exam-container .cards img{
+    min-height:170px;
+    max-height:170px;
+
   }
   .exam-container .cards .text{
-    margin:0.2rem
+    margin-top:0.5rem;
+    margin-left:0.5rem;
+    margin-bottom:0.7rem;
   }
   .channel1 .time{
     color:#13c24e;

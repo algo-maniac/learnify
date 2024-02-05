@@ -10,18 +10,21 @@ import Modal from '@mui/material/Modal';
 import AddIcon from '@mui/icons-material/Add';
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
-
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
 import detail from './examdata.json';
 const style = {
   position: 'absolute',
-  top: '50%',
+  top: '40%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
-  width: 400,
+  width: '43%',
   bgcolor: 'background.paper',
   border: '2px solid #000',
   boxShadow: 24,
-  p: 4,
+  p:1
 };
 const ExamHeader = () => {
   const exams=["jee","neet","ctet","nda","upsc"];
@@ -32,6 +35,10 @@ const ExamHeader = () => {
   const [data,setData]=useState(detail);
   const [key,setKey]=useState(0);
   const syllabus=[false,false,false,false,false];
+  const [age, setAge] = React.useState(10);
+  const handleChange = (event) => {
+    setAge(event.target.value);
+  };
   const syllabusHandler=(env)=>{
     console.log(env.target.parentNode);
   }
@@ -53,11 +60,47 @@ const ExamHeader = () => {
   useEffect(()=>{
 
   },[value])
-
-
+  const [youtube,setYoutube]=useState([]);
+  useEffect(()=>{
+    const fetchHandler=async()=>{
+      console.log(value)
+      try{
+        const res=await fetch(`http://localhost:3000/instructor/youtube/${value}`,{
+          method:"GET",
+        })
+        const data=await res.json();
+        setYoutube(data.data)
+        console.log(data)
+      }catch(er){
+        console.log("Error occured")
+      }
+    }
+    fetchHandler();
+  },[value])
+  const [channelname,setChannelName]=useState('');
+  const [channellink,setChannelLink]=useState('');
+  const [channelImgurl,setChannelImgurl]=useState('');
   const handleClickOpen = () => {
     setOpen(true);
   };
+  const uploadHandler=async()=>{
+    if(age===10){
+      try{
+        const response=await fetch("http://localhost:3000/instructor/youtube",{
+            method:'POST',
+            headers:{
+              'Content-type':'application/json'
+            },
+            body:JSON.stringify({channelname:channelname,channellink:channellink,channelImgurl:channelImgurl,username:"inst",category:value})
+          })
+          const data=await response.json();
+          console.log(data)
+      }
+      catch(er){
+        console.log("Error occured",er)
+      }
+    }
+  }
   return (
     <div className='outer'>
       <div className={"exam-container"}>
@@ -85,9 +128,45 @@ const ExamHeader = () => {
             aria-describedby="modal-modal-description"
           >
             <Box sx={style}>
-              <Typography id="modal-modal-title" variant="h6" component="h2">
-                <form><input></input></form>
-              </Typography>
+              <div className='select-div'>
+                <FormControl variant="standard" sx={{ m: 1, minWidth: 190 }}>
+                  <InputLabel id="demo-simple-select-standard-label">Select Resource Type:</InputLabel>
+                  <Select
+                    labelId="demo-simple-select-standard-label"
+                    id="demo-simple-select-standard"
+                    value={age}
+                    onChange={handleChange}
+                    label="Age"
+                  >
+                    <MenuItem value={10}>Youtube Channel</MenuItem>
+                    <MenuItem value={20}>PDF Material</MenuItem>
+                  </Select>
+                </FormControl>
+              </div>
+              {age===10 && <><div className='link-div'>
+                <label>Enter the Channel Name</label><br></br>
+                <input onChange={(env)=>{setChannelName(env.target.value)}} placeholder='Name of the Channel'></input>
+              </div>
+              <div className='link-div'>
+                <label>Paste the channel link</label><br></br>
+                <input onChange={(env)=>{setChannelLink(env.target.value)}} placeholder='Channel link'></input>
+              </div>
+              <div className='link-div'>
+                <label>Paste the image link</label><br></br>
+                <input onChange={(env)=>{setChannelImgurl(env.target.value)}} placeholder='Image url'></input>
+              </div></>}
+              {age===20 && <><div className='link-div'>
+                <label>Enter the Topic Name</label><br></br>
+                <input placeholder='Name of the Topic'></input>
+              </div>
+              <div className='link-div'>
+                <label>Upload file</label><br></br>
+                <input type='file' className='input-file'></input>
+              </div>
+              </>}
+              <div className='submit-btn'>
+                <button class="button-26" role="button" onClick={uploadHandler}>Upload</button>
+              </div>
             </Box>
           </Modal>
         </div>
@@ -126,15 +205,17 @@ const ExamHeader = () => {
         </div>
         <div className={"channel1"}>
           {
-            data[key].examVideoLinks.map((obj)=>(
+            youtube.map((obj)=>(
               <div className='cards'>
+                <a href={obj.channelLink} target='_blank'>
                 <div className='image'>
-                  <img src='/profile-13.png'></img>
+                  <img src={obj.imageUrl}></img>
                 </div>
                 <div className='text'>
-                  <h6>Physics Wallah</h6>
-                  <p>Suggested by <strong>inst</strong></p>
+                  <h6>{obj.channelname}</h6>
+                  <p>Suggested by <strong>{obj.username}</strong></p>
                 </div>
+                </a>
               </div>
             ))
           }

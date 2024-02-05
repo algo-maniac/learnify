@@ -13,6 +13,10 @@ const ExamHeader = () => {
   const [data,setData]=useState(detail);
   const [key,setKey]=useState(0);
   const syllabus=[false,false,false,false,false];
+  const [value, setValue] = React.useState('recents');
+  const handleChange = (event: React.SyntheticEvent, newValue: string) => {
+    setValue(newValue);
+  };
   const syllabusHandler=(env)=>{
     console.log(env.target.parentNode);
   }
@@ -37,23 +41,9 @@ const ExamHeader = () => {
   return (
     <div className='outer'>
       <div className={"exam-container"}>
-        <div className={"header"}>
-          <div id="jee" onClick={jeeHandler} className={key===0?'active':''}>
-            <span>JEE</span>
-          </div>
-          <div id="neet" onClick={neetHandler} className={key===1?'active':''}>
-            <span>NEET</span>
-          </div>
-          <div onClick={ctetHandler} className={key===2?'active':''}>
-            <span>CTET</span>
-          </div>
-          <div onClick={ndaHandler} className={key===3?'active':''}>
-            <span>NDA</span>
-          </div>
-          <div onClick={upscHandler} className={key===4?'active':''}>
-            <span>UPSC</span>
-          </div>
-        </div>
+        
+
+
         <div className={"blog-card"}>
           <input type="radio" name="select" id="tap-1" checked></input>
           <input type="checkbox" id="imgTap"></input>

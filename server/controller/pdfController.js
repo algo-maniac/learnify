@@ -31,26 +31,6 @@ module.exports.uploadYoutube = async (req, res) => {
         console.log("Error occured")
     }
 };
-
-module.exports.uploadYoutube = async (req, res) => {
-    const {channelname,channellink,channelImgurl,username,category}=req.body;
-    console.log(req.body)
-    try{
-        const youtube=new YoutubeSchema({
-            channel:channelname,
-            channelLink:channellink,
-            imageUrl:channelImgurl,
-            username:username,
-            category:category
-        });
-        const result=youtube.save();
-        console.log(result)
-        res.json({msg:"Channel added"})
-    }catch(er){
-        console.log("Error occured")
-    }
-};
-
 module.exports.getyoutube = async (req, res) => {
     const category=req.params.category;
     console.log(category)
@@ -59,6 +39,13 @@ module.exports.getyoutube = async (req, res) => {
         return res.json({data:result})
     }catch(er){
         console.log("Error occured",er)
+    }
+};
+
+module.exports.uploadpdf = async (req, res) => {
+    console.log("Inside")
+    try{
+    }catch(er){
     }
 };
 

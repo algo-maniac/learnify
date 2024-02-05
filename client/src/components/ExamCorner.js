@@ -40,14 +40,15 @@ const Container = styled.div`
   }
   .exam-container .header div{
     width: 13%;
-    height: 60%;
+    height: 90%;
     display: flex;
     transition: all 0.5s;
-    border-radius: 50%/125%;
+    border-radius: 50%/105%;
     justify-content: center;
     border: 2px solid black;
   }
   .exam-container .header div:hover{
+    cursor:pointer;
     background-color: rgb(202, 192, 192);
   }
   .exam-container .header div span{
@@ -235,6 +236,7 @@ const Container = styled.div`
   .exam-container .channel1{
     display: flex;
     flex-direction: row;
+    flex-wrap:wrap;
     justify-content:space-around;
 
   }
@@ -260,8 +262,8 @@ const Container = styled.div`
     border-radius:5px;
   }
   .exam-container .cards img{
-    min-height:170px;
-    max-height:170px;
+    min-height:160px;
+    max-height:160px;
 
   }
   .exam-container .cards .text{

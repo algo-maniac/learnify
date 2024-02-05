@@ -14,6 +14,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { CircularProgress } from '@mui/material';
 import detail from './examdata.json';
 const style = {
   position: 'absolute',
@@ -43,19 +44,19 @@ const ExamHeader = () => {
     console.log(env.target.parentNode);
   }
   const jeeHandler=()=>{
-    setKey(0);
+    setValue(0);
   }
   const neetHandler=()=>{
-    setKey(1);
+    setValue(1);
   }
   const ctetHandler=()=>{
-    setKey(2);
+    setValue(2);
   }
   const ndaHandler=()=>{
-    setKey(3);
+    setValue(3);
   }
   const upscHandler=()=>{
-    setKey(4);
+    setValue(4);
   }
   useEffect(()=>{
 
@@ -70,7 +71,6 @@ const ExamHeader = () => {
         })
         const data=await res.json();
         setYoutube(data.data)
-        console.log(data)
       }catch(er){
         console.log("Error occured")
       }
@@ -80,12 +80,16 @@ const ExamHeader = () => {
   const [channelname,setChannelName]=useState('');
   const [channellink,setChannelLink]=useState('');
   const [channelImgurl,setChannelImgurl]=useState('');
+  const [loader,setLoader]=useState(false);
   const handleClickOpen = () => {
     setOpen(true);
   };
+  const btnRef=React.useRef();
   const uploadHandler=async()=>{
     if(age===10){
       try{
+        setLoader(true);
+        btnRef.current.disabled=true;
         const response=await fetch("http://localhost:3000/instructor/youtube",{
             method:'POST',
             headers:{
@@ -95,6 +99,8 @@ const ExamHeader = () => {
           })
           const data=await response.json();
           console.log(data)
+          setLoader(false);
+          handleClose();
       }
       catch(er){
         console.log("Error occured",er)
@@ -166,7 +172,7 @@ const ExamHeader = () => {
               </div>
               </>}
               <div className='submit-btn'>
-                <button class="button-26" role="button" onClick={uploadHandler}>Upload</button>
+                <button class="button-26" ref={btnRef} role="button" onClick={uploadHandler}>{!loader && "Upload"}{loader && <div className='loader'>Loader...</div>}</button>
               </div>
             </Box>
           </Modal>
@@ -188,11 +194,10 @@ const ExamHeader = () => {
               <div className={"text"}>{data[value].examRole}</div>
               <h3>Official Website Link</h3>
               <div className={"text"}>Follow this <a href={data[value].examUrl} target="_blank">Link</a></div>
-              <h3>Syllabus</h3>
+              <h3 style={{"margin":"0px"}}>Syllabus</h3>
               <div className={"text"}>
-                <br></br>
                 <a href="" target="_blank">
-                <label style={{"fontSize":"1.2rem"}} className="linkSyllabus">To know more </label>
+                <label style={{"fontSize":"0.85em"}} className="linkSyllabus">To know more </label>
                 </a>
               </div>
             </div>

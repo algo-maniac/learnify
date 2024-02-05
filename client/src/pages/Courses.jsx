@@ -95,10 +95,6 @@ const Courses = () => {
                                         </div>
                                         <span className='price'>Rs. {data.price}</span>
                                     </CardContent>
-                                    {/* <CardActions className='box1'>
-                                    <button className='button-61' onClick={() => navigate(`/course/${data._id}/`)}>Buy</button>
-                                    <button className='button-61' onClick={() => enroll(data._id)}>Enroll</button>
-                                </CardActions> */}
                                 </Card>
                             </Link>
                         </div>
@@ -122,14 +118,21 @@ const Container = styled.div`
     .course-container{
         width: 100%;
         background-color: white;
-        padding: 20px 30px;
-        /* margin: auto; */
-        /* margin-top: 0.7rem; */
-        /* font-family: "Roboto",sans-serif; */
+        padding: 10px 15px;
+        margin: auto;
+        margin-top: 0.7rem;
+        font-family: Poppins,sans-serif;
     }
     .course-container .header-text h6{
         font-weight: 400;
         color: rgb(77, 76, 76);
+    }
+    .course-container .box{
+        padding:4px;
+        margin:4px;
+    }
+    .box .MuiTypography-h6{
+        font-weight:900;
     }
     /* CSS */
     .button-61 {

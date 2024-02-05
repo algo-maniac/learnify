@@ -104,21 +104,22 @@ const ExamHeader = () => {
   return (
     <div className='outer'>
       <div className={"exam-container"}>
-        <div className='header-icons'>
-        <BottomNavigation
-          showLabels
-          value={value}
-          onChange={(event, newValue) => {
-            setValue(newValue);
-          }}
-          className='icons'
-        >
-          <BottomNavigationAction label="JEE" />
-          <BottomNavigationAction label="NEET" />
-          <BottomNavigationAction label="CTET"  />
-          <BottomNavigationAction label="NDA" />
-          <BottomNavigationAction label="UPSC" />
-        </BottomNavigation>
+      <div className={"header"}>
+          <div id="jee" onClick={jeeHandler} className={value===0?'active':''}>
+            <span>JEE</span>
+          </div>
+          <div id="neet" onClick={neetHandler} className={value===1?'active':''}>
+            <span>NEET</span>
+          </div>
+          <div onClick={ctetHandler} className={value===2?'active':''}>
+            <span>CTET</span>
+          </div>
+          <div onClick={ndaHandler} className={value===3?'active':''}>
+            <span>NDA</span>
+          </div>
+          <div onClick={upscHandler} className={value===4?'active':''}>
+            <span>UPSC</span>
+          </div>
         </div>
         <div>
           <Modal

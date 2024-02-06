@@ -1,6 +1,8 @@
 const http = require("http");
 const express = require("express");
+const User = require("../models/user");
 const Instructor = require("../models/instructor");
+const Admin = require("../models/admin");
 const { VideoLecture } = require("../models/videoLecture");
 const Course = require("../models/course");
 const Section = require("../models/section");
@@ -374,12 +376,48 @@ module.exports.getAllInstructors = async (req, res) => {
   });
 };
 
+const checkSubscription = async (userId, instructorId, role) => {
+  try {
+    let model;
+
+    // Determine the model based on the role
+    switch (role) {
+      case 'user':
+        model = User;
+        break;
+      case 'admin':
+        model = Admin;
+        break;
+      case 'instructor':
+        model = Instructor;
+        break;
+      default:
+        console.log('Invalid role');
+        return false;
+    }
+
+    // Find the user/admin/instructor and check the subscription
+    const userRole = await model.findById(userId);
+
+    if (userRole && userRole.subscribedInstructors.includes(instructorId)) {
+      console.log(`${role} is subscribed to the instructor`);
+      return true;
+    }
+
+    console.log(`${role} is not subscribed to the instructor`);
+    return false;
+  } catch (err) {
+    console.error('Error checking subscription:', err);
+    return false;
+  }
+};
+
 module.exports.getInstructorWithId = async (req, res) => {
   const { id } = req.params;
   try {
     const instructor = await Instructor.findOne(
       { _id: id, isApproved: true },
-      "_id username profileImage videoLectures courses"
+      "_id username profileImage subscriberCount videoLectures courses"
     )
       .populate({
         path: "videoLectures",
@@ -397,13 +435,193 @@ module.exports.getInstructorWithId = async (req, res) => {
     //   options: { lean: true }
     // });
 
+    const isSubscribed = await checkSubscription(req.user.id, id, req.user.role);
+    const isOwner = id == req.user.id;
+
+    console.log(isSubscribed);
+
     console.log(instructor);
     res.json({
       instructor: instructor,
+      isSubscribed: isSubscribed,
+      isOwner: isOwner
     });
   } catch (err) {
     console.log(err);
+    res.status(400).json({
+      error: "error occured"
+    })
   }
 };
 
 
+module.exports.subscribeInstructor = async (req, res) => {
+  try {
+    const instructorId = req.params.id;
+    const userId = req.user.id;
+    const role = req.user.role;
+
+    if (instructorId == userId) {
+      return res.status(400).json({
+        error: "You can't subscribe yourself"
+      });
+    }
+
+    const instructor = await Instructor.findById(instructorId);
+    if (!instructor) {
+      return res.status(400).json({
+        error: "Invalid instructor"
+      });
+    }
+
+    let updatedUser;
+
+    if (role === "user" || role === "instructor" || role === "admin") {
+      if (role === "user") {
+        updatedUser = await User.findByIdAndUpdate(
+          userId,
+          { $push: { subscribedInstructors: instructorId } },
+          { new: true }
+        );
+      } else if (role === "instructor") {
+        updatedUser = await Instructor.findByIdAndUpdate(
+          userId,
+          { $push: { subscribedInstructors: instructorId } },
+          { new: true }
+        );
+      } else if (role === "admin") {
+        updatedUser = await Admin.findByIdAndUpdate(
+          userId,
+          { $push: { subscribedInstructors: instructorId } },
+          { new: true }
+        );
+      }
+
+      if (updatedUser) {
+        console.log('User updated successfully:', updatedUser);
+
+        const updatedInstructor = await Instructor.findByIdAndUpdate(
+          instructorId,
+          {
+            $addToSet: { subscribers: userId }, // Ensure unique subscribers
+          },
+          { new: true }
+        );
+        
+        const updatedSubscriberCount = updatedInstructor ? updatedInstructor.subscribers.length : 0;
+        
+        await Instructor.findByIdAndUpdate(
+          instructorId,
+          {
+            $set: { subscriberCount: updatedSubscriberCount },
+          },
+          { new: true }
+        );
+
+        return res.status(200).json({
+          ok: true,
+          updatedSubscriberCount: updatedSubscriberCount,
+          message: "Subscribed successfully"
+        });
+      } else {
+        console.log('User not found');
+      }
+    } else {
+      return res.status(400).json({
+        error: "Invalid user role"
+      });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({
+      error: "Error occurred"
+    });
+  }
+};
+
+
+
+module.exports.unsubscribeInstructor = async (req, res) => {
+  try {
+    const instructorId = req.params.id;
+    const userId = req.user.id;
+    const role = req.user.role;
+
+    if (instructorId == userId) {
+      return res.status(400).json({
+        error: "You can't unsubscribe yourself"
+      });
+    }
+
+    const instructor = await Instructor.findById(instructorId);
+    if (!instructor) {
+      return res.status(400).json({
+        error: "Invalid instructor"
+      });
+    }
+
+    if (role === "user" || role === "instructor" || role === "admin") {
+      let updatedUser;
+
+      if (role === "user") {
+        updatedUser = await User.findByIdAndUpdate(
+          userId,
+          { $pull: { subscribedInstructors: instructorId } },
+          { new: true }
+        );
+      } else if (role === "instructor") {
+        updatedUser = await Instructor.findByIdAndUpdate(
+          userId,
+          { $pull: { subscribedInstructors: instructorId } },
+          { new: true }
+        );
+      } else if (role === "admin") {
+        updatedUser = await Admin.findByIdAndUpdate(
+          userId,
+          { $pull: { subscribedInstructors: instructorId } },
+          { new: true }
+        );
+      }
+
+      if (updatedUser) {
+        console.log('User updated successfully:', updatedUser);
+
+        const updatedInstructor = await Instructor.findByIdAndUpdate(
+          instructorId,
+          {
+            $pull: { subscribers: userId },
+          },
+          { new: true }
+        );
+
+        const updatedSubscriberCount = updatedInstructor ? updatedInstructor.subscribers.length : 0;
+
+        await Instructor.findByIdAndUpdate(
+          instructorId,
+          {
+            $set: { subscriberCount: updatedSubscriberCount },
+          },
+          { new: true }
+        );
+
+
+        return res.status(200).json({
+          ok: true,
+          updatedSubscriberCount: updatedSubscriberCount,
+          message: "unsubscribed successfully"
+        });
+      } else {
+        console.log('User not found');
+      }
+    } else {
+      return res.status(400).json({
+        error: "Invalid user role"
+      });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(400).json({
+      error: "Error occurred"
+    });
+  }
+};

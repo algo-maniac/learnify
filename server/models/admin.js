@@ -7,6 +7,9 @@ const adminSchema = new mongoose.Schema(
     password: { type: String, required: true },
     profileImage: { type: String },
     isApproved: { type: Boolean, default: false },
+    subscribedInstructors: [{
+      type: mongoose.Schema.Types.ObjectId, ref: 'Instructor'
+    }], 
   },
   {
     timestamps: true,

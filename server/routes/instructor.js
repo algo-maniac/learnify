@@ -25,6 +25,9 @@ router.use(authenticateInstructor);
 
 router.get("/getInstructorData", instructorController.getInstructorData);
 
+router.post("/subscribe/:id", authenticateGeneral, instructorController.subscribeInstructor);
+
+router.post("/unsubscribe/:id", authenticateGeneral, instructorController.unsubscribeInstructor);
 // router.get("/getInstructorProfileImage/:id", authenticateGeneral, instructorController.getInstructorProfileImage);
 
 

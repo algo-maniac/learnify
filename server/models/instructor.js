@@ -23,7 +23,9 @@ const instructorSchema = new mongoose.Schema({
   }],
   subscribedInstructors: [{
     type: mongoose.Schema.Types.ObjectId, ref: 'Instructor'
-  }], 
+  }],
+  subscriberCount: { type: Number, default: 0 }, 
+  subscribers: [{ type: String }],
   isApproved: { type: Boolean, default: false },
 }, {
   timestamps: true, 

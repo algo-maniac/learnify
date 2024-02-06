@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { Avatar } from "@mui/material";
 import Button from "@mui/material/Button";
@@ -15,8 +15,12 @@ import styled from "styled-components";
 function TeacherDetails(props) {
   console.log(props);
 
-  const { _id, username, profileImage, videoLectures, courses } =
+  const { _id, username, profileImage, subscriberCount, videoLectures, courses } =
     props.instructordata;
+  const isOwner  = props.isOwner;
+  const isSubscribed  = props.isSubscribed;
+  const setIsSubscribed  = props.setIsSubscribed;
+  const setInstructorData = props.setInstructorData;
   const [tabValue, setTabvalue] = useState(0);
   const joinLiveClass = () => {
     console.log("Hello!!!!!!!!");
@@ -24,21 +28,67 @@ function TeacherDetails(props) {
     Navigate("/");
   };
 
-  // const subscribe = () => {
-  //   try {
-  //     if (data.ok) {
-  //       // Toast add
-  //     }
-  //   } catch (error) {}
-  // };
 
-  // const unSubscribe = () => {
-  //   try {
-  //     if (data.ok) {
-  //       // Toast add
-  //     }
-  //   } catch (error) {}
-  // };
+  const subscribe = async () => {
+    try {
+      const response = await fetch(`http://localhost:8000/instructor/subscribe/${_id}`, {
+        method: "POST",
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      })
+      const data = await response.json();
+      console.log(data);
+
+      if (data.ok) {
+        // Toast add
+        setIsSubscribed(true);
+        setInstructorData(prev => {
+          if (prev) {
+            const updatedSubscriberCount = data.updatedSubscriberCount;
+            // subscriberCount = updatedSubscriberCount;
+            return {
+              ...prev,
+              subscriberCount: updatedSubscriberCount
+            };
+          }
+        
+          return prev;
+        });
+      }
+    } catch (error) {}
+  };
+
+  const unsubscribe = async () => {
+    try {
+      const response = await fetch(`http://localhost:8000/instructor/unsubscribe/${_id}`, {
+        method: "POST",
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      })
+
+      const data = await response.json();
+      console.log(data);
+      if (data.ok) {
+        // Toast add
+        setIsSubscribed(false);
+        setInstructorData(prev => {
+          if (prev) {
+            const updatedSubscriberCount = data.updatedSubscriberCount;
+            // subscriberCount = updatedSubscriberCount;
+            
+            return {
+              ...prev,
+              subscriberCount: updatedSubscriberCount
+            };
+          }
+        
+          return prev;
+        });
+      }
+    } catch (error) {}
+  };
   return (
     <Container>
       <ParentTeacherDetails>
@@ -51,11 +101,14 @@ function TeacherDetails(props) {
               <h2>{username}</h2>
             </div>
             <div className="subscriber-count">
-              <span>12 subscribers</span>
+              {console.log(subscriberCount)}
+              <span>{subscriberCount} subscribers</span>
             </div>
-            <div className="subscriber-btn">
-              <button className="button-60">Subscribe</button>
-            </div>
+            {!isOwner && <div className="subscriber-btn">
+              {!isSubscribed 
+                ? <button className="button-60" onClick={subscribe}>Subscribe</button>
+                : <button className="button-60 unsubscribe" onClick={unsubscribe}>Subscribed</button>}
+            </div>}
           </div>
           <div className="join-live">
             <Link to={`/live/?roomID=${_id}&role=Audience`}>
@@ -152,6 +205,10 @@ const Container = styled.div`
     touch-action: manipulation;
     vertical-align: top;
     white-space: nowrap;
+  }
+
+  .button-60 .unsubscribe {
+    background-color: #b0afaf;
   }
 
   .join-live {

@@ -11,6 +11,8 @@ function Instructor() {
   const { id } = useParams();
 
   const [instructordata, setInstructorData] = useState();
+  const [isSubscribed, setIsSubscribed] = useState(false);
+  const [isOwner, setIsOwner] = useState(false);
 
   const getInstructorData = async () => {
     const data = await fetch(
@@ -25,7 +27,11 @@ function Instructor() {
     const json = await data.json();
     console.log(json.instructor);
     setInstructorData(json.instructor);
+    setIsSubscribed(json.isSubscribed);
+    setIsOwner(json.isOwner);
+    // console.log(json);
   };
+
   useEffect(() => {
     try {
       getInstructorData();
@@ -41,6 +47,10 @@ function Instructor() {
           {instructordata && (
             <TeacherDetails
               instructordata={instructordata}
+              isSubscribed={isSubscribed}
+              setIsSubscribed={setIsSubscribed}
+              isOwner={isOwner}
+              setInstructorData={setInstructorData}
             />
           )}
         </div>

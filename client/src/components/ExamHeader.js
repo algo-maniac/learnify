@@ -81,6 +81,8 @@ const ExamHeader = () => {
   const [channellink,setChannelLink]=useState('');
   const [channelImgurl,setChannelImgurl]=useState('');
   const [loader,setLoader]=useState(false);
+  const [file,setFile]=useState();
+  const [pdftile,setPdf]=useState();
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -164,11 +166,11 @@ const ExamHeader = () => {
               </div></>}
               {age===20 && <><div className='link-div'>
                 <label>Enter the Topic Name</label><br></br>
-                <input placeholder='Name of the Topic'></input>
+                <input onChange={(env)=>{setPdf(env.target.value)}} placeholder='Name of the Topic'></input>
               </div>
               <div className='link-div'>
                 <label>Upload file</label><br></br>
-                <input type='file' className='input-file'></input>
+                <input onChangetype='file' className='input-file'></input>
               </div>
               </>}
               <div className='submit-btn'>

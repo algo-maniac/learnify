@@ -107,7 +107,7 @@ function TeacherDetails(props) {
             {!isOwner && <div className="subscriber-btn">
               {!isSubscribed 
                 ? <button className="button-60" onClick={subscribe}>Subscribe</button>
-                : <button className="button-60 unsubscribe" onClick={unsubscribe}>Subscribed</button>}
+                : <button className="button-60 subscribed" onClick={unsubscribe}>Subscribed</button>}
             </div>}
           </div>
           <div className="join-live">
@@ -207,8 +207,8 @@ const Container = styled.div`
     white-space: nowrap;
   }
 
-  .button-60 .unsubscribe {
-    background-color: #b0afaf;
+  .subscribed {
+    background-color: #b0afaf !important;
   }
 
   .join-live {

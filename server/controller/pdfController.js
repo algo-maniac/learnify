@@ -43,9 +43,14 @@ module.exports.getyoutube = async (req, res) => {
 };
 
 module.exports.uploadpdf = async (req, res) => {
-    console.log("Inside")
+    console.log("Insisde");
+    const file=req.file;
+    const title=req.body.title;
+    console.log(title)
     try{
+        
     }catch(er){
+
     }
 };
 

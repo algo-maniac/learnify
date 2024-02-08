@@ -1,13 +1,13 @@
 import { useCallback, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 // import './ExamCorner.css'
-
 import * as React from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import AddIcon from '@mui/icons-material/Add';
+import axios from 'axios'
 import BottomNavigation from '@mui/material/BottomNavigation';
 import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import InputLabel from '@mui/material/InputLabel';
@@ -82,7 +82,11 @@ const ExamHeader = () => {
   const [channelImgurl,setChannelImgurl]=useState('');
   const [loader,setLoader]=useState(false);
   const [file,setFile]=useState();
+<<<<<<< HEAD
   const [pdftile,setPdf]=useState();
+=======
+  const [pdftile,setPdftitle]=useState();
+>>>>>>> exam-side
   const handleClickOpen = () => {
     setOpen(true);
   };
@@ -98,14 +102,34 @@ const ExamHeader = () => {
               'Content-type':'application/json'
             },
             body:JSON.stringify({channelname:channelname,channellink:channellink,channelImgurl:channelImgurl,username:"inst",category:value})
-          })
-          const data=await response.json();
-          console.log(data)
-          setLoader(false);
-          handleClose();
+        })
+        const data=await response.json();
+        console.log(data)
+        setLoader(false);
+        handleClose();
       }
       catch(er){
         console.log("Error occured",er)
+      }
+    }
+    else if(age===20){
+      try{
+        setLoader(true);
+        btnRef.current.disabled=true;
+        const form=new FormData();
+        const formData = new FormData();
+        formData.append("pdfFile", file);  // Ensure "pdfFile" matches the field name
+
+        const response=await axios.post("http://localhost:3000/instructor/pdfds", formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        });
+        const data=response.json();
+        console.log(data);
+      }
+      catch(er){
+        console.log("Error occured");
       }
     }
   }
@@ -166,11 +190,19 @@ const ExamHeader = () => {
               </div></>}
               {age===20 && <><div className='link-div'>
                 <label>Enter the Topic Name</label><br></br>
+<<<<<<< HEAD
                 <input onChange={(env)=>{setPdf(env.target.value)}} placeholder='Name of the Topic'></input>
               </div>
               <div className='link-div'>
                 <label>Upload file</label><br></br>
                 <input onChangetype='file' className='input-file'></input>
+=======
+                <input onChange={(env)=>{setPdftitle(env.target.value)}} placeholder='Name of the Topic'></input>
+              </div>
+              <div className='link-div'>
+                <label>Upload file</label><br></br>
+                <input onChange={(env)=>{setFile(env.target.files[0])}} type='file' className='input-file'></input>
+>>>>>>> exam-side
               </div>
               </>}
               <div className='submit-btn'>

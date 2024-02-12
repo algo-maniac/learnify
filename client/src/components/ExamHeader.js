@@ -190,19 +190,11 @@ const ExamHeader = () => {
               </div></>}
               {age===20 && <><div className='link-div'>
                 <label>Enter the Topic Name</label><br></br>
-<<<<<<< HEAD
-                <input onChange={(env)=>{setPdf(env.target.value)}} placeholder='Name of the Topic'></input>
-              </div>
-              <div className='link-div'>
-                <label>Upload file</label><br></br>
-                <input onChangetype='file' className='input-file'></input>
-=======
                 <input onChange={(env)=>{setPdftitle(env.target.value)}} placeholder='Name of the Topic'></input>
               </div>
               <div className='link-div'>
                 <label>Upload file</label><br></br>
                 <input onChange={(env)=>{setFile(env.target.files[0])}} type='file' className='input-file'></input>
->>>>>>> exam-side
               </div>
               </>}
               <div className='submit-btn'>

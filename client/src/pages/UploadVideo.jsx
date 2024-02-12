@@ -7,6 +7,8 @@ import AuthContext from "../store/auth-context";
 
 function UploadVideo(props) {
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
+
 
   const [formData, setFormData] = useState({
     title: "",
@@ -14,6 +16,7 @@ function UploadVideo(props) {
     video: null,
     thumbnail: null,
   });
+  
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -29,7 +32,8 @@ function UploadVideo(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    try {
+    setLoading(true);
     const form = new FormData();
     form.append("title", formData.title);
     form.append("description", formData.description);
@@ -49,21 +53,20 @@ function UploadVideo(props) {
         console.log(result);
 
         // Upload Video
-        // navigate(`/teacher/${props.data.id}`);
+        navigate(`/video`);
       })
       .catch((err) => {
         console.error(err);
       });
+    } catch(err) {
+      console.log(err);
+    } finally {
+      // setLoading(false);
+    }
   };
 
   return (
     <>
-      {/* <ImageContainer src="./assets/back_img2.png" alt="Error" />
-      <ImageContainer
-        src="./assets/back_img1.png"
-        style={{ top: "460px", left: "400px", transform: "rotate(-10deg)" }}
-        alt="Error"
-      /> */}
       <Contain>
         <Heading>Upload Video</Heading>
         <Content>
@@ -106,101 +109,92 @@ function UploadVideo(props) {
                 onChange={handleThumbnailChange}
               />
             </Label>
-            <Button>Submit</Button>
+            <br />
+            <br />
+            <Button disabled={loading}>Submit</Button>
           </Form>
         </Content>
+        {loading && <div className="toaster">Backend call in progress...</div>}
+
       </Contain>
     </>
   );
 }
 
-const Container = styled.div`
-  width: 100%;
-  margin: 20px auto;
-
-  .uploadvideo {
-    /* background-image: url(); */
-  }
-
-  .uploadvideo_form {
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    width: 33%;
-    padding: 90px 30px;
-    margin: 60px auto;
-    background-color: rgb(210, 210, 210);
-    border: 0;
-    border-radius: 10px;
-  }
-
-  .uploadvideo_form > label {
-    display: flex;
-    flex-direction: column;
-    font-size: 1.5rem;
-    gap: 15px;
-    font-weight: bolder;
-  }
-
-  .uploadvideo_form > button {
-    margin-top: 40px;
-    text-align: center;
-    height: 2.5rem;
-    font-size: 1.5rem;
-    background-color: green;
-    border: 0;
-    border-radius: 10px;
-  }
-
-  .uploadvideo_form > label > input {
-    height: 2.5rem;
-    border: 0;
-    border-radius: 10px;
-    background-color: white;
-    font-size: 1.3rem;
-    padding: 0 5px;
-  }
-`;
-const ImageContainer = styled.img`
-  position: absolute;
-  height: 300px;
-  width: 350px;
-  top: 130px;
-  left: 200px;
-  border-radius: 10px;
-  transform: rotate(10deg);
-  box-shadow: 2px 7px 29px 4px rgba(0, 0, 0, 0.75);
-`;
 const Contain = styled.div`
-  height: 640px;
-  width: 460px;
-  margin-top: 30px;
-  margin-left: 60vw;
-  margin-bottom: 100px;
+  max-width: 600px;
+  min-height: calc(100vh - 130px);
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
+  justify-content: space-evenly;
   align-items: center;
+  margin: 30px auto 30px auto;
   border-radius: 10px;
-  box-shadow: 2px 7px 29px 4px rgba(0, 0, 0, 0.75);
-  background-color: white;
+  box-shadow: 1px 1px 4px #ccc;
+  background-color: #fff;
+
+  .loader {
+    display: inline-block;
+    border: 4px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 4px solid #3498db;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+    margin-right: 8px; /* Adjust spacing as needed */
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  .toaster {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #333;
+    color: #fff;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    z-index: 100000; /* Ensure it's above other elements */
+    display: flex;
+    align-items: center;
+  }
+
+  @keyframes slideIn {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  /* Apply animation to toaster */
+  .toaster {
+    animation: slideIn 0.5s ease-in-out;
+  }
+
 `;
 
 const Heading = styled.div`
-  height: 10%;
-  width: 60%;
-  font-size: 40px;
+  font-size: 28px;
   text-align: center;
-  border: 2px solid #131c2c;
-  border-radius: 10px;
-  background-color: #131c2c;
-  color: white;
-  letter-spacing: 1px;
+  color: black;
+  font-weight: 600;
+  margin-bottom: 20px;
 `;
+
 const Content = styled.div`
-  height: 80%;
   width: 90%;
 `;
+
 const Form = styled.form`
   height: 100%;
   width: 100%;
@@ -210,41 +204,58 @@ const Form = styled.form`
   align-items: center;
 `;
 
-const Label = styled.label`
-  font-size: 25px;
-  width: 80%;
-  cursor: pointer;
-  color: #131c2c;
-  font-weight: 700;
-  letter-spacing: 1px;
+const Input = styled.input`
+  height: 40px;
+  width: 100%;
+  margin-top: 5px;
+  font-size: 16px;
+  padding: 8px; /* Increased padding for better aesthetics */
+  border-radius: 5px;
+  border: 1px solid #ccc;
 `;
 
-const Input = styled.input`
-  height: 50%;
-  width: 90%;
-  margin-top: 20px;
-  cursor: pointer;
-  font-size: 20px;
-  padding: 5px;
-  border-radius: 10px;
-  color: #131c2c;
-  font-weight: 550;
+const Label = styled.label`
+  width: 100%;
+  font-size: 18px;
+  font-weight: 700;
   letter-spacing: 1px;
+  margin-bottom: 5px; /* Added margin for better separation */
+`;
+
+const InputWrapper = styled.div`
+  width: 100%;
+  margin-bottom: 15px;
 `;
 
 const Button = styled.button`
-  font-size: 25px;
-  height: 50px;
-  width: 40%;
+  height: 40px;
+  width: 100%;
   color: white;
-  border-radius: 10px;
-  background-color: #131c2c;
+  border-radius: 5px;
+  background-color: #1732ac;
+  border: none;
+  font-weight: 500;
   cursor: pointer;
+
+  &:hover {
+    background-color: #3c56cd;
+    color: white;
+  }
+
+  &:disabled {
+    background-color: #586fd6 !important;
+    color: #e5e5e5 !important;
+    cursor: not-allowed !important;
+  }
 `;
 
 const Lognow = styled.div`
   margin-top: 10px;
-  height: 10%;
-  font-size: 20px;
+  
+  a {
+    text-decoration: none;
+    color: #383fa0;
+  }
 `;
+
 export default UploadVideo;

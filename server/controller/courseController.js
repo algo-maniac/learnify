@@ -51,7 +51,7 @@ module.exports.getCourses = async (req, res) => {
 
     const coursesQuery = await Course.find()
       .sort({ createdAt: -1 })
-      .skip(offset * pageSize)
+      .skip((offset - 1) * pageSize)
       .limit(pageSize)
       .populate({
         path: "instructorId",

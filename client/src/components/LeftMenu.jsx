@@ -21,7 +21,7 @@ const LeftMenu = ({ isSidebarExpanded, pageId, setIsSidebarExpanded }) => {
         text: "Purchases",
       },
       {
-        link: "/enrolled-courses",
+        link: "/enrolled-course",
         icon: "/assets/enrolled.png",
         text: "Enrolled",
       },

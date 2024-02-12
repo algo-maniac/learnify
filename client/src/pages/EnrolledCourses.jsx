@@ -104,6 +104,7 @@ const Container = styled.div`
 
     .course-container{
         width: 100%;
+        height: calc(100vh - 150px);
         background-color: white;
         padding: 20px 30px;
         /* margin: auto; */

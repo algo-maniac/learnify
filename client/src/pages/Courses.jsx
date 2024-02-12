@@ -13,7 +13,7 @@ import AuthContext from '../store/auth-context';
 import { Link, useNavigate } from 'react-router-dom';
 
 const Courses = () => {
-    const { isSidebarExpanded } = useContext(AuthContext);
+    const { userdata, isSidebarExpanded } = useContext(AuthContext);
     const [page, setPage] = useState(1);
     const [loading, setLoading] = useState(false);
     const [course, setCourses] = useState([]);
@@ -69,6 +69,10 @@ const Courses = () => {
     return <>
         <Container>
             <div className="course-container">
+                <div className='create-course-button'>
+                    {userdata.role === "instructor" && <button className='button-61' onClick={() => navigate('/create-course')}>Create Course</button>}
+                </div>
+                <br />
                 {loading && <div className='loader-page'><CircularProgress className='loading' /></div>}
                 {!loading && <div className={`courses-list ${ isSidebarExpanded ? 'sidebarExpanded' : '' }`}>
                     {course.length > 0 && course.map((data) => (
@@ -117,11 +121,18 @@ const Container = styled.div`
 
     .course-container{
         width: 100%;
+        height: calc(100vh - 240px);
         background-color: white;
-        padding: 10px 15px;
+        padding: 20px 30px;
         margin: auto;
-        margin-top: 0.7rem;
+        /* margin-top: 0.7rem; */
         font-family: Poppins,sans-serif;
+        
+        .create-course-button {
+            width: 100%;
+            display: flex;
+            justify-content: flex-end;
+        }
     }
     .course-container .header-text h6{
         font-weight: 400;
@@ -161,6 +172,7 @@ const Container = styled.div`
         touch-action: manipulation;
         vertical-align: top;
         white-space: nowrap;
+        border: none;
     }
 
     .button-61:active {

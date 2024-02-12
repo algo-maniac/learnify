@@ -6,10 +6,11 @@ import AuthContext from '../store/auth-context'
 import styled from 'styled-components';
 
 const InstructorVideo = () => {
-    const { isSidebarExpanded } = useContext(AuthContext);
+    const { userdata, isSidebarExpanded } = useContext(AuthContext);
     const [page, setPage] = useState(1);
     const [videoLength, setLength] = useState(0);
     const [videos, setVideos] = useState();
+    const navigate = useNavigate();
 
     const handlePageChange = (event, value) => {
         setPage(value);
@@ -27,6 +28,7 @@ const InstructorVideo = () => {
         console.log(json.instructor);
         setVideos(json.videos);
         setLength(json.totalVideos)
+        console.log(json);
     }
     useEffect(() => {
         try {
@@ -49,6 +51,10 @@ const InstructorVideo = () => {
     return <>
         <Container>
             <div className="videos-page">
+                <div className='create-course-button'>
+                    {userdata.role === "instructor" && <button className='button-61' onClick={() => navigate('/upload-video')}>Upload Video</button>}
+                </div>
+                <br />
                 <div className={`videos ${isSidebarExpanded ? 'sidebarExpanded' : ''}`}>
                     {videos && videos.map(vid => {
                         return <div className="video">
@@ -81,7 +87,14 @@ const Container = styled.div`
 
   .videos-page {
     width: 100%;
-    height: 100%;
+    /* height: 100%; */
+    height: calc(100vh - 240px);
+
+    .create-course-button {
+        width: 100%;
+        display: flex;
+        justify-content: flex-end;
+    }
   }
 
   .videos{
@@ -94,6 +107,8 @@ const Container = styled.div`
         flex-direction: row;
         flex-wrap: wrap;
         gap: 30px;
+        justify-content: flex-start;
+        align-items: flex-start;
     }
 
     .videos > * {
@@ -145,7 +160,52 @@ const Container = styled.div`
         }
     }
 
+    .button-61 {
+        align-items: center;
+        appearance: none;
+        background-color: #4a56b8;
+        border-radius: .375em;
+        box-shadow: none;
+        box-sizing: border-box;
+        color: #ffffff;
+        cursor: pointer;
+        margin-left: 0.7rem;
+        display: inline-flex;
+        font-family: BlinkMacSystemFont,-apple-system,"Segoe UI",Roboto,Oxygen,Ubuntu,Cantarell,"Fira Sans","Droid Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+        font-size: 0.85rem;
+        height: 2.8em;
+        justify-content: center;
+        line-height: 1.5;
+        padding: calc(.5em - 1px) 1em;
+        position: relative;
+        padding-left: 1.3rem;
+        padding-right: 1.3rem;
+        text-align: center;
+        user-select: none;
+        -webkit-user-select: none;
+        touch-action: manipulation;
+        vertical-align: top;
+        white-space: nowrap;
+        border: none;
+    }
 
+    .button-61:active {
+        border-color: #4a4a4a;
+        outline: 0;
+    }
+
+    .button-61:focus {
+        border-color: #485fc7;
+        outline: 0;
+    }
+
+    .button-61:hover {
+        background-color: rgb(71, 89, 206);
+    }
+
+    .button-61:focus:not(:active) {
+        box-shadow: rgba(72, 95, 199, .25) 0 0 0 .125em;
+    }
 
   .pagination{
     margin-top: auto;

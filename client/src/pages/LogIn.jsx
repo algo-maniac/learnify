@@ -6,6 +6,7 @@ import AuthContext from "../store/auth-context";
 import { toast } from "react-toastify";
 const LogIn = () => {
   const { userdata, fetchUserdata } = useContext(AuthContext);
+  const [loading, setLoading] = useState(false);
   const [currUser, setCurrUser] = useState({
     role: "user",
     email: "",
@@ -48,7 +49,7 @@ const LogIn = () => {
 
   useEffect(() => {
     if (userdata) {
-      navigate("/");
+      navigate("/course");
     }
   }, [userdata]);
 
@@ -98,14 +99,19 @@ const LogIn = () => {
               }}
             />
           </InputWrapper>
-
-          <Button className="login-submit">Submit</Button>
+          <br />
+          <br />
+          <br />
+            
+          <Button className="login-submit" disabled={loading}>Submit</Button>
           <Signnow>
             Don't have an account?
             <NavLink to="/SignUp"> Sign Up</NavLink>
           </Signnow>
         </Form>
       </Content>
+      {loading && <div className="toaster">Backend call in progress...</div>}
+
     </Container>
   );
 };
@@ -122,6 +128,54 @@ const Container = styled.div`
   border-radius: 10px;
   box-shadow: 1px 1px 4px #ccc;
   background-color: #fff;
+
+  .loader {
+    display: inline-block;
+    border: 4px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 4px solid #3498db;
+    width: 20px;
+    height: 20px;
+    animation: spin 1s linear infinite;
+    margin-right: 8px; /* Adjust spacing as needed */
+  }
+
+  @keyframes spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  .toaster {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #333;
+    color: #fff;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    z-index: 100000; /* Ensure it's above other elements */
+    display: flex;
+    align-items: center;
+  }
+
+  @keyframes slideIn {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  /* Apply animation to toaster */
+  .toaster {
+    animation: slideIn 0.5s ease-in-out;
+  }
 `;
 
 const Select = styled.select`

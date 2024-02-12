@@ -200,6 +200,7 @@ const SignUp = () => {
                 />
               </Label>
             </InputWrapper>
+            <br />
             <Button className="signup-submit">Submit</Button>
             <Lognow>
               Already Logged In?
@@ -299,6 +300,7 @@ const Label = styled.label`
   /* color: #131c2c; */
   font-weight: 700;
   letter-spacing: 1px;
+  width: 100%;
 `;
 
 const InputWrapper = styled.div`

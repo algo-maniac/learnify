@@ -90,7 +90,7 @@ const Container = styled.div`
     display: flex;
     flex-direction: row;
   }
-  .left-dashboard {
+  /* .left-dashboard {
     border: 1px solid black;
     min-width: 16vw;
     min-height: 90vh;
@@ -101,11 +101,12 @@ const Container = styled.div`
   }
   .left-dashboard ul li:hover {
     background-color: rgb(45, 44, 44);
-  }
+  } */
   /* css for right part content part */
   .right-dashboard {
     background-color: rgb(250, 250, 250);
-    min-width: 84vw;
+    /* min-width: 84vw; */
+    width: 100%;
     height: 100vh;
     display: flex;
     overflow: auto;

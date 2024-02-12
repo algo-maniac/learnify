@@ -23,13 +23,13 @@ router.post("/pdf",pdfController.uploadpdf)
 router.get("/youtube/:category",pdfController.getyoutube)
 router.post("/getInstructorVideos/:id", authenticateGeneral, instructorController.getInstructorVideos);
 
-router.use(authenticateInstructor);
-
-router.get("/getInstructorData", instructorController.getInstructorData);
-
 router.post("/subscribe/:id", authenticateGeneral, instructorController.subscribeInstructor);
 
 router.post("/unsubscribe/:id", authenticateGeneral, instructorController.unsubscribeInstructor);
+
+router.use(authenticateInstructor);
+
+router.get("/getInstructorData", instructorController.getInstructorData);
 // router.get("/getInstructorProfileImage/:id", authenticateGeneral, instructorController.getInstructorProfileImage);
 
 

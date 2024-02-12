@@ -133,6 +133,7 @@ const Container = styled.div`
 
   .course-container {
     width: 100%;
+    height: (100vh - 240px);
     background-color: white;
     padding: 20px 30px;
     /* margin: auto; */
@@ -172,6 +173,7 @@ const Container = styled.div`
     touch-action: manipulation;
     vertical-align: top;
     white-space: nowrap;
+    border: 0;
   }
 
   .button-61:active {

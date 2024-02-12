@@ -332,7 +332,7 @@ const Video = () => {
         <div className={`comment-box ${ isSidebarExpanded ? 'sidebarExpanded' : '' }`}>
           <div className="header1">
             <h4>
-              <span>{comments.length}</span> Comments
+              <span>{comments ? comments.length : 0}</span> Comments
             </h4>
           </div>
           <div className="comment-field">
@@ -353,7 +353,7 @@ const Video = () => {
             )}
           </div>
           <div className="comments">
-            {comments.map((data, index) => (
+            {comments && comments.map((data, index) => (
               <div className="chatWithReply">
                 <div
                   className={`chats ${

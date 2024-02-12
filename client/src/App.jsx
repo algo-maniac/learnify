@@ -46,6 +46,7 @@ function App() {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(
     window.innerWidth <= 786 ? false : true
   );
+  
   const toggleIsSearchExpanded = () => {
     console.log("clilcked");
     setIsSidebarExpanded((prev) => !prev);
@@ -165,10 +166,10 @@ function App() {
 
             <Route element={<InstructorProtected />}>
               <Route path="/home" element={<Instructor />} />
-              <Route path="/uploadvideo" element={<UploadVideo />} />
+              <Route path="/upload-video" element={<UploadVideo />} />
               <Route path="/edit-video" element={<EditableVideos />} />
               <Route path="/edit-course" element={<EditableCourses />} />
-              <Route path="/course/create" element={<CreateCourseForm />} />
+              <Route path="/create-course" element={<CreateCourseForm />} />
               <Route
                 path="/course/:courseId/edit"
                 element={<EditCourseForm />}

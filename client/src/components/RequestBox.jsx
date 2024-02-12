@@ -223,6 +223,7 @@ const RequestBox = () => {
             </select>
           </div>
         </div>
+        <br />
         <table class="content-table">
           <thead>
             <tr>
@@ -298,15 +299,19 @@ const RequestBox = () => {
     </Container>
   );
 };
+
 export default RequestBox;
 
 const Container = styled.div`
+  width: 100%;
+  padding: 0 30px;
   .request-box .heading {
     color: rgb(137, 137, 137);
     font-weight: 650;
-    padding-left: 1.2rem;
+    /* padding-left: 1.2rem; */
     font-size: 1.55rem;
     border-radius: 5px;
+    margin: 0;
   }
 
   .request-box .top {
@@ -325,7 +330,8 @@ const Container = styled.div`
     border-collapse: collapse;
     margin: 25px 0;
     font-size: 0.9em;
-    max-width: 80vw;
+    /* max-width: 80vw; */
+    width: 100%;
     border-radius: 5px 5px 0 0;
     margin: auto;
     overflow: hidden;

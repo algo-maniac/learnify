@@ -214,11 +214,17 @@ const Container = styled.div`
     font-weight: 500;
   }
   .exam-container .resourceContainer h2{
-    margin: 8px;
+    margin: 20px;
     font-weight:800;
+    margin-top:10px;
+    margin-bottom:10px;
+    background: linear-gradient(45deg, #0cc6fa, #0e2ac9,#5e23b0,#970fa6);
+    -webkit-background-clip: text; /* For Safari/Chrome */
+    background-clip: text;
+    color: transparent;
     font-family: 'Bungee Shade', cursive;
-  font-family: 'Cutive', serif;
-  font-family: 'Poppins', sans-serif;
+    font-family: 'Cutive', serif;
+    font-family: 'Roblex', sans-serif;
   }
   .exam-container .resourceContainer .resources{
     display: flex;
@@ -235,10 +241,11 @@ const Container = styled.div`
   }
   .exam-container .channel1{
     display: flex;
-    flex-direction: row;
     flex-wrap:wrap;
-    justify-content:space-around;
-
+    align-items: flex-start;
+    justify-content:space-between;
+    padding-left:4%;
+    padding-right:4%
   }
   .exam-container .card{
     min-width:245px;
@@ -247,6 +254,9 @@ const Container = styled.div`
   .exam-container .notes-content{
     margin:0.7rem;
   }  
+  .cards a{
+    text-decoration:none;
+  }
   .exam-container .channel div{
     text-align: center;
     padding: 20px 10px;
@@ -256,10 +266,11 @@ const Container = styled.div`
     border-radius:5px;
   }
   .exam-container .cards{
-    width:26%;
+    width:240px;
     box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     margin:0.6rem;
     border-radius:5px;
+    text-decoration:none;
   }
   .exam-container .cards img{
     min-height:160px;
@@ -270,6 +281,8 @@ const Container = styled.div`
     margin-top:0.5rem;
     margin-left:0.5rem;
     margin-bottom:0.7rem;
+    color:black;
+    text-decoration:none;
   }
   .channel1 .time{
     color:#13c24e;

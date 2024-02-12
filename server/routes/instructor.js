@@ -18,7 +18,7 @@ router.get("/getInstructor/:id", authenticateGeneral, instructorController.getIn
 router.post("/getInstructorCourses/:id", authenticateGeneral, instructorController.getInstructorCourses);
 router.post("/youtube",pdfController.uploadYoutube)
 
-router.post("/pdf",pdfController.uploadpdf)
+router.post("/pdf",upload.single("pdf"),pdfController.uploadpdf)
 
 router.get("/youtube/:category",pdfController.getyoutube)
 router.post("/getInstructorVideos/:id", authenticateGeneral, instructorController.getInstructorVideos);

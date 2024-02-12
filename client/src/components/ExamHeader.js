@@ -3,19 +3,15 @@ import { Link } from 'react-router-dom';
 // import './ExamCorner.css'
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import Modal from '@mui/material/Modal';
 import AddIcon from '@mui/icons-material/Add';
 import axios from 'axios'
-import BottomNavigation from '@mui/material/BottomNavigation';
-import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
-import { CircularProgress } from '@mui/material';
 import detail from './examdata.json';
+import { ToastContainer, toast } from 'react-toastify';
 const style = {
   position: 'absolute',
   top: '40%',
@@ -62,19 +58,21 @@ const ExamHeader = () => {
 
   },[value])
   const [youtube,setYoutube]=useState([]);
-  useEffect(()=>{
-    const fetchHandler=async()=>{
-      console.log(value)
-      try{
-        const res=await fetch(`http://localhost:3000/instructor/youtube/${value}`,{
-          method:"GET",
-        })
-        const data=await res.json();
-        setYoutube(data.data)
-      }catch(er){
-        console.log("Error occured")
-      }
+  const [material,setMaterial]=useState([]);
+  const fetchHandler=async()=>{
+    console.log(value)
+    try{
+      const res=await fetch(`http://localhost:3000/instructor/youtube/${value}`,{
+        method:"GET",
+      })
+      const data=await res.json();
+      setMaterial(data.material)
+      setYoutube(data.data)
+    }catch(er){
+      console.log("Error occured")
     }
+  }
+  useEffect(()=>{
     fetchHandler();
   },[value])
   const [channelname,setChannelName]=useState('');
@@ -82,14 +80,8 @@ const ExamHeader = () => {
   const [channelImgurl,setChannelImgurl]=useState('');
   const [loader,setLoader]=useState(false);
   const [file,setFile]=useState();
-<<<<<<< HEAD
   const [pdftile,setPdf]=useState();
-=======
-  const [pdftile,setPdftitle]=useState();
->>>>>>> exam-side
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
+  const submitRef=React.useRef();
   const btnRef=React.useRef();
   const uploadHandler=async()=>{
     if(age===10){
@@ -103,38 +95,79 @@ const ExamHeader = () => {
             },
             body:JSON.stringify({channelname:channelname,channellink:channellink,channelImgurl:channelImgurl,username:"inst",category:value})
         })
-        const data=await response.json();
-        console.log(data)
         setLoader(false);
         handleClose();
+        toast.success("Youtube Channel Uploaded successfully",{
+          position:'top-center'
+        })
+        fetchHandler();
       }
       catch(er){
         console.log("Error occured",er)
       }
+      setOpen(false);
     }
     else if(age===20){
       try{
         setLoader(true);
         btnRef.current.disabled=true;
-        const form=new FormData();
         const formData = new FormData();
-        formData.append("pdfFile", file);  // Ensure "pdfFile" matches the field name
-
-        const response=await axios.post("http://localhost:3000/instructor/pdfds", formData, {
+        formData.append("title",pdftile)
+        formData.append("pdf", file);  // Ensure "pdfFile" matches the field name
+        formData.append("username","inst");
+        formData.append("category",value)
+        console.log(pdftile,file)
+        const response=await axios.post("http://localhost:3000/instructor/pdf", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
           },
         });
-        const data=response.json();
-        console.log(data);
+        toast.success("Material Uploaded successfully",{
+          position:'top-center'
+        })
+        fetchHandler();
       }
       catch(er){
-        console.log("Error occured");
+        console.log("Error occured",er);
       }
+      setOpen(false)
     }
   }
+  const getTime = (data) => {
+    const dateObject = new Date(data);
+    const hours = dateObject.getHours();
+    const minutes = dateObject.getMinutes();
+    var time = "";
+    let period = hours >= 12 ? "PM" : "AM";
+    time += `${hours}:${minutes} ${period}`;
+    return time;
+  };
+  const getDate = (data) => {
+    const dateObject = new Date(data);
+    const year = dateObject.getUTCFullYear();
+    const month = dateObject.getMonth() + 1;
+    const monthNames = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December",
+    ];
+    const day = dateObject.getDate();
+    var date = "";
+    date += `${day},${monthNames[month - 1]} ${year}`;
+    return date;
+  };
   return (
     <div className='outer'>
+      <ToastContainer/>
       <div className={"exam-container"}>
       <div className={"header"}>
           <div id="jee" onClick={jeeHandler} className={value===0?'active':''}>
@@ -159,6 +192,7 @@ const ExamHeader = () => {
             onClose={handleClose}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
+            ref={submitRef}
           >
             <Box sx={style}>
               <div className='select-div'>
@@ -190,7 +224,7 @@ const ExamHeader = () => {
               </div></>}
               {age===20 && <><div className='link-div'>
                 <label>Enter the Topic Name</label><br></br>
-                <input onChange={(env)=>{setPdftitle(env.target.value)}} placeholder='Name of the Topic'></input>
+                <input onChange={(env)=>{setPdf(env.target.value)}} placeholder='Name of the Topic'></input>
               </div>
               <div className='link-div'>
                 <label>Upload file</label><br></br>
@@ -256,16 +290,22 @@ const ExamHeader = () => {
         <div>
     </div>
         <div className={"channel1"}>
-        <div className='cards'>
-          <div className='image'>
-              <img src='/profile-13.png'></img>
-            </div>
-            <div className='text'>
-              <h6>Physics Wallah</h6>
-              <p>Uploaded by <strong>inst</strong> on <span className='time'>11:10am, 14 Sept, 2024</span></p>
-            </div>
+          {
+            material.map((obj)=>(
+              <div className='cards' key={obj._id}>
+                <a href={obj.link} target='_blank'>
+                <div className='image'>
+                    <img src='/profile-13.png'></img>
+                  </div>
+                  <div className='text'>
+                    <h6>{obj.title}</h6>
+                    <p>Uploaded by <strong>{obj.username}</strong> on <span className='time'>{getTime(obj.createdAt)} {getDate(obj.createdAt)}</span></p>
+                  </div>
+                </a>
+              </div>
+            ))
+          }
           </div>
-        </div>
       </div>
       </div>
 

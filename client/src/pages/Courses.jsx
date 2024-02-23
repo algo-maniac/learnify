@@ -78,7 +78,10 @@ const Courses = () => {
                     {course.length > 0 && course.map((data) => (
                         <div className={`courses ${ isSidebarExpanded ? 'sidebarExpanded' : '' }`}>
                             <Link to={`/course/${ data._id }`} >
-                                <Card key={data._id}>
+                                <Card 
+                                    key={data._id}
+                                    sx={{ width: "100%", aspectRatio: "1/1", overflow: "hidden"}}    
+                                >
                                     <CardMedia
                                         sx={{ width: "100%", aspectRatio: "2/1" }}
                                         image={data.thumbnail}

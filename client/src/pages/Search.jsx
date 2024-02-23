@@ -29,6 +29,7 @@ const Search = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          Authorization: localStorage.getItem("token"),
         },
         body: JSON.stringify({ query: searchValue }),
       });
@@ -64,9 +65,8 @@ const Search = () => {
         </div>
         <div className="teachers">
           <div
-            className={`teachercards  ${
-              isSidebarExpanded ? "sidebarExpanded" : ""
-            }`}
+            className={`teachercards  ${ isSidebarExpanded ? "sidebarExpanded" : ""
+              }`}
           >
             {users &&
               users.map((instructor) => (
@@ -89,7 +89,7 @@ const Search = () => {
         </div>
         <div className="video-list">
           <div
-            className={`videos ${isSidebarExpanded ? "sidebarExpanded" : ""}`}
+            className={`videos ${ isSidebarExpanded ? "sidebarExpanded" : "" }`}
           >
             {videos &&
               videos.map((vid) => {
@@ -102,7 +102,7 @@ const Search = () => {
                       description={vid.description}
                       duration={toMin(vid.duration)}
                       thumbnail={vid.thumbnail}
-                      // profileImage={profileImage}
+                    // profileImage={profileImage}
                     />
                   </div>
                 );
@@ -124,20 +124,21 @@ const Search = () => {
           <h5>Courses</h5>
         </div>
         <div
-          className={`courses-list ${
-            isSidebarExpanded ? "sidebarExpanded" : ""
-          }`}
+          className={`courses-list ${ isSidebarExpanded ? "sidebarExpanded" : ""
+            }`}
         >
           {courses.length > 0 &&
             courses.map((data) => (
               <div
                 key={data._id}
-                className={`courses ${
-                  isSidebarExpanded ? "sidebarExpanded" : ""
-                }`}
+                className={`courses ${ isSidebarExpanded ? "sidebarExpanded" : ""
+                  }`}
               >
-                <Link to={`/course/${data._id}`}>
-                  <Card key={data._id}>
+                <Link to={`/course/${ data._id }`}>
+                  <Card
+                    key={data._id}
+                    sx={{ width: "100%", aspectRatio: "1/1.2", overflow: "hidden" }}
+                  >
                     <CardMedia
                       sx={{ width: "100%", aspectRatio: "2/1" }}
                       image={data.thumbnail}

@@ -97,8 +97,19 @@ function Navbar({ toggleIsSearchExpanded, logout, handleSearchClick }) {
 
     const fetchSuggestions = async () => {
       try {
-        const response = await axios.get(`/suggestions?query=${searchText}`);
-        setSearchSuggestions(response.data);
+        const response = await fetch(`/suggestions?query=${searchText}`, {
+          method: 'GET',
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        });
+    
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+    
+        const data = await response.json();
+        setSearchSuggestions(data);
       } catch (error) {
         console.error("Error fetching suggestions:", error);
       }

@@ -4,13 +4,11 @@ import { useNavigate } from 'react-router-dom'
 import NavbarLandingPage from '../components/NavbarLandingPage';
 
 
-const LandingPage = (logout) => {
+const LandingPage = ({ handleSearchClick }) => {
     const navigate = useNavigate();
     return (
         <Container>
-            <NavbarLandingPage
-                logout={logout}
-            />
+            <NavbarLandingPage handleSearchClick={handleSearchClick} />
             <div className="page1">
                 <div className="left">
                     {/* <div className="ju-logo"> */}
@@ -58,28 +56,28 @@ const LandingPage = (logout) => {
                 <h3>Our mission is to revolutionize education, making it accessible and enjoyable for everyone.</h3>
                 <p className='header-support'>Engage in interactive lessons that make learning fun.</p>
                 <div className='features'>
-                    <div className="feature">
+                    <div className="feature" onClick={() => navigate('/instructor')}>
                         <img src="/assets/instructor.png" alt="" />
                         <h4>Instructors</h4>
                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum, mollitia unde facere vero rem aliquam.</p>
                     </div>
-                    <div className="feature">
+                    <div className="feature" onClick={() => navigate('/course')}>
                         <img src="/assets/course.png" alt="" />
                         <h4>Courses</h4>
                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum, mollitia unde facere vero rem aliquam.</p>
                     </div>
-                    <div className="feature">
+                    <div className="feature" onClick={() => navigate('/video')}>
                         <img src="/assets/video.png" alt="" />
                         <h4>Video Lectures</h4>
                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum, mollitia unde facere vero rem aliquam.</p>
                     </div>
-                    <div className="feature">
+                    <div className="feature" onClick={() => navigate('/doubt-corner')}>
                         <img src="/assets/doubt.png" alt="" />
                         <h4>Exam Corner</h4>
                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum, mollitia unde facere vero rem aliquam.</p>
                     </div>
-                    <div className="feature">
-                    <img src="/assets/exam.png" alt="" />
+                    <div className="feature" onClick={() => navigate('/exam-corner')}>
+                        <img src="/assets/exam.png" alt="" />
                         <h4>Doubt Corner</h4>
                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum, mollitia unde facere vero rem aliquam.</p>
                     </div>
@@ -245,7 +243,7 @@ export default LandingPage
 const Container = styled.div`
     .page1{
         min-height: 600px;
-        margin-top: calc(70px + 0px);
+        /* margin-top: calc(70px + 0px); */
         height: calc(100vh - 70px);
         width: 100vw;
         display: flex;
@@ -324,9 +322,14 @@ const Container = styled.div`
                 .btn{
                     margin-top: 30px;
                     padding: 10px;
-                    border: 1px solid #d8b8b8;
+                    /* border: 1px solid #d8b8b8; */
+                    border: none;
                     font-size: 0.8rem;
                     margin-right: 10px;
+                    background-color: #5d37a8;
+                    color: white;
+                    font-weight: 600;
+                    cursor: pointer;
                 }
             }
         }
@@ -376,6 +379,7 @@ const Container = styled.div`
                 justify-content: center;
 
                 padding: 25px;
+                cursor: pointer;
 
                 img{
                     height: 50px;

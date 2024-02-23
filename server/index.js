@@ -16,6 +16,7 @@ const bodyParser = require("body-parser");
 const { VideoLecture } = require("./models/videoLecture");
 const Instructor = require("./models/instructor");
 const Course = require("./models/course");
+const authenticateGeneral = require("./middlewares/authenticationGeneral");
 const port = 8000;
 const app = express();
 
@@ -51,7 +52,7 @@ mongoose
 
  
 
-  app.get("/suggestions", async (req, res) => {
+  app.get("/suggestions", authenticateGeneral, async (req, res) => {
     const query = req.query.query;
     console.log(query);
   
@@ -78,7 +79,7 @@ mongoose
   });
   
 
-app.post("/search", async (req, res) => {
+app.post("/search", authenticateGeneral, async (req, res) => {
   const query = req.body.query;
   console.log(query);
   try {

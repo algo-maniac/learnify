@@ -9,8 +9,8 @@ import "react-toastify/dist/ReactToastify.css";
 import { Typography } from "@mui/material";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import NavbarLandingPage from "../components/NavbarLandingPage";
-const SignUp = (logout) => {
-  const { userdata, fetchUserdata } = useContext(AuthContext);
+const SignUp = () => {
+  const { userdata, fetchUserdata, logout } = useContext(AuthContext);
   const [popup, setPopup] = useState(false);
   const [loader, setLoader] = useState(false);
   const [timeout, setTimeout] = useState(5);

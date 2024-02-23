@@ -52,38 +52,41 @@ const PurchasedCourses = () => {
         <Container>
             <div className="course-container">
                 {loading && <div className='loader-page'><CircularProgress className='loading' /></div>}
-                {!loading && <div className={`courses-list ${isSidebarExpanded ? 'sidebarExpanded' : ''}`}>
+                {!loading && <div className={`courses-list ${ isSidebarExpanded ? 'sidebarExpanded' : '' }`}>
                     {course.length > 0 && course.map((data) => (
                         <div className={`courses ${ isSidebarExpanded ? 'sidebarExpanded' : '' }`}>
-                        <Link to={`/course/${ data._id }`} >
-                            <Card key={data._id}>
-                                <CardMedia
-                                    sx={{ width: "100%", aspectRatio: "2/1" }}
-                                    image={data.thumbnail}
-                                    title={data.title}
-                                />
-                                <CardContent className='box'>
-                                    <Typography variant="h6" component="div">
-                                        {data.title}
-                                    </Typography>
-                                    <span className='level'>{data.level}</span>
-                                    <Typography variant="body2" color="text.secondary" className='desc'>
-                                        {filterDesc(data.description)}
-                                    </Typography>
-                                    <div className='tags'>
-                                        <Fab variant="extended" size="small" className='tag'>
-                                            {data.category}
-                                        </Fab>
-                                    </div>
-                                    <span className='price'>Rs. {data.price}</span>
-                                </CardContent>
-                                {/* <CardActions className='box1'>
+                            <Link to={`/course/${ data._id }`} >
+                                <Card
+                                    key={data._id}
+                                    sx={{ width: "100%", aspectRatio: "1/1.2", overflow: "hidden" }}
+                                >
+                                    <CardMedia
+                                        sx={{ width: "100%", aspectRatio: "2/1" }}
+                                        image={data.thumbnail}
+                                        title={data.title}
+                                    />
+                                    <CardContent className='box'>
+                                        <Typography variant="h6" component="div">
+                                            {data.title}
+                                        </Typography>
+                                        <span className='level'>{data.level}</span>
+                                        <Typography variant="body2" color="text.secondary" className='desc'>
+                                            {filterDesc(data.description)}
+                                        </Typography>
+                                        <div className='tags'>
+                                            <Fab variant="extended" size="small" className='tag'>
+                                                {data.category}
+                                            </Fab>
+                                        </div>
+                                        <span className='price'>Rs. {data.price}</span>
+                                    </CardContent>
+                                    {/* <CardActions className='box1'>
                                 <button className='button-61' onClick={() => navigate(`/course/${data._id}/`)}>Buy</button>
                                 <button className='button-61' onClick={() => enroll(data._id)}>Enroll</button>
                             </CardActions> */}
-                            </Card>
-                        </Link>
-                    </div>
+                                </Card>
+                            </Link>
+                        </div>
                     ))}
                 </div>}
                 <div className='pagination'>

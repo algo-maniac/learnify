@@ -121,19 +121,20 @@ function App() {
     setUserdata,
     fetchUserdata,
     isSidebarExpanded,
+    logout
   };
 
   const routes = useRoutes([
     {
-      path: "/",
-      element: <Home2 logout={logout} />,
+      path: '/',
+      element: <Home2 handleSearchClick={handleSearchClick}/>
     },
     {
       path: "/signup",
       element: (
         <Routes>
           <Route element={<LoggedOutProtected />}>
-            <Route path="/" element={<SignUp logout={logout} />} />
+            <Route path="/" element={<SignUp/>} />
           </Route>
         </Routes>
       ),
@@ -143,7 +144,7 @@ function App() {
       element: (
         <Routes>
           <Route element={<LoggedOutProtected />}>
-            <Route path="/" element={<LogIn logout={logout} />} />
+            <Route path="/" element={<LogIn/>} />
           </Route>
         </Routes>
       ),
@@ -155,7 +156,6 @@ function App() {
           <NavbarContainer>
             <Navbar
               toggleIsSearchExpanded={toggleIsSearchExpanded}
-              logout={logout}
               handleSearchClick={handleSearchClick}
             />
           </NavbarContainer>

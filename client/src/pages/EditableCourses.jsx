@@ -28,7 +28,7 @@ const EnrolledCourses = () => {
   const fetchHandler = async () => {
     setLoading(true);
     const data = await fetch(
-      `http://localhost:8000/instructor/getInstructorCourses/${userdata.id}`,
+      `http://localhost:8000/instructor/getInstructorCourses/${ userdata.id }`,
       {
         method: "POST",
         headers: {
@@ -61,18 +61,19 @@ const EnrolledCourses = () => {
           )}
           {!loading && (
             <div
-              className={`courses-list ${
-                isSidebarExpanded ? "sidebarExpanded" : ""
-              }`}
+              className={`courses-list ${ isSidebarExpanded ? "sidebarExpanded" : ""
+                }`}
             >
               {course.length > 0 &&
                 course.map((data) => (
                   <div
-                    className={`courses ${
-                      isSidebarExpanded ? "sidebarExpanded" : ""
-                    }`}
+                    className={`courses ${ isSidebarExpanded ? "sidebarExpanded" : ""
+                      }`}
                   >
-                    <Card key={data._id}>
+                    <Card
+                      key={data._id}
+                      sx={{ width: "100%", aspectRatio: "1/1.2", overflow: "hidden" }}
+                    >
                       <CardMedia
                         sx={{ width: "100%", aspectRatio: "2/1" }}
                         image={data.thumbnail}
@@ -100,7 +101,7 @@ const EnrolledCourses = () => {
                       <CardActions className="box1">
                         <button
                           className="button-61"
-                          onClick={() => navigate(`/course/${data._id}/edit`)}
+                          onClick={() => navigate(`/course/${ data._id }/edit`)}
                         >
                           Edit
                         </button>

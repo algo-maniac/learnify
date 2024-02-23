@@ -247,4 +247,33 @@ const Container = styled.div`
     font-size: 16px;
     color: #666;
   }
+
+  .toaster {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #333;
+    color: #fff;
+    padding: 16px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    z-index: 100000; /* Ensure it's above other elements */
+    display: flex;
+    align-items: center;
+  }
+
+  /* Add animation for toaster */
+  @keyframes slideIn {
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
+  }
+
+  /* Apply animation to toaster */
+  .toaster {
+    animation: slideIn 0.5s ease-in-out;
+  }
 `;

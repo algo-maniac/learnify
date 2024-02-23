@@ -3,10 +3,10 @@ import styled from "styled-components";
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 import AuthContext from "../store/auth-context";
-import { toast } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import NavbarLandingPage from "../components/NavbarLandingPage";
-const LogIn = (logout) => {
-  const { userdata, fetchUserdata } = useContext(AuthContext);
+const LogIn = () => {
+  const { userdata, fetchUserdata, logout } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [currUser, setCurrUser] = useState({
     role: "user",
@@ -39,7 +39,10 @@ const LogIn = (logout) => {
       console.log(res);
       fetchUserdata();
       // Login Toast
-      navigate("/", { state: { toast: true, data: res.message } });
+      toast.success("Successfully logged in", {
+        position: "top-center",
+      })
+      // navigate("/", { state: { toast: true, data: res.message } });
     } catch (err) {
       toast.error("Error in Logging", {
         position: "top-center",
@@ -57,6 +60,7 @@ const LogIn = (logout) => {
   return (
     <>
     <NavbarLandingPage logout={logout} />
+    {loading && <ToastContainer />}
     <Container>
       <Heading>Log In</Heading>
       <Content>

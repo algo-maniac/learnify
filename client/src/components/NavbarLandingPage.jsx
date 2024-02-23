@@ -10,6 +10,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import AuthContext from "../store/auth-context";
+import axios from "axios";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { setSearch } from "../store/searchSlice";
 
@@ -27,32 +28,38 @@ const useDebounce = (searchText) => {
   }, [searchText]);
 };
 
-function NavbarLandingPage({ toggleIsSearchExpanded, logout }) {
+function Navbar({ toggleIsSearchExpanded, logout, handleSearchClick }) {
   const { userdata, setUserdata, fetchUserdata } = useContext(AuthContext);
 
   const navigate = useNavigate();
   const [searchText, setSearchText] = useState("");
+  const [searchSuggestions, setSearchSuggestions] = useState([]);
   const [isSearchExpanded, setIsSearchExpanded] = useState(false);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [suggestionClicked, setSuggestionClicked] = useState(false);
 
   useDebounce(searchText);
 
   const onBlurSearch = () => {
-    setIsSearchFocused(false);
-    console.log("inside blur search bar");
+    setTimeout(() => {
+      setIsSearchFocused(false);
+      setSearchSuggestions([]);
+      console.log("inside blur search bar");
+    }, 200);
   };
   const dropdownRef = useRef(null);
-  const history = useNavigate();
 
   const openSearchBar = () => {
     setIsSearchFocused(true);
     setIsSearchExpanded(true);
     console.log("inside open search bar");
+    handleSearchClick();
   };
   const cancelSearch = () => {
     setSearchText("");
     setIsSearchExpanded(false);
+    setSearchSuggestions([]);
   };
 
   const toggleDropdown = () => {
@@ -61,14 +68,15 @@ function NavbarLandingPage({ toggleIsSearchExpanded, logout }) {
 
   const closeDropdown = () => {
     setIsDropdownOpen(false);
+    setSearchSuggestions([]);
   };
 
-  const redirectToSearch = (text) => {
-    console.log(searchText, isSearchFocused);
-    if (searchText && isSearchFocused) {
-      history(`/search?query=${text}`);
-    }
-  };
+  // const redirectToSearch = (text) => {
+  //   console.log(searchText, isSearchFocused);
+  //   if (searchText && isSearchFocused) {
+  //     history(`/search?query=${text}`);
+  //   }
+  // };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -83,6 +91,35 @@ function NavbarLandingPage({ toggleIsSearchExpanded, logout }) {
       document.removeEventListener("mousedown", handleClickOutside);
     };
   }, [dropdownRef]);
+
+  useEffect(() => {
+    console.log("looking for sugg");
+
+    const fetchSuggestions = async () => {
+      try {
+        const response = await fetch(`/suggestions?query=${searchText}`, {
+          method: 'GET',
+          headers: {
+            Authorization: localStorage.getItem("token"),
+          },
+        });
+    
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+    
+        const data = await response.json();
+        setSearchSuggestions(data);
+      } catch (error) {
+        console.error("Error fetching suggestions:", error);
+      }
+    };
+    if (searchText.trim() !== "") {
+      fetchSuggestions();
+    } else {
+      setSearchSuggestions([]);
+    }
+  }, [searchText, isSearchFocused]);
 
   return (
     <Container className="navbar">
@@ -107,8 +144,25 @@ function NavbarLandingPage({ toggleIsSearchExpanded, logout }) {
               setSearchText(e.target.value);
             }}
             onBlur={onBlurSearch}
+            onClick={openSearchBar}
           />
           <CancelIcon className="cancel-icon" onClick={cancelSearch} />
+          {isSearchFocused && searchSuggestions.length > 0 && (
+            <div className="suggestions-dropdown">
+              <ul>
+                {searchSuggestions.map((suggestion, index) => (
+                  <li
+                    key={index}
+                    onClick={(e) => {
+                      setSearchText(suggestion);
+                    }}
+                  >
+                    {suggestion}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
 
         <div className="search">
@@ -127,6 +181,22 @@ function NavbarLandingPage({ toggleIsSearchExpanded, logout }) {
             className={`cancel-icon  ${searchText ? "hasInputText" : ""}`}
             onClick={cancelSearch}
           />
+          {isSearchFocused && searchSuggestions.length > 0 && (
+            <div className="suggestions-dropdown">
+              <ul>
+                {searchSuggestions.map((suggestion, index) => (
+                  <li
+                    key={index}
+                    onClick={(e) => {
+                      setSearchText(suggestion);
+                    }}
+                  >
+                    {suggestion}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
         </div>
 
         {userdata && userdata.id ? (
@@ -178,7 +248,7 @@ function NavbarLandingPage({ toggleIsSearchExpanded, logout }) {
   );
 }
 
-export default NavbarLandingPage;
+export default Navbar;
 
 const Container = styled.div`
   background-color: #fff;
@@ -275,10 +345,110 @@ const Container = styled.div`
           display: block;
         }
       }
+      .suggestions-dropdown {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        z-index: 100;
+        overflow: hidden;
+        max-height: 200px; /* Adjust max height as needed */
+        overflow-y: auto;
+        border-radius: 0 0 8px 8px;
+        border-radius: 20px;
+        border: 1px solid #e0e0e0;
+        /* border-top: none; */
+      }
+
+      .suggestions-dropdown::-webkit-scrollbar {
+        width: 0;
+      }
+
+      .suggestions-dropdown::-webkit-scrollbar-thumb {
+        background-color: #888;
+      }
+
+      .suggestions-dropdown::-webkit-scrollbar-track {
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        li {
+          padding: 12px 20px;
+          cursor: pointer;
+          font-size: 16px;
+          color: #333;
+          transition: background-color 0.3s;
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          gap: 10px;
+
+          &:hover {
+            background-color: #f5f5f5;
+          }
+        }
+      }
     }
 
     .search-mobile {
       display: none;
+      position: relative;
+
+      .suggestions-dropdown {
+        position: absolute;
+        top: calc(100%); /* Adjust the distance below the search-mobile box */
+        left: 50%;
+        transform: translate(-50%, 0);
+        width: calc(100% - 20px);
+        background-color: #fff;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        z-index: 100;
+        overflow: hidden;
+        max-height: 200px; /* Adjust max height as needed */
+        overflow-y: auto;
+        border-radius: 0 0 8px 8px;
+        border-radius: 20px;
+        border: 1px solid #e0e0e0;
+      }
+
+      .suggestions-dropdown::-webkit-scrollbar {
+        width: 0;
+      }
+
+      .suggestions-dropdown::-webkit-scrollbar-thumb {
+        background-color: #888;
+      }
+
+      .suggestions-dropdown::-webkit-scrollbar-track {
+      }
+
+      ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+
+        li {
+          padding: 12px 20px;
+          cursor: pointer;
+          font-size: 16px;
+          color: #333;
+          transition: background-color 0.3s;
+          display: flex;
+          justify-content: flex-start;
+          align-items: center;
+          gap: 10px;
+
+          &:hover {
+            background-color: #f5f5f5;
+          }
+        }
+      }
     }
 
     img {

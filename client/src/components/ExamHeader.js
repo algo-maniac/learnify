@@ -80,7 +80,7 @@ const ExamHeader = () => {
   const [channelImgurl,setChannelImgurl]=useState('');
   const [loader,setLoader]=useState(false);
   const [file,setFile]=useState();
-  const [pdftile,setPdf]=useState();
+  const [pdftile,setPdftitle]=useState();
   const submitRef=React.useRef();
   const btnRef=React.useRef();
   const uploadHandler=async()=>{
@@ -116,7 +116,6 @@ const ExamHeader = () => {
         formData.append("pdf", file);  // Ensure "pdfFile" matches the field name
         formData.append("username","inst");
         formData.append("category",value)
-        console.log(pdftile,file)
         const response=await axios.post("http://localhost:3000/instructor/pdf", formData, {
           headers: {
             "Content-Type": "multipart/form-data",
@@ -224,7 +223,6 @@ const ExamHeader = () => {
               </div></>}
               {age===20 && <><div className='link-div'>
                 <label>Enter the Topic Name</label><br></br>
-                <input onChange={(env)=>{setPdf(env.target.value)}} placeholder='Name of the Topic'></input>
                 <input onChange={(env)=>{setPdftitle(env.target.value)}} placeholder='Name of the Topic'></input>
               </div>
               <div className='link-div'>

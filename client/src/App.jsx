@@ -48,6 +48,12 @@ function App() {
     window.innerWidth <= 786 ? false : true
   );
 
+  const history = useNavigate();
+
+  const handleSearchClick = () => {
+    // Navigate to the search page
+    history("/search");
+  };
   const toggleIsSearchExpanded = () => {
     console.log("clilcked");
     setIsSidebarExpanded((prev) => !prev);
@@ -61,9 +67,10 @@ function App() {
       if (!token) return;
 
       const role = jwtDecode(token).role;
-      const requestRoute = `${ role }/get${ role.charAt(0).toUpperCase() + role.slice(1)
-        }Data`;
-      const data = await fetch(`http://localhost:8000/${ requestRoute }`, {
+      const requestRoute = `${role}/get${
+        role.charAt(0).toUpperCase() + role.slice(1)
+      }Data`;
+      const data = await fetch(`http://localhost:8000/${requestRoute}`, {
         method: "GET",
         headers: {
           authorization: token,
@@ -118,37 +125,38 @@ function App() {
 
   const routes = useRoutes([
     {
-      path: '/',
-      element: <Home2 logout={logout} />
+      path: "/",
+      element: <Home2 logout={logout} />,
     },
     {
-      path: '/signup',
+      path: "/signup",
       element: (
         <Routes>
           <Route element={<LoggedOutProtected />}>
-            <Route path="/" element={<SignUp logout={logout}/>} />
+            <Route path="/" element={<SignUp logout={logout} />} />
           </Route>
         </Routes>
       ),
     },
     {
-      path: '/login',
+      path: "/login",
       element: (
         <Routes>
           <Route element={<LoggedOutProtected />}>
-            <Route path="/" element={<LogIn logout={logout}/>} />
+            <Route path="/" element={<LogIn logout={logout} />} />
           </Route>
         </Routes>
       ),
     },
     {
-      path: '/*',
+      path: "/*",
       element: (
         <>
           <NavbarContainer>
             <Navbar
               toggleIsSearchExpanded={toggleIsSearchExpanded}
               logout={logout}
+              handleSearchClick={handleSearchClick}
             />
           </NavbarContainer>
 
@@ -166,9 +174,8 @@ function App() {
               <Route path="/doubt" element={<Doubt />}></Route>
 
               <Route element={<SignupLoginProtected />}>
-                <Route path="/search" element={<Search />} />
-
                 <Route path="/live" element={<LiveStream />} />
+                <Route path="/search" element={<Search />} />
 
                 <Route path="/video" element={<Videos />} />
                 <Route path="/video/:id" element={<Video />} />
@@ -179,7 +186,10 @@ function App() {
                 <Route path="/course" element={<Courses />} />
                 <Route path="/course/:courseId" element={<Course />} />
                 <Route path="/enrolled-course" element={<EnrolledCourses />} />
-                <Route path="/purchased-course" element={<PurchasedCourses />} />
+                <Route
+                  path="/purchased-course"
+                  element={<PurchasedCourses />}
+                />
 
                 <Route path="/exam-corner" element={<ExamCorner />} />
               </Route>
@@ -190,13 +200,15 @@ function App() {
                 <Route path="/edit-video" element={<EditableVideos />} />
                 <Route path="/edit-course" element={<EditableCourses />} />
                 <Route path="/create-course" element={<CreateCourseForm />} />
-                <Route path="/course/:courseId/edit" element={<EditCourseForm />} />
+                <Route
+                  path="/course/:courseId/edit"
+                  element={<EditCourseForm />}
+                />
               </Route>
 
               <Route element={<AdminProtected />}>
                 <Route path="/dashboard-admin" element={<AdminDashboard />} />
               </Route>
-
             </Routes>
             <Overlay
               isSidebarExpanded={isSidebarExpanded}
@@ -210,9 +222,7 @@ function App() {
 
   return (
     <>
-      <AuthContext.Provider value={contextValue}>
-        {routes}
-      </AuthContext.Provider>
+      <AuthContext.Provider value={contextValue}>{routes}</AuthContext.Provider>
     </>
   );
 }
@@ -228,22 +238,22 @@ const NavbarContainer = styled.div`
 `;
 
 const LeftMenuConainer = styled.div`
-  width: ${ ({ isSidebarExpanded }) => (isSidebarExpanded ? "260px" : "65px") };
+  width: ${({ isSidebarExpanded }) => (isSidebarExpanded ? "260px" : "65px")};
   background-color: #333;
   transition: width 0.3s;
 
   @media (max-width: 786px) {
-    display: ${ ({ isSidebarExpanded }) =>
-    isSidebarExpanded ? "block" : "none" };
-    /* width: ${ ({ isSidebarExpanded }) =>
-    isSidebarExpanded ? "100%" : "0" }; */
+    display: ${({ isSidebarExpanded }) =>
+      isSidebarExpanded ? "block" : "none"};
+    /* width: ${({ isSidebarExpanded }) =>
+      isSidebarExpanded ? "100%" : "0"}; */
     overflow-x: hidden;
   }
 `;
 
 const Content = styled.div`
-  padding-left: ${ ({ isSidebarExpanded }) =>
-    isSidebarExpanded ? "260px" : "65px" };
+  padding-left: ${({ isSidebarExpanded }) =>
+    isSidebarExpanded ? "260px" : "65px"};
   padding-top: 70px;
   background-color: #eeeded;
   transition: padding-left 0.3s;
@@ -258,8 +268,8 @@ const Overlay = styled.div`
   display: none;
 
   @media (max-width: 786px) {
-    display: ${ ({ isSidebarExpanded }) =>
-    isSidebarExpanded ? "block" : "none" };
+    display: ${({ isSidebarExpanded }) =>
+      isSidebarExpanded ? "block" : "none"};
     position: fixed;
     top: 0;
     left: 0;
@@ -271,8 +281,8 @@ const Overlay = styled.div`
 `;
 
 const FooterContainer = styled.div`
-  margin-left: ${ ({ isSidebarExpanded }) =>
-    isSidebarExpanded ? "260px" : "65px" };
+  margin-left: ${({ isSidebarExpanded }) =>
+    isSidebarExpanded ? "260px" : "65px"};
   position: sticky;
   top: 100vh;
   transition: margin-left 0.3s;

@@ -10,7 +10,7 @@ import SettingsIcon from "@mui/icons-material/Settings";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import AuthContext from "../store/auth-context";
-import axios from 'axios';
+import axios from "axios";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { setSearch } from "../store/searchSlice";
 
@@ -28,7 +28,7 @@ const useDebounce = (searchText) => {
   }, [searchText]);
 };
 
-function Navbar({ toggleIsSearchExpanded, logout }) {
+function Navbar({ toggleIsSearchExpanded, logout, handleSearchClick }) {
   const { userdata, setUserdata, fetchUserdata } = useContext(AuthContext);
 
   const navigate = useNavigate();
@@ -39,24 +39,22 @@ function Navbar({ toggleIsSearchExpanded, logout }) {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [suggestionClicked, setSuggestionClicked] = useState(false);
 
-
-
   useDebounce(searchText);
 
   const onBlurSearch = () => {
     setTimeout(() => {
-        setIsSearchFocused(false);
-        setSearchSuggestions([]);
-        console.log("inside blur search bar");
+      setIsSearchFocused(false);
+      setSearchSuggestions([]);
+      console.log("inside blur search bar");
     }, 200);
   };
   const dropdownRef = useRef(null);
-  const history = useNavigate();
 
   const openSearchBar = () => {
     setIsSearchFocused(true);
     setIsSearchExpanded(true);
     console.log("inside open search bar");
+    handleSearchClick();
   };
   const cancelSearch = () => {
     setSearchText("");
@@ -73,12 +71,12 @@ function Navbar({ toggleIsSearchExpanded, logout }) {
     setSearchSuggestions([]);
   };
 
-  const redirectToSearch = (text) => {
-    console.log(searchText, isSearchFocused);
-    if (searchText && isSearchFocused) {
-      history(`/search?query=${ text }`);
-    }
-  };
+  // const redirectToSearch = (text) => {
+  //   console.log(searchText, isSearchFocused);
+  //   if (searchText && isSearchFocused) {
+  //     history(`/search?query=${text}`);
+  //   }
+  // };
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -94,26 +92,23 @@ function Navbar({ toggleIsSearchExpanded, logout }) {
     };
   }, [dropdownRef]);
 
-
-
   useEffect(() => {
     console.log("looking for sugg");
 
     const fetchSuggestions = async () => {
       try {
-        const response = await axios.get(`/suggestions?query=${ searchText }`);
+        const response = await axios.get(`/suggestions?query=${searchText}`);
         setSearchSuggestions(response.data);
       } catch (error) {
-        console.error('Error fetching suggestions:', error);
+        console.error("Error fetching suggestions:", error);
       }
     };
-    if (searchText.trim() !== '') {
+    if (searchText.trim() !== "") {
       fetchSuggestions();
     } else {
       setSearchSuggestions([]);
     }
   }, [searchText, isSearchFocused]);
-
 
   return (
     <Container className="navbar">
@@ -128,7 +123,7 @@ function Navbar({ toggleIsSearchExpanded, logout }) {
       </div>
 
       <div className="right">
-        <div className={`search-mobile ${ isSearchExpanded ? "expanded" : "" }`}>
+        <div className={`search-mobile ${isSearchExpanded ? "expanded" : ""}`}>
           <SearchIcon className="search-icon" onClick={openSearchBar} />
           <input
             type="text"
@@ -145,9 +140,12 @@ function Navbar({ toggleIsSearchExpanded, logout }) {
             <div className="suggestions-dropdown">
               <ul>
                 {searchSuggestions.map((suggestion, index) => (
-                  <li key={index} onClick={(e) => {
-                    setSearchText(suggestion);
-                  }}>
+                  <li
+                    key={index}
+                    onClick={(e) => {
+                      setSearchText(suggestion);
+                    }}
+                  >
                     {suggestion}
                   </li>
                 ))}
@@ -169,16 +167,19 @@ function Navbar({ toggleIsSearchExpanded, logout }) {
             onClick={openSearchBar}
           />
           <CancelIcon
-            className={`cancel-icon  ${ searchText ? "hasInputText" : "" }`}
+            className={`cancel-icon  ${searchText ? "hasInputText" : ""}`}
             onClick={cancelSearch}
           />
           {isSearchFocused && searchSuggestions.length > 0 && (
             <div className="suggestions-dropdown">
               <ul>
                 {searchSuggestions.map((suggestion, index) => (
-                  <li key={index} onClick={(e) => {
-                    setSearchText(suggestion);
-                  }}>
+                  <li
+                    key={index}
+                    onClick={(e) => {
+                      setSearchText(suggestion);
+                    }}
+                  >
                     {suggestion}
                   </li>
                 ))}
@@ -205,7 +206,7 @@ function Navbar({ toggleIsSearchExpanded, logout }) {
                     </div>
                   ) : (
                     <div>
-                      <Link to={`/dashboard-${ userdata.role }`}>
+                      <Link to={`/dashboard-${userdata.role}`}>
                         <PersonIcon />
                         {userdata.username}
                       </Link>
@@ -355,11 +356,10 @@ const Container = styled.div`
       }
 
       .suggestions-dropdown::-webkit-scrollbar-thumb {
-        background-color: #888; 
+        background-color: #888;
       }
 
       .suggestions-dropdown::-webkit-scrollbar-track {
-
       }
 
       ul {
@@ -387,7 +387,7 @@ const Container = styled.div`
 
     .search-mobile {
       display: none;
-      position: relative; 
+      position: relative;
 
       .suggestions-dropdown {
         position: absolute;
@@ -411,11 +411,10 @@ const Container = styled.div`
       }
 
       .suggestions-dropdown::-webkit-scrollbar-thumb {
-        background-color: #888; 
+        background-color: #888;
       }
 
       .suggestions-dropdown::-webkit-scrollbar-track {
-
       }
 
       ul {

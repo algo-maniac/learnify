@@ -1,6 +1,7 @@
 const express = require("express");
 require("dotenv").config();
 const mongoose = require("mongoose");
+const compromise = require('compromise');
 const userRoutes = require("./routes/user");
 const doubtRoutes = require("./routes/doubt");
 const instructorRoutes = require("./routes/instructor");
@@ -48,6 +49,35 @@ mongoose
     console.error(`Error connecting to the database. n${err}`);
   });
 
+ 
+
+  app.get("/suggestions", async (req, res) => {
+    const query = req.query.query;
+    console.log(query);
+  
+    try {
+      const terms = compromise(query).terms().data().map(term => term.text);
+  
+      const stopWords = ['the', 'and', 'is', 'of', 'in', 'to', 'a', 'with', 'for', 'on'];
+      const filteredTerms = terms.filter(term => !stopWords.includes(term.toLowerCase()));
+  
+      const regexTerms = filteredTerms.map(term => new RegExp(term, 'i'));
+  
+      const videoSuggestions = await VideoLecture.find({ title: { $in: regexTerms } }).distinct('title');
+      const courseSuggestions = await Course.find({ title: { $in: regexTerms } }).distinct('title');
+      const instructorSuggestions = await Instructor.find({ username: { $in: regexTerms }, isApproved: true }).distinct('username');
+  
+      const allSuggestions = [...videoSuggestions, ...courseSuggestions, ...instructorSuggestions];
+      const uniqueSuggestions = Array.from(new Set(allSuggestions));
+  
+      res.json(uniqueSuggestions);
+    } catch (error) {
+      console.error("Error during suggestions fetch:", error);
+      res.status(500).json({ error: "Internal Server Error" });
+    }
+  });
+  
+
 app.post("/search", async (req, res) => {
   const query = req.body.query;
   console.log(query);
@@ -70,6 +100,7 @@ app.post("/search", async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 });
+
 app.listen(port, (err) => {
   if (err) {
     console.log("Some error occured");

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "./App.css";
-import { Routes, Route, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, useRoutes } from "react-router-dom";
 import styled from "styled-components";
 import LogIn from "./pages/LogIn";
 import Random from "./pages/Random";
@@ -32,9 +32,10 @@ import EditableVideos from "./pages/EditableVideos.jsx";
 import PurchasedCourses from "./pages/PurchasedCourses.jsx";
 import EnrolledCourses from "./pages/EnrolledCourses.jsx";
 import {
+  LoggedOutProtected,
+  SignupLoginProtected,
   AdminProtected,
   InstructorProtected,
-  SignupLoginProtected,
 } from "./ProtectedRoutes.jsx";
 
 function App() {
@@ -46,7 +47,7 @@ function App() {
   const [isSidebarExpanded, setIsSidebarExpanded] = useState(
     window.innerWidth <= 786 ? false : true
   );
-  
+
   const toggleIsSearchExpanded = () => {
     console.log("clilcked");
     setIsSidebarExpanded((prev) => !prev);
@@ -60,10 +61,9 @@ function App() {
       if (!token) return;
 
       const role = jwtDecode(token).role;
-      const requestRoute = `${role}/get${
-        role.charAt(0).toUpperCase() + role.slice(1)
-      }Data`;
-      const data = await fetch(`http://localhost:8000/${requestRoute}`, {
+      const requestRoute = `${ role }/get${ role.charAt(0).toUpperCase() + role.slice(1)
+        }Data`;
+      const data = await fetch(`http://localhost:8000/${ requestRoute }`, {
         method: "GET",
         headers: {
           authorization: token,
@@ -116,76 +116,102 @@ function App() {
     isSidebarExpanded,
   };
 
+  const routes = useRoutes([
+    {
+      path: '/',
+      element: <Home2 logout={logout} />
+    },
+    {
+      path: '/signup',
+      element: (
+        <Routes>
+          <Route element={<LoggedOutProtected />}>
+            <Route path="/" element={<SignUp logout={logout}/>} />
+          </Route>
+        </Routes>
+      ),
+    },
+    {
+      path: '/login',
+      element: (
+        <Routes>
+          <Route element={<LoggedOutProtected />}>
+            <Route path="/" element={<LogIn logout={logout}/>} />
+          </Route>
+        </Routes>
+      ),
+    },
+    {
+      path: '/*',
+      element: (
+        <>
+          <NavbarContainer>
+            <Navbar
+              toggleIsSearchExpanded={toggleIsSearchExpanded}
+              logout={logout}
+            />
+          </NavbarContainer>
+
+          <LeftMenuConainer isSidebarExpanded={isSidebarExpanded}>
+            <LeftMenu
+              isSidebarExpanded={isSidebarExpanded}
+              setIsSidebarExpanded={setIsSidebarExpanded}
+            />
+          </LeftMenuConainer>
+
+          <Content isSidebarExpanded={isSidebarExpanded}>
+            <Routes>
+              {/* <Route path="/Random" element={<Random />} /> */}
+
+              <Route path="/doubt" element={<Doubt />}></Route>
+
+              <Route element={<SignupLoginProtected />}>
+                <Route path="/search" element={<Search />} />
+
+                <Route path="/live" element={<LiveStream />} />
+
+                <Route path="/video" element={<Videos />} />
+                <Route path="/video/:id" element={<Video />} />
+
+                <Route path="/instructor" element={<Instructors />} />
+                <Route path="/instructor/:id" element={<Instructor />} />
+
+                <Route path="/course" element={<Courses />} />
+                <Route path="/course/:courseId" element={<Course />} />
+                <Route path="/enrolled-course" element={<EnrolledCourses />} />
+                <Route path="/purchased-course" element={<PurchasedCourses />} />
+
+                <Route path="/exam-corner" element={<ExamCorner />} />
+              </Route>
+
+              <Route element={<InstructorProtected />}>
+                <Route path="/home" element={<Instructor />} />
+                <Route path="/upload-video" element={<UploadVideo />} />
+                <Route path="/edit-video" element={<EditableVideos />} />
+                <Route path="/edit-course" element={<EditableCourses />} />
+                <Route path="/create-course" element={<CreateCourseForm />} />
+                <Route path="/course/:courseId/edit" element={<EditCourseForm />} />
+              </Route>
+
+              <Route element={<AdminProtected />}>
+                <Route path="/dashboard-admin" element={<AdminDashboard />} />
+              </Route>
+
+            </Routes>
+            <Overlay
+              isSidebarExpanded={isSidebarExpanded}
+              onClick={toggleIsSearchExpanded}
+            />
+          </Content>
+        </>
+      ),
+    },
+  ]);
+
   return (
     <>
       <AuthContext.Provider value={contextValue}>
-        <NavbarContainer>
-          <Navbar
-            toggleIsSearchExpanded={toggleIsSearchExpanded}
-            logout={logout}
-          />
-        </NavbarContainer>
-
-        <LeftMenuConainer isSidebarExpanded={isSidebarExpanded}>
-          <LeftMenu
-            isSidebarExpanded={isSidebarExpanded}
-            pageId={1}
-            setIsSidebarExpanded={setIsSidebarExpanded}
-          />
-        </LeftMenuConainer>
-
-        <Content isSidebarExpanded={isSidebarExpanded}>
-          <Routes>
-            {/* <Route path="/" element={<Home />}></Route> */}
-            <Route path="/" element={<Home2 />}></Route>
-            <Route path="/doubt" element={<Doubt />}></Route>
-
-            <Route element={<SignupLoginProtected />}>
-              <Route path="/SignUp" element={<SignUp />} />
-              <Route path="/LogIn" element={<LogIn />} />
-            </Route>
-            <Route path="/Random" element={<Random />} />
-
-            {userdata && userdata.role === "teacher" && (
-              <Route path="/live" element={<LiveStream />} />
-            )}
-            <Route path="/video" element={<Videos />} />
-            <Route path="/video/:id" element={<Video />} />
-
-            <Route element={<AdminProtected />}>
-              <Route path="/dashboard-admin" element={<AdminDashboard />} />
-            </Route>
-            <Route path="/instructor" element={<Instructors />} />
-            <Route path="/instructor/:id" element={<Instructor />} />
-            <Route path="/video/:id" element={<Random2 />} />
-            <Route path="/exam-corner" element={<ExamCorner />} />
-            <Route path="/course" element={<Courses />} />
-            <Route path="/course/:courseId" element={<Course />} />
-            <Route path="/enrolled-course" element={<EnrolledCourses />} />
-            <Route path="/purchased-course" element={<PurchasedCourses />} />
-
-            <Route element={<InstructorProtected />}>
-              <Route path="/home" element={<Instructor />} />
-              <Route path="/upload-video" element={<UploadVideo />} />
-              <Route path="/edit-video" element={<EditableVideos />} />
-              <Route path="/edit-course" element={<EditableCourses />} />
-              <Route path="/create-course" element={<CreateCourseForm />} />
-              <Route
-                path="/course/:courseId/edit"
-                element={<EditCourseForm />}
-              />
-            </Route>
-            <Route path="/search" element={<Search />} />
-          </Routes>
-          <Overlay
-            isSidebarExpanded={isSidebarExpanded}
-            onClick={toggleIsSearchExpanded}
-          />
-        </Content>
-
-        {/* <FooterContainer isSidebarExpanded={isSidebarExpanded}>
-          <Footer />
-        </FooterContainer> */}
+        {routes}
       </AuthContext.Provider>
     </>
   );
@@ -202,22 +228,22 @@ const NavbarContainer = styled.div`
 `;
 
 const LeftMenuConainer = styled.div`
-  width: ${({ isSidebarExpanded }) => (isSidebarExpanded ? "260px" : "65px")};
+  width: ${ ({ isSidebarExpanded }) => (isSidebarExpanded ? "260px" : "65px") };
   background-color: #333;
   transition: width 0.3s;
 
   @media (max-width: 786px) {
-    display: ${({ isSidebarExpanded }) =>
-      isSidebarExpanded ? "block" : "none"};
-    /* width: ${({ isSidebarExpanded }) =>
-      isSidebarExpanded ? "100%" : "0"}; */
+    display: ${ ({ isSidebarExpanded }) =>
+    isSidebarExpanded ? "block" : "none" };
+    /* width: ${ ({ isSidebarExpanded }) =>
+    isSidebarExpanded ? "100%" : "0" }; */
     overflow-x: hidden;
   }
 `;
 
 const Content = styled.div`
-  padding-left: ${({ isSidebarExpanded }) =>
-    isSidebarExpanded ? "260px" : "65px"};
+  padding-left: ${ ({ isSidebarExpanded }) =>
+    isSidebarExpanded ? "260px" : "65px" };
   padding-top: 70px;
   background-color: #eeeded;
   transition: padding-left 0.3s;
@@ -232,8 +258,8 @@ const Overlay = styled.div`
   display: none;
 
   @media (max-width: 786px) {
-    display: ${({ isSidebarExpanded }) =>
-      isSidebarExpanded ? "block" : "none"};
+    display: ${ ({ isSidebarExpanded }) =>
+    isSidebarExpanded ? "block" : "none" };
     position: fixed;
     top: 0;
     left: 0;
@@ -245,8 +271,8 @@ const Overlay = styled.div`
 `;
 
 const FooterContainer = styled.div`
-  margin-left: ${({ isSidebarExpanded }) =>
-    isSidebarExpanded ? "260px" : "65px"};
+  margin-left: ${ ({ isSidebarExpanded }) =>
+    isSidebarExpanded ? "260px" : "65px" };
   position: sticky;
   top: 100vh;
   transition: margin-left 0.3s;

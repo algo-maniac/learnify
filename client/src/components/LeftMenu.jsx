@@ -3,7 +3,7 @@ import styled from "styled-components";
 import AuthContext from "../store/auth-context";
 import { Link, useLocation } from "react-router-dom";
 
-const LeftMenu = ({ isSidebarExpanded, pageId, setIsSidebarExpanded }) => {
+const LeftMenu = ({ isSidebarExpanded, setIsSidebarExpanded }) => {
   const { userdata } = useContext(AuthContext);
 
   const menuItems = {

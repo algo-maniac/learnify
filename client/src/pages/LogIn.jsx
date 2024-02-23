@@ -4,7 +4,8 @@ import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 import AuthContext from "../store/auth-context";
 import { toast } from "react-toastify";
-const LogIn = () => {
+import NavbarLandingPage from "../components/NavbarLandingPage";
+const LogIn = (logout) => {
   const { userdata, fetchUserdata } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [currUser, setCurrUser] = useState({
@@ -54,6 +55,8 @@ const LogIn = () => {
   }, [userdata]);
 
   return (
+    <>
+    <NavbarLandingPage logout={logout} />
     <Container>
       <Heading>Log In</Heading>
       <Content>
@@ -113,6 +116,7 @@ const LogIn = () => {
       {loading && <div className="toaster">Backend call in progress...</div>}
 
     </Container>
+    </>
   );
 };
 

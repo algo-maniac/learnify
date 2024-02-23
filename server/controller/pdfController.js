@@ -14,6 +14,7 @@ const ffmpegInstaller = require("@ffmpeg-installer/ffmpeg");
 const { getVideoDurationInSeconds } = require("get-video-duration");
 const YoutubeSchema=require("../models/youtube");
 const cloudinary = require("cloudinary").v2;
+<<<<<<< HEAD
 const Material = require("../models/material");
 
 cloudinary.config({
@@ -52,26 +53,30 @@ module.exports.uploadpdf = async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 };
+=======
+const YoutubeSchema = require("../models/youtube")
+>>>>>>> ae77fad (landing page added + search component improvement)
 module.exports.uploadYoutube = async (req, res) => {
-    const {channelname,channellink,channelImgurl,username}=req.body;
+    const { channelname, channellink, channelImgurl, username } = req.body;
     console.log(req.body)
-    try{
-        const youtube=new YoutubeSchema({
-            channel:channelname,
-            channelLink:channellink,
-            imageUrl:channelImgurl,
-            username:username
+    try {
+        const youtube = new YoutubeSchema({
+            channel: channelname,
+            channelLink: channellink,
+            imageUrl: channelImgurl,
+            username: username
         });
-        const result=youtube.save();
+        const result = youtube.save();
         console.log(result)
-        res.json({msg:"Channel added"})
-    }catch(er){
+        res.json({ msg: "Channel added" })
+    } catch (er) {
         console.log("Error occured")
     }
 };
 module.exports.getyoutube = async (req, res) => {
-    const category=req.params.category;
+    const category = req.params.category;
     console.log(category)
+<<<<<<< HEAD
     try{
         const result=await YoutubeSchema.find({category:category});
         const material=await Material.find({category:category});
@@ -81,4 +86,25 @@ module.exports.getyoutube = async (req, res) => {
     }
 };
 
+=======
+    try {
+        const result = await YoutubeSchema.find({ category: category })
+        return res.json({ data: result })
+    } catch (er) {
+        console.log("Error occured", er)
+    }
+};
+
+module.exports.uploadpdf = async (req, res) => {
+    console.log("Insisde");
+    const file = req.file;
+    const title = req.body.title;
+    console.log(title)
+    try {
+
+    } catch (er) {
+
+    }
+};
+>>>>>>> ae77fad (landing page added + search component improvement)
 

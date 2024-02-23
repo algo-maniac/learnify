@@ -8,11 +8,8 @@ const Course = require("../models/course");
 const Section = require("../models/section");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const Post = require("../models/post");
 const mongoose = require("mongoose");
-const ffmpeg = require("fluent-ffmpeg");
 const streamifier = require("streamifier");
-const ffmpegInstaller = require("@ffmpeg-installer/ffmpeg");
 const { getVideoDurationInSeconds } = require("get-video-duration");
 const cloudinary = require("cloudinary").v2;
 

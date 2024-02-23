@@ -1,6 +1,5 @@
 const Post = require("../models/post");
 const mongoose = require("mongoose");
-const { Readable } = require('stream');
 
 const conn = mongoose.connection;
 let gfs;

@@ -2,7 +2,6 @@ const User = require("../models/user");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-const { Readable } = require("stream");
 const cloudinary = require("cloudinary").v2;
 
 const conn = mongoose.connection;

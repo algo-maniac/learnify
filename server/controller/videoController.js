@@ -1,9 +1,6 @@
-const User = require("../models/user");
 const { VideoLecture, Comment } = require("../models/videoLecture");
 const Instructor = require("../models/instructor");
 const mongoose = require("mongoose");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
 const cloudinary = require("cloudinary").v2;
 const streamifier = require("streamifier");
 const { getVideoDurationInSeconds } = require("get-video-duration");

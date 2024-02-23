@@ -1,17 +1,3 @@
-const http = require("http");
-const express = require("express");
-const Instructor = require("../models/instructor");
-const { VideoLecture } = require("../models/videoLecture");
-const Course = require("../models/course");
-const Section = require("../models/section");
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcrypt");
-const Post = require("../models/post");
-const mongoose = require("mongoose");
-const ffmpeg = require("fluent-ffmpeg");
-const streamifier = require("streamifier");
-const ffmpegInstaller = require("@ffmpeg-installer/ffmpeg");
-const { getVideoDurationInSeconds } = require("get-video-duration");
 const YoutubeSchema=require("../models/youtube");
 const cloudinary = require("cloudinary").v2;
 const Material = require("../models/material");

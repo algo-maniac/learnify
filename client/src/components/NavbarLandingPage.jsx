@@ -28,8 +28,8 @@ const useDebounce = (searchText) => {
   }, [searchText]);
 };
 
-function Navbar({ toggleIsSearchExpanded, logout, handleSearchClick }) {
-  const { userdata, setUserdata, fetchUserdata } = useContext(AuthContext);
+function Navbar({ toggleIsSearchExpanded, handleSearchClick }) {
+  const { userdata, setUserdata, fetchUserdata, logout } = useContext(AuthContext);
 
   const navigate = useNavigate();
   const [searchText, setSearchText] = useState("");

@@ -52,7 +52,7 @@ function Doubt() {
           </div>
           <div className="answer-input"> 
             <div className="input">
-              <input></input>
+              <input placeholder="Write Your Answer"></input>
             </div>
             <div className="icon">
               <SendIcon/>

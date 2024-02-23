@@ -25,6 +25,9 @@ app.use(express.json());
 app.use(cors());
 app.use(helmet());
 app.use(morgan("common"));
+app.get("/", (req, res) => {
+  res.send("You are using Algolisted APIs. - a Atanu Nayak production");
+});
 app.use("/user", userRoutes);
 app.use("/instructor", instructorRoutes);
 app.use("/admin", adminRoutes);

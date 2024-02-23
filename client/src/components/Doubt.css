@@ -1,0 +1,271 @@
+.doubt-header-icon{
+    width: 30vw;
+    margin: 2em;
+    display: flex;
+    flex-direction: row;
+    margin-bottom: 0.7em;
+}
+.doubt-header-icon .icon{
+    width: fit-content;
+    padding: 0.50em 1.2em;
+    border-radius: 30px;
+    font-size: 0.84em;
+    font-weight: 600;
+    color: white;
+    margin-right: 0.2em;
+    background-color: #536cdb;
+}
+.doubt-header-icon .icon2{
+    background-color: #eeeded;
+    color: black;
+}
+.doubt-header-icon .icon2:hover{
+    background-color: #b7b7b7;
+    cursor: pointer;
+}
+.doubt-header{
+    margin-left: 2em;
+    margin-right: 2em;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.doubt-header h5{
+    font-size: 1.5em;
+    font-weight: 700;
+    font-family:Arial, Arial, Helvetica, sans-serif, sans-serif;
+    background: linear-gradient(to right,rgb(70, 70, 70), #323232, #1a1a1a,rgb(41, 41, 41),black); /* Replace with your desired color values */
+    -webkit-background-clip: text;
+    text-shadow: #1a1a1a 10px;
+    color: transparent;
+}
+.doubt-header .search-div{
+    width: 30vw;
+}
+.doubt-header div{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.doubt-header .search-div input{
+    width: 100%;
+    border: none;
+    height: 100%;
+    font-size: 0.85;
+    outline: none;
+    padding: 0.6em;
+    font-style: italic;
+    background-color: rgb(255, 255, 255);
+    border-radius: 6px;
+}
+.doubt-chat-container{
+    margin-top: 1em;
+    border-radius: 10px;
+    width: 77vw;
+    margin-left: 2em;
+    margin-right: 2em;
+    box-shadow: rgba(98, 98, 98, 0.24) 0px 3px 8px;
+    background-color: white;
+}
+.doubt-chat-container .single{
+    width: 100%;
+    display: grid;
+    border-bottom: 1px solid black;
+    grid-template-columns: 7% 85%;
+    min-height: 13vh;
+}
+.doubt-chat-container .single:hover{
+    background-color: rgb(246, 246, 246);
+    cursor: pointer;
+}
+.doubt-chat-container .single .left-side{
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: right;
+    padding-right: 0.8em;
+}
+.doubt-chat-container .single .upvote{
+    border: 1px solid #cbcbcb;
+    width: fit-content;
+    margin-left: auto;
+    padding: 0.2em 0.5em;
+    font-size: 0.85em;
+    border-radius: 20px;
+    margin-top: 0.55em;
+}
+.doubt-chat-container .single .left-side div{
+    font-weight: 900;
+}
+.doubt-chat-container .single .left-side div .serial{
+    margin-right: 0.4em;
+}
+.doubt-chat-container .single .upvote span{
+    font-weight: 300;
+}
+.doubt-chat-container .single .right-side{
+    padding: 0.6em;
+}
+.doubt-chat-container .single .right-side .profile-info{
+    display: flex;
+    flex-direction: row;
+}
+.doubt-chat-container .single .right-side .profile-info img{
+    width: 2.2em;
+    border-radius: 50%;
+}
+.doubt-chat-container .single .right-side .profile-info .image{
+    width: fit-content;
+}
+.doubt-chat-container .right-side .text{
+    margin-left: 1em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    font-size: 0.9em;
+}
+
+.doubt-chat-container .right-side .text span span{
+    font-weight: 500;
+    color: rgb(139, 139, 139);
+}
+.doubt-chat-container .right-side .question p{
+    padding: 0.5em;
+    padding-bottom: 0.2em;
+    font-weight: 500;
+}
+.doubt-chat-container .right-side .tags{
+    padding: 0.5em;
+    padding-top: 0em;
+    display: flex;
+    flex-wrap: wrap;
+}
+.doubt-chat-container .right-side .tags .tag{
+    border: 0.2px solid black;
+    width: fit-content;
+    display: flex;
+    flex-direction: column;
+    border-radius: 20px;
+    margin: 0.3em;
+    background-color: rgb(230, 230, 230);
+    justify-content: center;
+}
+.doubt-chat-container .right-side .tags span{
+    padding: 0.4em 1em;
+    font-size: 0.75em;
+}
+
+
+/* Modal css */
+
+.modal-container{
+    min-height: 35vh;
+    max-height: 80vh;
+    border-radius: 8px;
+    margin: 0px;
+    width: 60vw;
+    overflow-y: auto;
+    background-color: rgb(255, 255, 255);
+}
+.modal-container .modal-header-text{
+    height: fit-content;
+    border-bottom-right-radius: 5px;
+    border-bottom-left-radius: 5px;
+    padding: 0.8em;
+    border-bottom: 0.2px solid gray;
+    margin-bottom: 1em;
+}
+.modal-container .modal-header-text p{
+    font-weight: 600;
+    font-size: 1.15em;
+    margin: 0px;
+    padding: 0px;
+}
+.modal-container .modal-answer-by-user{
+    background-color: rgb(208, 255, 208);
+    padding: 0.8em;
+    padding-bottom: 0.6em;
+}
+.modal-container .modal-answer-by-user div{
+    margin-left: 0.2em;
+    margin-right: 0.2em;
+}
+.modal-container .modal-answer-by-div{
+    display: flex;
+    flex-direction: row;
+}
+.modal-container .modal-answer-by-user .icon svg{
+    color: darkgreen;
+    font-size: 1.2em;
+}
+.modal-container .modal-answer-by-user .text span{
+    color: darkgreen;
+    font-size: 0.88em;
+}
+.modal-container .modal-answer-by-user .text .time{
+    color: rgb(109, 109, 109);
+    font-weight: 600;
+}
+.modal-container .modal-answer-by-user .answer{
+    font-size: 0.85em;
+    padding-top: 0.5em;
+    padding-left: 0.5em;
+}
+.modal-container .modal-answer-by-bot{
+    background-color: rgb(201, 240, 255);
+}
+.modal-container .modal-answer-by-bot .icon svg{
+    color: darkblue;
+    font-size: 1.2em;
+}
+.modal-container .answer-input{
+    width: 100%;
+    padding-left: 1em;
+    padding-right: 1em;
+    display: flex;
+    flex-direction: row;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    height: 2.8em;
+}
+.modal-container .answer-input .input{
+    width: 95%;
+    margin-right: 0.3em;
+}
+.modal-container .answer-input .input input{
+    width: 100%;
+    height: 100%;
+    border: none;
+    outline: none;
+    padding: 0.5em;
+    border: 5px;
+    font-size: 0.85em;
+    background-color: #eeeded;
+}
+.modal-container .answer-input .icon{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+.modal-container .answer-input .icon svg{
+    color: rgb(48, 63, 177);
+}
+.modal-container .answer-input .icon svg:hover{
+    cursor: pointer;
+    color: rgb(90, 130, 210);
+}
+.modal-container .modal-answer-by-bot .text span{
+    color: darkblue;
+    font-size: 0.88em;
+}
+.modal-container{
+    padding-bottom: 1em;
+}
+.modal-container .modal-answer-by-bot .text .time{
+    color: rgb(67, 114, 155);
+    font-weight: 600;
+}
+.modal-container .answer-container .modal-answer-by-user:nth-child(even){
+    background-color: rgb(235, 255, 235);
+}

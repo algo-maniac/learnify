@@ -10,7 +10,7 @@ const adminRoutes = require("./routes/admin");
 const courseRouter = require("./routes/course");
 const cors = require("cors");
 const helmet = require("helmet");
-const morgan = require("morgan");
+// const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const { VideoLecture } = require("./models/videoLecture");
 const Instructor = require("./models/instructor");
@@ -22,7 +22,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 app.use(helmet());
-app.use(morgan("common"));
+// app.use(morgan("common"));
 app.get("/", (req, res) => {
   res.send("You are using Algolistedddddd APIs. - a Atanu Nayak production");
 });

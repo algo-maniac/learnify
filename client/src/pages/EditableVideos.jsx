@@ -17,7 +17,7 @@ const InstructorVideo = () => {
     };
 
     const getInstructorData = async () => {
-        const data = await fetch(`http://localhost:8000/video/getVideos`, {
+        const data = await fetch(`${process.env.REACT_APP_BASE_URL}/video/getVideos`, {
             method: 'POST',
             headers: {
                 Authorization: localStorage.getItem("token")

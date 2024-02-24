@@ -70,7 +70,7 @@ const EditSectionDetailsForm = ({
       const sectionId = video.sectionId;
       console.log("inside handle video details submit");
       const res = await fetch(
-        `http://localhost:8000/course/deleteVideo/${videoId}`,
+        `${process.env.REACT_APP_BASE_URL}/course/deleteVideo/${videoId}`,
         {
           method: "DELETE",
           headers: {

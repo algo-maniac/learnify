@@ -27,7 +27,7 @@ const EnrolledCourses = () => {
     };
     const fetchHandler = async () => {
         setLoading(true)
-        const data = await fetch(`http://localhost:8000/course/enrolledCourses`, {
+        const data = await fetch(`${process.env.REACT_APP_BASE_URL}/course/enrolledCourses`, {
             method: 'POST',
             headers: {
                 Authorization: localStorage.getItem("token"),

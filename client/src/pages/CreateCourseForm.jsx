@@ -38,7 +38,7 @@ const CreateCourseForm = () => {
       formData.append("category", courseDetails.category);
       formData.append("thumbnail", courseDetails.thumbnail);
 
-      const res = await fetch("http://localhost:8000/course/createCourse", {
+      const res = await fetch(`${process.env.REACT_APP_BASE_URL}/course/createCourse`, {
         method: "POST",
         headers: {
           Authorization: localStorage.getItem("token"),

@@ -26,7 +26,7 @@ const InstructorPlaylist = () => {
   const fetchHandler = async () => {
     setLoading(true);
     const data = await fetch(
-      `http://localhost:8000/instructor/getInstructorCourses/65a16be384dda50de26b9584`,
+      `${process.env.REACT_APP_BASE_URL}/instructor/getInstructorCourses/65a16be384dda50de26b9584`,
       {
         method: "POST",
         headers: {

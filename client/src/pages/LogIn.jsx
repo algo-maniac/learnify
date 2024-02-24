@@ -19,7 +19,7 @@ const LogIn = () => {
     e.preventDefault();
     try {
       const res = await axios.post(
-        `http://localhost:8000/${currUser.role}/login`,
+        `${process.env.REACT_APP_BASE_URL}/${currUser.role}/login`,
         {
           role: currUser.role,
           email: currUser.email,

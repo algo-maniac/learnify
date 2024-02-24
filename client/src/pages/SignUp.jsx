@@ -52,7 +52,7 @@ const SignUp = () => {
 
     try {
       const data = await fetch(
-        `http://localhost:8000/${formData.role}/signup`,
+        `${process.env.REACT_APP_BASE_URL}/${formData.role}/signup`,
         {
           method: "POST",
           body: formDataToSend,

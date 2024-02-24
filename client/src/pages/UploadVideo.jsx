@@ -41,7 +41,7 @@ function UploadVideo(props) {
     form.append("thumbnail", formData.thumbnail);
     console.log(form);
 
-    fetch("http://localhost:8000/video/uploadVideo", {
+    fetch(`${process.env.REACT_APP_BASE_URL}/video/uploadVideo`, {
       method: "POST",
       headers: {
         Authorization: localStorage.getItem("token"),

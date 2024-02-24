@@ -28,7 +28,7 @@ const PurchasedCourses = () => {
     };
     const fetchHandler = async () => {
         setLoading(true)
-        const data = await fetch(`http://localhost:8000/course/purchasedCourses`, {
+        const data = await fetch(`${process.env.REACT_APP_BASE_URL}/course/purchasedCourses`, {
             method: 'POST',
             headers: {
                 Authorization: localStorage.getItem("token"),

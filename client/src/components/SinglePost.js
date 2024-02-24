@@ -26,7 +26,7 @@ const SinglePost = (props) => {
   };
   const commentSubmitHandler = (env) => {
     const id = env.target.id;
-    fetch("http://localhost:8000/doubt/comment", {
+    fetch(`${process.env.REACT_APP_BASE_URL}/doubt/comment`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -118,7 +118,7 @@ const SinglePost = (props) => {
           {imgFlag && (
             <img
               className="postImage"
-              src={"http://localhost:8000/" + props.data.img}
+              src={`${process.env.REACT_APP_BASE_URL}/` + props.data.img}
               alt=""
             ></img>
           )}

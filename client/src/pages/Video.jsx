@@ -29,7 +29,7 @@ const Video = () => {
 
   const fetchVideoDetails = async () => {
     const res = await fetch(
-      `http://localhost:8000/video/getVideo/?videoId=${id}`,
+      `${process.env.REACT_APP_BASE_URL}/video/getVideo/?videoId=${id}`,
       {
         method: "POST",
         headers: {
@@ -115,7 +115,7 @@ const Video = () => {
 
     try {
       const res = await fetch(
-        `http://localhost:8000/video/addComment/?videoId=${url}`,
+        `${process.env.REACT_APP_BASE_URL}/video/addComment/?videoId=${url}`,
         {
           method: "POST",
           headers: {
@@ -170,7 +170,7 @@ const Video = () => {
     }
     try {
       const res = await fetch(
-        `http://localhost:8000/video/addReply/?videoId=${videoId}&commentId=${commentID}`,
+        `${process.env.REACT_APP_BASE_URL}/video/addReply/?videoId=${videoId}&commentId=${commentID}`,
         {
           method: "POST",
           headers: {
@@ -236,7 +236,7 @@ const Video = () => {
     const videoId = data._id;
 
     const res = await fetch(
-      `http://localhost:8000/video/addLike/?videoId=${videoId}`,
+      `${process.env.REACT_APP_BASE_URL}/video/addLike/?videoId=${videoId}`,
       {
         method: "POST",
         headers: {
@@ -254,7 +254,7 @@ const Video = () => {
     const videoId = data._id;
 
     const res = await fetch(
-      `http://localhost:8000/video/removeLike/?videoId=${videoId}`,
+      `${process.env.REACT_APP_BASE_URL}/video/removeLike/?videoId=${videoId}`,
       {
         method: "POST",
         headers: {

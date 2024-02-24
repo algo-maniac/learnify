@@ -16,7 +16,7 @@ function Instructor() {
 
   const getInstructorData = async () => {
     const data = await fetch(
-      `http://localhost:8000/instructor/getInstructor/${id}`,
+      `${process.env.REACT_APP_BASE_URL}/instructor/getInstructor/${id}`,
       {
         method: "GET",
         headers: {

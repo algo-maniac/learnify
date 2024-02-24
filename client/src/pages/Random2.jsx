@@ -8,7 +8,7 @@ const Random = () => {
 
   useEffect(() => {
     const fetchVideoDetails = async (id) => {
-      const data = await fetch(`http://localhost:8000/video/getVideo/${id}`, {
+      const data = await fetch(`${process.env.REACT_APP_BASE_URL}/video/getVideo/${id}`, {
         headers: {
           Authorization: localStorage.getItem("token")
         }

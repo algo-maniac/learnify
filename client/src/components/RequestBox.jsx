@@ -45,7 +45,7 @@ const RequestBox = () => {
   const fetchHandler = async () => {
     try {
       const result = await fetch(
-        "http://localhost:8000/admin/getpendingrequests",
+        `${process.env.REACT_APP_BASE_URL}/admin/getpendingrequests`,
         {
           method: "GET",
           headers: {
@@ -103,7 +103,7 @@ const RequestBox = () => {
   };
 
   const approveRequest = async (role, id) => {
-    const result = await fetch("http://localhost:8000/admin/approveAccount", {
+    const result = await fetch(`${process.env.REACT_APP_BASE_URL}/admin/approveAccount`, {
       method: "POST",
       headers: {
         authorization: localStorage.getItem("token"),
@@ -120,7 +120,7 @@ const RequestBox = () => {
   };
 
   const denyRequest = async (role, id) => {
-    const result = await fetch("http://localhost:8000/admin/denyAccount", {
+    const result = await fetch(`${process.env.REACT_APP_BASE_URL}/admin/denyAccount`, {
       method: "POST",
       headers: {
         authorization: localStorage.getItem("token"),

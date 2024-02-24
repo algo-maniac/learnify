@@ -28,7 +28,7 @@ const EnrolledCourses = () => {
   const fetchHandler = async () => {
     setLoading(true);
     const data = await fetch(
-      `http://localhost:8000/instructor/getInstructorCourses/${ userdata.id }`,
+      `${process.env.REACT_APP_BASE_URL}/instructor/getInstructorCourses/${ userdata.id }`,
       {
         method: "POST",
         headers: {

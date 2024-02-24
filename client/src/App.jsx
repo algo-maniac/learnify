@@ -3,8 +3,6 @@ import "./App.css";
 import { Routes, Route, useNavigate, useRoutes } from "react-router-dom";
 import styled from "styled-components";
 import LogIn from "./pages/LogIn";
-import Random from "./pages/Random";
-import Random2 from "./pages/Random2";
 import SignUp from "./pages/SignUp";
 import Instructor from "./pages/Instructor";
 import LiveStream from "./pages/LiveStream.jsx";
@@ -14,8 +12,6 @@ import UploadVideo from "./pages/UploadVideo";
 import Doubt from "./components/Doubt";
 import Instructors from "./pages/Instructors";
 import ExamCorner from "./components/ExamCorner";
-import Footer from "./components/Footer";
-import Home from "./pages/Home";
 import Home2 from "./pages/Home2";
 import Search from "./pages/Search";
 import CreateCourseForm from "./pages/CreateCourseForm.jsx";
@@ -39,6 +35,10 @@ import {
 } from "./ProtectedRoutes.jsx";
 
 function App() {
+  console.log("----------------------------------------------------------------")
+  console.log(process.env);
+  console.log(process.env.REACT_APP_API_URL);
+  console.log("----------------------------------------------------------------")
   const navigate = useNavigate();
   const [userdata, setUserdata] = useState(() => {
     const storedUserData = localStorage.getItem("userdata");
@@ -70,7 +70,7 @@ function App() {
       const requestRoute = `${role}/get${
         role.charAt(0).toUpperCase() + role.slice(1)
       }Data`;
-      const data = await fetch(`http://localhost:8000/${requestRoute}`, {
+      const data = await fetch(`${process.env.REACT_APP_BASE_URL}/${requestRoute}`, {
         method: "GET",
         headers: {
           authorization: token,

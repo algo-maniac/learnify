@@ -6,7 +6,7 @@ const Posts = (props) => {
   const [data, setData] = useState([]);
   const [loader,setLoader]=useState(true);
   useEffect(() => {
-    fetch("http://localhost:8000/doubt", {
+    fetch(`${process.env.REACT_APP_BASE_URL}/doubt`, {
       method: 'GET',
     })
       .then((result) => {

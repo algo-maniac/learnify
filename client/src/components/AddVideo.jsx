@@ -42,7 +42,7 @@ const AddVideo = ({
       console.log(videoDetails);
 
       const res = await fetch(
-        "http://localhost:8000/course/uploadCourseVideo",
+        `${process.env.REACT_APP_BASE_URL}/course/uploadCourseVideo`,
         {
           method: "POST",
           headers: {

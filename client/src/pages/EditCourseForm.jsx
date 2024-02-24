@@ -38,7 +38,7 @@ const EditCourseForm = () => {
 
   const fetchCourseDetails = async () => {
     const res = await fetch(
-      `http://localhost:8000/course/getCourseDetailsForEdit/${courseId}`,
+      `${process.env.REACT_APP_BASE_URL}/course/getCourseDetailsForEdit/${courseId}`,
       {
         method: "GET",
         headers: {
@@ -90,7 +90,7 @@ const EditCourseForm = () => {
         formData.append("thumbnail", editedThumbnail);
 
       const res = await fetch(
-        `http://localhost:8000/course/editBasicCourseDetails/${courseId}`,
+        `${process.env.REACT_APP_BASE_URL}/course/editBasicCourseDetails/${courseId}`,
         {
           method: "PUT",
           headers: {
@@ -142,7 +142,7 @@ const EditCourseForm = () => {
   const handleSectionDetailsSubmit = async (formData, sectionId) => {
     try {
       const res = await fetch(
-        `http://localhost:8000/course/editSectionDetails/${courseId}/${sectionId}`,
+        `${process.env.REACT_APP_BASE_URL}/course/editSectionDetails/${courseId}/${sectionId}`,
         {
           method: "PUT",
           headers: {
@@ -187,7 +187,7 @@ const EditCourseForm = () => {
     try {
       console.log("inside handle video details submit");
       const res = await fetch(
-        `http://localhost:8000/course/editVideoDetails/${videoId}`,
+        `${process.env.REACT_APP_BASE_URL}/course/editVideoDetails/${videoId}`,
         {
           method: "PUT",
           headers: {
@@ -246,7 +246,7 @@ const EditCourseForm = () => {
   const handleDeleteSectionClick = async (sectionId) => {
     try {
       const res = await fetch(
-        `http://localhost:8000/course/deleteSection/${sectionId}`,
+        `${process.env.REACT_APP_BASE_URL}/course/deleteSection/${sectionId}`,
         {
           method: "DELETE",
           headers: {
@@ -280,7 +280,7 @@ const EditCourseForm = () => {
 
     try {
       const res = await fetch(
-        `http://localhost:8000/course/deleteCourse/${courseDetails._id}`,
+        `${process.env.REACT_APP_BASE_URL}/course/deleteCourse/${courseDetails._id}`,
         {
           method: "DELETE",
           headers: {

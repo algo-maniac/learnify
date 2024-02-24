@@ -26,7 +26,7 @@ const Course = () => {
 
   const fetchCourseDetails = async () => {
     const res = await fetch(
-      `http://localhost:8000/course/getCourse/${ courseId }`,
+      `${process.env.REACT_APP_BASE_URL}/course/getCourse/${ courseId }`,
       {
         method: "GET",
         headers: {
@@ -48,7 +48,7 @@ const Course = () => {
   };
 
   const handleEnrollment = async () => {
-      const data = await fetch(`http://localhost:8000/course/enroll/${ courseId }`, {
+      const data = await fetch(`${process.env.REACT_APP_BASE_URL}/course/enroll/${ courseId }`, {
           method: 'POST',
           headers: {
               Authorization: localStorage.getItem("token"),
@@ -68,7 +68,7 @@ const Course = () => {
   }
 
   const handleRevertEnrollment = async () => {
-      const data = await fetch(`http://localhost:8000/course/revertEnroll/${ courseId }`, {
+      const data = await fetch(`${process.env.REACT_APP_BASE_URL}/course/revertEnroll/${ courseId }`, {
           method: 'POST',
           headers: {
               Authorization: localStorage.getItem("token"),

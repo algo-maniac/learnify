@@ -32,7 +32,7 @@ const AddSectionForm = ({
       formData.append("description", sectionDetails.description);
 
       const res = await fetch(
-        `http://localhost:8000/course/createSection/${courseId}`,
+        `${process.env.REACT_APP_BASE_URL}/course/createSection/${courseId}`,
         {
           method: "POST",
           headers: {

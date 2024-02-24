@@ -28,7 +28,7 @@ const Sender = (props) => {
     formData.append("name",ctx.username);
     formData.append("image", file);
     formData.append("question", postData);
-    fetch("http://localhost:8000/doubt", {
+    fetch(`${process.env.REACT_APP_BASE_URL}/doubt`, {
       method: "POST",
       body: formData,
     })

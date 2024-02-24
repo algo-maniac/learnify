@@ -28,7 +28,7 @@ const Courses = () => {
     };
     const fetchHandler = async () => {
         setLoading(true)
-        const data = await fetch(`http://localhost:8000/course/getCourses`, {
+        const data = await fetch(`${process.env.REACT_APP_BASE_URL}/course/getCourses`, {
             method: 'POST',
             headers: {
                 Authorization: localStorage.getItem("token"),
@@ -46,7 +46,7 @@ const Courses = () => {
     }
 
     const enroll = async (courseId) => {
-        const data = await fetch(`http://localhost:8000/course/enroll/${ courseId }`, {
+        const data = await fetch(`${process.env.REACT_APP_BASE_URL}/course/enroll/${ courseId }`, {
             method: 'POST',
             headers: {
                 Authorization: localStorage.getItem("token"),

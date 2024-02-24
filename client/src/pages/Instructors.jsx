@@ -11,7 +11,7 @@ function Instructors(props) {
   console.log(userdata);
 
   const fetchInstructors = async () => {
-    const data = await fetch("http://localhost:8000/instructor", {
+    const data = await fetch(`${process.env.REACT_APP_BASE_URL}/instructor`, {
       headers: {
         Authorization: localStorage.getItem("token"),
       },

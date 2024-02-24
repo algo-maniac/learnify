@@ -31,7 +31,7 @@ function TeacherDetails(props) {
 
   const subscribe = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/instructor/subscribe/${_id}`, {
+      const response = await fetch(`${process.env.REACT_APP_BASE_URL}/instructor/subscribe/${_id}`, {
         method: "POST",
         headers: {
           Authorization: localStorage.getItem("token"),
@@ -61,7 +61,7 @@ function TeacherDetails(props) {
 
   const unsubscribe = async () => {
     try {
-      const response = await fetch(`http://localhost:8000/instructor/unsubscribe/${_id}`, {
+      const response = await fetch(`${process.env.REACT_APP_BASE_URL}/instructor/unsubscribe/${_id}`, {
         method: "POST",
         headers: {
           Authorization: localStorage.getItem("token"),

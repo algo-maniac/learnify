@@ -21,7 +21,7 @@ const InstructorVideo = () => {
 
   const getInstructorData = async () => {
     const data = await fetch(
-      `http://localhost:8000/instructor/getInstructorVideos/${id}`,
+      `${process.env.REACT_APP_BASE_URL}/instructor/getInstructorVideos/${id}`,
       {
         method: "POST",
         headers: {

@@ -35,10 +35,6 @@ import {
 } from "./ProtectedRoutes.jsx";
 
 function App() {
-  console.log("----------------------------------------------------------------")
-  console.log(process.env);
-  console.log(process.env.REACT_APP_API_URL);
-  console.log("----------------------------------------------------------------")
   const navigate = useNavigate();
   const [userdata, setUserdata] = useState(() => {
     const storedUserData = localStorage.getItem("userdata");

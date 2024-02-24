@@ -171,7 +171,7 @@ function App() {
             <Routes>
               {/* <Route path="/Random" element={<Random />} /> */}
 
-              <Route path="/doubt" element={<Doubt />}></Route>
+              <Route path="/doubt-corner" element={<Doubt />}></Route>
 
               <Route element={<SignupLoginProtected />}>
                 <Route path="/live" element={<LiveStream />} />
@@ -186,10 +186,7 @@ function App() {
                 <Route path="/course" element={<Courses />} />
                 <Route path="/course/:courseId" element={<Course />} />
                 <Route path="/enrolled-course" element={<EnrolledCourses />} />
-                <Route
-                  path="/purchased-course"
-                  element={<PurchasedCourses />}
-                />
+                <Route path="/purchased-course" element={<PurchasedCourses />} />
 
                 <Route path="/exam-corner" element={<ExamCorner />} />
               </Route>

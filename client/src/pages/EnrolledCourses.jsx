@@ -59,7 +59,7 @@ const EnrolledCourses = () => {
                             <Link to={`/course/${ data._id }`} >
                                 <Card
                                     key={data._id}
-                                    sx={{ width: "100%", aspectRatio: "1/1.2", overflow: "hidden" }}
+                                    sx={{ width: "100%", overflow: "hidden" }}
                                 >
                                     <CardMedia
                                         sx={{ width: "100%", aspectRatio: "2/1" }}
@@ -168,7 +168,7 @@ const Container = styled.div`
         width: 100%;
         display: flex;
         flex-direction: row;
-        height: 100%;
+        /* height: 100%; */
         flex-wrap: wrap;
         display: flex;
         flex-direction: row;
@@ -177,22 +177,13 @@ const Container = styled.div`
     }
 
     .courses-list > * {
-        width: calc(25% - 24.5px);
-    }
+        width: 100%;
+      }
 
-    .courses-list.sidebarExpanded > * {
-        width: calc(25% - 24.5px);
-    }
+      .courses-list.sidebarExpanded > * {
+          width: 100%;
+      }
 
-    @media only screen and (max-width: 600px) {
-    .courses-list > * {
-      width: calc(100%);
-    }
-
-    .courses-list.sidebarExpanded > * {
-        width: calc(100%);
-    }
-  }
 
   @media only screen and (min-width: 601px) and (max-width: 800px) {
         .courses-list > * {
@@ -225,6 +216,15 @@ const Container = styled.div`
         }
     }
 
+    @media only screen and (min-width: 1401px) {
+        .courses-list > * {
+            width: calc(25% - 24.5px);
+        }
+
+        .courses-list.sidebarExpanded > * {
+            width: calc(25% - 24.5px);
+        }
+    }
 
     .courses-list .courses{
         /* margin-right: 1rem;

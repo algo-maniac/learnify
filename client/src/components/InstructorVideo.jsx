@@ -113,7 +113,21 @@ const Container = styled.div`
     gap: 30px;
   }
 
-  .videos > * {
+  .videos{
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        gap: 30px;
+        justify-content: flex-start;
+        align-items: flex-start;
+    }
+
+    .videos > * {
         width: calc(100%);
     }
 

@@ -37,6 +37,9 @@ function TeacherCard(props) {
 export default TeacherCard;
 
 const Container = styled.div`
+  height: 100%;
+  width: 100%;
+
   .teachercard-outer {
     display: flex;
     justify-content: center;

@@ -124,7 +124,7 @@ const Container = styled.div`
 
     .course-container{
         width: 100%;
-        height: calc(100vh - 240px);
+        /* height: calc(100vh - 240px); */
         background-color: white;
         padding: 20px 30px;
         margin: auto;
@@ -199,7 +199,7 @@ const Container = styled.div`
         width: 100%;
         display: flex;
         flex-direction: row;
-        height: 100%;
+        /* height: 100%; */
         flex-wrap: wrap;
         display: flex;
         flex-direction: row;

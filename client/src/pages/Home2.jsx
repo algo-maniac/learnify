@@ -1,11 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useNavigate } from 'react-router-dom'
+import VideoCard from '../components/VideoCard'
+import { Link, useNavigate } from 'react-router-dom';
+import Card from '@mui/material/Card';
+import Typography from '@mui/material/Typography';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Fab from "@mui/material/Fab"
+import TeacherCard from "../components/TeacherCard";
 import NavbarLandingPage from '../components/NavbarLandingPage';
 
 
 const LandingPage = ({ handleSearchClick }) => {
     const navigate = useNavigate();
+
+    const filterDesc = (text) => {
+        return text.slice(0, 70) + "...";
+    }
     return (
         <Container>
             <NavbarLandingPage handleSearchClick={handleSearchClick} />
@@ -23,19 +34,19 @@ const LandingPage = ({ handleSearchClick }) => {
                     </h4>
                     <div className="students-already-enrolled">
                         <div className="student">
+                            <img src="https://res.cloudinary.com/desdkbhvz/image/upload/v1705077731/u17mqgolmdz2owhrwzkv.jpg" alt="" />
+                        </div>
+                        <div className="student">
                             <img src="https://lh3.googleusercontent.com/a/ACg8ocJa8z9paqwbmbmgoyzio2GbMogxzEbhJkWxozfe9XaUQd4=s576-c-no" alt="" />
                         </div>
                         <div className="student">
-                            <img src="https://images.pexels.com/photos/614810/pexels-photo-614810.jpeg?cs=srgb&dl=pexels-simon-robben-614810.jpg&fm=jpg" alt="" />
+                            <img src="https://res.cloudinary.com/desdkbhvz/image/upload/v1706378491/d0cjnei5atanj075g4oc.jpg" alt="" />
                         </div>
-                        <div className="student">
-                            <img src="https://www.famousbirthdays.com/headshots/ana-armas-5.jpg" alt="" />
-                        </div>
-                        <div className="student">
+                        {/* <div className="student">
                             <img src="https://hips.hearstapps.com/hmg-prod/images/gettyimages-1229892983-square.jpg" alt="" />
-                        </div>
+                        </div> */}
                         <div className="info">
-                            <b>50+ Students</b> in community
+                            <b>50+ Instructors</b> in community
                         </div>
                     </div>
                     <div className="btns">
@@ -73,17 +84,17 @@ const LandingPage = ({ handleSearchClick }) => {
                     </div>
                     <div className="feature" onClick={() => navigate('/doubt-corner')}>
                         <img src="/assets/doubt.png" alt="" />
-                        <h4>Exam Corner</h4>
+                        <h4>Doubt Corner</h4>
                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum, mollitia unde facere vero rem aliquam.</p>
                     </div>
                     <div className="feature" onClick={() => navigate('/exam-corner')}>
                         <img src="/assets/exam.png" alt="" />
-                        <h4>Doubt Corner</h4>
+                        <h4>Exam Corner</h4>
                         <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Earum, mollitia unde facere vero rem aliquam.</p>
                     </div>
                 </div>
             </div>
-            <div className="page3">
+            {/* <div className="page3">
                 <h3>Common subjects we provide guidance on</h3>
                 <p className='header-support'>Take the next step in your career. Get hands-on with the industry's most in-demand technologies.</p>
                 <div className="topics">
@@ -106,133 +117,129 @@ const LandingPage = ({ handleSearchClick }) => {
                         <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAOEAAADhCAMAAAAJbSJIAAAAYFBMVEUgvv////+p4P8Au//0/P9IyP/5/v9dzP/E6f8TvP/j9v/n9/8yw/9y0v+u5P/s+f/T8f8qwf/I7f+86f9/1v/M7v9Axv+P2/+35v9Xyv9w0f+k4f+X3f+a3v9jz//b8/93yxYXAAADmElEQVR4nO2d7W4aMRBFoWaXOoEA+YCQNPD+b1nRqA2Bu9hepYtvdM5PUCQfzXgcr8fLaAQAAAAAAAAAAAAAAAAAAAAAAAAAANcihk9cezj/gc3PY56n8doD+mLiZvyZyeraQ/piwo9Tw+baQ/piMPQHQ38w9AdDfzD0B0N/MPQHQ38w9AdDfzD0B0N/MPQHQ38w9AdDfzD0B0N/MPQHQ396GIbVdnrKbIix9qPcMGxu2zP29SoWG4b5WDGvtuGv1DA8SsHbbxPDDsGb9VDjLafMMDy2WrDaHC00DC8dKVqxYJFhmOoUrbvntsCwo4ou6xYsMAxzOQeX9VbRd7INw4sWrDyC+YZxq1N04OH2INMwTGUE74cebg/yDMNOCj4MPtweZBmG3cRWMMswbqXgfc3r/AcZhnGtU9TkilTaMOgI3pkIpg3jdqEEX68z3B6kDGMjBe885uCBhGGceafoKGUY1zpFjQQvG3ak6C8nwYuGsblVghufOXjgkuFMRvDNKoKXDOPqG6To6IJh1BF8dBPsNIzrGynoNQcPdBnOtKBdBLsNZRV1FOwwXMkIzh0FtaFM0XZnKagM42yvIuj6OgkVQyU4MY2gMlwrwXbqKnhu2KqFftLYCp4bKhaN6Rw8kGX47BvBTMOKT+nT5Bm2xmmaZ1hzJ0KKTMPxk20Qcw29nj4dk204fjFVzDccbz0TtcDwxrPaFBhanPieU2LoWW06DeWTNsddfpfhcnSnPjasNh2Ghy6SJ/G5YbXRhk+Hr+TBml+1kYbvGnGn5O2qjTL8e8AbfilFt4emwvDjBDs+KEWzndS54fERvXyuaLaTEs/ajr6NW9VK41VtEp0Kuu/ZqVEh2W0S5MK/MVJM90QthWFr9L9N2lA2nCyqbw3+R0Zfm1z4fapNRm+ividjU22y+kvlwu9SbfK6oNWZd2tyoJhlGBu18C+GH20fMjvZ5VRcWgQx9zbCq1K06DLNvjOjdvwWO6lsw5Xa8TtUm2zDKK/mGVSbgrtrp7/18Yd99UEsuH8Yn5Vi9dWm5A7pSnYS1d6uWGKoL8/UvpMquukc5Y6/8p1U4W11ufDvq14VS9+pIBf+qqtNqeFMt9ZWrFhqqBf+mqtN+btN5DZjUu9T4h7vp5E7/v0go+1Dn7coyYX/rdY8jW+nhskXscRGHizWajhanxTHh/RIYyOimPF3AAAAAAAAAAAAAAAAAAAAAAAAAAAAoPkND6sn8QyuY6YAAAAASUVORK5CYII=" alt="" />
                     </div>
                 </div>
+            </div> */}
+            <div className="page3">
+                <h3>Video Lectures</h3>
+                <p className='header-support'>High quality content to enhance your knowledge.</p>
+
+                <div className='videos'>
+                    <div className="video">
+                        <VideoCard
+                            id="65c2944ef3fb3a7e4aeeb17e"
+                            title="Intro to C++"
+                            description={"vid.description"}
+                            duration={"18 m"}
+                            thumbnail={"https://res.cloudinary.com/desdkbhvz/image/upload/v1707250765/c5olspf3sqcxh90zfu4c.png"}
+                            profileImage="https://res.cloudinary.com/desdkbhvz/image/upload/v1705077731/u17mqgolmdz2owhrwzkv.jpg"
+                        />
+                    </div>
+                    <div className="video">
+                        <VideoCard
+                            id="65c29355f3fb3a7e4aeeb082"
+                            title="Map in C++"
+                            description={"vid.description"}
+                            duration={"18 m"}
+                            thumbnail={"https://res.cloudinary.com/desdkbhvz/image/upload/v1707250516/cggvkolxmbjrpkkebr3y.jpg"}
+                            profileImage="https://res.cloudinary.com/desdkbhvz/image/upload/v1705077731/u17mqgolmdz2owhrwzkv.jpg"
+                        />
+                    </div>
+                </div>
             </div>
             <div className="page4">
-                <h3>All Courses</h3>
+                <h3>Our Courses</h3>
                 <p className='header-support'>Our courses come with added benefits as well.</p>
-                <div className="all-courses">
-                    <div className="course">
-                        <img src="https://i.ytimg.com/vi/X48VuDVv0do/maxresdefault.jpg" alt="" />
-                        <div className="course-name">Kubernetes Tutorial for Beginners [FULL COURSE in 4 Hours]</div>
-                        <div className="course-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima deserunt at suscipit ratione nihil rem id repudiandae, minus, facilis ex ad modi cum! Necessitatibus, a.</div>
-                        <div className="instructors">
-                            <b>Course Instructors : </b>
-                            <a href="/">Atanu Nayak</a>,
-                            <a href="/">Elon Musk</a> and
-                            <a href="/">Mark Zuckerburg</a>
-                        </div>
+                <div className='courses-list'>
+
+                    <div className='courses'>
+                        <Link to='/course/65c295d8f3fb3a7e4aeeb22c' >
+                            <Card
+                                key={'65c295d8f3fb3a7e4aeeb22c'}
+                                sx={{ width: "100%", overflow: "hidden" }}
+                            >
+                                <CardMedia
+                                    sx={{ width: "100%", aspectRatio: "2/1" }}
+                                    image='https://res.cloudinary.com/desdkbhvz/image/upload/v1707251160/phaccriatsbahp1kigvw.png'
+                                    title='Java Complete Course'
+                                />
+                                <CardContent className='box'>
+                                    <Typography variant="h6" component="div">
+                                        Java Complete Course
+                                    </Typography>
+                                    <span className='level'>intermediate</span>
+                                    <Typography variant="body2" color="text.secondary" className='desc'>
+                                        {filterDesc("This is a complete course on java. We will be studying everything about java")}
+                                    </Typography>
+                                    <div className='tags'>
+                                        <Fab variant="extended" size="small" className='tag'>
+                                            coding
+                                        </Fab>
+                                    </div>
+                                    <span className='price'>Rs. {0}</span>
+                                </CardContent>
+                            </Card>
+                        </Link>
                     </div>
-                    <div className="course">
-                        <img src="https://i.ytimg.com/vi/x_x5LkW6IXs/maxresdefault.jpg" alt="" />
-                        <div className="course-name">Kubernetes Tutorial for Beginners [FULL COURSE in 4 Hours]</div>
-                        <div className="course-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima deserunt at suscipit ratione nihil rem id repudiandae, minus, facilis ex ad modi cum! Necessitatibus, a.</div>
-                        <div className="instructors">
-                            <b>Course Instructors : </b>
-                            <a href="/">Atanu Nayak</a>,
-                            <a href="/">Elon Musk</a> and
-                            <a href="/">Mark Zuckerburg</a>
-                        </div>
-                    </div>
-                    <div className="course">
-                        <img src="https://i.ytimg.com/vi/7kBfeNf8pQo/maxresdefault.jpg" alt="" />
-                        <div className="course-name">Kubernetes Tutorial for Beginners [FULL COURSE in 4 Hours]</div>
-                        <div className="course-desc">Lorem ipsum dolor sit amet consectetur adipisicing elit. Minima deserunt at suscipit ratione nihil rem id repudiandae, minus, facilis ex ad modi cum! Necessitatibus, a.</div>
-                        <div className="instructors">
-                            <b>Course Instructors : </b>
-                            <a href="/">Atanu Nayak</a>,
-                            <a href="/">Elon Musk</a> and
-                            <a href="/">Mark Zuckerburg</a>
-                        </div>
+
+                    <div className='courses'>
+                        <Link to='/course/65c27c4273900bc04a7dd44a' >
+                            <Card
+                                key={'65c27c4273900bc04a7dd44a'}
+                                sx={{ width: "100%", overflow: "hidden" }}
+                            >
+                                <CardMedia
+                                    sx={{ width: "100%", aspectRatio: "2/1" }}
+                                    image='https://res.cloudinary.com/desdkbhvz/image/upload/v1707244610/jxwf0k8ni9ecikcue9xr.png'
+                                    title='Java Complete Course'
+                                />
+                                <CardContent className='box'>
+                                    <Typography variant="h6" component="div">
+                                        Complete C++ Course
+                                    </Typography>
+                                    <span className='level'>intermediate</span>
+                                    <Typography variant="body2" color="text.secondary" className='desc'>
+                                        {filterDesc("This is the most detailed C++ course that is available on internet. This course will take you from Z")}
+                                    </Typography>
+                                    <div className='tags'>
+                                        <Fab variant="extended" size="small" className='tag'>
+                                            coding
+                                        </Fab>
+                                    </div>
+                                    <span className='price'>Rs. {0}</span>
+                                </CardContent>
+                            </Card>
+                        </Link>
                     </div>
                 </div>
             </div>
             <div className="page5">
                 <h3>Course Instructors</h3>
                 <p className='header-support'>Take the next step in your career. Get hands-on with the industry's most in-demand technologies.</p>
-                <div className="instructors">
-                    <div className="instructor">
-                        <img src="https://lh3.googleusercontent.com/a/ACg8ocJa8z9paqwbmbmgoyzio2GbMogxzEbhJkWxozfe9XaUQd4=s576-c-no" alt="" />
-                        <div className="company">
-                            <img src="https://companieslogo.com/img/orig/GOOG-0ed88f7c.png?t=1633218227" alt="" />
-                        </div>
-                    </div>
-                    <div className="instructor">
-                        <img src="https://imageio.forbes.com/specials-images/imageserve/62d700cd6094d2c180f269b9/0x0.jpg?format=jpg&crop=959,959,x0,y0,safe" alt="" />
-                        <div className="company">
-                            <img src="https://companieslogo.com/img/orig/GOOG-0ed88f7c.png?t=1633218227" alt="" />
-                        </div>
-                    </div>
-                    <div className="instructor">
-                        <img src="https://imageio.forbes.com/specials-images/imageserve/5bb22ae84bbe6f67d2e82e05/0x0.jpg?format=jpg&crop=1012,1013,x627,y129,safe" alt="" />
-                        <div className="company">
-                            <img src="https://companieslogo.com/img/orig/GOOG-0ed88f7c.png?t=1633218227" alt="" />
-                        </div>
-                    </div>
-                    <div className="instructor">
-                        <img src="https://specials-images.forbesimg.com/imageserve/5e8b62cfc095010007bffea0/416x416.jpg?background=000000&cropX1=0&cropX2=4529&cropY1=652&cropY2=5184" alt="" />
-                        <div className="company">
-                            <img src="https://companieslogo.com/img/orig/GOOG-0ed88f7c.png?t=1633218227" alt="" />
-                        </div>
-                    </div>
-                    <div className="instructor">
-                        <img src="https://specials-images.forbesimg.com/imageserve/5babb7f1a7ea4342a948b79a/416x416.jpg?background=000000&cropX1=748&cropX2=3075&cropY1=1753&cropY2=4082" alt="" />
-                        <div className="company">
-                            <img src="https://companieslogo.com/img/orig/GOOG-0ed88f7c.png?t=1633218227" alt="" />
-                        </div>
-                    </div>
-                    <div className="instructor">
-                        <img src="https://specials-images.forbesimg.com/imageserve/5c76bcaaa7ea43100043c836/416x416.jpg?background=000000&cropX1=227&cropX2=2022&cropY1=22&cropY2=1817" alt="" />
-                        <div className="company">
-                            <img src="https://companieslogo.com/img/orig/GOOG-0ed88f7c.png?t=1633218227" alt="" />
-                        </div>
-                    </div>
-                    <div className="instructor">
-                        <img src="https://imageio.forbes.com/specials-images/imageserve/62d599ede3ff49f348f9b9b4/0x0.jpg?format=jpg&crop=821,821,x155,y340,safe" alt="" />
-                        <div className="company">
-                            <img src="https://companieslogo.com/img/orig/GOOG-0ed88f7c.png?t=1633218227" alt="" />
-                        </div>
-                    </div>
-                    <div className="instructor">
-                        <img src="https://specials-images.forbesimg.com/imageserve/5c7d7c254bbe6f78090d831f/416x416.jpg?background=000000&cropX1=475&cropX2=2887&cropY1=168&cropY2=2582" alt="" />
-                        <div className="company">
-                            <img src="https://companieslogo.com/img/orig/GOOG-0ed88f7c.png?t=1633218227" alt="" />
-                        </div>
-                    </div>
-                    <div className="instructor">
-                        <img src="https://specials-images.forbesimg.com/imageserve/5c76b7d331358e35dd2773a9/416x416.jpg?background=000000&cropX1=0&cropX2=4401&cropY1=0&cropY2=4401" alt="" />
-                        <div className="company">
-                            <img src="https://companieslogo.com/img/orig/GOOG-0ed88f7c.png?t=1633218227" alt="" />
-                        </div>
-                    </div>
-                    <div className="instructor">
-                        <img src="https://specials-images.forbesimg.com/imageserve/59d50c47a7ea436b47b36d66/416x416.jpg?background=000000&cropX1=553&cropX2=2940&cropY1=322&cropY2=2708" alt="" />
-                        <div className="company">
-                            <img src="https://companieslogo.com/img/orig/GOOG-0ed88f7c.png?t=1633218227" alt="" />
-                        </div>
-                    </div>
-                    <div className="instructor">
-                        <img src="https://specials-images.forbesimg.com/imageserve/5c76b4104bbe6f24ad99c35d/416x416.jpg?background=000000&cropX1=165&cropX2=5613&cropY1=321&cropY2=5769" alt="" />
-                        <div className="company">
-                            <img src="https://companieslogo.com/img/orig/GOOG-0ed88f7c.png?t=1633218227" alt="" />
-                        </div>
-                    </div>
-                    <div className="instructor">
-                        <img src="https://imageio.forbes.com/specials-images/imageserve/615c93f9da61f2ff5b9ecf9b/0x0.jpg?format=jpg&crop=1678,1679,x0,y118,safe" alt="" />
-                        <div className="company">
-                            <img src="https://companieslogo.com/img/orig/GOOG-0ed88f7c.png?t=1633218227" alt="" />
-                        </div>
-                    </div>
-                    <div className="instructor">
-                        <img src="https://techcrunch.com/wp-content/uploads/2021/03/Alexandr-Wang-.jpg?w=730&crop=1" alt="" />
-                        <div className="company">
-                            <img src="https://companieslogo.com/img/orig/GOOG-0ed88f7c.png?t=1633218227" alt="" />
-                        </div>
+                <div className="teachers">
+                    <div className='teachercards'>
+                        <TeacherCard
+                            id="65a16be384dda50de26b9584"
+                            username="Chandrachur"
+                            profileImage="https://res.cloudinary.com/desdkbhvz/image/upload/v1705077731/u17mqgolmdz2owhrwzkv.jpg"
+                            socialMediaLinks={null}
+                        />
+                        <TeacherCard
+                            id="65b544fcba3120d84f3365e9"
+                            username="Tuhin Saha"
+                            profileImage="https://res.cloudinary.com/desdkbhvz/image/upload/v1706378491/d0cjnei5atanj075g4oc.jpg"
+                            socialMediaLinks={null}
+                        />
+                        <TeacherCard
+                            id="65a2bf4f78312d451db95325"
+                            username="nayakpenguin"
+                            profileImage="https://res.cloudinary.com/desdkbhvz/image/upload/v1705164623/bwcc1ecwiifi5t6vcv8m.png"
+                            socialMediaLinks={null}
+                        />
                     </div>
                 </div>
             </div>
             <div className="footer">
-                Copyright ©2023 EliteCode, Inc. All rights reserved.
-                <p> - Powered by <b>Algolisted Business</b></p>
+                Copyright ©2023 Learnify, Inc. All rights reserved.
+                <p> - Powered by <b>Learnify Business</b></p>
             </div>
         </Container>
     )
@@ -417,7 +424,7 @@ const Container = styled.div`
             margin: 20px 0;
         }
 
-        .topics{
+        /* .topics{
             display: flex; 
             align-items: center;
 
@@ -436,6 +443,68 @@ const Container = styled.div`
                     border-radius: 50%;
                 }
             }
+        } */
+        .videos{
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .videos > * {
+            width: calc(100%);
+        }
+
+        .videos.sidebarExpanded > * {
+            width: calc(100%);
+        }
+
+        @media only screen and (min-width: 601px) and (max-width: 800px) {
+            .videos > * {
+                width: calc(50% - 15px);
+            }
+
+            .videos.sidebarExpanded > * {
+                width: calc(50% - 15px);
+            }
+        }
+
+        @media only screen and (min-width: 801px) and (max-width: 1200px) {
+            .videos > * {
+                width: calc(33.333% - 20px);
+            }
+
+            .videos.sidebarExpanded > * {
+                width: calc(50% - 15px);
+            }
+        }
+
+        @media only screen and (min-width: 1201px) and (max-width: 1400px) {
+            .videos > * {
+                width: calc(33.333% - 20px);
+            }
+
+            .videos.sidebarExpanded > * {
+                width: calc(33.333% - 20px);
+            }
+        }
+
+        @media only screen and (min-width: 1401px) {
+            
+            .videos > * {
+                width: calc(25% - 24.5px);
+            }
+
+            .videos.sidebarExpanded > * {
+                width: calc(25% - 24.5px);
+            }
         }
     }
 
@@ -445,7 +514,7 @@ const Container = styled.div`
         flex-direction: column;
         align-items: center;
         padding: 60px 120px;
-        min-height: calc(100vh - 115px);
+        /* min-height: calc(100vh - 115px); */
 
         h3{
             font-size: 1.5rem;
@@ -457,49 +526,103 @@ const Container = styled.div`
             margin: 20px 0;
         }
 
-        .all-courses{
+        .courses-list{
+            width: 100%;
             display: flex;
+            flex-direction: row;
+            height: 100%;
+            flex-wrap: wrap;
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            gap: 30px;
+            justify-content: center;
             align-items: center;
-            margin-top: 40px;
+        }
 
-            .course{
-                width: 360px;
-                padding: 10px;
-                background-color: white;
-                border-radius: 10px;
-                margin: 0 10px;
-                border: 1px solid #cecece;
-                
-                img{
-                    width: 100%;
-                    border-radius: 10px;
-                }
-                
-                .course-name{
-                    font-size: 1rem;
-                    font-weight: 500;
-                    margin: 10px 0 5px 0;
-                }
-                
-                .course-desc{
-                    font-size: 0.8rem;
-                    font-weight: 200;
-                }
+        .courses-list > * {
+            width: 100%;
+        }
 
-                .instructors{
-                    margin-top: 10px;
-                    font-size: 0.8rem;
-                    font-weight: 200;
+        .courses-list.sidebarExpanded > * {
+            width: 100%;
+        }
 
-                    b{
-                        font-weight: 500;
-                    }
 
-                    a{
-                        margin: 0 2px 0 5px;
-                    }
-                }
+        @media only screen and (min-width: 601px) and (max-width: 800px) {
+            .courses-list > * {
+                width: calc(50% - 15px);
             }
+
+            .courses-list.sidebarExpanded > * {
+                width: calc(50% - 15px);
+            }
+        }
+
+
+        @media only screen and (min-width: 801px) and (max-width: 1200px) {
+            .courses-list > * {
+                width: calc(33.333% - 20px);
+            }
+
+            .courses-list.sidebarExpanded > * {
+                width: calc(50% - 15px);
+            }
+        }
+
+        @media only screen and (min-width: 1201px) and (max-width: 1400px) {
+            .courses-list > * {
+                width: calc(33.333% - 20px);
+            }
+
+            .courses-list.sidebarExpanded > * {
+                width: calc(33.333% - 20px);
+            }
+        }
+
+        @media only screen and (min-width: 1401px) {
+            .courses-list > * {
+                width: calc(25% - 24.5px);
+            }
+
+            .courses-list.sidebarExpanded > * {
+                width: calc(25% - 24.5px);
+            }
+        }
+
+        .courses-list .courses{
+            /* margin-right: 1rem;
+            margin-bottom: 1rem; */
+            /* width:  */
+            a {
+                text-decoration: none;
+            }
+        }
+        .courses-list .courses .level{
+            font-weight: 700;
+            background: -webkit-linear-gradient(90deg,#6980b5, #3f469d,blue);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .courses-list .courses .price{
+            font-weight: 700;
+            color: black;
+        }
+        .courses-list .courses .desc{
+            padding: 0px;
+            padding-top: 0.2rem;
+            padding-bottom: 0.2rem;
+        }
+        .courses-list .courses .tag{
+            background-color: black;
+            color: white;
+            text-transform: none;
+            font-size: 0.72rem;
+            margin: 0.1rem;
+            z-index: 1;
+        }
+        .courses-list .courses .box1{
+            height: fit-content;
         }
     }
 
@@ -519,7 +642,7 @@ const Container = styled.div`
             margin: 20px 0;
         }
 
-        .instructors{
+        /* .instructors{
             display: flex; 
             align-items: center;
             justify-content: center;
@@ -562,7 +685,58 @@ const Container = styled.div`
                     }
                 }
             }
+        } */
+
+        .teachers {
+            display: flex;
+            width: 100%;
+            height: 100%;
+            /* min-height: calc(100vh - 70px); */
+            justify-content: center;
+            align-items: center;
+            /* background-color: #e7e7e7;
+            background-color: white; */
         }
+        .teachercards {
+            display: flex;
+            flex-direction: row;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            width: 100%;
+            height: 100%;
+            gap: 30px;
+        }
+
+        .teachercard-outer {
+            width: 100%;
+            height: 100%;
+        }
+
+        .teachercards > * {
+            width: calc(100% - 30px);
+            height: 100%;
+            overflow: hidden;
+        }
+
+        @media only screen and (min-width: 601px) and (max-width: 800px) {
+            .teachercards > * {
+                width: calc(50% - 30px);
+            }
+        }
+
+        @media only screen and (min-width: 801px) and (max-width: 1200px) {
+            .teachercards > * {
+                width: calc(33.33% - 24.5px);
+            }
+        }
+
+        @media only screen and (min-width: 1201px){
+            .teachercards > * {
+                width: calc(25% - 50px);
+            }
+        }
+
     }
     
     .footer{
@@ -583,7 +757,7 @@ const Container = styled.div`
             color: white;
             font-weight: 200;
             font-size: 0.75rem;
-
+            margin: 0;
             b{
                 color: white;
                 font-weight: 500;

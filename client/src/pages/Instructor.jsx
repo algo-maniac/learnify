@@ -97,10 +97,9 @@ const Container = styled.div`
     gap: 30px;
   }
 
-  .videos > * {
+  /* .videos > * {
     width: calc(33.333% - 20px);
-    /* margin: 10px; */
-  }
+  } */
 
   .navbar_branding {
     display: flex;
@@ -244,13 +243,13 @@ const Container = styled.div`
     gap: 30px;
   }
 
-  .courses-list > * {
+  /* .courses-list > * {
     width: calc(33.333% - 20px);
-  }
+  } */
   .courses-list .courses {
     /* margin-right: 1rem;
       margin-bottom: 1rem; */
-    width: ;
+    /* width: ; */
   }
   .courses-list .courses .level {
     font-weight: 700;

@@ -72,7 +72,7 @@ const EnrolledCourses = () => {
                   >
                     <Card
                       key={data._id}
-                      sx={{ width: "100%", aspectRatio: "1/1.2", overflow: "hidden" }}
+                      sx={{ width: "100%", overflow: "hidden" }}
                     >
                       <CardMedia
                         sx={{ width: "100%", aspectRatio: "2/1" }}
@@ -207,61 +207,63 @@ const Container = styled.div`
   }
 
   .courses-list > * {
-    width: calc(25% - 24.5px);
-  }
+        width: 100%;
+      }
 
-  .courses-list.sidebarExpanded > * {
-    width: calc(25% - 24.5px);
-  }
+      .courses-list.sidebarExpanded > * {
+          width: 100%;
+      }
 
-  @media only screen and (max-width: 600px) {
-    .courses-list > * {
-      width: calc(100%);
-    }
-
-    .courses-list.sidebarExpanded > * {
-      width: calc(100%);
-    }
-  }
 
   @media only screen and (min-width: 601px) and (max-width: 800px) {
-    .courses-list > * {
-      width: calc(50% - 15px);
+        .courses-list > * {
+            width: calc(50% - 15px);
+        }
+
+        .courses-list.sidebarExpanded > * {
+            width: calc(50% - 15px);
+        }
     }
 
-    .courses-list.sidebarExpanded > * {
-      width: calc(50% - 15px);
-    }
-  }
 
-  @media only screen and (min-width: 801px) and (max-width: 1200px) {
-    .courses-list > * {
-      width: calc(33.333% - 20px);
-    }
+    @media only screen and (min-width: 801px) and (max-width: 1200px) {
+        .courses-list > * {
+            width: calc(33.333% - 20px);
+        }
 
-    .courses-list.sidebarExpanded > * {
-      width: calc(50% - 15px);
-    }
-  }
-
-  @media only screen and (min-width: 1201px) and (max-width: 1400px) {
-    .courses-list > * {
-      width: calc(33.333% - 20px);
+        .courses-list.sidebarExpanded > * {
+            width: calc(50% - 15px);
+        }
     }
 
-    .courses-list.sidebarExpanded > * {
-      width: calc(33.333% - 20px);
-    }
-  }
+    @media only screen and (min-width: 1201px) and (max-width: 1400px) {
+        .courses-list > * {
+            width: calc(33.333% - 20px);
+        }
 
-  .courses-list .courses {
-    /* margin-right: 1rem;
+        .courses-list.sidebarExpanded > * {
+            width: calc(33.333% - 20px);
+        }
+    }
+
+    @media only screen and (min-width: 1401px) {
+        .courses-list > * {
+            width: calc(25% - 24.5px);
+        }
+
+        .courses-list.sidebarExpanded > * {
+            width: calc(25% - 24.5px);
+        }
+    }
+
+    .courses-list .courses{
+        /* margin-right: 1rem;
         margin-bottom: 1rem; */
-    /* width:  */
-    a {
-      text-decoration: none;
+        /* width:  */
+        a {
+            text-decoration: none;
+        }
     }
-  }
   .courses-list .courses .level {
     font-weight: 700;
     background: -webkit-linear-gradient(90deg, #6980b5, #3f469d, blue);

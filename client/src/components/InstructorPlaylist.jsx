@@ -68,7 +68,7 @@ const InstructorPlaylist = () => {
                     <Link to={`/course/${ data._id }`} >
                       <Card
                         key={data._id}
-                        sx={{ width: "100%", aspectRatio: "1/1.2", overflow: "hidden" }}
+                        sx={{ width: "100%", overflow: "hidden" }}
                       >
                         <CardMedia
                           sx={{ width: "100%", aspectRatio: "2/1" }}

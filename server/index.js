@@ -38,34 +38,34 @@ app.use("/uploads", express.static("uploads"));
 
 
 
- 
 
-  app.get("/suggestions", authenticateGeneral, async (req, res) => {
-    const query = req.query.query;
-    console.log(query);
-  
-    try {
-      const terms = compromise(query).terms().data().map(term => term.text);
-  
-      const stopWords = ['the', 'and', 'is', 'of', 'in', 'to', 'a', 'with', 'for', 'on'];
-      const filteredTerms = terms.filter(term => !stopWords.includes(term.toLowerCase()));
-  
-      const regexTerms = filteredTerms.map(term => new RegExp(term, 'i'));
-  
-      const videoSuggestions = await VideoLecture.find({ title: { $in: regexTerms } }).distinct('title');
-      const courseSuggestions = await Course.find({ title: { $in: regexTerms } }).distinct('title');
-      const instructorSuggestions = await Instructor.find({ username: { $in: regexTerms }, isApproved: true }).distinct('username');
-  
-      const allSuggestions = [...videoSuggestions, ...courseSuggestions, ...instructorSuggestions];
-      const uniqueSuggestions = Array.from(new Set(allSuggestions));
-  
-      res.json(uniqueSuggestions);
-    } catch (error) {
-      console.error("Error during suggestions fetch:", error);
-      res.status(500).json({ error: "Internal Server Error" });
-    }
-  });
-  
+
+app.get("/suggestions", authenticateGeneral, async (req, res) => {
+  const query = req.query.query;
+  console.log(query);
+
+  try {
+    const terms = compromise(query).terms().data().map(term => term.text);
+
+    const stopWords = ['the', 'and', 'is', 'of', 'in', 'to', 'a', 'with', 'for', 'on'];
+    const filteredTerms = terms.filter(term => !stopWords.includes(term.toLowerCase()));
+
+    const regexTerms = filteredTerms.map(term => new RegExp(term, 'i'));
+
+    const videoSuggestions = await VideoLecture.find({ title: { $in: regexTerms } }).distinct('title');
+    const courseSuggestions = await Course.find({ title: { $in: regexTerms } }).distinct('title');
+    const instructorSuggestions = await Instructor.find({ username: { $in: regexTerms }, isApproved: true }).distinct('username');
+
+    const allSuggestions = [...videoSuggestions, ...courseSuggestions, ...instructorSuggestions];
+    const uniqueSuggestions = Array.from(new Set(allSuggestions));
+
+    res.json(uniqueSuggestions);
+  } catch (error) {
+    console.error("Error during suggestions fetch:", error);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+});
+
 
 app.post("/search", authenticateGeneral, async (req, res) => {
   const query = req.body.query;
@@ -105,11 +105,11 @@ mongoose
         console.log("Some error occured");
         return;
       }
-      console.log(`Server running on port ${port}`);
+      console.log(`Server running on port ${ port }`);
     });
   })
   .catch((err) => {
-    console.error(`Error connecting to the database. n${err}`);
+    console.error(`Error connecting to the database. n${ err }`);
   });
 
 

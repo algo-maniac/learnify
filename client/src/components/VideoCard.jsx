@@ -56,7 +56,7 @@ const Container = styled.div`
     position: relative;
     width: 100%;
     aspect-ratio: 2/1;
-    object-fit: contain;
+    object-fit: cover;
   }
 
   .details {

@@ -42,7 +42,6 @@ const uploadToCloudinary = (file) => {
 
 module.exports.signuppost = async (req, res) => {
   const { username, email, password } = req.body;
-  console.log("here");
   try {
     const profileImage = req.file;
 
@@ -70,11 +69,13 @@ module.exports.signuppost = async (req, res) => {
 
     return res.status(200).json({
       message: "Registered successfull! Approval pending",
+      status: "pending"
     });
   } catch (err) {
     console.log(err);
-    return res.status(500).json({
-      message: "Something went wrong at our end",
+
+    return res.status(400).json({
+      message: "Error Signing In",
     });
   }
 };
@@ -87,13 +88,13 @@ module.exports.loginpost = async (req, res) => {
     const validPassword = await bcrypt.compare(password, admin.password);
 
     if (!admin) {
-      return res.status(404).json({
+      return res.status(400).json({
         message: "User Not Present",
       });
     }
 
     if (!validPassword) {
-      return res.status(404).json({
+      return res.status(400).json({
         message: "Invalid Password",
       });
     }
@@ -103,6 +104,7 @@ module.exports.loginpost = async (req, res) => {
         message: "Approval Pending",
       });
     }
+    
 
     const token = jwt.sign(
       {
@@ -114,14 +116,14 @@ module.exports.loginpost = async (req, res) => {
       { expiresIn: "24h" }
     );
 
-    return res.status(200).json({
+    res.status(200).json({
       message: "Login successfull",
       token: token,
     });
   } catch (err) {
     console.log(err);
-    return res.status(500).json({
-      message: "There is some problem at our end",
+    return res.status(400).send({
+      message: "Invalid Credentials"
     });
   }
 };

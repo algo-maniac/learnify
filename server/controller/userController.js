@@ -18,7 +18,7 @@ cloudinary.config({
   api_secret: process.env.api_secret,
 });
 
-// Function to upload file to Cloudinary
+
 const uploadToCloudinary = (file) => {
   return new Promise((resolve, reject) => {
     cloudinary.uploader
@@ -42,10 +42,9 @@ module.exports.signuppost = async (req, res) => {
 
     const existingUser = await User.findOne({ email });
     if (existingUser) {
-      res.status(400).json({
+      return res.status(400).json({
         message: "User with this eamil alread exists!",
       });
-      return;
     }
 
     const user = new User({
@@ -65,9 +64,14 @@ module.exports.signuppost = async (req, res) => {
     res.status(200).json({
       message: "SignUp successfull",
       token: token,
+      status: "successfull"
     });
   } catch (err) {
     console.log(err);
+
+    return res.status(400).json({
+      message: "Error Signing In",
+    });
   }
 };
 
@@ -78,12 +82,14 @@ module.exports.loginpost = async (req, res) => {
     console.log("user" + user);
     const validPassword = await bcrypt.compare(password, user.password);
     if (!user) {
-      res.status(404).send("User Not Present");
-      return;
+      return res.status(400).send({
+        message: "User Not Present"
+      });
     }
     if (!validPassword) {
-      res.status(404).send("Invalid Password");
-      return;
+      return res.status(400).send({
+        message: "Invalid Password"
+      });
     }
 
     const token = jwt.sign(
@@ -101,6 +107,9 @@ module.exports.loginpost = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
+    return res.status(400).send({
+      message: "Invalid Credentials"
+    });
   }
 };
 

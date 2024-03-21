@@ -103,12 +103,13 @@ module.exports.signuppost = async (req, res) => {
 
     return res.status(200).json({
       message: "Sucessfully registered. Awaiting approval",
+      status: "pending"
     });
   } catch (err) {
     console.log(err);
 
-    return res.status(500).json({
-      message: "There is some problem at our end. Please retry",
+    return res.status(400).json({
+      message: "Error Signing In",
     });
   }
 };
@@ -122,20 +123,20 @@ module.exports.loginpost = async (req, res) => {
     console.log("hello from login" + instructor);
 
     if (!instructor) {
-      return res.status(404).json({
+      return res.status(400).json({
         message: "Instructor Not Present",
       });
     }
 
     const validPassword = await bcrypt.compare(password, instructor.password);
     if (!validPassword) {
-      return res.status(404).json({
+      return res.status(400).json({
         message: "Invalid Password",
       });
     }
 
     if (!instructor.isApproved) {
-      return res.status(401).json({
+      return res.status(400).json({
         message: "Approval pending!",
       });
     }
@@ -156,8 +157,8 @@ module.exports.loginpost = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    return res.status(500).json({
-      message: "There is some problem at our end. Please retry",
+    return res.status(400).send({
+      message: "Invalid Credentials"
     });
   }
 };

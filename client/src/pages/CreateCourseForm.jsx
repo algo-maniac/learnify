@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
+import AuthContext from "../store/auth-context";
 
 const CreateCourseForm = () => {
+  const { showToast } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
-
+  
   const navigate = useNavigate();
   const [courseDetails, setCourseDetails] = useState({
     title: "",
@@ -15,10 +17,10 @@ const CreateCourseForm = () => {
     category: "",
     thumbnail: null,
   });
-
+  
   const handleChange = (e) => {
     const { name, value, type } = e.target;
-
+    
     setCourseDetails((prevDetails) => ({
       ...prevDetails,
       [name]: type === "file" ? e.target.files[0] : value,
@@ -27,8 +29,10 @@ const CreateCourseForm = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    showToast("Please wait", "loading");
     try {
       setLoading(true);
+
       const formData = new FormData();
       formData.append("title", courseDetails.title);
       formData.append("description", courseDetails.description);
@@ -54,12 +58,14 @@ const CreateCourseForm = () => {
         const courseId = data.courseId;
         // show toast created course success
         setLoading(false);
+        showToast("Course created successfully", "success");
         navigate(`/course/${courseId}/edit`);
       } else {
         // show toast err
       }
     } catch (err) {
       console.log(err);
+      showToast("Error in creating course", "error");
     } finally {
       setLoading(false);
     }

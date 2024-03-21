@@ -1,3 +1,4 @@
+import { useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import AddSectionForm from "../components/AddSectionForm";
 import AddVideo from "../components/AddVideo";
@@ -5,8 +6,11 @@ import EditBasicDetailsForm from "../components/EditBasicDetailsForm";
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import EditSectionDetailsForm from "../components/EditSectionDetailsForm";
+import AuthContext from "../store/auth-context";
+
 
 const EditCourseForm = () => {
+  const { showToast } = useContext(AuthContext);
   const { courseId } = useParams();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -71,6 +75,7 @@ const EditCourseForm = () => {
   ) => {
     try {
       setLoading(true);
+      showToast("Please wait", "loading");
       console.log(editedDetails);
       console.log(editedThumbnail);
       const formData = new FormData();
@@ -105,6 +110,7 @@ const EditCourseForm = () => {
       console.log(data);
       if (data.ok) {
         console.log(data.course);
+        showToast("Basic Details Updated", "success");
         setCourseDetails((prevCourseDetails) => {
           return {
             ...prevCourseDetails,
@@ -116,10 +122,9 @@ const EditCourseForm = () => {
         console.log(data.course);
         console.log(data.course.thumbnail);
         toggleShowEditForm();
-      } else {
       }
     } catch (error) {
-      // Handle error
+      showToast("Error In Updating Basic Details", "error");
     } finally {
       setTimeout(() => {
         setLoading(false);
@@ -141,6 +146,7 @@ const EditCourseForm = () => {
 
   const handleSectionDetailsSubmit = async (formData, sectionId) => {
     try {
+      showToast("Please Wait", "loading");
       const res = await fetch(
         `${process.env.REACT_APP_BASE_URL}/course/editSectionDetails/${courseId}/${sectionId}`,
         {
@@ -156,6 +162,7 @@ const EditCourseForm = () => {
 
       console.log(data);
       if (data.ok) {
+        showToast("Section Details Updated Sucessfully", "success");
         const updatedSection = data.updatedSection;
         setCourseDetails((prevDetails) => {
           const updatedCourseDetails = { ...prevDetails };
@@ -175,10 +182,9 @@ const EditCourseForm = () => {
           return updatedCourseDetails;
         });
         setShowEditSectionForm(false);
-      } else {
-      }
+      } 
     } catch (error) {
-      // Handle error
+      showToast("Error In Updating Section Details", "error");
     }
     setShowEditSectionForm(false);
   };
@@ -186,6 +192,7 @@ const EditCourseForm = () => {
   const handleVideoDetailsSubmit = async (formData, videoId, sectionId) => {
     try {
       console.log("inside handle video details submit");
+      showToast("Please wait", "loading");
       const res = await fetch(
         `${process.env.REACT_APP_BASE_URL}/course/editVideoDetails/${videoId}`,
         {
@@ -201,6 +208,7 @@ const EditCourseForm = () => {
       console.log(data);
 
       if (data.ok) {
+        showToast("Video Details Updated Successfully", "success");
         const updatedVideoDetails = data.video;
         console.log("updatedVideoDetails", updatedVideoDetails);
         console.log("videoId", videoId, "sectionid", sectionId);
@@ -235,16 +243,16 @@ const EditCourseForm = () => {
           // Toast Video Uploaded Successfully
           return updatedCourseDetails;
         });
-      } else {
-      }
+      } 
     } catch (error) {
-      console.log("error in uploading");
       console.log(error);
+      showToast("Error In Updating Video Details", "error");
     }
   };
 
   const handleDeleteSectionClick = async (sectionId) => {
     try {
+      showToast("Please wait", "loading");
       const res = await fetch(
         `${process.env.REACT_APP_BASE_URL}/course/deleteSection/${sectionId}`,
         {
@@ -258,6 +266,7 @@ const EditCourseForm = () => {
       const data = await res.json();
 
       if (data.ok) {
+        showToast("Section Deleted Successfully", "success");
         setCourseDetails((prevDetails) => {
           const updatedCourseDetails = { ...prevDetails };
           const updatedSections = updatedCourseDetails.sections.filter(
@@ -267,10 +276,10 @@ const EditCourseForm = () => {
           // Toast Section Deleted Successfully
           return updatedCourseDetails;
         });
-      } else {
-      }
+      } 
     } catch (error) {
       // Handle error
+      showToast("Error In Deleting Section", "error");
     }
     setShowEditSectionForm(false);
   };
@@ -279,6 +288,7 @@ const EditCourseForm = () => {
     e.preventDefault();
 
     try {
+      showToast("Please wait", "loading");
       const res = await fetch(
         `${process.env.REACT_APP_BASE_URL}/course/deleteCourse/${courseDetails._id}`,
         {
@@ -292,13 +302,12 @@ const EditCourseForm = () => {
       const data = await res.json();
 
       if (data.ok) {
+        showToast("Course Deleted Successfully", "success");
         // Toast Deleted Course Successfully
         navigate("/courses");
-      } else {
-        //
-      }
+      } 
     } catch (error) {
-      // Handle error
+      showToast("Error In Deleting Course", "error");
     }
     setShowEditSectionForm(false);
   };

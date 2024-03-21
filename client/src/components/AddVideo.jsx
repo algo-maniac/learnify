@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import styled from "styled-components";
+import AuthContext from "../store/auth-context";
 
 const AddVideo = ({
   courseId,
@@ -9,6 +10,7 @@ const AddVideo = ({
   loading,
   setLoading,
 }) => {
+  const { showToast } = useContext(AuthContext);
   const [localLoading, setLocalLoading] = useState(false);
   const [videoDetails, setVideoDetails] = useState({
     title: "",
@@ -28,6 +30,7 @@ const AddVideo = ({
 
   const handleUpload = async (e) => {
     e.preventDefault();
+    showToast("Please wait", "loading");
     console.log("here");
     try {
       setLocalLoading(true);
@@ -58,6 +61,7 @@ const AddVideo = ({
       if (!newVideo) {
         // show err
       } else {
+        showToast("Video Uploaded Successfully", "success");
         setCourseDetails((prevDetails) => {
           const updatedSections = prevDetails.sections.map((section) => {
             if (section._id === sectionId) {
@@ -88,6 +92,7 @@ const AddVideo = ({
         // Toast Video Uploaded Successfully
       }
     } catch (err) {
+      showToast("Error In Uploading Video", "error");
     } finally {
       setLocalLoading(false);
       setLoading(false);

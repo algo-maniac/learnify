@@ -6,14 +6,14 @@ import ThumbUpAltIcon from "@mui/icons-material/ThumbUpAlt";
 import ThumbUpOffAltIcon from "@mui/icons-material/ThumbUpOffAlt";
 import TextField from "@mui/material/TextField";
 import SendIcon from "@mui/icons-material/Send";
-import { ToastContainer, toast } from "react-toastify";
+// import { ToastContainer, toast } from "react-toastify";
 import LoadingBar from "react-top-loading-bar";
 import CircularProgress from "@mui/material/CircularProgress";
 import AuthContext from "../store/auth-context";
 import styled from "styled-components";
 
 const Video = () => {
-  const { userdata, isSidebarExpanded } = useContext(AuthContext);
+  const { userdata, isSidebarExpanded, showToast } = useContext(AuthContext);
   const { id } = useParams();
   const [data, setData] = useState({});
   const [isLiked, setIsLiked] = useState(false);
@@ -104,9 +104,10 @@ const Video = () => {
   };
   const commentHandler = async () => {
     if (input === "") {
-      toast.error("Validation Error! Do not leave the input blank", {
-        position: "top-center",
-      });
+      // toast.error("Validation Error! Do not leave the input blank", {
+      //   position: "top-center",
+      // });
+      showToast("Validation Error! Do not leave the input blank", "error");
       return;
     }
     setLoader(true);
@@ -139,13 +140,15 @@ const Video = () => {
           return { [newComment._id]: "", ...prevReplies };
         });
 
-        toast.success("Comment Posted", {
-          position: "top-center",
-        });
+        // toast.success("Comment Posted", {
+        //   position: "top-center",
+        // });
+        showToast("Commnet Posted", "success");
       } else {
-        toast.error("Failed to post comment", {
-          position: "top-center",
-        });
+        // toast.error("Failed to post comment", {
+        //   position: "top-center",
+        // });
+        showToast("Failed to post comment", "error");
       }
     } catch (error) {
       console.error("Error posting comment:", error);
@@ -163,9 +166,10 @@ const Video = () => {
     const videoId = data._id;
     const text = replyTexts[commentID];
     if (text === "") {
-      toast.error("Validation Error! Do not leave the input blank", {
-        position: "top-center",
-      });
+      // toast.error("Validation Error! Do not leave the input blank", {
+      //   position: "top-center",
+      // });
+      showToast("Validation Error! Do not leave the input blank", "error");
       return;
     }
     try {
@@ -205,13 +209,15 @@ const Video = () => {
         });
         setComment(updatedComments);
 
-        toast.success("Reply Posted", {
-          position: "top-center",
-        });
+        // toast.success("Reply Posted", {
+        //   position: "top-center",
+        // });
+        showToast("Reply Added", "success");
       } else {
-        toast.error("Failed to post reply", {
-          position: "top-center",
-        });
+        // toast.error("Failed to post reply", {
+        //   position: "top-center",
+        // });
+        showToast("Failed to post reply", "error");
       }
     } catch (error) {
       console.error("Error posting comment:", error);
@@ -269,7 +275,7 @@ const Video = () => {
   };
   return (
     <Container>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
       <LoadingBar color="black" ref={ref} className="loading-bar" />
       <div className={`video-box ${ isSidebarExpanded ? 'sidebarExpanded' : '' }`}>
         <div className={`video-player ${ isSidebarExpanded ? 'sidebarExpanded' : '' }`}>

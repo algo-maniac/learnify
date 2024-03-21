@@ -6,6 +6,7 @@ import styled from "styled-components";
 import AuthContext from "../store/auth-context";
 
 function UploadVideo(props) {
+  const { showToast } = useContext(AuthContext);
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
 
@@ -32,6 +33,7 @@ function UploadVideo(props) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    showToast("Please wait", "loading");
     try {
     setLoading(true);
     const form = new FormData();
@@ -51,15 +53,17 @@ function UploadVideo(props) {
       .then((data) => data.json())
       .then((result) => {
         console.log(result);
-
+        showToast("Video Uploaded Successfully", "success");
         // Upload Video
         navigate(`/video`);
       })
       .catch((err) => {
         console.error(err);
+        showToast("Error In Uploading Video", "error");
       });
     } catch(err) {
       console.log(err);
+      showToast("Error In Uploading Video", "error");
     } finally {
       // setLoading(false);
     }
@@ -114,7 +118,7 @@ function UploadVideo(props) {
             <Button disabled={loading}>Submit</Button>
           </Form>
         </Content>
-        {loading && <div className="toaster">Backend call in progress...</div>}
+        {/* {loading && <div className="toaster">Backend call in progress...</div>} */}
 
       </Contain>
     </>

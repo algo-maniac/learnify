@@ -288,9 +288,9 @@ const EditBasicDetailsForm = ({
           </button>
         </div>
         {/* {localLoading && <div className="loader">Loading...</div>} */}
-        {localLoading && (
+        {/* {localLoading && (
           <div className="toaster">Backend call in progress...</div>
-        )}
+        )} */}
       </form>
     </Container>
   );

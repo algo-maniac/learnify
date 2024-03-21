@@ -1,19 +1,18 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import { NavLink, Navigate, useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import axios from "axios";
 import AuthContext from "../store/auth-context";
 import Modal from "@mui/material/Modal";
 import Box from "@mui/material/Box";
-import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Typography } from "@mui/material";
-import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 import NavbarLandingPage from "../components/NavbarLandingPage";
+
 const SignUp = () => {
-  const { userdata, fetchUserdata, logout } = useContext(AuthContext);
-  const [popup, setPopup] = useState(false);
+  const { userdata, fetchUserdata, logout, showToast } = useContext(AuthContext);
+  const profileImageRef = useRef(null); 
+  // const [popup, setPopup] = useState(false);
   const [loader, setLoader] = useState(false);
-  const [timeout, setTimeout] = useState(5);
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: "",
@@ -23,6 +22,7 @@ const SignUp = () => {
     role: "user",
   });
 
+
   const handleInputChange = (e) => {
     const { name, value, files } = e.target;
 
@@ -30,6 +30,10 @@ const SignUp = () => {
       ...prevData,
       [name]: name === "profileImage" ? files[0] : value,
     }));
+  };
+
+  const clearFileInput = () => {
+    profileImageRef.current.value = "";
   };
   const redirectHandler = () => {
     navigate("/");
@@ -40,9 +44,9 @@ const SignUp = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoader(true);
-    toast("Signing up... Please wait ", {
-      position: "top-center",
-    });
+
+    showToast("Please wait", "loading");
+
     const formDataToSend = new FormData();
     formDataToSend.append("username", formData.username);
     formDataToSend.append("email", formData.email);
@@ -51,36 +55,33 @@ const SignUp = () => {
     formDataToSend.append("role", formData.role);
 
     try {
-      const data = await fetch(
+      const res = await axios.post(
         `${process.env.REACT_APP_BASE_URL}/${formData.role}/signup`,
-        {
-          method: "POST",
-          body: formDataToSend,
-        }
+        formDataToSend
       );
-      const res = await data.json();
-      const token = res.token;
-      localStorage.setItem("token", token);
-      fetchUserdata();
-      setLoader(false);
-      if (res.message === "Sucessfully registered. Awaiting approval") {
-        setInterval(() => {
-          setTimeout((prev) => {
-            if (prev === 0) {
-              navigate("/");
-            } else {
-              return prev - 1;
-            }
-          });
-        }, 1000);
-        setPopup(true);
+  
+      const { message, token, status } = res.data;
+
+      setFormData({
+        username: "",
+        email: "",
+        password: "",
+        profileImage: null,
+        role: "user",
+      });
+      clearFileInput();
+
+      showToast(message, "success");
+      if(status === "pending") {
+      } else {
+        localStorage.setItem("token", token);
+        fetchUserdata();
       }
     } catch (err) {
       console.log(err);
-      setLoader(true);
-      toast.error("Signup Failed, Try Again", {
-        position: "top-center",
-      });
+      showToast(err.response.data.message || "Error Signing In", "error");
+    } finally {
+      setLoader(false);
     }
   };
 
@@ -93,8 +94,7 @@ const SignUp = () => {
   return (
     <>
       <NavbarLandingPage logout={logout}/>
-      {loader && <ToastContainer />}
-      {popup && (
+      {/* {popup && (
         <Modal
           open={true}
           aria-labelledby="modal-modal-title"
@@ -133,7 +133,7 @@ const SignUp = () => {
             </Typography>
           </Box>
         </Modal>
-      )}
+      )} */}
 
       <Container>
         <Heading>Sign Up</Heading>
@@ -199,11 +199,12 @@ const SignUp = () => {
                   name="profileImage"
                   accept="image/*"
                   onChange={handleInputChange}
+                  ref={profileImageRef}
                 />
               </Label>
             </InputWrapper>
             <br />
-            <Button className="signup-submit">Submit</Button>
+            <Button className="signup-submit" disabled={loader}>Submit</Button>
             <Lognow>
               Already Logged In?
               <NavLink to="/LogIn"> Log In</NavLink>
@@ -323,6 +324,11 @@ const Button = styled.button`
   &:hover {
     background-color: #3c56cd;
     color: white;
+  }
+
+  &:disabled {
+    background-color: #b9c4f4;
+    cursor: not-allowed; 
   }
 `;
 

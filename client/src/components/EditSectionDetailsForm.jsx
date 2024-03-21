@@ -1,8 +1,8 @@
-import React, { useState } from "react";
-
+import React, { useState, useContext } from "react";
 import EditVideoDetailsForm from "./EditVideoDetailsForm";
 import { useEffect } from "react";
 import styled from "styled-components";
+import AuthContext from "../store/auth-context";
 
 const EditSectionDetailsForm = ({
   initialSectionDetails,
@@ -13,6 +13,7 @@ const EditSectionDetailsForm = ({
   loading,
   setLoading,
 }) => {
+  const { showToast } = useContext(AuthContext);
   const [localLoading, setLocalLoading] = useState(false);
   const [editedSectionDetails, setEditedSectionDetails] = useState({
     ...initialSectionDetails,
@@ -66,6 +67,8 @@ const EditSectionDetailsForm = ({
     try {
       setLocalLoading(true);
       setLoading(true);
+      showToast("Please wait", "loading");
+
       const videoId = video._id;
       const sectionId = video.sectionId;
       console.log("inside handle video details submit");
@@ -82,6 +85,8 @@ const EditSectionDetailsForm = ({
       const data = await res.json();
 
       if (data.ok) {
+        showToast("Video Deleted Successfully", "success");
+
         setCourseDetails((prevDetails) => {
           const updatedDetails = { ...prevDetails };
           const sectionIndex = updatedDetails.sections.findIndex(
@@ -111,10 +116,10 @@ const EditSectionDetailsForm = ({
         //     (video) => video._id !== videoId
         //   ),
         // }));
-      } else {
-      }
+      } 
     } catch (error) {
       console.log(error);
+      showToast("Error in Deleting Video", "error");
     } finally {
       setLocalLoading(false);
       setLoading(false);
@@ -283,7 +288,27 @@ const Container = styled.div`
   }
 
   .not-editable {
-    background-color: #f5f5f5;
+    background-color: #f2f2f2; /* Light gray background */
+    border: 1px solid #ccc; /* Light border color */
+    padding: 8px;
+    opacity: 0.7; /* Reduced opacity for a subtle effect */
+    cursor: not-allowed; /* Change cursor to not-allowed */
+    padding: 5px;
+  }
+
+  .not-editable input,
+  .not-editable textarea,
+  .not-editable select {
+    background-color: transparent; /* Make input fields transparent within not-editable container */
+    border: none; /* Remove borders within not-editable container */
+    color: #555; /* Adjust text color */
+    padding: 0;
+  }
+
+  .not-editable button {
+    background-color: #ddd; /* Light button background color */
+    color: #777; /* Adjust button text color */
+    cursor: not-allowed; /* Change cursor to not-allowed */
   }
 
   .text-label {

@@ -13,6 +13,7 @@ import AuthContext from "../store/auth-context";
 import axios from "axios";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { setSearch } from "../store/searchSlice";
+import { Avatar } from "@mui/material";
 
 const useDebounce = (searchText) => {
   const dispatch = useDispatch();
@@ -201,7 +202,9 @@ function Navbar({ toggleIsSearchExpanded, handleSearchClick }) {
 
         {userdata && userdata.id ? (
           <div className="right-profile">
-            <img src={userdata.profileImage} alt="profileImage" />
+            {/* <img src={userdata.profileImage} alt="profileImage" /> */}
+            <Avatar src={userdata.profileImage} style={{width: "50px", height: "50px"}}/>
+
             <div ref={dropdownRef}>
               {isDropdownOpen ? (
                 <KeyboardArrowUpIcon onClick={toggleDropdown} />

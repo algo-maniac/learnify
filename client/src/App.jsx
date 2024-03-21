@@ -33,6 +33,8 @@ import {
   AdminProtected,
   InstructorProtected,
 } from "./ProtectedRoutes.jsx";
+import { ToastContainer, toast } from "react-toastify";
+
 
 function App() {
   const navigate = useNavigate();
@@ -112,12 +114,34 @@ function App() {
     checkTokenExpiration();
   }, []);
 
+  const showToast = (content, type) => {
+    toast.dismiss();
+    
+    if(type === "success") {
+      toast.success(content, {
+        position: 'top-center',
+      });
+    } else if(type === "error") {
+      toast.error(content, {
+        position: 'top-center',
+      });
+    } else if(type === "loading") {
+      toast.loading(content, {
+        position: "top-center", 
+        autoClose: false, 
+        closeButton: false, 
+        hideProgressBar: true, 
+      });
+    }
+  };
+
   const contextValue = {
     userdata,
     setUserdata,
     fetchUserdata,
     isSidebarExpanded,
-    logout
+    logout,
+    showToast
   };
 
   const routes = useRoutes([
@@ -215,6 +239,7 @@ function App() {
 
   return (
     <>
+      <ToastContainer />
       <AuthContext.Provider value={contextValue}>{routes}</AuthContext.Provider>
     </>
   );

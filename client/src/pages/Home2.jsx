@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import VideoCard from '../components/VideoCard'
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import Card from '@mui/material/Card';
 import Typography from '@mui/material/Typography';
 import CardContent from '@mui/material/CardContent';
@@ -10,13 +10,14 @@ import Fab from "@mui/material/Fab"
 import TeacherCard from "../components/TeacherCard";
 import NavbarLandingPage from '../components/NavbarLandingPage';
 
-
+  
 const LandingPage = ({ handleSearchClick }) => {
     const navigate = useNavigate();
 
     const filterDesc = (text) => {
         return text.slice(0, 70) + "...";
     }
+
     return (
         <Container>
             <NavbarLandingPage handleSearchClick={handleSearchClick} />

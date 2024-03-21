@@ -10,18 +10,18 @@ function Home() {
   const location = useLocation();
   const [state, setState] = useState(location.state);
   useEffect(() => {
-    if (state) {
-      if (state?.toast) {
-        toast.success(state?.data, {
-          position: "top-center",
-        });
-      }
-      setState(null);
-    }
+    // if (state) {
+    //   if (state?.toast) {
+    //     toast.success(state?.data, {
+    //       position: "top-center",
+    //     });
+    //   }
+    //   setState(null);
+    // }
   }, [state]);
   return (
     <Container>
-      <ToastContainer />
+      {/* <ToastContainer /> */}
       <div className="home_background">
         <div className="home">
           <div className="banner">

@@ -3,10 +3,10 @@ import styled from "styled-components";
 import { NavLink, useNavigate } from "react-router-dom";
 import axios from "axios";
 import AuthContext from "../store/auth-context";
-import { ToastContainer, toast } from "react-toastify";
 import NavbarLandingPage from "../components/NavbarLandingPage";
+
 const LogIn = () => {
-  const { userdata, fetchUserdata, logout } = useContext(AuthContext);
+  const { userdata, fetchUserdata, logout, showToast } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [currUser, setCurrUser] = useState({
     role: "user",
@@ -15,7 +15,9 @@ const LogIn = () => {
   });
 
   const navigate = useNavigate();
+
   const handleSubmit = async (e) => {
+    setLoading(true);
     e.preventDefault();
     try {
       const res = await axios.post(
@@ -26,28 +28,16 @@ const LogIn = () => {
           password: currUser.password,
         }
       );
-      if (res.status === 404) {
-        console.log("User Not Found");
-        return;
-      }
-      if (res.status === 400) {
-        console.log("Wrong Password");
-        return;
-      }
-      const { token } = res.data;
+  
+      const { message, token } = res.data;
       localStorage.setItem("token", token);
-      console.log(res);
+      showToast(message, "success");
       fetchUserdata();
-      // Login Toast
-      toast.success("Successfully logged in", {
-        position: "top-center",
-      })
-      // navigate("/", { state: { toast: true, data: res.message } });
+      setLoading(false);
     } catch (err) {
-      toast.error("Error in Logging", {
-        position: "top-center",
-      });
-      console.log(err);
+      showToast(err.response.data.message || "Error Logging In", "error");
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -60,7 +50,6 @@ const LogIn = () => {
   return (
     <>
     <NavbarLandingPage logout={logout} />
-    {loading && <ToastContainer />}
     <Container>
       <Heading>Log In</Heading>
       <Content>
@@ -266,3 +255,4 @@ const Signnow = styled.div`
 `;
 
 export default LogIn;
+ 

@@ -1,7 +1,7 @@
-// AddSectionForm.jsx
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useParams } from "react-router-dom";
 import styled from "styled-components";
+import AuthContext from "../store/auth-context";
 
 const AddSectionForm = ({
   setCourseDetails,
@@ -10,6 +10,7 @@ const AddSectionForm = ({
   setLoading,
 }) => {
   const { courseId } = useParams();
+  const { showToast } = useContext(AuthContext);
 
   console.log(courseId);
   const [sectionDetails, setSectionDetails] = useState({
@@ -57,6 +58,7 @@ const AddSectionForm = ({
         });
 
         // Toast Section Added Successfully
+        showToast("Section Added Successfully", "success");
         setSectionDetails({
           title: "",
           description: "",
@@ -64,10 +66,9 @@ const AddSectionForm = ({
         handleAddSectionClick();
         // show toast success
         // navigate(`/course/${courseId}/edit`);
-      } else {
-        // show toast err
       }
     } catch (err) {
+      showToast("Error in Adding Section", "error");
     } finally {
       setLoading(false);
     }
